@@ -1,5 +1,6 @@
 import 'package:affiliate_platform/config/flavor_banner.dart';
 import 'package:affiliate_platform/utils/l10n/l10n.dart';
+import 'package:affiliate_platform/view/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -42,9 +43,7 @@ class App extends StatelessWidget {
               supportedLocales: AppLocalizations.supportedLocales,
               // home: const SplashPage(),
               // home: CheckOut(),
-              home: Scaffold(
-                body: Container(),
-              ),
+              home: LoginPage(),
             ),
           );
         },
