@@ -1,0 +1,6 @@
+package com.virtualsystechnologies.org.affiliate_platform
+
+import io.flutter.embedding.android.FlutterActivity
+
+class MainActivity: FlutterActivity() {
+}
