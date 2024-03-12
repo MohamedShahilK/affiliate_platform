@@ -42,7 +42,7 @@ class App extends StatelessWidget {
               debugShowCheckedModeBanner: false,
               localizationsDelegates: AppLocalizations.localizationsDelegates,
               supportedLocales: AppLocalizations.supportedLocales,
-              home: ManageContact(),
+              home: ManageContactPage(),
             ),
           );
         },

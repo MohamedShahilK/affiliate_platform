@@ -134,7 +134,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ).ripple(context, () {
                         if (emailController.value.text == 'test' && passController.value.text == 'test') {
-                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ManageContact(),));
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ManageContactPage(),));
                           successMotionToastInfo(context, msg: 'Login is successful');
                         } else {
                           erroMotionToastInfo(context, msg: 'Login is failed');
