@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:affiliate_platform/config/ripple.dart';
 import 'package:affiliate_platform/utils/constants/styles.dart';
 import 'package:affiliate_platform/utils/custom_tools.dart';
+import 'package:affiliate_platform/view/manage_contact/manage_contact.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -133,6 +134,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ).ripple(context, () {
                         if (emailController.value.text == 'test' && passController.value.text == 'test') {
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ManageContact(),));
                           successMotionToastInfo(context, msg: 'Login is successful');
                         } else {
                           erroMotionToastInfo(context, msg: 'Login is failed');

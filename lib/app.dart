@@ -1,6 +1,7 @@
 import 'package:affiliate_platform/config/flavor_banner.dart';
 import 'package:affiliate_platform/utils/l10n/l10n.dart';
-import 'package:affiliate_platform/view/login_page.dart';
+import 'package:affiliate_platform/view/auth/login_page.dart';
+import 'package:affiliate_platform/view/manage_contact/manage_contact.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -29,9 +30,9 @@ class App extends StatelessWidget {
               theme: ThemeData(
                 // canvas color transparent for modal bottom sheet
                 canvasColor: Colors.transparent,
-          
+
                 // visualDensity: VisualDensity.adaptivePlatformDensity,
-          
+
                 // scaffoldBackgroundColor: Colors.blue[700],
                 // scaffoldBackgroundColor: AppColors.mainColor,
                 // primarySwatch: Colors.blue,
@@ -41,9 +42,7 @@ class App extends StatelessWidget {
               debugShowCheckedModeBanner: false,
               localizationsDelegates: AppLocalizations.localizationsDelegates,
               supportedLocales: AppLocalizations.supportedLocales,
-              // home: const SplashPage(),
-              // home: CheckOut(),
-              home: LoginPage(),
+              home: ManageContact(),
             ),
           );
         },
