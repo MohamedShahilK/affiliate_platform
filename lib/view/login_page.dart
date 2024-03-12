@@ -2,12 +2,22 @@
 
 import 'dart:ui';
 
+import 'package:affiliate_platform/config/ripple.dart';
 import 'package:affiliate_platform/utils/constants/styles.dart';
+import 'package:affiliate_platform/utils/custom_tools.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final emailController = TextEditingController();
+  final passController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +61,7 @@ class LoginPage extends StatelessWidget {
         ),
         child: ClipRRect(
           child: BackdropFilter(
-      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
             child: Padding(
               padding: EdgeInsets.symmetric(vertical: 30.h, horizontal: 35.w),
               child: Column(
@@ -60,7 +70,7 @@ class LoginPage extends StatelessWidget {
                 children: [
                   Container(),
                   Center(child: Image.asset('assets/images/logo-dark.png', width: 160.w)),
-            
+
                   //
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 0.h),
@@ -74,20 +84,20 @@ class LoginPage extends StatelessWidget {
                       ),
                     ),
                   ),
-            
+
                   SizedBox(height: 30.h),
-            
+
                   Form(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const LoginCustomTextField(hint: 'Enter your email', heading: 'Email'),
+                        LoginCustomTextField(controller: emailController, hint: 'Enter your email', heading: 'Email'),
                         SizedBox(height: 20.h),
-                        const LoginCustomTextField(hint: 'Enter password', heading: 'Password'),
+                        LoginCustomTextField(controller: passController, hint: 'Enter password', heading: 'Password'),
                       ],
                     ),
                   ),
-            
+
                   Padding(
                     padding: EdgeInsets.only(top: 15.h),
                     child: Align(
@@ -101,7 +111,7 @@ class LoginPage extends StatelessWidget {
                       ),
                     ),
                   ),
-            
+
                   // Button
                   Padding(
                     padding: EdgeInsets.only(top: 15.h),
@@ -121,7 +131,13 @@ class LoginPage extends StatelessWidget {
                             fontSize: 13.w,
                           ),
                         ),
-                      ),
+                      ).ripple(context, () {
+                        if (emailController.value.text == 'test' && passController.value.text == 'test') {
+                          successMotionToastInfo(context, msg: 'Login is successful');
+                        } else {
+                          erroMotionToastInfo(context, msg: 'Login is failed');
+                        }
+                      }),
                     ),
                   )
                 ],
@@ -136,11 +152,13 @@ class LoginPage extends StatelessWidget {
 
 class LoginCustomTextField extends StatelessWidget {
   const LoginCustomTextField({
+    required this.controller,
     required this.heading,
     required this.hint,
     super.key,
   });
 
+  final TextEditingController controller;
   final String heading;
   final String hint;
 
@@ -154,6 +172,7 @@ class LoginCustomTextField extends StatelessWidget {
         SizedBox(
           height: 50.h,
           child: TextFormField(
+            controller: controller,
             style: AppStyles.openSans.copyWith(
               color: Colors.white,
               fontSize: 15.w,

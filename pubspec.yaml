@@ -9,16 +9,21 @@ environment:
 dependencies:
   bloc: ^8.1.1
   connectivity_plus: ^5.0.2
+  delightful_toast: ^1.1.0
+  elegant_notification: ^1.14.0
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.2
   flutter_localizations:
     sdk: flutter
+  flutter_overlay_loader: ^2.0.0
   flutter_screenutil: ^5.9.0
+  font_awesome_flutter: ^10.7.0
   get: ^4.6.6
   google_fonts: ^6.2.0
   image_picker: ^1.0.7
   intl: ^0.18.1
+  loading_animation_widget: ^1.2.1
   shared_preferences: ^2.2.2
   webview_flutter: ^4.5.0
 
