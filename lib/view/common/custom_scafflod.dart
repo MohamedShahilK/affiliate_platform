@@ -1,6 +1,7 @@
 // ignore_for_file: lines_longer_than_80_chars, invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member, inference_failure_on_instance_creation
 
 import 'package:affiliate_platform/config/ripple.dart';
+import 'package:affiliate_platform/utils/constants/styles.dart';
 import 'package:affiliate_platform/view/checkIn/checkin.dart';
 import 'package:affiliate_platform/view/checkout/checkin.dart';
 import 'package:affiliate_platform/view/manage_contact/manage_contact.dart';
@@ -24,21 +25,24 @@ class _CustomScaffoldState extends State<CustomScaffold> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Stack(
           children: [
-            Expanded(
-              child: Column(
-                children: [
-                  const CustomHeader(),
-              
-                  //
-                  //
-                  widget.body,
-                ],
-              ),
-            ),
+            // Expanded(
+            //   child: Column(
+            //     children: [
+            //       // const CustomHeader(),
+
+            //       //
+            //       //
+            //       widget.body,
+            //     ],
+            //   ),
+            // ),
+            widget.body,
+
             Container(
               // width: 60.w,
               child: ValueListenableBuilder(
@@ -232,8 +236,11 @@ class _CustomScaffoldState extends State<CustomScaffold> {
 
 class CustomHeader extends StatelessWidget {
   const CustomHeader({
+    this.isBackButtonNeeded = false,
     super.key,
   });
+
+  final bool isBackButtonNeeded;
 
   @override
   Widget build(BuildContext context) {
@@ -244,7 +251,7 @@ class CustomHeader extends StatelessWidget {
         // border: Border.all(color: Colors.grey[50]!)
       ),
       child: Container(
-        margin: EdgeInsets.only(top: 10.h, left: 10.w, right: 10.w,bottom: 15.h),
+        margin: EdgeInsets.only(top: 10.h, left: 10.w, right: 10.w, bottom: 15.h),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30.r),
           color: Colors.white,
@@ -260,21 +267,32 @@ class CustomHeader extends StatelessWidget {
         padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 11.w),
         child: Row(
           children: [
-            Image.asset('assets/images/logo-dark.png', width: 90.w),
-      
+            if (isBackButtonNeeded) const Icon(Icons.arrow_back_ios_new_rounded).ripple(context, () => Navigator.pop(context)) else Image.asset('assets/images/logo-dark.png', width: 90.w),
+
             const Spacer(),
-      
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text('Welcome, Mohamed', style: TextStyle(fontSize: 12.w)),
-                Text('EMPLOYEE', style: TextStyle(fontSize: 12.w)),
-              ],
-            ),
+
+            if (isBackButtonNeeded) ...[
+              // SizedBox(width: 15.w),
+              Text(
+                'Add New Contact',
+                style: AppStyles.openSans.copyWith(fontSize: 16.w, fontWeight: FontWeight.w700, color: Colors.grey[600]),
+              ),
+            ],
+
+            const Spacer(),
+            if (!isBackButtonNeeded)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text('Welcome, Mohamed', style: TextStyle(fontSize: 12.w)),
+                  Text('EMPLOYEE', style: TextStyle(fontSize: 12.w)),
+                ],
+              ),
             // Text('EMPLOYEE', style: TextStyle(fontSize: 12.w)),
-      
+
+            if (!isBackButtonNeeded)
             SizedBox(width: 10.w),
-      
+
             Stack(
               children: [
                 Container(

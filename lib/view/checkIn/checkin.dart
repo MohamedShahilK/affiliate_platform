@@ -1,9 +1,7 @@
 // ignore_for_file: lines_longer_than_80_chars
 
 import 'package:affiliate_platform/view/common/custom_scafflod.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CheckInPage extends StatelessWidget {
@@ -12,14 +10,15 @@ class CheckInPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      body: Expanded(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
+      body: Column(
+        children: [
+          const CustomHeader(),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Padding(
                 padding: EdgeInsets.only(top: 20.h, left: 10.w, right: 10.w),
                 // child: _CustomExpansionTile(),
-
+              
                 // child: ListView.builder(
                 //   itemCount: 10,
                 //   shrinkWrap: true,
@@ -31,7 +30,7 @@ class CheckInPage extends StatelessWidget {
                 child: const Column(
                   children: [
                     // _CustomExpansionTile(),
-
+                
                     _CheckInItem(),
                     _CheckInItem(),
                     _CheckInItem(),
@@ -40,9 +39,9 @@ class CheckInPage extends StatelessWidget {
                   ],
                 ),
               ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -68,7 +67,7 @@ class _CheckInItem extends StatelessWidget {
               borderRadius: BorderRadius.circular(15.r),
             ),
             child: Padding(
-              padding: EdgeInsets.only(top: 45.h),
+              padding: EdgeInsets.only(top: 38.h),
               child: Column(
                 children: [
                   Row(
@@ -122,6 +121,19 @@ class _CheckInItem extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Container(
+                        padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 7.h),
+                        decoration: BoxDecoration(
+                            color: Colors.red[300],
+                            // borderRadius: BorderRadius.only(topRight: Radius.circular(15.r), bottomLeft: Radius.circular(15.r)),
+                            shape: BoxShape.circle),
+                        child: Icon(
+                          Icons.delete_outline_outlined,
+                          size: 18.w,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const Spacer(),
+                      Container(
                         padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 8.w),
                         decoration: BoxDecoration(color: Colors.green, borderRadius: BorderRadius.circular(15.r)),
                         child: Row(
@@ -152,18 +164,38 @@ class _CheckInItem extends StatelessWidget {
           Positioned(
             right: 0,
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
-              child: Icon(
-                Icons.edit,
-                size: 18.w,
-                color: Colors.white,
-              ),
+              padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 7.h),
               decoration: BoxDecoration(
                 color: Colors.blue,
                 borderRadius: BorderRadius.only(topRight: Radius.circular(15.r), bottomLeft: Radius.circular(15.r)),
               ),
+              child: Icon(
+                Icons.remove_red_eye_outlined,
+                size: 16.w,
+                color: Colors.white,
+              ),
             ),
-          )
+          ),
+
+          //
+          // Positioned(
+          //   left: 23.h,
+          //   bottom: 10.h,
+          //   // bottom: 0,
+          //   child: Container(
+          //     padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 7.h),
+          //     decoration: BoxDecoration(
+          //       color: Colors.red[300],
+          //       // borderRadius: BorderRadius.only(topRight: Radius.circular(15.r), bottomLeft: Radius.circular(15.r)),
+          //       shape: BoxShape.circle
+          //     ),
+          //     child: Icon(
+          //       Icons.delete_outline_outlined,
+          //       size: 18.w,
+          //       color: Colors.white,
+          //     ),
+          //   ),
+          // )
         ],
       ),
     );
