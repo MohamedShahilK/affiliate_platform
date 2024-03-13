@@ -16,7 +16,7 @@ class NewContact extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const CustomHeader(isBackButtonNeeded: true),
+          const CustomHeader(isBackButtonNeeded: true,heading: 'Add New Contact'),
           // Padding(
           //   padding: EdgeInsets.only(top: 15.h),
           //   // child: Row(
