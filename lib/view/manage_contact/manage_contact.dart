@@ -7,6 +7,7 @@ import 'package:affiliate_platform/view/manage_contact/new_contact.dart';
 import 'package:affiliate_platform/view/manage_contact/view_contact.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ManageContactPage extends StatelessWidget {
   const ManageContactPage({super.key});
@@ -90,14 +91,34 @@ class _ContactItem extends StatelessWidget {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Contact # 1',
-                    style: TextStyle(fontWeight: FontWeight.w900, color: Colors.grey[800], fontSize: 12.w),
+                  Row(
+                    children: [
+                      // Text(
+                      //   'Name: ',
+                      //   style: TextStyle(fontWeight: FontWeight.w900, color: Colors.grey[800], fontSize: 12.w),
+                      // ),
+                      Icon(Icons.person_2_outlined,size: 17.w),
+                      SizedBox(width: 3.w),
+                      Text(
+                        'Mr. Lallit Potter',
+                        style: TextStyle(color: Colors.grey[800], fontSize: 12.w),
+                      ),
+                    ],
                   ),
                   const Spacer(),
-                  Text(
-                    'Mar 12th, 2024',
-                    style: TextStyle(color: Colors.grey[800], fontSize: 12.w),
+                  Row(
+                    children: [
+                      // Text(
+                      //   'Company Name: ',
+                      //   style: TextStyle(fontWeight: FontWeight.w900, color: Colors.grey[800], fontSize: 12.w),
+                      // ),
+                      Icon(Icons.business ,size: 17.w),
+                      SizedBox(width: 3.w),
+                      Text(
+                        'R.K.I.F',
+                        style: TextStyle(color: Colors.grey[800], fontSize: 12.w),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -105,18 +126,32 @@ class _ContactItem extends StatelessWidget {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Giridhar',
-                    style: TextStyle(color: Colors.grey[800], fontSize: 12.w),
+                  Row(
+                    children: [
+                      Text(
+                        'User/Type: ',
+                        style: TextStyle(fontWeight: FontWeight.w900, color: Colors.grey[800], fontSize: 12.w),
+                      ),
+                      Text(
+                        'Giridhar',
+                        style: TextStyle(color: Colors.grey[800], fontSize: 12.w),
+                      ),
+                      SizedBox(width: 2.w),
+                      Container(
+                        padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 3.w),
+                        decoration: BoxDecoration(color: Colors.grey, borderRadius: BorderRadius.circular(15.r)),
+                        child: Text('Qtn2015', style: TextStyle(fontSize: 10.w, color: Colors.white)),
+                      ),
+                    ],
                   ),
                   const Spacer(),
                   Text(
-                    '08:30:00',
+                    'Mar 12th 2024',
                     style: TextStyle(color: Colors.grey[800], fontSize: 12.w),
                   ),
                 ],
               ),
-      
+
               SizedBox(height: 10.h),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -132,11 +167,39 @@ class _ContactItem extends StatelessWidget {
                   ),
                 ],
               ),
-      
-              SizedBox(height: 15.h),
+
+              SizedBox(height: 5.h),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 3.h),
+                    decoration: BoxDecoration(
+                      color: Colors.green[300],
+                      borderRadius: BorderRadius.circular(15.r),
+                      // shape: BoxShape.circle,
+                    ),
+                    child: Text(
+                      'Follow Up',
+                      style: AppStyles.openSans.copyWith(color: Colors.white, fontSize: 12.w),
+                    ),
+                  ),
+                  // SizedBox(width: 5.w),
+                  const Spacer(),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 7.h),
+                    decoration: BoxDecoration(
+                      color: Colors.blue[300],
+                      // borderRadius: BorderRadius.only(topRight: Radius.circular(15.r), bottomLeft: Radius.circular(15.r)),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Icons.remove_red_eye_outlined,
+                      size: 18.w,
+                      color: Colors.white,
+                    ),
+                  ),
+                  SizedBox(width: 5.w),
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 7.h),
                     decoration: BoxDecoration(
@@ -150,27 +213,11 @@ class _ContactItem extends StatelessWidget {
                       color: Colors.white,
                     ),
                   ),
-                  const Spacer(),
-                  Container(
-                    padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 8.w),
-                    decoration: BoxDecoration(color: Colors.green, borderRadius: BorderRadius.circular(15.r)),
-                    child: Row(
-                      children: [
-                        // Icon(
-                        //   Icons.subdirectory_arrow_right_sharp,
-                        //   size: 14.w,
-                        //   color: Colors.white,
-                        // ),
-                        // SizedBox(width: 4.w),
-                        Text('Qtn2015', style: TextStyle(fontSize: 13.w, color: Colors.white)),
-                      ],
-                    ),
-                  ),
                 ],
               ),
-      
-              SizedBox(height: 10.h),
-      
+
+              // SizedBox(height: 10.h),
+
               // const Spacer(),
               // Divider(indent: 15.w, color: Colors.grey),
             ],
