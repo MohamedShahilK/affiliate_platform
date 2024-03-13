@@ -32,7 +32,7 @@ class _CustomScaffoldState extends State<CustomScaffold> {
               child: Column(
                 children: [
                   const CustomHeader(),
-
+              
                   //
                   //
                   widget.body,
@@ -147,11 +147,11 @@ class _CustomScaffoldState extends State<CustomScaffold> {
                               icon: Icons.home,
                               label: 'Home',
                               onTap: () {
+                                currentSideBarIndex.value = 0;
+                                currentSideBarIndex.notifyListeners();
+
                                 menuVisibility.value = false;
                                 menuVisibility.notifyListeners();
-
-                                currentSideBarIndex.value = 1;
-                                currentSideBarIndex.notifyListeners();
 
                                 Navigator.push(
                                   context,
@@ -165,11 +165,11 @@ class _CustomScaffoldState extends State<CustomScaffold> {
                               icon: Icons.subdirectory_arrow_right_sharp,
                               label: 'Check In',
                               onTap: () {
-                                menuVisibility.value = false;
-                                menuVisibility.notifyListeners();
-
                                 currentSideBarIndex.value = 1;
                                 currentSideBarIndex.notifyListeners();
+
+                                menuVisibility.value = false;
+                                menuVisibility.notifyListeners();
 
                                 Navigator.push(
                                   context,
@@ -183,11 +183,11 @@ class _CustomScaffoldState extends State<CustomScaffold> {
                               icon: Icons.subdirectory_arrow_left_rounded,
                               label: 'Check Out',
                               onTap: () {
-                                menuVisibility.value = false;
-                                menuVisibility.notifyListeners();
-
                                 currentSideBarIndex.value = 2;
                                 currentSideBarIndex.notifyListeners();
+
+                                menuVisibility.value = false;
+                                menuVisibility.notifyListeners();
 
                                 Navigator.push(
                                   context,
@@ -197,16 +197,15 @@ class _CustomScaffoldState extends State<CustomScaffold> {
                                 );
                               },
                             ),
-
                             SidebarXItem(
                               icon: Icons.account_box_outlined,
                               label: 'Manage Contact',
                               onTap: () {
+                                currentSideBarIndex.value = 3;
+                                currentSideBarIndex.notifyListeners();
+
                                 menuVisibility.value = false;
                                 menuVisibility.notifyListeners();
-
-                                currentSideBarIndex.value = 1;
-                                currentSideBarIndex.notifyListeners();
 
                                 Navigator.push(
                                   context,
@@ -239,70 +238,77 @@ class CustomHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 10.h, left: 10.w, right: 10.w),
+      //  margin: EdgeInsets.only(left: 10.w, right: 10.w),r
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(30.r),
-        color: Colors.white,
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.grey,
-            offset: Offset(-1, 0),
-            blurRadius: 6,
-            spreadRadius: -1,
-          ),
-        ],
+        borderRadius: BorderRadius.circular(15.r),
+        // border: Border.all(color: Colors.grey[50]!)
       ),
-      padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 11.w),
-      child: Row(
-        children: [
-          Image.asset('assets/images/logo-dark.png', width: 90.w),
-
-          const Spacer(),
-
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text('Welcome, Mohamed', style: TextStyle(fontSize: 12.w)),
-              Text('EMPLOYEE', style: TextStyle(fontSize: 12.w)),
-            ],
-          ),
-          // Text('EMPLOYEE', style: TextStyle(fontSize: 12.w)),
-
-          SizedBox(width: 10.w),
-
-          Stack(
-            children: [
-              Container(
-                height: 40.w,
-                width: 40.w,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.white,
-                  image: DecorationImage(image: AssetImage('assets/images/avatar.jpg')),
-                ),
-              ),
-              Positioned(
-                bottom: 5.w,
-                right: 0,
-                child: Container(
-                  width: 10.w,
-                  height: 10.w,
+      child: Container(
+        margin: EdgeInsets.only(top: 10.h, left: 10.w, right: 10.w,bottom: 15.h),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(30.r),
+          color: Colors.white,
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.grey,
+              offset: Offset(-1, 0),
+              blurRadius: 6,
+              spreadRadius: -1,
+            ),
+          ],
+        ),
+        padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 11.w),
+        child: Row(
+          children: [
+            Image.asset('assets/images/logo-dark.png', width: 90.w),
+      
+            const Spacer(),
+      
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text('Welcome, Mohamed', style: TextStyle(fontSize: 12.w)),
+                Text('EMPLOYEE', style: TextStyle(fontSize: 12.w)),
+              ],
+            ),
+            // Text('EMPLOYEE', style: TextStyle(fontSize: 12.w)),
+      
+            SizedBox(width: 10.w),
+      
+            Stack(
+              children: [
+                Container(
+                  height: 40.w,
+                  width: 40.w,
                   decoration: const BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.green,
+                    color: Colors.white,
+                    image: DecorationImage(image: AssetImage('assets/images/avatar.jpg')),
                   ),
                 ),
-              ),
-            ],
-          ).ripple(
-            borderRadius: BorderRadius.circular(30.r),
-            context,
-            () {
-              menuVisibility.value = !menuVisibility.value;
-              menuVisibility.notifyListeners();
-            },
-          ),
-        ],
+                Positioned(
+                  bottom: 5.w,
+                  right: 0,
+                  child: Container(
+                    width: 10.w,
+                    height: 10.w,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.green,
+                    ),
+                  ),
+                ),
+              ],
+            ).ripple(
+              borderRadius: BorderRadius.circular(30.r),
+              context,
+              () {
+                menuVisibility.value = !menuVisibility.value;
+                menuVisibility.notifyListeners();
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
