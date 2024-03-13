@@ -97,7 +97,7 @@ class _ContactItem extends StatelessWidget {
                       //   'Name: ',
                       //   style: TextStyle(fontWeight: FontWeight.w900, color: Colors.grey[800], fontSize: 12.w),
                       // ),
-                      Icon(Icons.person_2_outlined,size: 17.w),
+                      Icon(Icons.person_2_outlined, size: 17.w),
                       SizedBox(width: 3.w),
                       Text(
                         'Mr. Lallit Potter',
@@ -112,7 +112,7 @@ class _ContactItem extends StatelessWidget {
                       //   'Company Name: ',
                       //   style: TextStyle(fontWeight: FontWeight.w900, color: Colors.grey[800], fontSize: 12.w),
                       // ),
-                      Icon(Icons.business ,size: 17.w),
+                      Icon(Icons.business, size: 17.w),
                       SizedBox(width: 3.w),
                       Text(
                         'R.K.I.F',
@@ -183,7 +183,9 @@ class _ContactItem extends StatelessWidget {
                       'Follow Up',
                       style: AppStyles.openSans.copyWith(color: Colors.white, fontSize: 12.w),
                     ),
-                  ),
+                  ).ripple(context, () {
+                    _followUpDialog(context);
+                  }),
                   // SizedBox(width: 5.w),
                   const Spacer(),
                   Container(
@@ -222,6 +224,86 @@ class _ContactItem extends StatelessWidget {
               // Divider(indent: 15.w, color: Colors.grey),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  void _followUpDialog(BuildContext context) {
+    // ignore: inference_failure_on_function_invocation
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.transparent,
+        actionsPadding: EdgeInsets.zero,
+        iconPadding: EdgeInsets.zero,
+        buttonPadding: EdgeInsets.zero,
+        contentPadding: EdgeInsets.zero,
+        // insetPadding: EdgeInsets.zero,
+        // insetPadding: const EdgeInsets.symmetric(
+        //   horizontal: 70,
+        // ),
+        insetPadding: EdgeInsets.only(
+          bottom: 50.h,
+          left: 15.w,
+          right: 15.w,
+        ),
+        titlePadding: EdgeInsets.zero,
+        content: Stack(
+          children: [
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 20.h),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15.r),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(),
+                  Text(
+                    'No Followups Found!!',
+                    style: AppStyles.openSans.copyWith(fontSize: 10.w, fontWeight: FontWeight.w700, color: Colors.red),
+                  ),
+
+                  SizedBox(height: 10.h),
+
+                  // New Follow up add button
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 5.h),
+                    decoration: BoxDecoration(color: Colors.purple[400], borderRadius: BorderRadius.circular(15.r)),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.add,
+                          size: 13.w,
+                          color: Colors.white,
+                        ),
+                        Text(
+                          'Add Followup',
+                          style: AppStyles.openSans.copyWith(fontSize: 10.w, fontWeight: FontWeight.w700, color: Colors.white),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Positioned(
+              top: 5.h,
+              right: 10.w,
+              child: Container(
+                height: 15.w,
+                width: 15.w,
+                decoration: BoxDecoration(border: Border.all(color: Colors.grey), shape: BoxShape.circle),
+                child: Icon(Icons.close, size: 13.w),
+              ).ripple(context, () {
+                Navigator.pop(context);
+              }),
+            ),
+          ],
         ),
       ),
     );
