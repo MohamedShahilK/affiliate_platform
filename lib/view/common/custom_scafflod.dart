@@ -26,12 +26,17 @@ class _CustomScaffoldState extends State<CustomScaffold> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      floatingActionButton: Container(
+        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.w),
+        decoration: BoxDecoration(color: Colors.purple[400], shape: BoxShape.circle),
+        child: Icon(Icons.add, color: Colors.white, size: 22.w),
+      ),
       backgroundColor: Colors.white,
       body: SafeArea(
         child: GestureDetector(
           onTap: () {
-             menuVisibility.value = false;
-                                menuVisibility.notifyListeners();
+            menuVisibility.value = false;
+            menuVisibility.notifyListeners();
           },
           child: Stack(
             children: [
@@ -39,7 +44,7 @@ class _CustomScaffoldState extends State<CustomScaffold> {
               //   child: Column(
               //     children: [
               //       // const CustomHeader(),
-          
+
               //       //
               //       //
               //       widget.body,
@@ -47,7 +52,7 @@ class _CustomScaffoldState extends State<CustomScaffold> {
               //   ),
               // ),
               widget.body,
-          
+
               Container(
                 // width: 60.w,
                 child: ValueListenableBuilder(
@@ -68,7 +73,7 @@ class _CustomScaffoldState extends State<CustomScaffold> {
                             //       decoration: const BoxDecoration(
                             //         color: Colors.white,
                             //         shape: BoxShape.circle,
-          
+
                             //       ),
                             //       child: Icon(
                             //         Icons.close,
@@ -84,7 +89,7 @@ class _CustomScaffoldState extends State<CustomScaffold> {
                             //     },
                             //   ),
                             // ],
-          
+
                             // footerDivider: Container(
                             //   height: 25.w,
                             //   width: 25.w,
@@ -158,10 +163,10 @@ class _CustomScaffoldState extends State<CustomScaffold> {
                                 onTap: () {
                                   currentSideBarIndex.value = 0;
                                   currentSideBarIndex.notifyListeners();
-          
+
                                   menuVisibility.value = false;
                                   menuVisibility.notifyListeners();
-          
+
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -176,10 +181,10 @@ class _CustomScaffoldState extends State<CustomScaffold> {
                                 onTap: () {
                                   currentSideBarIndex.value = 1;
                                   currentSideBarIndex.notifyListeners();
-          
+
                                   menuVisibility.value = false;
                                   menuVisibility.notifyListeners();
-          
+
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -194,10 +199,10 @@ class _CustomScaffoldState extends State<CustomScaffold> {
                                 onTap: () {
                                   currentSideBarIndex.value = 2;
                                   currentSideBarIndex.notifyListeners();
-          
+
                                   menuVisibility.value = false;
                                   menuVisibility.notifyListeners();
-          
+
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -212,10 +217,10 @@ class _CustomScaffoldState extends State<CustomScaffold> {
                                 onTap: () {
                                   currentSideBarIndex.value = 3;
                                   currentSideBarIndex.notifyListeners();
-          
+
                                   menuVisibility.value = false;
                                   menuVisibility.notifyListeners();
-          
+
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -292,14 +297,13 @@ class CustomHeader extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text('Welcome, Mohamed', style: TextStyle(fontSize: 12.w)),
-                  Text('EMPLOYEE', style: TextStyle(fontSize: 12.w)),
+                  Text('Welcome, Mohamed', style: AppStyles.openSans.copyWith(fontSize: 12.w,color: Colors.black)),
+                  Text('EMPLOYEE', style: AppStyles.openSans.copyWith(fontSize: 12.w,color: Colors.black)),
                 ],
               ),
             // Text('EMPLOYEE', style: TextStyle(fontSize: 12.w)),
 
-            if (!isBackButtonNeeded)
-            SizedBox(width: 10.w),
+            if (!isBackButtonNeeded) SizedBox(width: 10.w),
 
             Stack(
               children: [

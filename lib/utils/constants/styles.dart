@@ -7,6 +7,11 @@ class AppStyles {
     color: Colors.white,
   );
 
+  static TextStyle poppins = GoogleFonts.poppins(
+    fontSize: 22,
+    color: Colors.white,
+  );
+
   static TextStyle appBarHeadingStyle = GoogleFonts.openSans(
     fontSize: 18,
     color: Colors.white,
@@ -29,8 +34,7 @@ class AppStyles {
     fontSize: 12,
   );
   static TextStyle hintTextStyle = GoogleFonts.openSans(fontSize: 13.5);
-  static TextStyle loginHintTextStyle =
-      GoogleFonts.openSans(fontSize: 13.5, color: Colors.grey[700]);
+  static TextStyle loginHintTextStyle = GoogleFonts.openSans(fontSize: 13.5, color: Colors.grey[700]);
 
   // static TextStyle generateButtonStyle = GoogleFonts.abhayaLibre(
   //   color: AppColors.generateButtonColor,
