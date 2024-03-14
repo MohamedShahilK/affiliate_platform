@@ -7,7 +7,8 @@ class CheckOutPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      body: Center(
+      onTapFloatingButton: () {},
+      body: const Center(
         child: Text('CheckOutPage'),
       ),
     );

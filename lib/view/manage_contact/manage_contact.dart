@@ -4,14 +4,11 @@ import 'dart:async';
 
 import 'package:affiliate_platform/config/ripple.dart';
 import 'package:affiliate_platform/utils/constants/styles.dart';
-import 'package:affiliate_platform/utils/custom_tools.dart';
 import 'package:affiliate_platform/view/common/custom_scafflod.dart';
 import 'package:affiliate_platform/view/manage_contact/data_sample.dart';
 import 'package:affiliate_platform/view/manage_contact/new_contact.dart';
 import 'package:affiliate_platform/view/manage_contact/view_contact.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -22,6 +19,14 @@ class ManageContactPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
+      onTapFloatingButton: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const NewContact(),
+          ),
+        );
+      },
       body: Column(
         children: [
           const CustomHeader(),
@@ -120,7 +125,7 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 30.h),
+      padding: EdgeInsets.only(bottom: 10.h),
       child: Theme(
         data: Theme.of(context).copyWith(
           dividerColor: Colors.transparent,
@@ -246,41 +251,41 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                       ],
                     ),
                   ),
-                  Positioned(
-                    // top: -18.h,
-                    top: -22.h,
-                    left: 0,
-                    child: Row(
-                      children: [
-                        Container(
-                          height: 22.w,
-                          width: 22.w,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.white,
-                            image: DecorationImage(image: AssetImage('assets/images/user.png')),
-                          ),
-                        ),
-                        SizedBox(width: 5.w),
-                        Text(
-                          // 'Giridhar | Qtn2015',
-                          '${widget.user} | ${widget.type}',
-                          style: AppStyles.poppins.copyWith(color: Colors.grey[800], fontSize: 9.w),
-                        ),
-                        // SizedBox(width: 3.w),
-                        // Text(
-                        //   'Qtn2015',
-                        //   style: AppStyles.poppins.copyWith(color: Colors.blueGrey, fontSize: 9.w),
-                        // ),
-                        // SizedBox(width: 2.w),
-                        // Container(
-                        //   padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 3.w),
-                        //   decoration: BoxDecoration(color: Colors.cyan[900], borderRadius: BorderRadius.circular(15.r)),
-                        //   child: Text('Qtn2015', style: AppStyles.poppins.copyWith(fontSize: 7.w, color: Colors.white)),
-                        // ),
-                      ],
-                    ),
-                  ),
+                  // Positioned(
+                  //   // top: -18.h,
+                  //   top: -22.h,
+                  //   left: 0,
+                  //   child: Row(
+                  //     children: [
+                  //       Container(
+                  //         height: 22.w,
+                  //         width: 22.w,
+                  //         decoration: const BoxDecoration(
+                  //           shape: BoxShape.circle,
+                  //           color: Colors.white,
+                  //           image: DecorationImage(image: AssetImage('assets/images/user.png')),
+                  //         ),
+                  //       ),
+                  //       SizedBox(width: 5.w),
+                  //       Text(
+                  //         // 'Giridhar | Qtn2015',
+                  //         '${widget.user} | ${widget.type}',
+                  //         style: AppStyles.poppins.copyWith(color: Colors.grey[800], fontSize: 9.w),
+                  //       ),
+                  //       // SizedBox(width: 3.w),
+                  //       // Text(
+                  //       //   'Qtn2015',
+                  //       //   style: AppStyles.poppins.copyWith(color: Colors.blueGrey, fontSize: 9.w),
+                  //       // ),
+                  //       // SizedBox(width: 2.w),
+                  //       // Container(
+                  //       //   padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 3.w),
+                  //       //   decoration: BoxDecoration(color: Colors.cyan[900], borderRadius: BorderRadius.circular(15.r)),
+                  //       //   child: Text('Qtn2015', style: AppStyles.poppins.copyWith(fontSize: 7.w, color: Colors.white)),
+                  //       // ),
+                  //     ],
+                  //   ),
+                  // ),
                   // Positioned(
                   //   top: -18.h,
                   //   right: 0,
@@ -583,7 +588,14 @@ class _EachContachSmallButtons extends StatelessWidget {
         ),
         SizedBox(width: 5.w),
       ],
-    );
+    ).ripple(context, () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const ViewContact(),
+        ),
+      );
+    });
   }
 }
 

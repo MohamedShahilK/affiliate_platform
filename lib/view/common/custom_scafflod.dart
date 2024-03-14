@@ -13,9 +13,10 @@ final menuVisibility = ValueNotifier<bool>(false);
 final currentSideBarIndex = ValueNotifier<int>(0);
 
 class CustomScaffold extends StatefulWidget {
-  const CustomScaffold({required this.body, super.key});
+  const CustomScaffold({required this.body, required this.onTapFloatingButton, super.key});
 
   final Widget body;
+  final VoidCallback onTapFloatingButton;
 
   @override
   State<CustomScaffold> createState() => _CustomScaffoldState();
@@ -30,7 +31,9 @@ class _CustomScaffoldState extends State<CustomScaffold> {
         padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.w),
         decoration: BoxDecoration(color: Colors.purple[400], shape: BoxShape.circle),
         child: Icon(Icons.add, color: Colors.white, size: 22.w),
-      ),
+      ).ripple(context, () {
+        widget.onTapFloatingButton();
+      }),
       backgroundColor: Colors.white,
       body: SafeArea(
         child: GestureDetector(
@@ -297,8 +300,8 @@ class CustomHeader extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text('Welcome, Mohamed', style: AppStyles.openSans.copyWith(fontSize: 12.w,color: Colors.black)),
-                  Text('EMPLOYEE', style: AppStyles.openSans.copyWith(fontSize: 12.w,color: Colors.black)),
+                  Text('Welcome, Mohamed', style: AppStyles.openSans.copyWith(fontSize: 12.w, color: Colors.black)),
+                  Text('EMPLOYEE', style: AppStyles.openSans.copyWith(fontSize: 12.w, color: Colors.black)),
                 ],
               ),
             // Text('EMPLOYEE', style: TextStyle(fontSize: 12.w)),

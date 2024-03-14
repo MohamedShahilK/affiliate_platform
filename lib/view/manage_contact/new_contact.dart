@@ -2,9 +2,7 @@
 
 import 'package:affiliate_platform/utils/constants/styles.dart';
 import 'package:affiliate_platform/view/common/custom_scafflod.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class NewContact extends StatelessWidget {
@@ -13,6 +11,7 @@ class NewContact extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
+      onTapFloatingButton: () {},
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

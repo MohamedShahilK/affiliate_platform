@@ -6,15 +6,13 @@ class ViewContact extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const CustomScaffold(
-      body: Column(
+    return  CustomScaffold(
+      onTapFloatingButton: () {},
+      body: const Column(
         children: [
           CustomHeader(isBackButtonNeeded: true, heading: 'Contact Details'),
-
           Column(
-            children: [
-
-            ],
+            children: [],
           ),
         ],
       ),

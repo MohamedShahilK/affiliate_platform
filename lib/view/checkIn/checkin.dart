@@ -10,6 +10,7 @@ class CheckInPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
+      onTapFloatingButton: () {},
       body: Column(
         children: [
           const CustomHeader(),
@@ -18,7 +19,7 @@ class CheckInPage extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.only(top: 20.h, left: 10.w, right: 10.w),
                 // child: _CustomExpansionTile(),
-              
+
                 // child: ListView.builder(
                 //   itemCount: 10,
                 //   shrinkWrap: true,
@@ -30,7 +31,7 @@ class CheckInPage extends StatelessWidget {
                 child: const Column(
                   children: [
                     // _CustomExpansionTile(),
-                
+
                     _CheckInItem(),
                     _CheckInItem(),
                     _CheckInItem(),
