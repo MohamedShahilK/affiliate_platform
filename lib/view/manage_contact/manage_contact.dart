@@ -1,5 +1,7 @@
 // ignore_for_file: lines_longer_than_80_chars, inference_failure_on_instance_creation
 
+import 'dart:async';
+
 import 'package:affiliate_platform/config/ripple.dart';
 import 'package:affiliate_platform/utils/constants/styles.dart';
 import 'package:affiliate_platform/utils/custom_tools.dart';
@@ -166,13 +168,14 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                                 // ),
                                 Icon(Icons.person_2_outlined, size: 17.w),
                                 SizedBox(width: 5.w),
-                                 SizedBox(
+                                SizedBox(
                                   width: 90.w,
-                                  child: Text(
-                                    // 'Mr. Lallit Potter',
-                                    widget.name,
-                                    style: AppStyles.poppins.copyWith(color: Colors.grey[800], fontSize: 12.w, overflow: TextOverflow.ellipsis),
-                                  ),
+                                  // child: Text(
+                                  //   // 'Mr. Lallit Potter',
+                                  //   widget.name,
+                                  //   style: AppStyles.poppins.copyWith(color: Colors.grey[800], fontSize: 12.w, overflow: TextOverflow.ellipsis),
+                                  // ),
+                                  child: MyTextWidget(text: widget.name),
                                 ),
                               ],
                             ),
@@ -186,23 +189,14 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                                 // ),
                                 Icon(Icons.business, size: 17.w),
                                 SizedBox(width: 5.w),
-                                Tooltip(
-                                  textStyle:  AppStyles.poppins.copyWith(color: Colors.orange[800], fontSize: 12.w, overflow: TextOverflow.ellipsis),
-                                  message: 'asdasdadasdas',
-                                  child: InkWell(
-                                    onTap: () {
-                                      print('222222222222222222222222222');
-                                      
-                                    },
-                                    child: SizedBox(
-                                      width: 90.w,
-                                      child: Text(
-                                        // 'R.K.I.F',
-                                        widget.companyName,
-                                        style: AppStyles.poppins.copyWith(color: Colors.grey[800], fontSize: 12.w, overflow: TextOverflow.ellipsis),
-                                      ),
-                                    ),
-                                  ),
+                                SizedBox(
+                                  width: 90.w,
+                                  // child: Text(
+                                  //   // 'R.K.I.F',
+                                  //   widget.companyName,
+                                  //   style: AppStyles.poppins.copyWith(color: Colors.grey[800], fontSize: 12.w, overflow: TextOverflow.ellipsis),
+                                  // ),
+                                  child: MyTextWidget(text: widget.companyName),
                                 ),
                               ],
                             ),
@@ -221,11 +215,12 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                                 SizedBox(width: 5.w),
                                 SizedBox(
                                   width: 90.w,
-                                  child: Text(
-                                    // 'info@sgtf.ae',
-                                    widget.email,
-                                    style: AppStyles.poppins.copyWith(color: Colors.grey[800], fontSize: 12.w, overflow: TextOverflow.ellipsis),
-                                  ),
+                                  // child: Text(
+                                  //   // 'info@sgtf.ae',
+                                  //   widget.email,
+                                  //   style: AppStyles.poppins.copyWith(color: Colors.grey[800], fontSize: 12.w, overflow: TextOverflow.ellipsis),
+                                  // ),
+                                  child: MyTextWidget(text: widget.email, isRightItem: true),
                                 ),
                               ],
                             ),
@@ -832,5 +827,88 @@ class _ContactItem extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class MyTextWidget extends StatefulWidget {
+  const MyTextWidget({required this.text, this.isRightItem = false, super.key});
+
+  final String text;
+  final bool isRightItem;
+
+  @override
+  State<MyTextWidget> createState() => _MyTextWidgetState();
+}
+
+class _MyTextWidgetState extends State<MyTextWidget> {
+  bool isOverflowed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        final textSpan = TextSpan(text: widget.text, style: AppStyles.poppins.copyWith(fontWeight: FontWeight.w900, color: Colors.grey[800], fontSize: 12.w));
+        final textPainter = TextPainter(text: textSpan, maxLines: 1, textDirection: TextDirection.ltr);
+
+        textPainter.layout(maxWidth: constraints.maxWidth);
+
+        isOverflowed = textPainter.didExceedMaxLines;
+        // print('111111111111111111111111111111 $isOverflowed');
+        // setState(() {
+        // });
+
+        return isOverflowed
+            ? GestureDetector(
+                onTapDown: (TapDownDetails details) {
+                  showTextDialog(context, details.globalPosition);
+                },
+                child: Text(widget.text, style: AppStyles.poppins.copyWith(color: Colors.grey[800], fontSize: 12.w, overflow: TextOverflow.ellipsis)),
+              )
+            : Text(widget.text, style: AppStyles.poppins.copyWith(color: Colors.grey[800], fontSize: 12.w, overflow: TextOverflow.ellipsis));
+      },
+    );
+  }
+
+  void showTextDialog(BuildContext context, Offset tapPosition) {
+    final overlay = Overlay.of(context).context.findRenderObject();
+    final renderBox = context.findRenderObject() as RenderBox;
+    final textOffset = renderBox.localToGlobal(Offset.zero, ancestor: overlay);
+
+    final textRenderBox = context.findRenderObject() as RenderBox;
+    final localTapPosition = textRenderBox.globalToLocal(tapPosition);
+
+    Timer? timer;
+
+    showDialog(
+      barrierColor: Colors.transparent,
+      context: context,
+      builder: (BuildContext context) {
+        return Stack(
+          children: [
+            Positioned(
+              // left: textOffset.dx + localTapPosition.dx - 20.0, // Adjust the dialog position as needed
+              // top: textOffset.dy + localTapPosition.dy - 20.0, // Adjust the dialog position as needed
+
+              left: widget.isRightItem ? textOffset.dx + localTapPosition.dx - 100.w : textOffset.dx + localTapPosition.dx - 20.w, // Adjust the dialog position as needed
+              top: textOffset.dy + localTapPosition.dy - 30.h, // Adjust the dialog position as needed
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 4.h),
+                decoration: BoxDecoration(
+                  color: Colors.grey,
+                  borderRadius: BorderRadius.circular(15.r),
+                ),
+                child: Text(widget.text, style: AppStyles.poppins.copyWith(color: Colors.white, fontSize: 11.w)),
+              ),
+            ),
+          ],
+        );
+      },
+    ).then((_) {
+      timer?.cancel(); // Cancel the timer if the dialog is dismissed manually
+    });
+
+    timer = Timer(const Duration(seconds: 1), () {
+      Navigator.of(context).pop(); // Close dialog after 1 second
+    });
   }
 }
