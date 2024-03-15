@@ -1,0 +1,5 @@
+"https://tsinis.medium.com/flutter-native-splash-en-8ba23e3889cf"
+
+flutter get flutter_native_splash
+
+dart run flutter_native_splash:create
