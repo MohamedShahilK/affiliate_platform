@@ -11,7 +11,7 @@ class NewContact extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      onTapFloatingButton: () {},
+      haveFloatingButton: false,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

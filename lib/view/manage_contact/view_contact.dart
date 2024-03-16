@@ -16,7 +16,7 @@ class ViewContact extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      onTapFloatingButton: () {},
+      haveFloatingButton: false,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -30,7 +30,6 @@ class ViewContact extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    
                     // Container(
                     //   padding: EdgeInsets.all(15.w),
                     //   decoration: BoxDecoration(
@@ -42,7 +41,7 @@ class ViewContact extends StatelessWidget {
                     // ),
 
                     // Design 1
-                    
+
                     // Top Section
                     // Align(child: Text(model.name, style: AppStyles.poppins.copyWith(fontSize: 18.w, color: Colors.purple[600], fontWeight: FontWeight.w800))),
                     // SizedBox(height: 3.h),
@@ -175,7 +174,170 @@ class ViewContact extends StatelessWidget {
 
                     Container(),
 
+                    Align(child: Text(model.name, style: AppStyles.poppins.copyWith(fontSize: 18.w, color: Colors.purple[600], fontWeight: FontWeight.w800))),
 
+                    Align(child: Text(model.companyName, style: AppStyles.poppins.copyWith(fontSize: 14.w, color: Colors.grey[600], fontWeight: FontWeight.w800))),
+
+                    SizedBox(height: 30.h),
+
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Company Information', style: AppStyles.poppins.copyWith(fontSize: 13.w, color: Colors.grey[800], fontWeight: FontWeight.w800)),
+                        // Padding(
+                        //   padding: EdgeInsets.only(top: 10.h),
+                        //   // child: _NewCardItem(model: model),
+                        //   child: Column(
+                        //     children: [
+                        //       Container(
+                        //         margin: EdgeInsets.only(bottom: 2.h),
+                        //         decoration: BoxDecoration(
+                        //           // border: Border.all(color: Colors.grey),
+                        //           color: Color(0xFFFEFBFF),
+                        //           borderRadius: BorderRadius.only(topRight: Radius.circular(12.r), topLeft: Radius.circular(12.r)),
+                        //         ),
+                        //         padding: EdgeInsets.symmetric(vertical: 13.h, horiz20ontal: 5.w),
+                        //         child: Row(
+                        //           children: [
+                        //             Icon(Icons.person, size: 13.w),
+                        //             SizedBox(width: 5.w),
+                        //             Text('Name', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800])),
+                        //             const Spacer(),
+                        //             Text(model.name, style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800], fontWeight: FontWeight.w800)),
+                        //           ],
+                        //         ),
+                        //       ),
+
+                        //       //
+                        //       _NewCardItem(field: 'Company', value: model.companyName, icondata: Icons.business),
+                        Padding(
+                          padding: EdgeInsets.only(top: 10.h),
+                          // child: _NewCardItem(model: model),
+                          child: Column(
+                            children: [
+                              Container(
+                                margin: EdgeInsets.only(bottom: 2.h),
+                                decoration: BoxDecoration(
+                                  // border: Border.all(color: Colors.grey),
+                                  color: Color(0xFFFEFBFF),
+                                  borderRadius: BorderRadius.only(topRight: Radius.circular(12.r), topLeft: Radius.circular(12.r)),
+                                ),
+                                padding: EdgeInsets.symmetric(vertical: 13.h, horizontal: 5.w),
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.person, size: 13.w),
+                                    SizedBox(width: 5.w),
+                                    Text('Phone Number', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800])),
+                                    const Spacer(),
+                                    Text(model.phoneNumber, style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800], fontWeight: FontWeight.w800)),
+                                  ],
+                                ),
+                              ),
+
+                              // _NewCardItem(field: 'Phone Number', value: model.phoneNumber, icondata: Icons.phone_outlined),
+                              _NewCardItem(field: 'Email', value: model.email, icondata: Icons.email_outlined),
+                              _NewCardItem(field: 'Company Address', value: model.companyAddress, icondata: Icons.note_alt_outlined),
+                              _NewCardItem(field: 'Company Landline', value: model.companyLandline, icondata: Icons.lan_outlined),
+                              _NewCardItem(field: 'Company Location', value: model.companyLocation, icondata: Icons.location_on_outlined),
+                              // _NewCardItem(field: 'Company Website', value: model.companyWebsite),
+
+                              //
+                              Container(
+                                decoration: BoxDecoration(
+                                  // border: Border.all(color: Colors.grey),
+                                  color: Color(0xFFFEFBFF),
+                                  borderRadius: BorderRadius.only(bottomRight: Radius.circular(12.r), bottomLeft: Radius.circular(12.r)),
+                                ),
+                                padding: EdgeInsets.symmetric(vertical: 13.h, horizontal: 5.w),
+                                child: Row(
+                                  children: [
+                                    Icon(FontAwesomeIcons.earthAfrica, size: 13.w),
+                                    SizedBox(width: 5.w),
+                                    Text('Company Website', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800])),
+                                    const Spacer(),
+                                    Text(model.companyWebsite, style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800], fontWeight: FontWeight.w800)),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    //
+                    SizedBox(height: 20.h),
+
+                    //
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Contact Information', style: AppStyles.poppins.copyWith(fontSize: 13.w, color: Colors.grey[800], fontWeight: FontWeight.w800)),
+                        Padding(
+                          padding: EdgeInsets.only(top: 10.h),
+                          // child: _NewCardItem(model: model),
+                          child: Column(
+                            children: [
+                              Container(
+                                margin: EdgeInsets.only(bottom: 2.h),
+                                decoration: BoxDecoration(
+                                  // border: Border.all(color: Colors.grey),
+                                  color: Color(0xFFFEFBFF),
+                                  borderRadius: BorderRadius.only(topRight: Radius.circular(12.r), topLeft: Radius.circular(12.r)),
+                                ),
+                                padding: EdgeInsets.symmetric(vertical: 13.h, horizontal: 5.w),
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.person_add_alt, size: 13.w),
+                                    SizedBox(width: 5.w),
+                                    Text('Created By', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800])),
+                                    const Spacer(),
+                                    Text(model.createdBy, style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800], fontWeight: FontWeight.w800)),
+                                  ],
+                                ),
+                              ),
+
+                              //
+
+                              _NewCardItem(
+                                field: 'Contact Type',
+                                value: model.type,
+                                icondata: Icons.type_specimen_outlined,
+                              ),
+                              _NewCardItem(
+                                field: 'Contact Source',
+                                value: model.contactSource,
+                                icondata: Icons.source_outlined,
+                              ),
+                              _NewCardItem(
+                                field: 'Contact Designation',
+                                value: model.contactDesignation,
+                                icondata: Icons.location_city_rounded,
+                              ),
+
+                              //
+                              Container(
+                                decoration: BoxDecoration(
+                                  // border: Border.all(color: Colors.grey),
+                                  color: Color(0xFFFEFBFF),
+                                  borderRadius: BorderRadius.only(bottomRight: Radius.circular(12.r), bottomLeft: Radius.circular(12.r)),
+                                ),
+                                padding: EdgeInsets.symmetric(vertical: 13.h, horizontal: 5.w),
+                                child: Row(
+                                  children: [
+                                    Icon(FontAwesomeIcons.readme, size: 13.w),
+                                    SizedBox(width: 5.w),
+                                    Text('Remarks', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800])),
+                                    const Spacer(),
+                                    Text(model.remarks, style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800], fontWeight: FontWeight.w800)),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -262,6 +424,47 @@ class ViewContact extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _NewCardItem extends StatelessWidget {
+  const _NewCardItem({
+    required this.field,
+    required this.value,
+    required this.icondata,
+    // this.bottomPadReq = false,
+  });
+
+  // final bool bottomPadReq;
+  final String field;
+  final String value;
+  final IconData icondata;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 2.h),
+      decoration: BoxDecoration(
+        // border: Border.all(color: Colors.grey),
+        color: Color(0xFFFEFBFF),
+        // borderRadius: BorderRadius.only(topRight: Radius.circular(12.r), topLeft: Radius.circular(12.r)),
+      ),
+      padding: EdgeInsets.symmetric(vertical: 13.h, horizontal: 5.w),
+      child: Row(
+        children: [
+          Icon(icondata, size: 13.w),
+          SizedBox(width: 5.w),
+          Text(field, style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800])),
+          const Spacer(),
+          SizedBox(
+            width: 150.w,
+            child: Align(
+                alignment: Alignment.bottomRight,
+                child: Text(value, textAlign: TextAlign.justify, style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800], fontWeight: FontWeight.w800))),
+          ),
+        ],
       ),
     );
   }

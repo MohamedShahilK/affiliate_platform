@@ -13,10 +13,11 @@ final menuVisibility = ValueNotifier<bool>(false);
 final currentSideBarIndex = ValueNotifier<int>(0);
 
 class CustomScaffold extends StatefulWidget {
-  const CustomScaffold({required this.body, required this.onTapFloatingButton, super.key});
+  const CustomScaffold({required this.body, this.onTapFloatingButton, this.haveFloatingButton = true, super.key});
 
   final Widget body;
-  final VoidCallback onTapFloatingButton;
+  final VoidCallback? onTapFloatingButton;
+  final bool haveFloatingButton;
 
   @override
   State<CustomScaffold> createState() => _CustomScaffoldState();
@@ -27,13 +28,17 @@ class _CustomScaffoldState extends State<CustomScaffold> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      floatingActionButton: Container(
-        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.w),
-        decoration: BoxDecoration(color: Colors.purple[400], shape: BoxShape.circle),
-        child: Icon(Icons.add, color: Colors.white, size: 22.w),
-      ).ripple(context, () {
-        widget.onTapFloatingButton();
-      }),
+      floatingActionButton: !widget.haveFloatingButton
+          ? null
+          : Container(
+              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.w),
+              decoration: BoxDecoration(color: Colors.purple[400], shape: BoxShape.circle),
+              child: Icon(Icons.add, color: Colors.white, size: 22.w),
+            ).ripple(context, () {
+              if (widget.haveFloatingButton && widget.onTapFloatingButton != null) {
+                widget.onTapFloatingButton!();
+              }
+            }),
       backgroundColor: Colors.white,
       body: SafeArea(
         child: GestureDetector(
@@ -262,7 +267,7 @@ class CustomHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return isBackButtonNeeded
         ? Container(
-            margin: EdgeInsets.only(top: 10.h, left: 10.w, right: 10.w, bottom: 15.h),
+            margin: EdgeInsets.only(top: 10.h, bottom: 15.h),
             padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 11.w),
             child: Row(
               children: [
@@ -271,7 +276,8 @@ class CustomHeader extends StatelessWidget {
                 Text(
                   heading,
                   style: AppStyles.openSans.copyWith(fontSize: 16.w, fontWeight: FontWeight.w700, color: Colors.grey[600]),
-                ),                
+                ),
+                SizedBox(width: 25.w),
                 const Spacer(),
               ],
             ),
