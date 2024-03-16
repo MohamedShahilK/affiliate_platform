@@ -71,17 +71,11 @@ class ManageContactPage extends StatelessWidget {
                     // _CustomExpansionTile(),
 
                     ...List.generate(sampleList['contacts']!.length, (index) {
-                      final list = sampleList['contacts'];
+                      final list = sampleList['contacts']?[index];
+                      final model = Contact.fromJson(list ?? {});
                       return _CustomExpansionTile(
-                        user: list![index]['user'] ?? '',
-                        type: list[index]['type'] ?? '',
-                        name: list[index]['name'] ?? '',
-                        companyName: list[index]['company_name'] ?? '',
-                        email: list[index]['email'] ?? '',
-                        phone: list[index]['phone_number'] ?? '',
-                        followupMsg: list[index]['sample_followup_message'] ?? '',
-                        followupDate: list[index]['followup_date'] ?? '',
-                        index:index,
+                        model: model,
+                        index: index,
                       );
                     }),
                   ],
@@ -97,33 +91,35 @@ class ManageContactPage extends StatelessWidget {
 
 class _CustomExpansionTile extends StatefulWidget {
   const _CustomExpansionTile({
-    required this.user,
-    required this.type,
-    required this.name,
-    required this.companyName,
-    required this.email,
-    required this.phone,
-    required this.followupMsg,
-    required this.followupDate,
+    // required this.user,
+    // required this.type,
+    // required this.name,
+    // required this.companyName,
+    // required this.email,
+    // required this.phone,
+    // required this.followupMsg,
+    // required this.followupDate,
     required this.index,
+    required this.model,
   });
 
-  final String user;
-  final String type;
-  final String name;
-  final String companyName;
-  final String email;
-  final String phone;
-  final String followupMsg;
-  final String followupDate;
-  final int  index;
+  // final String user;
+  // final String type;
+  // final String name;
+  // final String companyName;
+  // final String email;
+  // final String phone;
+  // final String followupMsg;
+  // final String followupDate;
+  final int index;
+  final Contact model;
 
   @override
   State<_CustomExpansionTile> createState() => _CustomExpansionTileState();
 }
 
 class _CustomExpansionTileState extends State<_CustomExpansionTile> {
-  bool showAllIcons = false;
+  bool showAllIcons = true;
 
   @override
   Widget build(BuildContext context) {
@@ -183,7 +179,7 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                                   //   widget.name,
                                   //   style: AppStyles.poppins.copyWith(color: Colors.grey[800], fontSize: 12.w, overflow: TextOverflow.ellipsis),
                                   // ),
-                                  child: MyTextWidget(text: widget.name),
+                                  child: MyTextWidget(text: widget.model.name),
                                 ),
                               ],
                             ),
@@ -201,10 +197,10 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                                   width: 90.w,
                                   // child: Text(
                                   //   // 'R.K.I.F',
-                                  //   widget.companyName,
+                                  //   widget.model.companyName,
                                   //   style: AppStyles.poppins.copyWith(color: Colors.grey[800], fontSize: 12.w, overflow: TextOverflow.ellipsis),
                                   // ),
-                                  child: MyTextWidget(text: widget.companyName),
+                                  child: MyTextWidget(text: widget.model.companyName),
                                 ),
                               ],
                             ),
@@ -225,10 +221,10 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                                   width: 90.w,
                                   // child: Text(
                                   //   // 'info@sgtf.ae',
-                                  //   widget.email,
+                                  //   widget.model.email,
                                   //   style: AppStyles.poppins.copyWith(color: Colors.grey[800], fontSize: 12.w, overflow: TextOverflow.ellipsis),
                                   // ),
-                                  child: MyTextWidget(text: widget.email, isRightItem: true),
+                                  child: MyTextWidget(text: widget.model.email, isRightItem: true),
                                 ),
                               ],
                             ),
@@ -244,7 +240,7 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                                 SizedBox(width: 5.w),
                                 Text(
                                   // '971522627165',
-                                  widget.phone,
+                                  widget.model.phoneNumber,
                                   style: GoogleFonts.poppins().copyWith(color: Colors.grey[800], fontSize: 12.w),
                                 ),
                               ],
@@ -261,7 +257,7 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                     top: -22.h,
                     left: 0,
                     child: Container(
-                      padding: EdgeInsets.only(right: 8.w,bottom: 15.h,left: 8.w,top: 2.h),
+                      padding: EdgeInsets.only(right: 8.w, bottom: 15.h, left: 8.w, top: 2.h),
                       decoration: BoxDecoration(color: Colors.grey[100], borderRadius: BorderRadius.circular(15.r)),
                       child: Row(
                         children: [
@@ -278,7 +274,7 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                           Text(
                             // 'Giridhar | Qtn2015',
                             'Contact #${widget.index + 1}',
-                            style: AppStyles.poppins.copyWith(color: Colors.grey[800], fontSize: 9.w,fontWeight: FontWeight.w900),
+                            style: AppStyles.poppins.copyWith(color: Colors.grey[800], fontSize: 9.w, fontWeight: FontWeight.w900),
                           ),
                           // SizedBox(width: 3.w),
                           // Text(
@@ -422,39 +418,36 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                             style: AppStyles.poppins.copyWith(fontWeight: FontWeight.w900, color: Colors.purple[900], fontSize: 11.w),
                           ),
                           SizedBox(height: 2.h),
-                          Align(
-                            // alignment: Alignment.center,
-                            child: Text(
-                              // "I hope you're doing well. I wanted to touch base regarding the custom software development project for XYZ Corporation. Following our recent discussions, our team has been actively refining the project scope and strategies to ensure we meet your needs effectively.",
-                              widget.followupMsg,
-                              // 'NA',
-                              style: TextStyle(color: Colors.grey[800], fontSize: 10.w),
-                              textAlign: TextAlign.justify,
-                            ),
-                          ),
-                          SizedBox(height: 4.h),
+                          Text(
+                            // "I hope you're doing well. I wanted to touch base regarding the custom software development project for XYZ Corporation. Following our recent discussions, our team has been actively refining the project scope and strategies to ensure we meet your needs effectively.",
+                            widget.model.sampleFollowupMessage,
+                            // 'NA',
+                            style: TextStyle(color: Colors.grey[800], fontSize: 10.w),
+                            textAlign: TextAlign.justify,
+                          ),SizedBox(height: 4.h),
                           Align(
                             alignment: Alignment.bottomRight,
                             child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 4.h),
+                              padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
                               decoration: BoxDecoration(color: Colors.grey[600], borderRadius: BorderRadius.circular(15.r)),
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Text(
                                     'Date: ',
-                                    style: AppStyles.poppins.copyWith(fontWeight: FontWeight.w900, color: Colors.white, fontSize: 10.w),
+                                    style: AppStyles.poppins.copyWith(fontWeight: FontWeight.w900, color: Colors.white, fontSize: 8.w),
                                   ),
                                   Text(
                                     // '18/04/2024',
-                                    widget.followupDate,
+                                    widget.model.followupDate,
                                     // 'NA',
-                                    style: TextStyle(color: Colors.white, fontSize: 9.w),
+                                    style: TextStyle(color: Colors.white, fontSize: 8.w),
                                   ),
                                 ],
                               ),
                             ),
                           ),
+                          SizedBox(height: 4.h),
                         ],
                       ),
                     ),
@@ -472,6 +465,7 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                           ),
                           child: Text(
                             'Follow Up',
+                            // 'F',
                             style: AppStyles.poppins.copyWith(color: Colors.white, fontSize: 12.w),
                           ),
                         ).ripple(context, () {
@@ -484,17 +478,30 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                           visible: showAllIcons,
                           child: Row(
                             children: [
-                              const _EachContachSmallButtons(color: Colors.black45, icon: Icons.keyboard_arrow_right_rounded).ripple(
-                                context,
-                                () {
+                              _EachContachSmallButtons(
+                                color: Colors.black45,
+                                icon: Icons.keyboard_arrow_right_rounded,
+                                onTap: () {
                                   setState(() {
                                     showAllIcons = false;
                                   });
                                 },
                               ),
-                              _EachContachSmallButtons(color: Colors.orange[600]!, icon: Icons.email_outlined),
-                              _EachContachSmallButtons(color: Colors.blue[700]!, icon: Icons.phone_outlined),
-                              _EachContachSmallButtons(color: Colors.green[500]!, icon: FontAwesomeIcons.whatsapp),
+                              _EachContachSmallButtons(
+                                color: Colors.orange[600]!,
+                                icon: Icons.email_outlined,
+                                onTap: () {},
+                              ),
+                              _EachContachSmallButtons(
+                                color: Colors.blue[700]!,
+                                icon: Icons.phone_outlined,
+                                onTap: () {},
+                              ),
+                              _EachContachSmallButtons(
+                                color: Colors.green[500]!,
+                                icon: FontAwesomeIcons.whatsapp,
+                                onTap: () {},
+                              ),
                             ],
                           ),
                         ),
@@ -503,9 +510,10 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                           visible: !showAllIcons,
                           child: Row(
                             children: [
-                              const _EachContachSmallButtons(color: Colors.black45, icon: Icons.more_horiz).ripple(
-                                context,
-                                () {
+                              _EachContachSmallButtons(
+                                color: Colors.black45,
+                                icon: Icons.more_horiz,
+                                onTap: () {
                                   setState(() {
                                     showAllIcons = true;
                                   });
@@ -515,8 +523,23 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                           ),
                         ),
 
-                        _EachContachSmallButtons(color: Colors.blue[400]!, icon: Icons.remove_red_eye_outlined),
-                        _EachContachSmallButtons(color: Colors.red[400]!, icon: Icons.delete_outline_outlined),
+                        _EachContachSmallButtons(
+                          color: Colors.blue[400]!,
+                          icon: Icons.remove_red_eye_outlined,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>  ViewContact(model:widget.model),
+                              ),
+                            );
+                          },
+                        ),
+                        _EachContachSmallButtons(
+                          color: Colors.red[400]!,
+                          icon: Icons.delete_outline_outlined,
+                          onTap: () {},
+                        ),
                       ],
                     ),
                   ],
@@ -614,10 +637,12 @@ class _EachContachSmallButtons extends StatelessWidget {
   const _EachContachSmallButtons({
     required this.color,
     required this.icon,
+    required this.onTap,
   });
 
   final Color color;
   final IconData icon;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -638,14 +663,7 @@ class _EachContachSmallButtons extends StatelessWidget {
         ),
         SizedBox(width: 5.w),
       ],
-    ).ripple(context, () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const ViewContact(),
-        ),
-      );
-    });
+    ).ripple(context, onTap);
   }
 }
 
