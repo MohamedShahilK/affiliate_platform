@@ -1,6 +1,7 @@
 // ignore_for_file: lines_longer_than_80_chars, invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member, inference_failure_on_instance_creation
 
 import 'package:affiliate_platform/config/ripple.dart';
+import 'package:affiliate_platform/profile/edit_profile.dart';
 import 'package:affiliate_platform/profile/profile_page.dart';
 import 'package:affiliate_platform/utils/constants/styles.dart';
 import 'package:affiliate_platform/view/checkIn/checkin.dart';
@@ -8,6 +9,7 @@ import 'package:affiliate_platform/view/checkout/checkin.dart';
 import 'package:affiliate_platform/view/manage_contact/manage_contact.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sidebarx/sidebarx.dart';
 
 final menuVisibility = ValueNotifier<bool>(false);
@@ -238,7 +240,7 @@ class _CustomScaffoldState extends State<CustomScaffold> {
                                   );
                                 },
                               ),
-                               SidebarXItem(
+                              SidebarXItem(
                                 icon: Icons.person,
                                 label: 'Profile',
                                 onTap: () {
@@ -275,11 +277,13 @@ class _CustomScaffoldState extends State<CustomScaffold> {
 class CustomHeader extends StatelessWidget {
   const CustomHeader({
     this.isBackButtonNeeded = false,
+    this.isTrailingButtonNeeded = false,
     this.heading = '',
     super.key,
   });
 
   final bool isBackButtonNeeded;
+  final bool isTrailingButtonNeeded;
   final String heading;
 
   @override
@@ -296,8 +300,17 @@ class CustomHeader extends StatelessWidget {
                   heading,
                   style: AppStyles.openSans.copyWith(fontSize: 16.w, fontWeight: FontWeight.w700, color: Colors.grey[600]),
                 ),
-                SizedBox(width: 25.w),
+                if (!isTrailingButtonNeeded) SizedBox(width: 25.w),
                 const Spacer(),
+                if (isTrailingButtonNeeded)
+                  const Icon(FontAwesomeIcons.userPen).ripple(context, () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const EditProfile(),
+                      ),
+                    );
+                  }),
               ],
             ),
           )
