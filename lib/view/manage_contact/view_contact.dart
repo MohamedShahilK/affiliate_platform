@@ -219,7 +219,7 @@ class ViewContact extends StatelessWidget {
                                 margin: EdgeInsets.only(bottom: 2.h),
                                 decoration: BoxDecoration(
                                   // border: Border.all(color: Colors.grey),
-                                  color: Color(0xFFFEFBFF),
+                                  color: const Color(0xFFFEFBFF),
                                   borderRadius: BorderRadius.only(topRight: Radius.circular(12.r), topLeft: Radius.circular(12.r)),
                                 ),
                                 padding: EdgeInsets.symmetric(vertical: 13.h, horizontal: 5.w),
@@ -229,7 +229,7 @@ class ViewContact extends StatelessWidget {
                                     SizedBox(width: 5.w),
                                     Text('Phone Number', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800])),
                                     const Spacer(),
-                                    Text(model.phoneNumber, style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800], fontWeight: FontWeight.w800)),
+                                    SelectableText(model.phoneNumber, style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800], fontWeight: FontWeight.w800)),
                                   ],
                                 ),
                               ),
@@ -245,7 +245,7 @@ class ViewContact extends StatelessWidget {
                               Container(
                                 decoration: BoxDecoration(
                                   // border: Border.all(color: Colors.grey),
-                                  color: Color(0xFFFEFBFF),
+                                  color: const Color(0xFFFEFBFF),
                                   borderRadius: BorderRadius.only(bottomRight: Radius.circular(12.r), bottomLeft: Radius.circular(12.r)),
                                 ),
                                 padding: EdgeInsets.symmetric(vertical: 13.h, horizontal: 5.w),
@@ -255,7 +255,7 @@ class ViewContact extends StatelessWidget {
                                     SizedBox(width: 5.w),
                                     Text('Company Website', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800])),
                                     const Spacer(),
-                                    Text(model.companyWebsite, style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800], fontWeight: FontWeight.w800)),
+                                    SelectableText(model.companyWebsite, style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800], fontWeight: FontWeight.w800)),
                                   ],
                                 ),
                               ),
@@ -282,7 +282,7 @@ class ViewContact extends StatelessWidget {
                                 margin: EdgeInsets.only(bottom: 2.h),
                                 decoration: BoxDecoration(
                                   // border: Border.all(color: Colors.grey),
-                                  color: Color(0xFFFEFBFF),
+                                  color: const Color(0xFFFEFBFF),
                                   borderRadius: BorderRadius.only(topRight: Radius.circular(12.r), topLeft: Radius.circular(12.r)),
                                 ),
                                 padding: EdgeInsets.symmetric(vertical: 13.h, horizontal: 5.w),
@@ -292,7 +292,7 @@ class ViewContact extends StatelessWidget {
                                     SizedBox(width: 5.w),
                                     Text('Created By', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800])),
                                     const Spacer(),
-                                    Text(model.createdBy, style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800], fontWeight: FontWeight.w800)),
+                                    SelectableText(model.createdBy, style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800], fontWeight: FontWeight.w800)),
                                   ],
                                 ),
                               ),
@@ -319,7 +319,7 @@ class ViewContact extends StatelessWidget {
                               Container(
                                 decoration: BoxDecoration(
                                   // border: Border.all(color: Colors.grey),
-                                  color: Color(0xFFFEFBFF),
+                                  color: const Color(0xFFFEFBFF),
                                   borderRadius: BorderRadius.only(bottomRight: Radius.circular(12.r), bottomLeft: Radius.circular(12.r)),
                                 ),
                                 padding: EdgeInsets.symmetric(vertical: 13.h, horizontal: 5.w),
@@ -329,7 +329,7 @@ class ViewContact extends StatelessWidget {
                                     SizedBox(width: 5.w),
                                     Text('Remarks', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800])),
                                     const Spacer(),
-                                    Text(model.remarks, style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800], fontWeight: FontWeight.w800)),
+                                    SelectableText(model.remarks, style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800], fontWeight: FontWeight.w800)),
                                   ],
                                 ),
                               ),
@@ -446,7 +446,7 @@ class _NewCardItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(bottom: 2.h),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         // border: Border.all(color: Colors.grey),
         color: Color(0xFFFEFBFF),
         // borderRadius: BorderRadius.only(topRight: Radius.circular(12.r), topLeft: Radius.circular(12.r)),
@@ -462,7 +462,7 @@ class _NewCardItem extends StatelessWidget {
             width: 150.w,
             child: Align(
                 alignment: Alignment.bottomRight,
-                child: Text(value, textAlign: TextAlign.justify, style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800], fontWeight: FontWeight.w800))),
+                child: SelectableText(value, textAlign: TextAlign.justify, style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800], fontWeight: FontWeight.w800))),
           ),
         ],
       ),

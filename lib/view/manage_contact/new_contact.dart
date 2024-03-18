@@ -2,8 +2,10 @@
 
 import 'package:affiliate_platform/utils/constants/styles.dart';
 import 'package:affiliate_platform/view/common/custom_scafflod.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class NewContact extends StatelessWidget {
   const NewContact({super.key});
@@ -15,7 +17,7 @@ class NewContact extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const CustomHeader(isBackButtonNeeded: true,heading: 'Add New Contact'),
+          const CustomHeader(isBackButtonNeeded: true, heading: 'Add New Contact'),
           // Padding(
           //   padding: EdgeInsets.only(top: 15.h),
           //   // child: Row(
@@ -24,7 +26,7 @@ class NewContact extends StatelessWidget {
           //   //     SizedBox(width: 15.w),
           //   //     Text(
           //   //       'Add New Contact',
-          //   //       style: TextStyle(fontSize: 16.w),
+          //   //       style: AppStyles.poppins.copyWith(fontSize: 16.w),
           //   //     ),
           //   //     SizedBox(width: 15.w),
           //   //     const Expanded(child: Divider(height: 1)),
@@ -47,7 +49,7 @@ class NewContact extends StatelessWidget {
           //   //       ),
           //   //       Text(
           //   //         'Add New Contact',
-          //   //         style: TextStyle(fontSize: 14.w, fontWeight: FontWeight.w700, color: Colors.grey[600]),
+          //   //         style: AppStyles.poppins.copyWith(fontSize: 14.w, fontWeight: FontWeight.w700, color: Colors.grey[600]),
           //   //       ),
           //   //       Positioned(
           //   //         left: 0,
@@ -82,20 +84,30 @@ class NewContact extends StatelessWidget {
 
                     Padding(
                       padding: EdgeInsets.only(top: 7.h),
-                      child: const Column(
+                      child: Column(
                         children: [
-                          NewContactField(heading: 'Contact Name', hint: 'Contact Person Full Name'),
-                          NewContactField(heading: 'Contact Type', hint: 'Select Contact Type'), //dropdown
-                          NewContactField(heading: 'Mobile Number', hint: 'eg: 9719864631313', textInputType: TextInputType.phone),
-                          NewContactField(heading: 'Email Address', hint: 'eg: example@exm.com', textInputType: TextInputType.emailAddress),
-                          NewContactField(heading: 'Contact Source', hint: 'Select Contact Source'), //dropdown
-                          NewContactField(heading: 'Contact Destination', hint: 'eg: CEO'),
-                          NewContactField(heading: 'Company Name', hint: 'eg: Arabinfotec Pvt Ltd'),
-                          NewContactField(heading: 'Company Landline Number', hint: 'eg: 97163466578', textInputType: TextInputType.phone),
-                          NewContactField(heading: 'Company Website', hint: 'eg: https://arabinfotechllc.com/', textInputType: TextInputType.url),
-                          NewContactField(heading: 'Company Location', hint: 'Enter Location'),
-                          NewContactField(heading: 'Company Address', hint: 'Enter Adress', isLargeField: true),
-                          NewContactField(heading: 'Remarks if any', hint: '-- NOTE --', isLargeField: true),
+                          const NewContactField(heading: 'Contact Name', hint: 'Contact Person Full Name'),
+                          NewContactDropDown(
+                            heading: 'Contact Type',
+                            hint: 'Select Contact Type',
+                            items: const ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'],
+                            label: 'Contact Type',
+                          ), //dropdown
+                          const NewContactField(heading: 'Mobile Number', hint: 'eg: 9719864631313', textInputType: TextInputType.phone),
+                          const NewContactField(heading: 'Email Address', hint: 'eg: example@exm.com', textInputType: TextInputType.emailAddress),
+                          NewContactDropDown(
+                            heading: 'Contact Source',
+                            hint: 'Select Contact Source',
+                            items: const ['', 'Internet', 'Social Media', 'Email'],
+                            label: 'Contact Source',
+                          ), //dropdown
+                          const NewContactField(heading: 'Contact Destination', hint: 'eg: CEO'),
+                          const NewContactField(heading: 'Company Name', hint: 'eg: Arabinfotec Pvt Ltd'),
+                          const NewContactField(heading: 'Company Landline Number', hint: 'eg: 97163466578', textInputType: TextInputType.phone),
+                          const NewContactField(heading: 'Company Website', hint: 'eg: https://arabinfotechllc.com/', textInputType: TextInputType.url),
+                          const NewContactField(heading: 'Company Location', hint: 'Enter Location'),
+                          const NewContactField(heading: 'Company Address', hint: 'Enter Adress', isLargeField: true),
+                          const NewContactField(heading: 'Remarks if any', hint: '-- NOTE --', isLargeField: true),
                         ],
                       ),
                     ),
@@ -109,7 +121,7 @@ class NewContact extends StatelessWidget {
                             color: Colors.orange,
                             borderRadius: BorderRadius.circular(15.r),
                           ),
-                          child: Text('Reset', style: TextStyle(fontSize: 14.w, color: Colors.white)),
+                          child: Text('Reset', style: AppStyles.poppins.copyWith(fontSize: 14.w, color: Colors.white)),
                         ),
                         SizedBox(width: 10.w),
                         Container(
@@ -118,7 +130,7 @@ class NewContact extends StatelessWidget {
                             color: Colors.purple,
                             borderRadius: BorderRadius.circular(15.r),
                           ),
-                          child: Text('Submit', style: TextStyle(fontSize: 14.w, color: Colors.white)),
+                          child: Text('Submit', style: AppStyles.poppins.copyWith(fontSize: 14.w, color: Colors.white)),
                         ),
                       ],
                     ),
@@ -129,6 +141,153 @@ class NewContact extends StatelessWidget {
               ),
             ),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class NewContactDropDown extends StatefulWidget {
+  NewContactDropDown({
+    // required this.controller,
+    required this.heading,
+    required this.hint,
+    required this.label,
+    required this.items,
+    super.key,
+  });
+
+  final String heading;
+  final String hint;
+  final String label;
+  final List<String> items;
+
+  @override
+  State<NewContactDropDown> createState() => _NewContactDropDownState();
+}
+
+class _NewContactDropDownState extends State<NewContactDropDown> {
+  // final items = ['', 'a', 'b', 'c'];
+  String selectedValue = '';
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 10.h),
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(color: const Color.fromARGB(139, 103, 51, 137)),
+            ),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton2<String>(
+                isExpanded: true,
+                hint: Row(
+                  children: [
+                    Icon(Icons.list, size: 16.w, color: Colors.purple[100]),
+                    SizedBox(width: 4.w),
+                    Expanded(
+                      child: Text(
+                        widget.hint,
+                        style: AppStyles.poppins.copyWith(
+                          fontSize: 12.w,
+                          // fontWeight: FontWeight.bold,
+                          color: Colors.purple[100],
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+                items: widget.items.map(
+                  (String item) {
+                    var item1 = item;
+                    if (item == '') {
+                      item1 = widget.hint;
+                    }
+                    return DropdownMenuItem<String>(
+                      value: item1,
+                      child: Text(
+                        item1,
+                        // style: AppStyles.poppins.copyWith(
+                        //   fontSize: 12.w,
+                        //   // fontWeight: FontWeight.bold,
+                        //   color: Colors.purple,
+                        // ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    );
+                  },
+                ).toList(),
+                style: AppStyles.poppins.copyWith(
+                  color: Colors.purple,
+                  fontSize: 12.w,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                value: selectedValue == '' ? null : selectedValue,
+                onChanged: (value) {
+                  setState(() {
+                    if (value == widget.hint) {
+                      selectedValue = '';
+                    } else {
+                      selectedValue = value!;
+                    }
+                  });
+                },
+                buttonStyleData: ButtonStyleData(
+                  height: 50,
+                  // width: 160,
+                  padding: const EdgeInsets.only(left: 14, right: 14),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(14),
+                    // border: Border.all(
+                    //   color: Colors.black26
+                    // ),
+                    // color: Colors.white,
+                  ),
+                  // elevation: 2,
+                ),
+                iconStyleData: IconStyleData(
+                  icon: const Icon(FontAwesomeIcons.angleDown),
+                  iconSize: 14.w,
+                  iconEnabledColor: Colors.purple[100],
+                  iconDisabledColor: Colors.grey,
+                ),
+                dropdownStyleData: DropdownStyleData(
+                  maxHeight: 200,
+                  width: 200,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(14),
+                    color: Colors.white,
+                  ),
+                  // offset: const Offset(-20, 0),
+                  scrollbarTheme: ScrollbarThemeData(
+                    radius: const Radius.circular(40),
+                    thickness: MaterialStateProperty.all(6),
+                    thumbVisibility: MaterialStateProperty.all(true),
+                  ),
+                ),
+                menuItemStyleData: const MenuItemStyleData(
+                  height: 40,
+                  padding: EdgeInsets.only(left: 14, right: 14),
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            top: -10.h,
+            left: 12.w,
+            child: Container(
+              color: Colors.white,
+              child: Text(
+                widget.label,
+                style: AppStyles.poppins.copyWith(fontSize: 9.w, color: Colors.purple),
+              ),
+            ),
+          )
         ],
       ),
     );
@@ -158,13 +317,13 @@ class NewContactField extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Text(heading, style: TextStyle(fontSize: 12.w, color: Colors.purple)),
+          // Text(heading, style: AppStyles.poppins.copyWith(fontSize: 12.w, color: Colors.purple)),
           // SizedBox(height: 7.h),
           SizedBox(
             height: isLargeField ? null : 50.h,
             child: TextFormField(
               // controller: controller,
-              style: AppStyles.openSans.copyWith(
+              style: AppStyles.poppins.copyWith(
                 color: Colors.purple,
                 fontSize: 13.w,
               ),
@@ -178,7 +337,7 @@ class NewContactField extends StatelessWidget {
                 // isDense: true,
                 floatingLabelBehavior: FloatingLabelBehavior.always,
                 labelText: heading,
-                labelStyle: TextStyle(fontSize: 12.w, color: Colors.purple),
+                labelStyle: AppStyles.poppins.copyWith(fontSize: 12.w, color: Colors.purple),
                 hintText: hint,
                 hintStyle: AppStyles.openSans.copyWith(
                   color: Colors.purple[100],

@@ -1,6 +1,7 @@
 // ignore_for_file: lines_longer_than_80_chars, invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member, inference_failure_on_instance_creation
 
 import 'package:affiliate_platform/config/ripple.dart';
+import 'package:affiliate_platform/profile/profile_page.dart';
 import 'package:affiliate_platform/utils/constants/styles.dart';
 import 'package:affiliate_platform/view/checkIn/checkin.dart';
 import 'package:affiliate_platform/view/checkout/checkin.dart';
@@ -149,14 +150,14 @@ class _CustomScaffoldState extends State<CustomScaffold> {
                             headerBuilder: (context, extended) {
                               return extended
                                   ? Padding(
-                                      padding: EdgeInsets.symmetric(vertical: 20.w),
+                                      padding: const EdgeInsets.symmetric(vertical: 25),
                                       child: Image.asset(
                                         'assets/images/logo-dark.png',
                                         width: 130.w,
                                       ),
                                     )
                                   : Padding(
-                                      padding: EdgeInsets.symmetric(vertical: 20.w),
+                                      padding: const EdgeInsets.symmetric(vertical: 25),
                                       child: Image.asset(
                                         'assets/images/logo.png',
                                         width: 30.w,
@@ -165,9 +166,63 @@ class _CustomScaffoldState extends State<CustomScaffold> {
                             },
                             controller: SidebarXController(selectedIndex: currentSideBarIndex.value, extended: true),
                             items: [
+                              // SidebarXItem(
+                              //   icon: Icons.home,
+                              //   label: 'Home',
+                              //   onTap: () {
+                              //     currentSideBarIndex.value = 0;
+                              //     currentSideBarIndex.notifyListeners();
+
+                              //     menuVisibility.value = false;
+                              //     menuVisibility.notifyListeners();
+
+                              //     Navigator.push(
+                              //       context,
+                              //       MaterialPageRoute(
+                              //         builder: (context) => const ManageContactPage(),
+                              //       ),
+                              //     );
+                              //   },
+                              // ),
+                              // SidebarXItem(
+                              //   icon: Icons.subdirectory_arrow_right_sharp,
+                              //   label: 'Check In',
+                              //   onTap: () {
+                              //     currentSideBarIndex.value = 1;
+                              //     currentSideBarIndex.notifyListeners();
+
+                              //     menuVisibility.value = false;
+                              //     menuVisibility.notifyListeners();
+
+                              //     Navigator.push(
+                              //       context,
+                              //       MaterialPageRoute(
+                              //         builder: (context) => const CheckInPage(),
+                              //       ),
+                              //     );
+                              //   },
+                              // ),
+                              // SidebarXItem(
+                              //   icon: Icons.subdirectory_arrow_left_rounded,
+                              //   label: 'Check Out',
+                              //   onTap: () {
+                              //     currentSideBarIndex.value = 2;
+                              //     currentSideBarIndex.notifyListeners();
+
+                              //     menuVisibility.value = false;
+                              //     menuVisibility.notifyListeners();
+
+                              //     Navigator.push(
+                              //       context,
+                              //       MaterialPageRoute(
+                              //         builder: (context) => const CheckOutPage(),
+                              //       ),
+                              //     );
+                              //   },
+                              // ),
                               SidebarXItem(
-                                icon: Icons.home,
-                                label: 'Home',
+                                icon: Icons.account_box_outlined,
+                                label: 'Manage Contact',
                                 onTap: () {
                                   currentSideBarIndex.value = 0;
                                   currentSideBarIndex.notifyListeners();
@@ -183,9 +238,9 @@ class _CustomScaffoldState extends State<CustomScaffold> {
                                   );
                                 },
                               ),
-                              SidebarXItem(
-                                icon: Icons.subdirectory_arrow_right_sharp,
-                                label: 'Check In',
+                               SidebarXItem(
+                                icon: Icons.person,
+                                label: 'Profile',
                                 onTap: () {
                                   currentSideBarIndex.value = 1;
                                   currentSideBarIndex.notifyListeners();
@@ -196,43 +251,7 @@ class _CustomScaffoldState extends State<CustomScaffold> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => const CheckInPage(),
-                                    ),
-                                  );
-                                },
-                              ),
-                              SidebarXItem(
-                                icon: Icons.subdirectory_arrow_left_rounded,
-                                label: 'Check Out',
-                                onTap: () {
-                                  currentSideBarIndex.value = 2;
-                                  currentSideBarIndex.notifyListeners();
-
-                                  menuVisibility.value = false;
-                                  menuVisibility.notifyListeners();
-
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => const CheckOutPage(),
-                                    ),
-                                  );
-                                },
-                              ),
-                              SidebarXItem(
-                                icon: Icons.account_box_outlined,
-                                label: 'Manage Contact',
-                                onTap: () {
-                                  currentSideBarIndex.value = 3;
-                                  currentSideBarIndex.notifyListeners();
-
-                                  menuVisibility.value = false;
-                                  menuVisibility.notifyListeners();
-
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => const ManageContactPage(),
+                                      builder: (context) => const ProfilePage(),
                                     ),
                                   );
                                 },
@@ -289,7 +308,7 @@ class CustomHeader extends StatelessWidget {
               // border: Border.all(color: Colors.grey[50]!)
             ),
             child: Container(
-              margin: EdgeInsets.only(top: 10.h, left: 10.w, right: 10.w, bottom: 15.h),
+              margin: EdgeInsets.only(top: 10.h, left: 4.w, right: 4.w, bottom: 15.h),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(30.r),
                 color: Colors.white,
