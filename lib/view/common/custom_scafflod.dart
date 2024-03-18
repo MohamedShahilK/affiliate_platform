@@ -29,6 +29,7 @@ class CustomScaffold extends StatefulWidget {
 class _CustomScaffoldState extends State<CustomScaffold> {
   @override
   Widget build(BuildContext context) {
+    final pages = [const ManageContactPage(), const ProfilePage()];
     return Scaffold(
       resizeToAvoidBottomInset: false,
       floatingActionButton: !widget.haveFloatingButton
@@ -49,224 +50,229 @@ class _CustomScaffoldState extends State<CustomScaffold> {
             menuVisibility.value = false;
             menuVisibility.notifyListeners();
           },
-          child: Stack(
-            children: [
-              // Expanded(
-              //   child: Column(
-              //     children: [
-              //       // const CustomHeader(),
+          child: ValueListenableBuilder(
+            valueListenable: currentSideBarIndex,
+            builder: (context, currentIndex, _) {
+              return Stack(
+                children: [
+                  // Expanded(
+                  //   child: Column(
+                  //     children: [
+                  //       // const CustomHeader(),
 
-              //       //
-              //       //
-              //       widget.body,
-              //     ],
-              //   ),
-              // ),
-              widget.body,
+                  //       //
+                  //       //
+                  //       widget.body,
+                  //     ],
+                  //   ),
+                  // ),
+                  widget.body,
 
-              Container(
-                // width: 60.w,
-                child: ValueListenableBuilder(
-                  valueListenable: currentSideBarIndex,
-                  builder: (context, currentIndex, _) {
-                    return ValueListenableBuilder(
-                      valueListenable: menuVisibility,
-                      builder: (context, visi, _) {
-                        return Visibility(
-                          visible: menuVisibility.value,
-                          child: SidebarX(
-                            // showToggleButton: false,
-                            // footerItems: [
-                            //   SidebarXItem(
-                            //     iconWidget: Container(
-                            //       height: 25.w,
-                            //       width: 25.w,
-                            //       decoration: const BoxDecoration(
-                            //         color: Colors.white,
-                            //         shape: BoxShape.circle,
+                  Container(
+                    // width: 60.w,
+                    child: ValueListenableBuilder(
+                      valueListenable: currentSideBarIndex,
+                      builder: (context, currentIndex, _) {
+                        return ValueListenableBuilder(
+                          valueListenable: menuVisibility,
+                          builder: (context, visi, _) {
+                            return Visibility(
+                              visible: menuVisibility.value,
+                              child: SidebarX(
+                                // showToggleButton: false,
+                                // footerItems: [
+                                //   SidebarXItem(
+                                //     iconWidget: Container(
+                                //       height: 25.w,
+                                //       width: 25.w,
+                                //       decoration: const BoxDecoration(
+                                //         color: Colors.white,
+                                //         shape: BoxShape.circle,
 
-                            //       ),
-                            //       child: Icon(
-                            //         Icons.close,
-                            //         color: Colors.black,
-                            //         size: 12.w,
-                            //       ),
-                            //     ),
-                            //     // icon: Icons.home,
-                            //     // label: 'Home',
-                            //     onTap: () {
-                            //       menuVisibility.value = false;
-                            //       menuVisibility.notifyListeners();
-                            //     },
-                            //   ),
-                            // ],
+                                //       ),
+                                //       child: Icon(
+                                //         Icons.close,
+                                //         color: Colors.black,
+                                //         size: 12.w,
+                                //       ),
+                                //     ),
+                                //     // icon: Icons.home,
+                                //     // label: 'Home',
+                                //     onTap: () {
+                                //       menuVisibility.value = false;
+                                //       menuVisibility.notifyListeners();
+                                //     },
+                                //   ),
+                                // ],
 
-                            // footerDivider: Container(
-                            //   height: 25.w,
-                            //   width: 25.w,
-                            //   decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
-                            //   child: Icon(Icons.close, color: Colors.black,size: 12.w,),
-                            // ),
-                            animationDuration: Duration.zero,
-                            theme: SidebarXTheme(
-                              selectedItemDecoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(20.r),
-                              ),
-                              itemTextPadding: EdgeInsets.only(left: 5.w),
-                              selectedItemTextPadding: EdgeInsets.only(left: 5.w),
-                              selectedIconTheme: IconThemeData(color: const Color(0xFF2c343b), size: 18.w),
-                              iconTheme: IconThemeData(color: Colors.white, size: 18.w),
-                              selectedTextStyle: const TextStyle(color: Color(0xFF2c343b)),
-                              textStyle: const TextStyle(color: Colors.white),
-                              margin: EdgeInsets.only(top: 10.h),
-                              padding: EdgeInsets.symmetric(vertical: 10.h),
-                              decoration: BoxDecoration(
-                                // border: Border.all(),
-                                // borderRadius: BorderRadius.circular(20.r),
-                                // color: const Color(0xFF2c343b),
-                                color: const Color(0xFF2c343b),
-                                borderRadius: BorderRadius.only(bottomRight: Radius.circular(25.r), topRight: Radius.circular(25.r)),
-                              ),
-                              width: 50.w,
-                            ),
-                            extendedTheme: SidebarXTheme(
-                              itemTextPadding: EdgeInsets.only(left: 5.w),
-                              selectedItemTextPadding: EdgeInsets.only(left: 5.w),
-                              selectedIconTheme: IconThemeData(color: const Color(0xFF2c343b), size: 18.w),
-                              iconTheme: IconThemeData(color: Colors.white, size: 18.w),
-                              selectedTextStyle: const TextStyle(color: Color(0xFF2c343b)),
-                              textStyle: const TextStyle(color: Colors.white),
-                              // width: 120.w,
-                              width: MediaQuery.of(context).size.width * (3 / 5),
-                              margin: EdgeInsets.only(top: 10.h),
-                              padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 3.w),
-                              decoration: BoxDecoration(
-                                // border: Border.all(),
-                                // color: const Color(0xFF2c343b),
-                                color: const Color(0xFF2c343b),
-                                // borderRadius: BorderRadius.circular(20.r),
-                                borderRadius: BorderRadius.only(bottomRight: Radius.circular(25.r), topRight: Radius.circular(25.r)),
-                              ),
-                            ),
-                            headerBuilder: (context, extended) {
-                              return extended
-                                  ? Padding(
-                                      padding: const EdgeInsets.symmetric(vertical: 25),
-                                      child: Image.asset(
-                                        'assets/images/logo-dark.png',
-                                        width: 130.w,
-                                      ),
-                                    )
-                                  : Padding(
-                                      padding: const EdgeInsets.symmetric(vertical: 25),
-                                      child: Image.asset(
-                                        'assets/images/logo.png',
-                                        width: 30.w,
-                                      ),
-                                    );
-                            },
-                            controller: SidebarXController(selectedIndex: currentSideBarIndex.value, extended: true),
-                            items: [
-                              // SidebarXItem(
-                              //   icon: Icons.home,
-                              //   label: 'Home',
-                              //   onTap: () {
-                              //     currentSideBarIndex.value = 0;
-                              //     currentSideBarIndex.notifyListeners();
-
-                              //     menuVisibility.value = false;
-                              //     menuVisibility.notifyListeners();
-
-                              //     Navigator.push(
-                              //       context,
-                              //       MaterialPageRoute(
-                              //         builder: (context) => const ManageContactPage(),
-                              //       ),
-                              //     );
-                              //   },
-                              // ),
-                              // SidebarXItem(
-                              //   icon: Icons.subdirectory_arrow_right_sharp,
-                              //   label: 'Check In',
-                              //   onTap: () {
-                              //     currentSideBarIndex.value = 1;
-                              //     currentSideBarIndex.notifyListeners();
-
-                              //     menuVisibility.value = false;
-                              //     menuVisibility.notifyListeners();
-
-                              //     Navigator.push(
-                              //       context,
-                              //       MaterialPageRoute(
-                              //         builder: (context) => const CheckInPage(),
-                              //       ),
-                              //     );
-                              //   },
-                              // ),
-                              // SidebarXItem(
-                              //   icon: Icons.subdirectory_arrow_left_rounded,
-                              //   label: 'Check Out',
-                              //   onTap: () {
-                              //     currentSideBarIndex.value = 2;
-                              //     currentSideBarIndex.notifyListeners();
-
-                              //     menuVisibility.value = false;
-                              //     menuVisibility.notifyListeners();
-
-                              //     Navigator.push(
-                              //       context,
-                              //       MaterialPageRoute(
-                              //         builder: (context) => const CheckOutPage(),
-                              //       ),
-                              //     );
-                              //   },
-                              // ),
-                              SidebarXItem(
-                                icon: Icons.account_box_outlined,
-                                label: 'Manage Contact',
-                                onTap: () {
-                                  currentSideBarIndex.value = 0;
-                                  currentSideBarIndex.notifyListeners();
-
-                                  menuVisibility.value = false;
-                                  menuVisibility.notifyListeners();
-
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => const ManageContactPage(),
-                                    ),
-                                  );
+                                // footerDivider: Container(
+                                //   height: 25.w,
+                                //   width: 25.w,
+                                //   decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+                                //   child: Icon(Icons.close, color: Colors.black,size: 12.w,),
+                                // ),
+                                animationDuration: Duration.zero,
+                                theme: SidebarXTheme(
+                                  selectedItemDecoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(20.r),
+                                  ),
+                                  itemTextPadding: EdgeInsets.only(left: 5.w),
+                                  selectedItemTextPadding: EdgeInsets.only(left: 5.w),
+                                  selectedIconTheme: IconThemeData(color: const Color(0xFF2c343b), size: 18.w),
+                                  iconTheme: IconThemeData(color: Colors.white, size: 18.w),
+                                  selectedTextStyle: const TextStyle(color: Color(0xFF2c343b)),
+                                  textStyle: const TextStyle(color: Colors.white),
+                                  margin: EdgeInsets.only(top: 10.h),
+                                  padding: EdgeInsets.symmetric(vertical: 10.h),
+                                  decoration: BoxDecoration(
+                                    // border: Border.all(),
+                                    // borderRadius: BorderRadius.circular(20.r),
+                                    // color: const Color(0xFF2c343b),
+                                    color: const Color(0xFF2c343b),
+                                    borderRadius: BorderRadius.only(bottomRight: Radius.circular(25.r), topRight: Radius.circular(25.r)),
+                                  ),
+                                  width: 50.w,
+                                ),
+                                extendedTheme: SidebarXTheme(
+                                  itemTextPadding: EdgeInsets.only(left: 5.w),
+                                  selectedItemTextPadding: EdgeInsets.only(left: 5.w),
+                                  selectedIconTheme: IconThemeData(color: const Color(0xFF2c343b), size: 18.w),
+                                  iconTheme: IconThemeData(color: Colors.white, size: 18.w),
+                                  selectedTextStyle: const TextStyle(color: Color(0xFF2c343b)),
+                                  textStyle: const TextStyle(color: Colors.white),
+                                  // width: 120.w,
+                                  width: MediaQuery.of(context).size.width * (3 / 5),
+                                  margin: EdgeInsets.only(top: 10.h),
+                                  padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 3.w),
+                                  decoration: BoxDecoration(
+                                    // border: Border.all(),
+                                    // color: const Color(0xFF2c343b),
+                                    color: const Color(0xFF2c343b),
+                                    // borderRadius: BorderRadius.circular(20.r),
+                                    borderRadius: BorderRadius.only(bottomRight: Radius.circular(25.r), topRight: Radius.circular(25.r)),
+                                  ),
+                                ),
+                                headerBuilder: (context, extended) {
+                                  return extended
+                                      ? Padding(
+                                          padding: const EdgeInsets.symmetric(vertical: 25),
+                                          child: Image.asset(
+                                            'assets/images/logo-dark.png',
+                                            width: 130.w,
+                                          ),
+                                        )
+                                      : Padding(
+                                          padding: const EdgeInsets.symmetric(vertical: 25),
+                                          child: Image.asset(
+                                            'assets/images/logo.png',
+                                            width: 30.w,
+                                          ),
+                                        );
                                 },
-                              ),
-                              SidebarXItem(
-                                icon: Icons.person,
-                                label: 'Profile',
-                                onTap: () {
-                                  currentSideBarIndex.value = 1;
-                                  currentSideBarIndex.notifyListeners();
+                                controller: SidebarXController(selectedIndex: currentSideBarIndex.value, extended: true),
+                                items: [
+                                  // SidebarXItem(
+                                  //   icon: Icons.home,
+                                  //   label: 'Home',
+                                  //   onTap: () {
+                                  //     currentSideBarIndex.value = 0;
+                                  //     currentSideBarIndex.notifyListeners();
 
-                                  menuVisibility.value = false;
-                                  menuVisibility.notifyListeners();
+                                  //     menuVisibility.value = false;
+                                  //     menuVisibility.notifyListeners();
 
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => const ProfilePage(),
-                                    ),
-                                  );
-                                },
+                                  //     Navigator.push(
+                                  //       context,
+                                  //       MaterialPageRoute(
+                                  //         builder: (context) => const ManageContactPage(),
+                                  //       ),
+                                  //     );
+                                  //   },
+                                  // ),
+                                  // SidebarXItem(
+                                  //   icon: Icons.subdirectory_arrow_right_sharp,
+                                  //   label: 'Check In',
+                                  //   onTap: () {
+                                  //     currentSideBarIndex.value = 1;
+                                  //     currentSideBarIndex.notifyListeners();
+
+                                  //     menuVisibility.value = false;
+                                  //     menuVisibility.notifyListeners();
+
+                                  //     Navigator.push(
+                                  //       context,
+                                  //       MaterialPageRoute(
+                                  //         builder: (context) => const CheckInPage(),
+                                  //       ),
+                                  //     );
+                                  //   },
+                                  // ),
+                                  // SidebarXItem(
+                                  //   icon: Icons.subdirectory_arrow_left_rounded,
+                                  //   label: 'Check Out',
+                                  //   onTap: () {
+                                  //     currentSideBarIndex.value = 2;
+                                  //     currentSideBarIndex.notifyListeners();
+
+                                  //     menuVisibility.value = false;
+                                  //     menuVisibility.notifyListeners();
+
+                                  //     Navigator.push(
+                                  //       context,
+                                  //       MaterialPageRoute(
+                                  //         builder: (context) => const CheckOutPage(),
+                                  //       ),
+                                  //     );
+                                  //   },
+                                  // ),
+                                  SidebarXItem(
+                                    icon: Icons.account_box_outlined,
+                                    label: 'Manage Contact',
+                                    onTap: () {
+                                      currentSideBarIndex.value = 0;
+                                      currentSideBarIndex.notifyListeners();
+
+                                      menuVisibility.value = false;
+                                      menuVisibility.notifyListeners();
+
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => const ManageContactPage(),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                  SidebarXItem(
+                                    icon: Icons.person,
+                                    label: 'Profile',
+                                    onTap: () {
+                                      currentSideBarIndex.value = 1;
+                                      currentSideBarIndex.notifyListeners();
+
+                                      menuVisibility.value = false;
+                                      menuVisibility.notifyListeners();
+
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => const ProfilePage(),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
+                            );
+                          },
                         );
                       },
-                    );
-                  },
-                ),
-              ),
-            ],
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
         ),
       ),

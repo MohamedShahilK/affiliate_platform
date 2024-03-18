@@ -4,6 +4,7 @@ import 'package:affiliate_platform/utils/constants/styles.dart';
 import 'package:affiliate_platform/view/common/custom_scafflod.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -106,8 +107,8 @@ class NewContact extends StatelessWidget {
                           const NewContactField(heading: 'Company Landline Number', hint: 'eg: 97163466578', textInputType: TextInputType.phone),
                           const NewContactField(heading: 'Company Website', hint: 'eg: https://arabinfotechllc.com/', textInputType: TextInputType.url),
                           const NewContactField(heading: 'Company Location', hint: 'Enter Location'),
-                          const NewContactField(heading: 'Company Address', hint: 'Enter Adress', isLargeField: true),
-                          const NewContactField(heading: 'Remarks if any', hint: '-- NOTE --', isLargeField: true),
+                          const NewContactLargeField(heading: 'Company Address', hint: 'Enter Adress'),
+                          const NewContactLargeField(heading: 'Remarks if any', hint: '-- NOTE --'),
                         ],
                       ),
                     ),
@@ -135,7 +136,7 @@ class NewContact extends StatelessWidget {
                       ],
                     ),
 
-                    SizedBox(height: 15.h),
+                    SizedBox(height: 160.h),
                   ],
                 ),
               ),
@@ -322,17 +323,95 @@ class NewContactField extends StatelessWidget {
           SizedBox(
             height: isLargeField ? null : 50.h,
             child: TextFormField(
+              scrollPadding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom + 15.w * 6, // Adjust the value as needed
+              ),
               // controller: controller,
               style: AppStyles.poppins.copyWith(
                 color: Colors.purple,
                 fontSize: 13.w,
               ),
               keyboardType: !isLargeField ? textInputType : TextInputType.multiline,
-              minLines: !isLargeField ? null : 1,
-              maxLines: !isLargeField ? null : 20,
-              maxLength: !isLargeField ? null : 500,
-              // expands: true,
+              // minLines: !isLargeField ? null : 1,
+              // maxLines: !isLargeField ? null : 20,
+              // maxLength: !isLargeField ? null : 500,
+              // expands:isLargeField ,
               // maxLines: null,
+              decoration: InputDecoration(
+                // isDense: true,
+                floatingLabelBehavior: FloatingLabelBehavior.always,
+                labelText: heading,
+                labelStyle: AppStyles.poppins.copyWith(fontSize: 12.w, color: Colors.purple),
+                hintText: hint,
+                hintStyle: AppStyles.openSans.copyWith(
+                  color: Colors.purple[100],
+                  fontSize: 13.w,
+                ),
+                contentPadding: EdgeInsets.only(left: 15.w),
+                border: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Color.fromARGB(139, 103, 51, 137)),
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Color.fromARGB(139, 103, 51, 137)),
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Color.fromARGB(255, 152, 102, 185)),
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class NewContactLargeField extends StatelessWidget {
+  const NewContactLargeField({
+    // required this.controller,
+    required this.heading,
+    required this.hint,
+    this.textInputType = TextInputType.name,
+    this.isLargeField = false,
+    super.key,
+  });
+
+  // final TextEditingController controller;
+  final String heading;
+  final String hint;
+  final bool isLargeField;
+  final TextInputType textInputType;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 10.h),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Text(heading, style: AppStyles.poppins.copyWith(fontSize: 12.w, color: Colors.purple)),
+          // SizedBox(height: 7.h),
+          SizedBox(
+            height: 100.h,
+            child: TextFormField(
+              scrollPadding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom + 15.w * 6, // Adjust the value as needed
+              ),
+              // controller: controller,
+              style: AppStyles.poppins.copyWith(
+                color: Colors.purple,
+                fontSize: 13.w,
+              ),
+              keyboardType: !isLargeField ? textInputType : TextInputType.multiline,
+              // minLines: !isLargeField ? null : 1,
+              // maxLines: !isLargeField ? null : 20,
+              maxLength: 500,
+              maxLengthEnforcement: MaxLengthEnforcement.enforced,
+              expands: true,
+              maxLines: null,
               decoration: InputDecoration(
                 // isDense: true,
                 floatingLabelBehavior: FloatingLabelBehavior.always,
