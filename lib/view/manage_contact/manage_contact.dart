@@ -4,6 +4,7 @@ import 'dart:async';
 
 import 'package:affiliate_platform/config/ripple.dart';
 import 'package:affiliate_platform/utils/constants/styles.dart';
+import 'package:affiliate_platform/utils/custom_tools.dart';
 import 'package:affiliate_platform/view/common/custom_scafflod.dart';
 import 'package:affiliate_platform/view/manage_contact/data_sample.dart';
 import 'package:affiliate_platform/view/manage_contact/new_contact.dart';
@@ -12,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
 class ManageContactPage extends StatelessWidget {
   const ManageContactPage({super.key});
@@ -424,7 +426,8 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                             // 'NA',
                             style: TextStyle(color: Colors.grey[800], fontSize: 10.w),
                             textAlign: TextAlign.justify,
-                          ),SizedBox(height: 4.h),
+                          ),
+                          SizedBox(height: 4.h),
                           Align(
                             alignment: Alignment.bottomRight,
                             child: Container(
@@ -490,17 +493,39 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                               _EachContachSmallButtons(
                                 color: Colors.orange[600]!,
                                 icon: Icons.email_outlined,
-                                onTap: () {},
+                                onTap: () {
+                                  String? encodeQueryParameters(Map<String, String> params) {
+                                    return params.entries.map((MapEntry<String, String> e) => '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}').join('&');
+                                  }
+
+                                  final emailLaunchUri = Uri(
+                                    scheme: 'mailto',
+                                    path: widget.model.email,
+                                    query: encodeQueryParameters(<String, String>{
+                                      'subject': 'Example Subject & Symbols are allowed!',
+                                    }),
+                                  );
+
+                                  UrlLauncher.launchUrl(emailLaunchUri);
+                                },
                               ),
                               _EachContachSmallButtons(
                                 color: Colors.blue[700]!,
                                 icon: Icons.phone_outlined,
-                                onTap: () {},
+                                onTap: () {
+                                  UrlLauncher.launchUrl(Uri.parse('tel://${widget.model.phoneNumber.contains('+') ? widget.model.phoneNumber : '+971${widget.model.phoneNumber}'}'));
+                                },
                               ),
                               _EachContachSmallButtons(
                                 color: Colors.green[500]!,
                                 icon: FontAwesomeIcons.whatsapp,
-                                onTap: () {},
+                                onTap: () async {
+                                  final whatsappUrl = 'whatsapp://send?phone=${widget.model.phoneNumber.contains('+') ? widget.model.phoneNumber : '+971${widget.model.phoneNumber}'}';
+                                  await UrlLauncher.canLaunchUrl(Uri.parse(whatsappUrl))
+                                      ? UrlLauncher.launchUrl(Uri.parse(whatsappUrl))
+                                      // ignore: use_build_context_synchronously
+                                      : await erroMotionToastInfo(context, msg: 'WhatsApp is not installed');
+                                },
                               ),
                             ],
                           ),
@@ -530,7 +555,7 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>  ViewContact(model:widget.model),
+                                builder: (context) => ViewContact(model: widget.model),
                               ),
                             );
                           },
