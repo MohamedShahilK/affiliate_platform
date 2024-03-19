@@ -6,6 +6,7 @@ import 'package:affiliate_platform/utils/constants/styles.dart';
 import 'package:affiliate_platform/view/common/custom_scafflod.dart';
 import 'package:affiliate_platform/view/common/sidebar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -29,7 +30,7 @@ class _ProfilePageState extends State<ProfilePage> {
       canPop: false,
       child: CustomScaffold(
         key: _refreshKey,
-        floatingActionButtonIcon: FontAwesomeIcons.userPen,        
+        floatingActionButtonIcon: FontAwesomeIcons.userPen,
         onTapFloatingButton: () {
           Navigator.push(
             context,
@@ -145,32 +146,52 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                             // Top Section
 
-                            SizedBox(height: 50.h),
+                            SizedBox(height: 40.h),
 
                             // Below
-                            Align(
-                              alignment: Alignment.bottomLeft,
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 15.w),
-                                child: const Column(
-                                  children: [
-                                    _BottomSectionItem(icon: Icons.home_work_outlined, field: 'Permanent Address', value: 'Shree Revabhai Industrial Estate, CTM Sureliya Road, Amraiwadi'),
-                                    _BottomSectionItem(
-                                      icon: Icons.home_outlined,
-                                      field: 'Communication Address',
-                                      value: 'Grd Floor Sidhartha Chamber, Gokhale Road, Naupada , Opp. Gaodevi Mandir, Naupada',
-                                    ),
-                                    _BottomSectionItem(
-                                      icon: Icons.school_outlined,
-                                      field: 'Education / Qualification Information',
-                                      value: "Master's in Computer Science, Stanford University, 2020. Specialization: Artificial Intelligence and Machine Learning",
-                                    ),
-                                    _BottomSectionItem(
-                                      icon: Icons.business_center_outlined,
-                                      field: 'Previous Experience Information',
-                                      value: 'Software Engineer at Google, 5 years. Specialized in backend development and distributed systems architecture',
-                                    ),
-                                  ],
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(15),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    spreadRadius: 3,
+                                    blurRadius: 7,
+                                    offset: const Offset(0, 3), // changes position of shadow
+                                  ),
+                                ],
+                              ),
+                              margin: EdgeInsets.symmetric(horizontal: 25.w),
+                              child: Align(
+                                alignment: Alignment.bottomLeft,
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
+                                  child: Column(
+                                    children: [
+                                      SizedBox(height: 16.h),
+                                      const _BottomSectionItem(
+                                        icon: Icons.home_work_outlined,
+                                        field: 'Permanent Address',
+                                        value: 'Shree Revabhai Industrial Estate, CTM Sureliya Road, Amraiwadi',
+                                      ),
+                                      const _BottomSectionItem(
+                                        icon: Icons.home_outlined,
+                                        field: 'Communication Address',
+                                        value: 'Grd Floor Sidhartha Chamber, Gokhale Road, Naupada , Opp. Gaodevi Mandir, Naupada',
+                                      ),
+                                      const _BottomSectionItem(
+                                        icon: Icons.school_outlined,
+                                        field: 'Education / Qualification Information',
+                                        value: "Master's in Computer Science, Stanford University, 2020. Specialization: Artificial Intelligence and Machine Learning",
+                                      ),
+                                      const _BottomSectionItem(
+                                        icon: Icons.business_center_outlined,
+                                        field: 'Previous Experience Information',
+                                        value: 'Software Engineer at Google, 5 years. Specialized in backend development and distributed systems architecture',
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
@@ -216,11 +237,11 @@ class _BottomSectionItem extends StatelessWidget {
             ],
           ),
           Padding(
-            padding: EdgeInsets.only(left: 8.w),
+            padding: EdgeInsets.only(top: 3.h, left: 8.w),
             child: SelectableText(
               value,
               // textAlign: TextAlign.justify,
-              style: AppStyles.poppins.copyWith(fontSize: 13.w, color: Colors.grey[800]),
+              style: AppStyles.poppins.copyWith(fontSize: 13.w, color: Colors.grey[800],fontStyle: FontStyle.italic),
             ),
           ),
         ],
