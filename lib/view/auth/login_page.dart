@@ -62,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
         child: ClipRRect(
           child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            filter: ImageFilter.blur(sigmaX: 7, sigmaY: 7),
             child: Padding(
               padding: EdgeInsets.symmetric(vertical: 30.h, horizontal: 35.w),
               child: Column(
