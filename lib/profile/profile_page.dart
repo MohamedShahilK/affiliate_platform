@@ -29,7 +29,15 @@ class _ProfilePageState extends State<ProfilePage> {
       canPop: false,
       child: CustomScaffold(
         key: _refreshKey,
-        haveFloatingButton: false,
+        floatingActionButtonIcon: FontAwesomeIcons.userPen,        
+        onTapFloatingButton: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const EditProfile(),
+            ),
+          );
+        },
         body: GestureDetector(
           onTap: _handleLocaleChanged,
           child: Column(
@@ -39,9 +47,9 @@ class _ProfilePageState extends State<ProfilePage> {
               //   isBackButtonNeeded: true,
               //   isTrailingButtonNeeded: true,
               // ),
-      
-              CustomHeader(),
-      
+
+              const CustomHeader(),
+
               //
               Expanded(
                 child: SingleChildScrollView(
@@ -51,14 +59,6 @@ class _ProfilePageState extends State<ProfilePage> {
                         padding: EdgeInsets.symmetric(vertical: 20.h),
                         child: Column(
                           children: [
-                            const Icon(FontAwesomeIcons.userPen).ripple(context, () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const EditProfile(),
-                                ),
-                              );
-                            }),
                             // DP
                             Stack(
                               children: [
@@ -88,11 +88,11 @@ class _ProfilePageState extends State<ProfilePage> {
                               ],
                             ),
                             // DP
-      
+
                             // const Spacer(),
-      
+
                             SizedBox(height: 15.h),
-      
+
                             // Top Section
                             Column(
                               // crossAxisAlignment: CrossAxisAlignment.center,
@@ -144,9 +144,9 @@ class _ProfilePageState extends State<ProfilePage> {
                               ],
                             ),
                             // Top Section
-      
+
                             SizedBox(height: 50.h),
-      
+
                             // Below
                             Align(
                               alignment: Alignment.bottomLeft,

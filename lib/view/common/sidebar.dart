@@ -31,7 +31,8 @@ class _SideBarState extends State<SideBar> {
   @override
   Widget build(BuildContext context) {
     final pages = [const ManageContactPage(), const ProfilePage()];
-    return CustomScaffold(     
+    return CustomScaffold(
+      haveFloatingButton: false,     
       body: SafeArea(
         child: GestureDetector(
           onTap: () {

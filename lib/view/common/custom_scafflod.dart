@@ -7,11 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomScaffold extends StatefulWidget {
-  const CustomScaffold({required this.body, this.onTapFloatingButton, this.haveFloatingButton = true, super.key});
+  const CustomScaffold({required this.body,  this.floatingActionButtonIcon, this.onTapFloatingButton, this.haveFloatingButton = true, this.floatingActionButtonColor, super.key});
 
   final Widget body;
   final VoidCallback? onTapFloatingButton;
   final bool haveFloatingButton;
+  final Color? floatingActionButtonColor;
+  final IconData? floatingActionButtonIcon;
 
   @override
   State<CustomScaffold> createState() => _CustomScaffoldState();
@@ -27,8 +29,8 @@ class _CustomScaffoldState extends State<CustomScaffold> {
           ? null
           : Container(
               padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.w),
-              decoration: BoxDecoration(color: Colors.purple[400], shape: BoxShape.circle),
-              child: Icon(Icons.add, color: Colors.white, size: 22.w),
+              decoration: BoxDecoration(color: widget.floatingActionButtonColor ?? Colors.purple[400], shape: BoxShape.circle),
+              child: Icon(widget.floatingActionButtonIcon ?? Icons.add, color: Colors.white, size: 22.w),
             ).ripple(context, () {
               if (widget.haveFloatingButton && widget.onTapFloatingButton != null) {
                 widget.onTapFloatingButton!();

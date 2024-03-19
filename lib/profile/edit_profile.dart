@@ -12,18 +12,13 @@ class EditProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      onPopInvoked: (didPop) {
-        currentSideBarIndex.value = 1;
-        currentSideBarIndex.notifyListeners();
-      },
-      canPop: false,
-      child: CustomScaffold(
-        haveFloatingButton: false,
-        body: Column(
+    return CustomScaffold(
+      haveFloatingButton: false,
+      body: SafeArea(
+        child: Column(
           children: [
             const CustomHeader(heading: 'Edit Profile', isBackButtonNeeded: true),
-      
+              
             //
             Expanded(
               child: SingleChildScrollView(
@@ -42,9 +37,9 @@ class EditProfile extends StatelessWidget {
                       const NewContactLargeField(heading: 'Communication Address', hint: 'Communication Address'),
                       const NewContactLargeField(heading: 'Education / Qualification Information', hint: 'Education / Qualification Information'),
                       const NewContactLargeField(heading: 'Previous Experience Information', hint: 'Previous Experience Information'),
-      
+              
                       SizedBox(height: 15.h),
-      
+              
                       // Buttons
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
@@ -68,7 +63,7 @@ class EditProfile extends StatelessWidget {
                           ),
                         ],
                       ),
-      
+              
                       SizedBox(height: 160.h),
                     ],
                   ),
