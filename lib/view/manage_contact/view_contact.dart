@@ -3,6 +3,7 @@
 import 'package:affiliate_platform/config/ripple.dart';
 import 'package:affiliate_platform/utils/constants/styles.dart';
 import 'package:affiliate_platform/view/common/custom_scafflod.dart';
+import 'package:affiliate_platform/view/common/sidebar.dart';
 import 'package:affiliate_platform/view/manage_contact/data_sample.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

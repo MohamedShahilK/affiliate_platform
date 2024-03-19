@@ -2,6 +2,7 @@
 
 import 'package:affiliate_platform/utils/constants/styles.dart';
 import 'package:affiliate_platform/view/common/custom_scafflod.dart';
+import 'package:affiliate_platform/view/common/sidebar.dart';
 import 'package:affiliate_platform/view/manage_contact/new_contact.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

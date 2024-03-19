@@ -1,6 +1,7 @@
 import 'package:affiliate_platform/config/flavor_banner.dart';
 import 'package:affiliate_platform/utils/l10n/l10n.dart';
 import 'package:affiliate_platform/view/auth/login_page.dart';
+import 'package:affiliate_platform/view/common/sidebar.dart';
 import 'package:affiliate_platform/view/manage_contact/manage_contact.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -42,7 +43,7 @@ class App extends StatelessWidget {
               debugShowCheckedModeBanner: false,
               localizationsDelegates: AppLocalizations.localizationsDelegates,
               supportedLocales: AppLocalizations.supportedLocales,
-              home: ManageContactPage(),
+              home: SideBar(),
               // home: LoginPage(),
             ),
           );
