@@ -16,134 +16,136 @@ class NewContact extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomScaffold(
       haveFloatingButton: false,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const CustomHeader(isBackButtonNeeded: true, heading: 'Add New Contact'),
-          // Padding(
-          //   padding: EdgeInsets.only(top: 15.h),
-          //   // child: Row(
-          //   //   children: [
-          //   //     const Expanded(child: Divider(height: 1)),
-          //   //     SizedBox(width: 15.w),
-          //   //     Text(
-          //   //       'Add New Contact',
-          //   //       style: AppStyles.poppins.copyWith(fontSize: 16.w),
-          //   //     ),
-          //   //     SizedBox(width: 15.w),
-          //   //     const Expanded(child: Divider(height: 1)),
-          //   //   ],
-          //   // ),
-          //   // child: Padding(
-          //   //   padding: EdgeInsets.only(left: 15.w),
-          //   //   child: Stack(
-          //   //     alignment: Alignment.center,
-          //   //     children: [
-          //   //       SizedBox(height: 30.h),
-          //   //       Positioned(
-          //   //         left: 0,
-          //   //         right: 0,
-          //   //         top: 0,
-          //   //         child: Container(
-          //   //           height: .6.h,
-          //   //           color: Colors.grey[400],
-          //   //         ),
-          //   //       ),
-          //   //       Text(
-          //   //         'Add New Contact',
-          //   //         style: AppStyles.poppins.copyWith(fontSize: 14.w, fontWeight: FontWeight.w700, color: Colors.grey[600]),
-          //   //       ),
-          //   //       Positioned(
-          //   //         left: 0,
-          //   //         right: 0,
-          //   //         bottom: 0,
-          //   //         child: Container(
-          //   //           height: .6.h,
-          //   //           color: Colors.grey[400],
-          //   //         ),
-          //   //       ),
-          //   //     ],
-          //   //   ),
-          //   // ),
-          //   child: Padding(
-          //     padding: EdgeInsets.only(left: 15.w),
-          //     child: Text(
-          //       'Add New Contact',
-          //       style: AppStyles.openSans.copyWith(fontSize: 13.w, fontWeight: FontWeight.w700, color: Colors.grey[600]),
-          //     ),
-          //   ),
-          // ),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 12.h),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Heading
-
-                    // Form Fields
-
-                    Padding(
-                      padding: EdgeInsets.only(top: 7.h),
-                      child: Column(
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const CustomHeader(isBackButtonNeeded: true, heading: 'Add New Contact'),
+            // Padding(
+            //   padding: EdgeInsets.only(top: 15.h),
+            //   // child: Row(
+            //   //   children: [
+            //   //     const Expanded(child: Divider(height: 1)),
+            //   //     SizedBox(width: 15.w),
+            //   //     Text(
+            //   //       'Add New Contact',
+            //   //       style: AppStyles.poppins.copyWith(fontSize: 16.w),
+            //   //     ),
+            //   //     SizedBox(width: 15.w),
+            //   //     const Expanded(child: Divider(height: 1)),
+            //   //   ],
+            //   // ),
+            //   // child: Padding(
+            //   //   padding: EdgeInsets.only(left: 15.w),
+            //   //   child: Stack(
+            //   //     alignment: Alignment.center,
+            //   //     children: [
+            //   //       SizedBox(height: 30.h),
+            //   //       Positioned(
+            //   //         left: 0,
+            //   //         right: 0,
+            //   //         top: 0,
+            //   //         child: Container(
+            //   //           height: .6.h,
+            //   //           color: Colors.grey[400],
+            //   //         ),
+            //   //       ),
+            //   //       Text(
+            //   //         'Add New Contact',
+            //   //         style: AppStyles.poppins.copyWith(fontSize: 14.w, fontWeight: FontWeight.w700, color: Colors.grey[600]),
+            //   //       ),
+            //   //       Positioned(
+            //   //         left: 0,
+            //   //         right: 0,
+            //   //         bottom: 0,
+            //   //         child: Container(
+            //   //           height: .6.h,
+            //   //           color: Colors.grey[400],
+            //   //         ),
+            //   //       ),
+            //   //     ],
+            //   //   ),
+            //   // ),
+            //   child: Padding(
+            //     padding: EdgeInsets.only(left: 15.w),
+            //     child: Text(
+            //       'Add New Contact',
+            //       style: AppStyles.openSans.copyWith(fontSize: 13.w, fontWeight: FontWeight.w700, color: Colors.grey[600]),
+            //     ),
+            //   ),
+            // ),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 12.h),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Heading
+        
+                      // Form Fields
+        
+                      Padding(
+                        padding: EdgeInsets.only(top: 7.h),
+                        child: Column(
+                          children: [
+                            const NewContactField(heading: 'Contact Name', hint: 'Contact Person Full Name'),
+                            NewContactDropDown(
+                              heading: 'Contact Type',
+                              hint: 'Select Contact Type',
+                              items: const ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'],
+                              label: 'Contact Type',
+                            ), //dropdown
+                            const NewContactField(heading: 'Mobile Number', hint: 'eg: 9719864631313', textInputType: TextInputType.phone),
+                            const NewContactField(heading: 'Email Address', hint: 'eg: example@exm.com', textInputType: TextInputType.emailAddress),
+                            NewContactDropDown(
+                              heading: 'Contact Source',
+                              hint: 'Select Contact Source',
+                              items: const ['', 'Internet', 'Social Media', 'Email'],
+                              label: 'Contact Source',
+                            ), //dropdown
+                            const NewContactField(heading: 'Contact Destination', hint: 'eg: CEO'),
+                            const NewContactField(heading: 'Company Name', hint: 'eg: Arabinfotec Pvt Ltd'),
+                            const NewContactField(heading: 'Company Landline Number', hint: 'eg: 97163466578', textInputType: TextInputType.phone),
+                            const NewContactField(heading: 'Company Website', hint: 'eg: https://arabinfotechllc.com/', textInputType: TextInputType.url),
+                            const NewContactField(heading: 'Company Location', hint: 'Enter Location'),
+                            const NewContactLargeField(heading: 'Company Address', hint: 'Enter Adress'),
+                            const NewContactLargeField(heading: 'Remarks if any', hint: '-- NOTE --'),
+                          ],
+                        ),
+                      ),
+        
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          const NewContactField(heading: 'Contact Name', hint: 'Contact Person Full Name'),
-                          NewContactDropDown(
-                            heading: 'Contact Type',
-                            hint: 'Select Contact Type',
-                            items: const ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'],
-                            label: 'Contact Type',
-                          ), //dropdown
-                          const NewContactField(heading: 'Mobile Number', hint: 'eg: 9719864631313', textInputType: TextInputType.phone),
-                          const NewContactField(heading: 'Email Address', hint: 'eg: example@exm.com', textInputType: TextInputType.emailAddress),
-                          NewContactDropDown(
-                            heading: 'Contact Source',
-                            hint: 'Select Contact Source',
-                            items: const ['', 'Internet', 'Social Media', 'Email'],
-                            label: 'Contact Source',
-                          ), //dropdown
-                          const NewContactField(heading: 'Contact Destination', hint: 'eg: CEO'),
-                          const NewContactField(heading: 'Company Name', hint: 'eg: Arabinfotec Pvt Ltd'),
-                          const NewContactField(heading: 'Company Landline Number', hint: 'eg: 97163466578', textInputType: TextInputType.phone),
-                          const NewContactField(heading: 'Company Website', hint: 'eg: https://arabinfotechllc.com/', textInputType: TextInputType.url),
-                          const NewContactField(heading: 'Company Location', hint: 'Enter Location'),
-                          const NewContactLargeField(heading: 'Company Address', hint: 'Enter Adress'),
-                          const NewContactLargeField(heading: 'Remarks if any', hint: '-- NOTE --'),
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
+                            decoration: BoxDecoration(
+                              color: Colors.orange,
+                              borderRadius: BorderRadius.circular(15.r),
+                            ),
+                            child: Text('Reset', style: AppStyles.poppins.copyWith(fontSize: 14.w, color: Colors.white)),
+                          ),
+                          SizedBox(width: 10.w),
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
+                            decoration: BoxDecoration(
+                              color: Colors.purple,
+                              borderRadius: BorderRadius.circular(15.r),
+                            ),
+                            child: Text('Submit', style: AppStyles.poppins.copyWith(fontSize: 14.w, color: Colors.white)),
+                          ),
                         ],
                       ),
-                    ),
-
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
-                          decoration: BoxDecoration(
-                            color: Colors.orange,
-                            borderRadius: BorderRadius.circular(15.r),
-                          ),
-                          child: Text('Reset', style: AppStyles.poppins.copyWith(fontSize: 14.w, color: Colors.white)),
-                        ),
-                        SizedBox(width: 10.w),
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
-                          decoration: BoxDecoration(
-                            color: Colors.purple,
-                            borderRadius: BorderRadius.circular(15.r),
-                          ),
-                          child: Text('Submit', style: AppStyles.poppins.copyWith(fontSize: 14.w, color: Colors.white)),
-                        ),
-                      ],
-                    ),
-
-                    SizedBox(height: 160.h),
-                  ],
+        
+                      SizedBox(height: 160.h),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
