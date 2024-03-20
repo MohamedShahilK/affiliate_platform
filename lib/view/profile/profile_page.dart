@@ -3,7 +3,7 @@
 import 'dart:io';
 
 import 'package:affiliate_platform/config/ripple.dart';
-import 'package:affiliate_platform/profile/edit_profile.dart';
+import 'package:affiliate_platform/view/profile/edit_profile.dart';
 import 'package:affiliate_platform/utils/constants/styles.dart';
 import 'package:affiliate_platform/utils/image_related.dart';
 import 'package:affiliate_platform/view/common/custom_scafflod.dart';
@@ -274,7 +274,7 @@ class _ProfilePageState extends State<ProfilePage> with ImagePickerMixin {
                                     children: [
                                       // SizedBox(height: 16.h),
                                       _BottomSectionItem(
-                                        icon: Icons.email,
+                                        icon: Icons.email_outlined,
                                         field: 'Email',
                                         value: 'shahil@virtualsystechnologies.com',
                                       ),

@@ -1,8 +1,8 @@
 // ignore_for_file: lines_longer_than_80_chars, invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member, inference_failure_on_instance_creation
 
 import 'package:affiliate_platform/config/ripple.dart';
-import 'package:affiliate_platform/profile/edit_profile.dart';
-import 'package:affiliate_platform/profile/profile_page.dart';
+import 'package:affiliate_platform/view/profile/edit_profile.dart';
+import 'package:affiliate_platform/view/profile/profile_page.dart';
 import 'package:affiliate_platform/utils/constants/styles.dart';
 import 'package:affiliate_platform/view/checkIn/checkin.dart';
 import 'package:affiliate_platform/view/checkout/checkin.dart';
