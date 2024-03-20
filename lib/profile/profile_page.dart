@@ -1,12 +1,17 @@
-// ignore_for_file: cascade_invocations, lines_longer_than_80_chars
+// ignore_for_file: cascade_invocations, lines_longer_than_80_chars, invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member, inference_failure_on_instance_creation
 
+import 'dart:io';
+
+import 'package:affiliate_platform/config/ripple.dart';
 import 'package:affiliate_platform/profile/edit_profile.dart';
 import 'package:affiliate_platform/utils/constants/styles.dart';
+import 'package:affiliate_platform/utils/image_related.dart';
 import 'package:affiliate_platform/view/common/custom_scafflod.dart';
 import 'package:affiliate_platform/view/common/sidebar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -15,9 +20,9 @@ class ProfilePage extends StatefulWidget {
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
-  Key _refreshKey = UniqueKey();
-  
+class _ProfilePageState extends State<ProfilePage> with ImagePickerMixin {
+  final _refreshKey = UniqueKey();
+
   // To update or hot reload
   // void _handleLocaleChanged() => setState(() {
   //       _refreshKey = UniqueKey();
@@ -26,7 +31,9 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      canPop: false,
+      onPopInvoked: (didPop) {
+        Navigator.pop(context);
+      },
       child: GestureDetector(
         onTap: () {
           menuVisibility.value = false;
@@ -46,9 +53,9 @@ class _ProfilePageState extends State<ProfilePage> {
           body: GestureDetector(
             // onTap: _handleLocaleChanged,
             onTap: () {
-          menuVisibility.value = false;
-          menuVisibility.notifyListeners();
-        },
+              menuVisibility.value = false;
+              menuVisibility.notifyListeners();
+            },
             child: Column(
               children: [
                 // const CustomHeader(
@@ -95,7 +102,38 @@ class _ProfilePageState extends State<ProfilePage> {
                                     ),
                                   ),
                                 ],
-                              ),
+                              ).ripple(context, () async {
+                                final imageSrc = await selectImagePickerSource(context);
+
+                                final xfile = await pickXFileImage(context, imageSource: imageSrc!);
+
+                                if (xfile != null) {
+                                  await compressAndResizeImage(File(xfile.path)).then((fileInJpg) {
+                                  print('3333333333333333333333333333333333333333333');
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                        backgroundColor: Colors.transparent,
+                                        actionsPadding: EdgeInsets.zero,
+                                        iconPadding: EdgeInsets.zero,
+                                        buttonPadding: EdgeInsets.zero,
+                                        contentPadding: EdgeInsets.zero,
+                                        // insetPadding: EdgeInsets.zero,
+                                        // insetPadding: const EdgeInsets.symmetric(
+                                        //   horizontal: 70,
+                                        // ),
+                                        insetPadding: EdgeInsets.only(
+                                          bottom: 50.h,
+                                          left: 15.w,
+                                          right: 15.w,
+                                        ),
+                                        titlePadding: EdgeInsets.zero,
+                                        content: Image.file(fileInJpg),
+                                      ),
+                                    );
+                                  });
+                                }
+                              }),
                               // DP
 
                               // const Spacer(),
