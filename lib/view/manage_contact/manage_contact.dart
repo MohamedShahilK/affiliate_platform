@@ -11,13 +11,26 @@ import 'package:affiliate_platform/view/manage_contact/data_sample.dart';
 import 'package:affiliate_platform/view/manage_contact/new_contact.dart';
 import 'package:affiliate_platform/view/manage_contact/view_contact.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
-class ManageContactPage extends StatelessWidget {
+class ManageContactPage extends StatefulWidget {
   const ManageContactPage({super.key});
+
+  @override
+  State<ManageContactPage> createState() => _ManageContactPageState();
+}
+
+class _ManageContactPageState extends State<ManageContactPage> {
+  var _refreshKey = UniqueKey();
+
+  // To update or hot reload
+  void _handleLocaleChanged() => setState(() {
+        _refreshKey = UniqueKey();
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -25,72 +38,81 @@ class ManageContactPage extends StatelessWidget {
       onPopInvoked: (didPop) {
         Navigator.pop(context);
       },
-      child: CustomScaffold(
-        onTapFloatingButton: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const NewContact(),
-            ),
-          );
-        },
-        body: Column(
-          children: [
-            const CustomHeader(),
-            // Align(
-            //   alignment: Alignment.topRight,
-            //   child: Padding(
-            //     padding: EdgeInsets.only(right: 15.w, top: 3.h, bottom: 3.h),
-            //     child: ElevatedButton(
-            //       onPressed: () {
-            //         Navigator.push(
-            //           context,
-            //           MaterialPageRoute(
-            //             builder: (context) => const NewContact(),
-            //           ),
-            //         );
-            //       },
-            //       child: Text(
-            //         'Create New Contact',
-            //         style: AppStyles.poppins.copyWith(fontSize: 10.w, fontWeight: FontWeight.w700, color: Colors.purple[800]),
-            //       ),
-            //     ),
-            //   ),
-            // ),
-      
-            //
-            //
-            Expanded(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 15.w),
-                  child: Column(
-                    children: [
-                      SizedBox(height: 15.h),
-                      // _CustomExpansionTile(),
-                      // _CustomExpansionTile(),
-                      // _CustomExpansionTile(),
-                      // _CustomExpansionTile(),
-                      // _CustomExpansionTile(),
-                      // _CustomExpansionTile(),
-                      // _CustomExpansionTile(),
-                      // _CustomExpansionTile(),
-                      // _CustomExpansionTile(),
-      
-                      ...List.generate(sampleList['contacts']!.length, (index) {
-                        final list = sampleList['contacts']?[index];
-                        final model = Contact.fromJson(list ?? {});
-                        return _CustomExpansionTile(
-                          model: model,
-                          index: index,
-                        );
-                      }),
-                    ],
+      child:  GestureDetector(
+          // onTap: _handleLocaleChanged,
+          onTap: () {
+            _handleLocaleChanged();
+            menuVisibility.value = false;
+            menuVisibility.notifyListeners();
+          },
+        child: CustomScaffold(
+          key: _refreshKey,
+          onTapFloatingButton: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const NewContact(),
+              ),
+            );
+          },
+          body: Column(
+            children: [
+              const CustomHeader(),
+              // Align(
+              //   alignment: Alignment.topRight,
+              //   child: Padding(
+              //     padding: EdgeInsets.only(right: 15.w, top: 3.h, bottom: 3.h),
+              //     child: ElevatedButton(
+              //       onPressed: () {
+              //         Navigator.push(
+              //           context,
+              //           MaterialPageRoute(
+              //             builder: (context) => const NewContact(),
+              //           ),
+              //         );
+              //       },
+              //       child: Text(
+              //         'Create New Contact',
+              //         style: AppStyles.poppins.copyWith(fontSize: 10.w, fontWeight: FontWeight.w700, color: Colors.purple[800]),
+              //       ),
+              //     ),
+              //   ),
+              // ),
+        
+              //
+              //
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 15.w),
+                    child: Column(
+                      children: [
+                        SizedBox(height: 15.h),
+                        // _CustomExpansionTile(),
+                        // _CustomExpansionTile(),
+                        // _CustomExpansionTile(),
+                        // _CustomExpansionTile(),
+                        // _CustomExpansionTile(),
+                        // _CustomExpansionTile(),
+                        // _CustomExpansionTile(),
+                        // _CustomExpansionTile(),
+                        // _CustomExpansionTile(),
+        
+                        ...List.generate(sampleList['contacts']!.length, (index) {
+                          final list = sampleList['contacts']?[index];
+                          final model = Contact.fromJson(list ?? {});
+                          return _CustomExpansionTile(
+                            model: model,
+                            index: index,
+                          );
+                        }),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -421,12 +443,12 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          SelectableText(
                             'Next Followup : ',
                             style: AppStyles.poppins.copyWith(fontWeight: FontWeight.w900, color: Colors.purple[900], fontSize: 11.w),
                           ),
                           SizedBox(height: 2.h),
-                          Text(
+                          SelectableText(
                             // "I hope you're doing well. I wanted to touch base regarding the custom software development project for XYZ Corporation. Following our recent discussions, our team has been actively refining the project scope and strategies to ensure we meet your needs effectively.",
                             widget.model.sampleFollowupMessage,
                             // 'NA',

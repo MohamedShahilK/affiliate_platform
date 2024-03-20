@@ -29,7 +29,7 @@ class _CustomScaffoldState extends State<CustomScaffold> {
           ? null
           : Container(
               padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.w),
-              decoration: BoxDecoration(color: widget.floatingActionButtonColor ?? Colors.purple[400], shape: BoxShape.circle),
+              decoration: BoxDecoration(color: widget.floatingActionButtonColor ?? Colors.purple[900], shape: BoxShape.circle),
               child: Icon(widget.floatingActionButtonIcon ?? Icons.add, color: Colors.white, size: 22.w),
             ).ripple(context, () {
               if (widget.haveFloatingButton && widget.onTapFloatingButton != null) {
