@@ -21,72 +21,77 @@ class ManageContactPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
-      onTapFloatingButton: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const NewContact(),
-          ),
-        );
+    return PopScope(
+      onPopInvoked: (didPop) {
+        Navigator.pop(context);
       },
-      body: Column(
-        children: [
-          const CustomHeader(),
-          // Align(
-          //   alignment: Alignment.topRight,
-          //   child: Padding(
-          //     padding: EdgeInsets.only(right: 15.w, top: 3.h, bottom: 3.h),
-          //     child: ElevatedButton(
-          //       onPressed: () {
-          //         Navigator.push(
-          //           context,
-          //           MaterialPageRoute(
-          //             builder: (context) => const NewContact(),
-          //           ),
-          //         );
-          //       },
-          //       child: Text(
-          //         'Create New Contact',
-          //         style: AppStyles.poppins.copyWith(fontSize: 10.w, fontWeight: FontWeight.w700, color: Colors.purple[800]),
-          //       ),
-          //     ),
-          //   ),
-          // ),
-
-          //
-          //
-          Expanded(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15.w),
-                child: Column(
-                  children: [
-                    SizedBox(height: 15.h),
-                    // _CustomExpansionTile(),
-                    // _CustomExpansionTile(),
-                    // _CustomExpansionTile(),
-                    // _CustomExpansionTile(),
-                    // _CustomExpansionTile(),
-                    // _CustomExpansionTile(),
-                    // _CustomExpansionTile(),
-                    // _CustomExpansionTile(),
-                    // _CustomExpansionTile(),
-
-                    ...List.generate(sampleList['contacts']!.length, (index) {
-                      final list = sampleList['contacts']?[index];
-                      final model = Contact.fromJson(list ?? {});
-                      return _CustomExpansionTile(
-                        model: model,
-                        index: index,
-                      );
-                    }),
-                  ],
+      child: CustomScaffold(
+        onTapFloatingButton: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const NewContact(),
+            ),
+          );
+        },
+        body: Column(
+          children: [
+            const CustomHeader(),
+            // Align(
+            //   alignment: Alignment.topRight,
+            //   child: Padding(
+            //     padding: EdgeInsets.only(right: 15.w, top: 3.h, bottom: 3.h),
+            //     child: ElevatedButton(
+            //       onPressed: () {
+            //         Navigator.push(
+            //           context,
+            //           MaterialPageRoute(
+            //             builder: (context) => const NewContact(),
+            //           ),
+            //         );
+            //       },
+            //       child: Text(
+            //         'Create New Contact',
+            //         style: AppStyles.poppins.copyWith(fontSize: 10.w, fontWeight: FontWeight.w700, color: Colors.purple[800]),
+            //       ),
+            //     ),
+            //   ),
+            // ),
+      
+            //
+            //
+            Expanded(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 15.w),
+                  child: Column(
+                    children: [
+                      SizedBox(height: 15.h),
+                      // _CustomExpansionTile(),
+                      // _CustomExpansionTile(),
+                      // _CustomExpansionTile(),
+                      // _CustomExpansionTile(),
+                      // _CustomExpansionTile(),
+                      // _CustomExpansionTile(),
+                      // _CustomExpansionTile(),
+                      // _CustomExpansionTile(),
+                      // _CustomExpansionTile(),
+      
+                      ...List.generate(sampleList['contacts']!.length, (index) {
+                        final list = sampleList['contacts']?[index];
+                        final model = Contact.fromJson(list ?? {});
+                        return _CustomExpansionTile(
+                          model: model,
+                          index: index,
+                        );
+                      }),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
