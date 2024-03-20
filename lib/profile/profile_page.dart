@@ -9,9 +9,13 @@ import 'package:affiliate_platform/utils/image_related.dart';
 import 'package:affiliate_platform/view/common/custom_scafflod.dart';
 import 'package:affiliate_platform/view/common/sidebar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+
+final croppedImagePath = ValueNotifier<String?>(null);
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -76,64 +80,113 @@ class _ProfilePageState extends State<ProfilePage> with ImagePickerMixin {
                           child: Column(
                             children: [
                               // DP
-                              Stack(
-                                children: [
-                                  Container(
-                                    height: 90.w,
-                                    width: 90.w,
-                                    decoration: const BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Colors.white,
-                                      image: DecorationImage(image: AssetImage('assets/images/avatar.jpg')),
-                                    ),
-                                  ),
-                                  Positioned(
-                                    bottom: 0.h,
-                                    right: 5.w,
-                                    child: Container(
-                                      width: 25.w,
-                                      height: 25.w,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Colors.white,
-                                        border: Border.all(color: Colors.green[400]!),
+                              ValueListenableBuilder(
+                                valueListenable: croppedImagePath,
+                                builder: (context, value, child) {
+                                  return Stack(
+                                    children: [
+                                      Container(
+                                        height: 90.w,
+                                        width: 90.w,
+                                        decoration: croppedImagePath.value == null
+                                            ? const BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: Colors.white,
+                                                image: DecorationImage(image: AssetImage('assets/images/avatar.jpg')),
+                                              )
+                                            : BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: Colors.white,
+                                                image: DecorationImage(image: FileImage(File(croppedImagePath.value!))),
+                                              ),
                                       ),
-                                      child: Icon(Icons.edit, color: Colors.green[900], size: 15.w),
-                                    ),
-                                  ),
-                                ],
-                              ).ripple(context, () async {
-                                final imageSrc = await selectImagePickerSource(context);
-
-                                final xfile = await pickXFileImage(context, imageSource: imageSrc!);
-
-                                if (xfile != null) {
-                                  await compressAndResizeImage(File(xfile.path)).then((fileInJpg) {
-                                  print('3333333333333333333333333333333333333333333');
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) => AlertDialog(
-                                        backgroundColor: Colors.transparent,
-                                        actionsPadding: EdgeInsets.zero,
-                                        iconPadding: EdgeInsets.zero,
-                                        buttonPadding: EdgeInsets.zero,
-                                        contentPadding: EdgeInsets.zero,
-                                        // insetPadding: EdgeInsets.zero,
-                                        // insetPadding: const EdgeInsets.symmetric(
-                                        //   horizontal: 70,
-                                        // ),
-                                        insetPadding: EdgeInsets.only(
-                                          bottom: 50.h,
-                                          left: 15.w,
-                                          right: 15.w,
+                                      Positioned(
+                                        bottom: 0.h,
+                                        right: 5.w,
+                                        child: Container(
+                                          width: 25.w,
+                                          height: 25.w,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: Colors.white,
+                                            border: Border.all(color: Colors.green[400]!),
+                                          ),
+                                          child: Icon(Icons.edit, color: Colors.green[900], size: 15.w),
                                         ),
-                                        titlePadding: EdgeInsets.zero,
-                                        content: Image.file(fileInJpg),
                                       ),
-                                    );
+                                    ],
+                                  ).ripple(context, () async {
+                                    final imageSrc = await selectImagePickerSource(context);
+
+                                    final xfile = await pickXFileImage(context, imageSource: imageSrc!);
+
+                                    if (xfile != null) {
+                                      await compressAndResizeImage(File(xfile.path)).then((fileInJpg) async {
+                                        // print('3333333333333333333333333333333333333333333');
+                                        // showDialog(
+                                        //   context: context,
+                                        //   builder: (context) => AlertDialog(
+                                        //     backgroundColor: Colors.transparent,
+                                        //     actionsPadding: EdgeInsets.zero,
+                                        //     iconPadding: EdgeInsets.zero,
+                                        //     buttonPadding: EdgeInsets.zero,
+                                        //     contentPadding: EdgeInsets.zero,
+                                        //     // insetPadding: EdgeInsets.zero,
+                                        //     // insetPadding: const EdgeInsets.symmetric(
+                                        //     //   horizontal: 70,
+                                        //     // ),
+                                        //     insetPadding: EdgeInsets.only(
+                                        //       bottom: 50.h,
+                                        //       left: 15.w,
+                                        //       right: 15.w,
+                                        //     ),
+                                        //     titlePadding: EdgeInsets.zero,
+                                        //     content: Image.file(fileInJpg),
+                                        //   ),
+                                        // );
+
+                                        // final bytes = fileInJpg.readAsBytesSync();
+
+                                        final croppedFile = await ImageCropper().cropImage(
+                                          cropStyle: CropStyle.circle,
+                                          sourcePath: fileInJpg.path,                                          
+                                          // aspectRatioPresets: [
+                                          //   CropAspectRatioPreset.square,
+                                          //   CropAspectRatioPreset.ratio3x2,
+                                          //   CropAspectRatioPreset.original,
+                                          //   CropAspectRatioPreset.ratio4x3,
+                                          //   CropAspectRatioPreset.ratio16x9,
+                                          // ],
+                                          uiSettings: [
+                                            AndroidUiSettings(
+                                              toolbarTitle: 'Profile Image',
+                                              toolbarColor: Colors.purple[300],
+                                              toolbarWidgetColor: Colors.white,
+                                              // initAspectRatio: CropAspectRatioPreset.original,
+                                              hideBottomControls: true,
+                                              lockAspectRatio: false,
+                                              showCropGrid: false,                                              
+                                            ),
+                                            IOSUiSettings(
+                                              title: 'Profile Image',
+                                            ),
+                                            WebUiSettings(
+                                              context: context,
+                                            ),
+                                          ],
+                                        );
+
+                                        final output = croppedFile?.path;
+
+                                        // print('22222222222222222222222 ${output}');
+
+                                        croppedImagePath.value = output;
+                                        croppedImagePath.notifyListeners();
+                                      });
+                                    }
                                   });
-                                }
-                              }),
+                                },
+                              ),
                               // DP
 
                               // const Spacer(),
