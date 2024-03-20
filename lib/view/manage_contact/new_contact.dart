@@ -3,6 +3,7 @@
 import 'package:affiliate_platform/utils/constants/styles.dart';
 import 'package:affiliate_platform/view/common/custom_scafflod.dart';
 import 'package:affiliate_platform/view/common/sidebar.dart';
+import 'package:affiliate_platform/view/manage_contact/data_sample.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,7 +11,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class NewContact extends StatelessWidget {
-  const NewContact({super.key});
+  const NewContact({this.model, super.key});
+
+  final Contact? model;
 
   @override
   Widget build(BuildContext context) {
@@ -82,39 +85,46 @@ class NewContact extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // Heading
-        
+
                       // Form Fields
-        
+
                       Padding(
                         padding: EdgeInsets.only(top: 7.h),
                         child: Column(
                           children: [
-                            const NewContactField(heading: 'Contact Name', hint: 'Contact Person Full Name'),
+                            NewContactField(heading: 'Contact Name', hint: 'Contact Person Full Name', initialValue: model?.name ?? ''),
                             NewContactDropDown(
                               heading: 'Contact Type',
                               hint: 'Select Contact Type',
-                              items: const ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'],
+                              items: model != null ? ['', model!.type, 'Qtn2016', 'Qtn2017', 'Qtn2018'] : ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'],
                               label: 'Contact Type',
+                              initialValue: model?.type ?? '',
                             ), //dropdown
-                            const NewContactField(heading: 'Mobile Number', hint: 'eg: 9719864631313', textInputType: TextInputType.phone),
-                            const NewContactField(heading: 'Email Address', hint: 'eg: example@exm.com', textInputType: TextInputType.emailAddress),
+                            NewContactField(heading: 'Mobile Number', hint: 'eg: 9719864631313', textInputType: TextInputType.phone, initialValue: model?.phoneNumber ?? ''),
+                            NewContactField(heading: 'Email Address', hint: 'eg: example@exm.com', textInputType: TextInputType.emailAddress, initialValue: model?.email ?? ''),
                             NewContactDropDown(
                               heading: 'Contact Source',
                               hint: 'Select Contact Source',
-                              items: const ['', 'Internet', 'Social Media', 'Email'],
+                              items: model != null ? ['', model!.contactSource, 'Internet', 'Social Media', 'Email'] : ['', 'Internet', 'Social Media', 'Email'],
                               label: 'Contact Source',
+                              initialValue: model?.contactSource ?? '',
                             ), //dropdown
-                            const NewContactField(heading: 'Contact Destination', hint: 'eg: CEO'),
-                            const NewContactField(heading: 'Company Name', hint: 'eg: Arabinfotec Pvt Ltd'),
-                            const NewContactField(heading: 'Company Landline Number', hint: 'eg: 97163466578', textInputType: TextInputType.phone),
-                            const NewContactField(heading: 'Company Website', hint: 'eg: https://arabinfotechllc.com/', textInputType: TextInputType.url),
-                            const NewContactField(heading: 'Company Location', hint: 'Enter Location'),
-                            const NewContactLargeField(heading: 'Company Address', hint: 'Enter Adress'),
-                            const NewContactLargeField(heading: 'Remarks if any', hint: '-- NOTE --'),
+                            NewContactField(heading: 'Contact Destination', hint: 'eg: CEO', initialValue: model?.contactDesignation ?? ''),
+                            NewContactField(heading: 'Company Name', hint: 'eg: Arabinfotec Pvt Ltd', initialValue: model?.companyName ?? ''),
+                            NewContactField(heading: 'Company Landline Number', hint: 'eg: 97163466578', textInputType: TextInputType.phone, initialValue: model?.companyLandline ?? ''),
+                            NewContactField(
+                              heading: 'Company Website',
+                              hint: 'eg: https://arabinfotechllc.com/',
+                              textInputType: TextInputType.url,
+                              initialValue: model?.companyWebsite ?? '',
+                            ),
+                            NewContactField(heading: 'Company Location', hint: 'Enter Location', initialValue: model?.companyLocation ?? ''),
+                            NewContactLargeField(heading: 'Company Address', hint: 'Enter Adress', initialValue: model?.companyAddress ?? ''),
+                            NewContactLargeField(heading: 'Remarks if any', hint: '-- NOTE --', initialValue: model?.remarks ?? ''),
                           ],
                         ),
                       ),
-        
+
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
@@ -137,7 +147,7 @@ class NewContact extends StatelessWidget {
                           ),
                         ],
                       ),
-        
+
                       SizedBox(height: 160.h),
                     ],
                   ),
@@ -157,6 +167,7 @@ class NewContactDropDown extends StatefulWidget {
     required this.heading,
     required this.hint,
     required this.label,
+    required this.initialValue,
     required this.items,
     super.key,
   });
@@ -164,6 +175,7 @@ class NewContactDropDown extends StatefulWidget {
   final String heading;
   final String hint;
   final String label;
+  final String initialValue;
   final List<String> items;
 
   @override
@@ -172,7 +184,14 @@ class NewContactDropDown extends StatefulWidget {
 
 class _NewContactDropDownState extends State<NewContactDropDown> {
   // final items = ['', 'a', 'b', 'c'];
+
   String selectedValue = '';
+
+  @override
+  void initState() {
+    super.initState();
+    selectedValue = widget.initialValue;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -291,7 +310,7 @@ class _NewContactDropDownState extends State<NewContactDropDown> {
                 style: AppStyles.poppins.copyWith(fontSize: 9.w, color: Colors.purple),
               ),
             ),
-          )
+          ),
         ],
       ),
     );
@@ -303,6 +322,7 @@ class NewContactField extends StatelessWidget {
     // required this.controller,
     required this.heading,
     required this.hint,
+    this.initialValue = '',
     this.textInputType = TextInputType.name,
     this.isLargeField = false,
     super.key,
@@ -311,6 +331,7 @@ class NewContactField extends StatelessWidget {
   // final TextEditingController controller;
   final String heading;
   final String hint;
+  final String initialValue;
   final bool isLargeField;
   final TextInputType textInputType;
 
@@ -326,6 +347,7 @@ class NewContactField extends StatelessWidget {
           SizedBox(
             height: isLargeField ? null : 50.h,
             child: TextFormField(
+              initialValue: initialValue,
               scrollPadding: EdgeInsets.only(
                 bottom: MediaQuery.of(context).viewInsets.bottom + 15.w * 6, // Adjust the value as needed
               ),
@@ -377,6 +399,7 @@ class NewContactLargeField extends StatelessWidget {
     // required this.controller,
     required this.heading,
     required this.hint,
+    this.initialValue = '',
     this.textInputType = TextInputType.name,
     this.isLargeField = false,
     super.key,
@@ -385,6 +408,7 @@ class NewContactLargeField extends StatelessWidget {
   // final TextEditingController controller;
   final String heading;
   final String hint;
+  final String initialValue;
   final bool isLargeField;
   final TextInputType textInputType;
 
@@ -400,6 +424,7 @@ class NewContactLargeField extends StatelessWidget {
           SizedBox(
             height: 100.h,
             child: TextFormField(
+              initialValue: initialValue,
               scrollPadding: EdgeInsets.only(
                 bottom: MediaQuery.of(context).viewInsets.bottom + 15.w * 6, // Adjust the value as needed
               ),

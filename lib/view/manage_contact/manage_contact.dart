@@ -38,13 +38,13 @@ class _ManageContactPageState extends State<ManageContactPage> {
       onPopInvoked: (didPop) {
         Navigator.pop(context);
       },
-      child:  GestureDetector(
-          // onTap: _handleLocaleChanged,
-          onTap: () {
-            _handleLocaleChanged();
-            menuVisibility.value = false;
-            menuVisibility.notifyListeners();
-          },
+      child: GestureDetector(
+        // onTap: _handleLocaleChanged,
+        onTap: () {
+          _handleLocaleChanged();
+          menuVisibility.value = false;
+          menuVisibility.notifyListeners();
+        },
         child: CustomScaffold(
           key: _refreshKey,
           onTapFloatingButton: () {
@@ -78,7 +78,7 @@ class _ManageContactPageState extends State<ManageContactPage> {
               //     ),
               //   ),
               // ),
-        
+
               //
               //
               Expanded(
@@ -97,7 +97,7 @@ class _ManageContactPageState extends State<ManageContactPage> {
                         // _CustomExpansionTile(),
                         // _CustomExpansionTile(),
                         // _CustomExpansionTile(),
-        
+
                         ...List.generate(sampleList['contacts']!.length, (index) {
                           final list = sampleList['contacts']?[index];
                           final model = Contact.fromJson(list ?? {});
@@ -544,15 +544,27 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                                   UrlLauncher.launchUrl(Uri.parse('tel://${widget.model.phoneNumber.contains('+') ? widget.model.phoneNumber : '+971${widget.model.phoneNumber}'}'));
                                 },
                               ),
+                              // _EachContachSmallButtons(
+                              //   color: Colors.green[500]!,
+                              //   icon: FontAwesomeIcons.whatsapp,
+                              //   onTap: () async {
+                              //     final whatsappUrl = 'whatsapp://send?phone=${widget.model.phoneNumber.contains('+') ? widget.model.phoneNumber : '+971${widget.model.phoneNumber}'}';
+                              //     await UrlLauncher.canLaunchUrl(Uri.parse(whatsappUrl))
+                              //         ? UrlLauncher.launchUrl(Uri.parse(whatsappUrl))
+                              //         // ignore: use_build_context_synchronously
+                              //         : await erroMotionToastInfo(context, msg: 'WhatsApp is not installed');
+                              //   },
+                              // ),
                               _EachContachSmallButtons(
-                                color: Colors.green[500]!,
-                                icon: FontAwesomeIcons.whatsapp,
-                                onTap: () async {
-                                  final whatsappUrl = 'whatsapp://send?phone=${widget.model.phoneNumber.contains('+') ? widget.model.phoneNumber : '+971${widget.model.phoneNumber}'}';
-                                  await UrlLauncher.canLaunchUrl(Uri.parse(whatsappUrl))
-                                      ? UrlLauncher.launchUrl(Uri.parse(whatsappUrl))
-                                      // ignore: use_build_context_synchronously
-                                      : await erroMotionToastInfo(context, msg: 'WhatsApp is not installed');
+                                color: Colors.purple[900]!,
+                                icon: Icons.edit_outlined,
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>  NewContact(model:widget.model),
+                                    ),
+                                  );
                                 },
                               ),
                             ],
