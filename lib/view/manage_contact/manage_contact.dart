@@ -562,7 +562,7 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) =>  NewContact(model:widget.model),
+                                      builder: (context) => NewContact(model: widget.model),
                                     ),
                                   );
                                 },
@@ -633,6 +633,7 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
         //   horizontal: 70,
         // ),
         insetPadding: EdgeInsets.only(
+          top: 30.h,
           bottom: 50.h,
           left: 15.w,
           right: 15.w,
@@ -650,9 +651,37 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(),
-                  Text(
-                    'No Followups Found!!',
-                    style: AppStyles.poppins.copyWith(fontSize: 10.w, fontWeight: FontWeight.w700, color: Colors.red),
+                  // Text(
+                  //   'No Followups Found!!',
+                  //   style: AppStyles.poppins.copyWith(fontSize: 10.w, fontWeight: FontWeight.w700, color: Colors.red),
+                  // ),
+
+                  SizedBox(height: 10.h),
+
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10.h),
+                    // child: Column(
+                    //   children: [
+                    //     _FollowUpWidget(widget: widget),
+                    //   ],
+                    // ),
+                    child: SizedBox(
+                      height: 550.h, // Change as per your requirement
+                      width: double.maxFinite, // Change as per your requirement
+                      child: ListView.separated(
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) => _FollowUpWidget(model: widget.model),
+                        separatorBuilder: (context, index) => Padding(
+                          padding: EdgeInsets.only(top: 12.h),
+                          child: Divider(
+                            indent: 10.w,
+                            endIndent: 10.w,
+                            color: Colors.grey[200],
+                          ),
+                        ),
+                        itemCount: 12,
+                      ),
+                    ),
                   ),
 
                   SizedBox(height: 10.h),
@@ -683,10 +712,15 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
               top: 5.h,
               right: 10.w,
               child: Container(
-                height: 15.w,
-                width: 15.w,
-                decoration: BoxDecoration(border: Border.all(color: Colors.grey), shape: BoxShape.circle),
-                child: Icon(Icons.close, size: 13.w),
+                margin: EdgeInsets.only(top: 10.h),
+                height: 20.w,
+                width: 20.w,
+                decoration: BoxDecoration(
+                  // border: Border.all(color: Colors.grey),
+                  color: Colors.purple[400],
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(Icons.close, size: 18.w, color: Colors.white),
               ).ripple(context, () {
                 Navigator.pop(context);
               }),
@@ -694,6 +728,67 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _FollowUpWidget extends StatelessWidget {
+  const _FollowUpWidget({
+    required this.model,
+    super.key,
+  });
+
+  final Contact model;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 40.w),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [              
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 5.w),
+                child: Row(
+                  children: [
+                    Text(
+                      'Followup #1',
+                      style: AppStyles.poppins.copyWith(fontSize: 12.w, fontWeight: FontWeight.w700, color: Colors.purple[400]),
+                    ),
+                    const Spacer(),
+                    Text(
+                      'Date : ${model.followupDate}',
+                      style: AppStyles.poppins.copyWith(fontSize: 12.w, fontWeight: FontWeight.w700, color: Colors.purple[400]),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 12.h),
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 5.h),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(8.r),
+                ),
+                child: Text(
+                  model.sampleFollowupMessage,
+                  style: AppStyles.poppins.copyWith(fontSize: 12.w, fontWeight: FontWeight.w700, color: Colors.grey[700]),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Positioned(
+          bottom: 0,
+          right: 10.w,
+          child: Icon(Icons.delete_outline, size: 20.w, color: Colors.purple[400]).ripple(context, () {
+            Navigator.pop(context);
+          }),
+        ),
+      ],
     );
   }
 }
