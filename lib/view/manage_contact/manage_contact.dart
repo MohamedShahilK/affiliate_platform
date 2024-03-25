@@ -490,7 +490,7 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                         Container(
                           padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 3.h),
                           decoration: BoxDecoration(
-                            color: Colors.green[600],
+                            color: Colors.purple[400],
                             borderRadius: BorderRadius.circular(15.r),
                             // shape: BoxShape.circle,
                           ),
@@ -618,115 +618,183 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
   }
 
   void _followUpDialog(BuildContext context) {
+    bool isAddFollowUp = false;
     // ignore: inference_failure_on_function_invocation
     showDialog(
       barrierDismissible: false,
       context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: Colors.transparent,
-        actionsPadding: EdgeInsets.zero,
-        iconPadding: EdgeInsets.zero,
-        buttonPadding: EdgeInsets.zero,
-        contentPadding: EdgeInsets.zero,
-        // insetPadding: EdgeInsets.zero,
-        // insetPadding: const EdgeInsets.symmetric(
-        //   horizontal: 70,
-        // ),
-        insetPadding: EdgeInsets.only(
-          top: 30.h,
-          bottom: 50.h,
-          left: 15.w,
-          right: 15.w,
-        ),
-        titlePadding: EdgeInsets.zero,
-        content: Stack(
-          children: [
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 20.h),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(15.r),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(),
-                  // Text(
-                  //   'No Followups Found!!',
-                  //   style: AppStyles.poppins.copyWith(fontSize: 10.w, fontWeight: FontWeight.w700, color: Colors.red),
-                  // ),
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) {
+          return AlertDialog(
+            backgroundColor: Colors.transparent,
+            actionsPadding: EdgeInsets.zero,
+            iconPadding: EdgeInsets.zero,
+            buttonPadding: EdgeInsets.zero,
+            contentPadding: EdgeInsets.zero,
+            // insetPadding: EdgeInsets.zero,
+            // insetPadding: const EdgeInsets.symmetric(
+            //   horizontal: 70,
+            // ),
+            insetPadding: EdgeInsets.only(
+              top: 30.h,
+              bottom: 50.h,
+              left: 15.w,
+              right: 15.w,
+            ),
+            titlePadding: EdgeInsets.zero,
+            content: Stack(
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 20.h),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15.r),
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(),
+                      // Text(
+                      //   'No Followups Found!!',
+                      //   style: AppStyles.poppins.copyWith(fontSize: 10.w, fontWeight: FontWeight.w700, color: Colors.red),
+                      // ),
 
-                  SizedBox(height: 10.h),
+                      SizedBox(height: 25.h),
 
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10.h),
-                    // child: Column(
-                    //   children: [
-                    //     _FollowUpWidget(widget: widget),
-                    //   ],
-                    // ),
-                    child: SizedBox(
-                      height: 550.h, // Change as per your requirement
-                      width: double.maxFinite, // Change as per your requirement
-                      child: ListView.separated(
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) => _FollowUpWidget(model: widget.model),
-                        separatorBuilder: (context, index) => Padding(
-                          padding: EdgeInsets.only(top: 12.h),
-                          child: Divider(
-                            indent: 10.w,
-                            endIndent: 10.w,
-                            color: Colors.grey[200],
-                          ),
-                        ),
-                        itemCount: 12,
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 10.h),
+                        // child: Column(
+                        //   children: [
+                        //     _FollowUpWidget(widget: widget),
+                        //   ],
+                        // ),
+                        child: isAddFollowUp
+                            ? SizedBox(
+                                width: 800.w,
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 20.w),
+                                  child: const Column(
+                                    children: [
+                                      _AddFollowUpField(heading: 'Followup Text', hint: 'Followup Text'),
+                                      _AddFollowUpField(heading: 'Description', hint: 'Description'),
+                                      _AddFollowUpField(heading: 'Next followup date', hint: 'Followup date dd/mm/yy'),
+                                    ],
+                                  ),
+                                ),
+                              )
+                            : SizedBox(
+                                height: 550.h, // Change as per your requirement
+                                width: double.maxFinite, // Change as per your requirement
+                                child: ListView.separated(
+                                  shrinkWrap: true,
+                                  itemBuilder: (context, index) => _FollowUpWidget(model: widget.model),
+                                  separatorBuilder: (context, index) => Padding(
+                                    padding: EdgeInsets.only(top: 12.h),
+                                    child: Divider(
+                                      indent: 10.w,
+                                      endIndent: 10.w,
+                                      color: Colors.grey[200],
+                                    ),
+                                  ),
+                                  itemCount: 12,
+                                ),
+                              ),
                       ),
-                    ),
-                  ),
 
-                  SizedBox(height: 10.h),
+                      SizedBox(height: 10.h),
 
-                  // New Follow up add button
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 5.h),
-                    decoration: BoxDecoration(color: Colors.purple[400], borderRadius: BorderRadius.circular(15.r)),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.add,
-                          size: 13.w,
-                          color: Colors.white,
-                        ),
-                        Text(
-                          'Add Followup',
-                          style: AppStyles.poppins.copyWith(fontSize: 10.w, fontWeight: FontWeight.w700, color: Colors.white),
-                        ),
-                      ],
-                    ),
+                      // New Follow up add button
+                      if (isAddFollowUp)
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 5.h),
+                          decoration: BoxDecoration(color: Colors.purple[400], borderRadius: BorderRadius.circular(15.r)),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.check,
+                                size: 18.w,
+                                color: Colors.white,
+                              ),
+                              SizedBox(width: 5.w),
+                              Text(
+                                'Add',
+                                style: AppStyles.poppins.copyWith(fontSize: 13.w, fontWeight: FontWeight.w700, color: Colors.white),
+                              ),
+                            ],
+                          ),
+                        ).ripple(context, () {
+                          setState(() {
+                            isAddFollowUp = false;
+                          });
+                        })
+                      else
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 5.h),
+                          decoration: BoxDecoration(color: Colors.purple[400], borderRadius: BorderRadius.circular(15.r)),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.add,
+                                size: 18.w,
+                                color: Colors.white,
+                              ),
+                              Text(
+                                'Add Followup',
+                                style: AppStyles.poppins.copyWith(fontSize: 13.w, fontWeight: FontWeight.w700, color: Colors.white),
+                              ),
+                            ],
+                          ),
+                        ).ripple(context, () {
+                          setState(() {
+                            isAddFollowUp = true;
+                          });
+                        }),
+                    ],
                   ),
-                ],
-              ),
-            ),
-            Positioned(
-              top: 5.h,
-              right: 10.w,
-              child: Container(
-                margin: EdgeInsets.only(top: 10.h),
-                height: 20.w,
-                width: 20.w,
-                decoration: BoxDecoration(
-                  // border: Border.all(color: Colors.grey),
-                  color: Colors.purple[400],
-                  shape: BoxShape.circle,
                 ),
-                child: Icon(Icons.close, size: 18.w, color: Colors.white),
-              ).ripple(context, () {
-                Navigator.pop(context);
-              }),
+                Positioned(
+                  top: 5.h,
+                  right: 10.w,
+                  child: Container(
+                    margin: EdgeInsets.only(top: 10.h),
+                    height: 30.w,
+                    width: 30.w,
+                    decoration: BoxDecoration(
+                      // border: Border.all(color: Colors.grey),
+                      color: Colors.purple[400],
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(Icons.close, size: 18.w, color: Colors.white),
+                  ).ripple(context, () {
+                    Navigator.pop(context);
+                  }),
+                ),
+                if (isAddFollowUp)
+                  Positioned(
+                    top: 5.h,
+                    left: 10.w,
+                    child: Container(
+                      margin: EdgeInsets.only(top: 10.h),
+                      height: 30.w,
+                      width: 30.w,
+                      decoration: BoxDecoration(
+                        // border: Border.all(color: Colors.grey),
+                        color: Colors.purple[400],
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(Icons.arrow_back_ios_new_rounded, size: 18.w, color: Colors.white),
+                    ).ripple(context, () {
+                      setState(() {
+                        isAddFollowUp = false;
+                      });
+                    }),
+                  ),
+              ],
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
@@ -748,7 +816,7 @@ class _FollowUpWidget extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 40.w),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [              
+            children: [
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 5.w),
                 child: Row(
@@ -811,7 +879,8 @@ class _EachContachSmallButtons extends StatelessWidget {
         Container(
           padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 5.h),
           decoration: BoxDecoration(
-            color: color,
+            // color: color,
+            color: Colors.purple[400],
             // borderRadius: BorderRadius.only(topRight: Radius.circular(15.r), bottomLeft: Radius.circular(15.r)),
             shape: BoxShape.circle,
           ),
@@ -1150,5 +1219,82 @@ class _MyTextWidgetState extends State<MyTextWidget> {
     timer = Timer(const Duration(seconds: 1), () {
       Navigator.of(context).pop(); // Close dialog after 1 second
     });
+  }
+}
+
+class _AddFollowUpField extends StatelessWidget {
+  const _AddFollowUpField({
+    // required this.controller,
+    required this.heading,
+    required this.hint,
+    this.initialValue = '',
+    this.textInputType = TextInputType.name,
+    this.isLargeField = false,
+    super.key,
+  });
+
+  // final TextEditingController controller;
+  final String heading;
+  final String hint;
+  final String initialValue;
+  final bool isLargeField;
+  final TextInputType textInputType;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 10.h),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Text(heading, style: AppStyles.poppins.copyWith(fontSize: 12.w, color: Colors.purple)),
+          // SizedBox(height: 7.h),
+          SizedBox(
+            height: isLargeField ? null : 50.h,
+            child: TextFormField(
+              initialValue: initialValue,
+              scrollPadding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom + 15.w * 6, // Adjust the value as needed
+              ),
+              // controller: controller,
+              style: AppStyles.poppins.copyWith(
+                color: Colors.purple,
+                fontSize: 13.w,
+              ),
+              keyboardType: !isLargeField ? textInputType : TextInputType.multiline,
+              // minLines: !isLargeField ? null : 1,
+              // maxLines: !isLargeField ? null : 20,
+              // maxLength: !isLargeField ? null : 500,
+              // expands:isLargeField ,
+              // maxLines: null,
+              decoration: InputDecoration(
+                // isDense: true,
+                floatingLabelBehavior: FloatingLabelBehavior.always,
+                labelText: heading,
+                labelStyle: AppStyles.poppins.copyWith(fontSize: 12.w, color: Colors.purple),
+                hintText: hint,
+                hintStyle: AppStyles.openSans.copyWith(
+                  color: Colors.purple[100],
+                  fontSize: 13.w,
+                ),
+                contentPadding: EdgeInsets.only(left: 15.w),
+                border: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Color.fromARGB(139, 103, 51, 137)),
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Color.fromARGB(139, 103, 51, 137)),
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Color.fromARGB(255, 152, 102, 185)),
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

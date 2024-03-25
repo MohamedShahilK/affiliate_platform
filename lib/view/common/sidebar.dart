@@ -32,7 +32,7 @@ class _SideBarState extends State<SideBar> {
   Widget build(BuildContext context) {
     final pages = [const ManageContactPage(), const ProfilePage()];
     return CustomScaffold(
-      haveFloatingButton: false,     
+      haveFloatingButton: false,
       body: SafeArea(
         child: GestureDetector(
           onTap: () {
@@ -57,7 +57,10 @@ class _SideBarState extends State<SideBar> {
                   // ),
                   // widget.body,
 
-                  IndexedStack(children: pages,index: currentIndex,),
+                  IndexedStack(
+                    children: pages,
+                    index: currentIndex,
+                  ),
 
                   Container(
                     // width: 60.w,
@@ -104,43 +107,59 @@ class _SideBarState extends State<SideBar> {
                                 // ),
                                 animationDuration: Duration.zero,
                                 theme: SidebarXTheme(
+                                  // selectedItemDecoration: BoxDecoration(
+                                  //   color: Colors.white,
+                                  //   borderRadius: BorderRadius.circular(20.r),
+                                  // ),
                                   selectedItemDecoration: BoxDecoration(
-                                    color: Colors.white,
+                                    // color: const Color.fromARGB(255, 75, 2, 93),
+                                    color: const Color.fromARGB(220, 75, 2, 93),
+                                    borderRadius: BorderRadius.circular(20.r),
+                                  ),
+                                  itemDecoration: BoxDecoration(
+                                    border: Border.all(color: const Color.fromARGB(30, 44, 52, 59)),
                                     borderRadius: BorderRadius.circular(20.r),
                                   ),
                                   itemTextPadding: EdgeInsets.only(left: 5.w),
                                   selectedItemTextPadding: EdgeInsets.only(left: 5.w),
-                                  selectedIconTheme: IconThemeData(color: const Color(0xFF2c343b), size: 18.w),
-                                  iconTheme: IconThemeData(color: Colors.white, size: 18.w),
-                                  selectedTextStyle: const TextStyle(color: Color(0xFF2c343b)),
-                                  textStyle: const TextStyle(color: Colors.white),
+                                  selectedIconTheme: IconThemeData(color: Colors.white, size: 18.w),
+                                  iconTheme: IconThemeData(color: Colors.black, size: 18.w),
+                                  selectedTextStyle: const TextStyle(color: Colors.black),
+                                  textStyle: const TextStyle(color: Colors.black),
                                   margin: EdgeInsets.only(top: 10.h),
                                   padding: EdgeInsets.symmetric(vertical: 10.h),
                                   decoration: BoxDecoration(
-                                    // border: Border.all(),
-                                    // borderRadius: BorderRadius.circular(20.r),
                                     // color: const Color(0xFF2c343b),
-                                    color: const Color(0xFF2c343b),
+                                    color: Colors.white,
+                                    border: Border.all(color: const Color.fromARGB(30, 44, 52, 59)),
                                     borderRadius: BorderRadius.only(bottomRight: Radius.circular(25.r), topRight: Radius.circular(25.r)),
                                   ),
                                   width: 50.w,
                                 ),
                                 extendedTheme: SidebarXTheme(
+                                  selectedItemDecoration: BoxDecoration(
+                                    // color: const Color.fromARGB(255, 75, 2, 93),
+                                    color: const Color.fromARGB(220, 75, 2, 93),
+                                    borderRadius: BorderRadius.circular(20.r),
+                                  ),
+                                  itemDecoration: BoxDecoration(
+                                    border: Border.all(color: const Color.fromARGB(30, 44, 52, 59)),
+                                    borderRadius: BorderRadius.circular(20.r),
+                                  ),
                                   itemTextPadding: EdgeInsets.only(left: 5.w),
                                   selectedItemTextPadding: EdgeInsets.only(left: 5.w),
-                                  selectedIconTheme: IconThemeData(color: const Color(0xFF2c343b), size: 18.w),
-                                  iconTheme: IconThemeData(color: Colors.white, size: 18.w),
-                                  selectedTextStyle: const TextStyle(color: Color(0xFF2c343b)),
-                                  textStyle: const TextStyle(color: Colors.white),
+                                  selectedIconTheme: IconThemeData(color: Colors.white, size: 18.w),
+                                  iconTheme: IconThemeData(color: Colors.black, size: 18.w),
+                                  selectedTextStyle: const TextStyle(color: Colors.white),
+                                  textStyle: const TextStyle(color: Colors.black),
                                   // width: 120.w,
                                   width: MediaQuery.of(context).size.width * (3 / 5),
                                   margin: EdgeInsets.only(top: 10.h),
                                   padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 3.w),
                                   decoration: BoxDecoration(
-                                    // border: Border.all(),
                                     // color: const Color(0xFF2c343b),
-                                    color: const Color(0xFF2c343b),
-                                    // borderRadius: BorderRadius.circular(20.r),
+                                    color: Colors.white,
+                                    border: Border.all(color: const Color.fromARGB(30, 44, 52, 59)),
                                     borderRadius: BorderRadius.only(bottomRight: Radius.circular(25.r), topRight: Radius.circular(25.r)),
                                   ),
                                 ),
@@ -162,6 +181,7 @@ class _SideBarState extends State<SideBar> {
                                         );
                                 },
                                 controller: SidebarXController(selectedIndex: currentSideBarIndex.value, extended: true),
+                                // controller: SidebarXController(selectedIndex: currentSideBarIndex.value),
                                 items: [
                                   // SidebarXItem(
                                   //   icon: Icons.home,
@@ -267,7 +287,6 @@ class _SideBarState extends State<SideBar> {
           ),
         ),
       ),
-    
     );
   }
 }
@@ -371,7 +390,7 @@ class CustomHeader extends StatelessWidget {
                         decoration: const BoxDecoration(
                           shape: BoxShape.circle,
                           color: Colors.white,
-                          image: DecorationImage(image: AssetImage('assets/images/avatar.jpg')),
+                          image: DecorationImage(image: AssetImage('assets/images/avatar2.png')),
                         ),
                       ),
                       Positioned(
