@@ -41,7 +41,7 @@ class _ManageContactPageState extends State<ManageContactPage> {
       child: GestureDetector(
         // onTap: _handleLocaleChanged,
         onTap: () {
-          _handleLocaleChanged();
+          // _handleLocaleChanged();
           menuVisibility.value = false;
           menuVisibility.notifyListeners();
         },

@@ -32,7 +32,7 @@ class _ViewContactState extends State<ViewContact> {
       body: SafeArea(
         child: GestureDetector(
           // onTap: _handleLocaleChanged,
-          onTap: _handleLocaleChanged,
+          // onTap: _handleLocaleChanged,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

@@ -54,7 +54,7 @@ class _ProfilePageState extends State<ProfilePage> with ImagePickerMixin {
         body: GestureDetector(
           // onTap: _handleLocaleChanged,
           onTap: () {
-            _handleLocaleChanged();
+            // _handleLocaleChanged();
             menuVisibility.value = false;
             menuVisibility.notifyListeners();
           },
