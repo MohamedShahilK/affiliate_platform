@@ -58,8 +58,8 @@ class _SideBarState extends State<SideBar> {
                   // widget.body,
 
                   IndexedStack(
-                    children: pages,
                     index: currentIndex,
+                    children: pages,
                   ),
 
                   Container(
