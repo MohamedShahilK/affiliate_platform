@@ -2,7 +2,10 @@
 
 import 'dart:ui';
 
+import 'package:affiliate_platform/models/auth/auth_services.dart';
+import 'package:affiliate_platform/utils/constants/string_constants.dart';
 import 'package:affiliate_platform/utils/constants/styles.dart';
+import 'package:affiliate_platform/utils/internal_services/storage_services.dart';
 import 'package:affiliate_platform/view/common/sidebar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -18,11 +21,26 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> {
   // final isLogined = StorageServices.to.getBool(StorageServicesKeys.isLoginKey);
 
-  Future<void> validLogin() async {
-    await Future.delayed(const Duration(seconds: 3));
+  // Future<void> validLogin() async {
+  //   await Future.delayed(const Duration(seconds: 3));
 
-    //
-    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const SideBar()), (route) => false);
+  //   //
+  //   Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const SideBar()), (route) => false);
+  // }
+
+  Future<void> validLogin() async {
+    final authServices = AuthServices();
+    final token = StorageServices.to.getString(StorageServicesKeys.token);
+
+     final haveToken = token.isNotEmpty;
+
+     if (haveToken) {
+
+      //  final authResp = await authServices.getToken(token: token);
+       
+     } else {
+       
+     }
   }
 
   @override

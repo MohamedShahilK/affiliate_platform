@@ -30,6 +30,7 @@ dependencies:
   image_cropper: ^5.0.1
   image_picker: ^1.0.7
   intl: ^0.18.1
+  json_annotation: ^4.8.1
   loading_animation_widget: ^1.2.1
   shared_preferences: ^2.2.2
   sidebarx: ^0.16.3
@@ -39,6 +40,7 @@ dependencies:
 
 dev_dependencies:
   bloc_test: ^9.1.1
+  build_runner: ^2.4.9
   flutter_test:
     sdk: flutter
   mocktail: ^0.3.0
