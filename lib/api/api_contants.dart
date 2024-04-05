@@ -4,4 +4,6 @@ class ApiConstants {
 
 class EndPoints {
   static const login = '/auth/login';
+  static const validateToken = '/auth/validate_token';
+  static const regenerateToken = '/auth/regenerate_token';
 }

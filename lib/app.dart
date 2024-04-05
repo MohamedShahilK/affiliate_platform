@@ -1,4 +1,5 @@
 import 'package:affiliate_platform/config/flavor_banner.dart';
+import 'package:affiliate_platform/logic/auth/auth_bloc.dart';
 import 'package:affiliate_platform/splash.dart';
 import 'package:affiliate_platform/utils/l10n/l10n.dart';
 import 'package:affiliate_platform/view/auth/login_page.dart';
@@ -24,29 +25,37 @@ class App extends StatelessWidget {
         minTextAdapt: true,
         splitScreenMode: true,
         builder: (_, child) {
-          return MediaQuery.withClampedTextScaling(
-            minScaleFactor: 0.85, // set min scale value here
-            maxScaleFactor: .95,
-            child: MaterialApp(
-              title: 'Affiliate Platform',
-              theme: ThemeData(
-                // canvas color transparent for modal bottom sheet
-                canvasColor: Colors.transparent,
-
-                // visualDensity: VisualDensity.adaptivePlatformDensity,
-
-                // scaffoldBackgroundColor: Colors.blue[700],
-                // scaffoldBackgroundColor: AppColors.mainColor,
-                // primarySwatch: Colors.blue,
+          return MultiProvider(
+            providers: [
+               Provider(
+                create: (context) => AuthBloc(),
+                dispose: (context, bloc) => bloc.dispose(),
               ),
-              navigatorObservers: [routeObserver],
-              navigatorKey: navigatorKey,
-              debugShowCheckedModeBanner: false,
-              localizationsDelegates: AppLocalizations.localizationsDelegates,
-              supportedLocales: AppLocalizations.supportedLocales,
-              home: const SplashPage(),
-              // home: SideBar(),
-              // home: LoginPage(),
+            ],
+            child: MediaQuery.withClampedTextScaling(
+              minScaleFactor: 0.85, // set min scale value here
+              maxScaleFactor: .95,
+              child: MaterialApp(
+                title: 'Affiliate Platform',
+                theme: ThemeData(
+                  // canvas color transparent for modal bottom sheet
+                  canvasColor: Colors.transparent,
+            
+                  // visualDensity: VisualDensity.adaptivePlatformDensity,
+            
+                  // scaffoldBackgroundColor: Colors.blue[700],
+                  // scaffoldBackgroundColor: AppColors.mainColor,
+                  // primarySwatch: Colors.blue,
+                ),
+                navigatorObservers: [routeObserver],
+                navigatorKey: navigatorKey,
+                debugShowCheckedModeBanner: false,
+                localizationsDelegates: AppLocalizations.localizationsDelegates,
+                supportedLocales: AppLocalizations.supportedLocales,
+                home: const SplashPage(),
+                // home: SideBar(),
+                // home: LoginPage(),
+              ),
             ),
           );
         },
