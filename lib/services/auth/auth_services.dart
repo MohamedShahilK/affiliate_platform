@@ -2,7 +2,9 @@ import 'package:affiliate_platform/api/api.dart';
 import 'package:affiliate_platform/api/api_contants.dart';
 import 'package:affiliate_platform/api/api_errror_handling.dart';
 import 'package:affiliate_platform/models/auth/auth_model.dart';
+import 'package:affiliate_platform/utils/constants/string_constants.dart';
 import 'package:affiliate_platform/utils/custom_tools.dart';
+import 'package:affiliate_platform/utils/internal_services/storage_services.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
@@ -60,6 +62,11 @@ class AuthServices {
     }
   }
 
+  // Logout
+  Future<void> logout() async {
+    await StorageServices.to.remove(StorageServicesKeys.token);
+  }
+
   // Auth
   Future<AuthModel?> login(
     BuildContext context, {
@@ -81,10 +88,10 @@ class AuthServices {
     } on UnauthorizedException catch (e) {
       Loader.hide();
       final errorResponse = e.response;
-      final errorMsg = errorResponse!.data['errors'][0];
+      final errorMsg = (errorResponse?.data?['errors'] as Map<String,dynamic>)['error'];
 
       await erroMotionToastInfo(context, msg: errorMsg as String);
-      print('login function Error1 : ${errorMsg as String}');
+      // print('login function Error1 : ${(errorResponse?.data?['errors'] as Map<String,dynamic>)['error']}');
       return null;
       // rethrow;
     } on Exception catch (e) {

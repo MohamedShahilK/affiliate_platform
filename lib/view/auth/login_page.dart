@@ -32,6 +32,27 @@ class _LoginPageState extends State<LoginPage> {
   bool isLoading = false;
   String isValidString = '';
 
+  bool isCircle = false;
+  bool isLoginTextOverflow = false;
+
+  void toggleShape() {
+    setState(() {
+      if (isCircle) {
+        isCircle = !isCircle;
+        Future.delayed(const Duration(seconds: 3), () {
+          setState(() {
+            isLoading = !isLoading;
+          });
+        });
+      } else {
+        isCircle = !isCircle;
+        setState(() {
+          isLoading = !isLoading;
+        });
+      }
+    });
+  }
+
   // final emailController = TextEditingController();
   // final passController = TextEditingController();
 
@@ -202,25 +223,26 @@ class _LoginPageState extends State<LoginPage> {
                       //   ),
                       // )
 
-                      child: Container(
-                        height: 35.h,
-                        width: double.infinity,
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 100),
+                        height: 50.h,
+                        width: isCircle ? 50 : 400,
                         decoration: BoxDecoration(
-                          color: isLoading ? Colors.grey : Colors.purple,
-                          borderRadius: BorderRadius.circular(5),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey[600]!,
-                              spreadRadius: 1,
-                              blurRadius: 1,
-                              offset: const Offset(0, 1),
-                            ),
-                          ],
+                          color: isCircle ? Colors.grey : Colors.purple,
+                          borderRadius: BorderRadius.circular(isCircle ? 50.r : 20.r),
+                          // boxShadow: [
+                          //   BoxShadow(
+                          //     color: Colors.grey[600]!,
+                          //     spreadRadius: 1,
+                          //     blurRadius: 1,
+                          //     offset: const Offset(0, 1),
+                          //   ),
+                          // ],
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            if (isLoading)
+                            if (isCircle)
                               Container(
                                 width: 24.w,
                                 height: 24.h,
@@ -237,13 +259,16 @@ class _LoginPageState extends State<LoginPage> {
                                 color: Colors.white70,
                               ),
                             SizedBox(width: 5.w),
-                            const Text(
-                              'Login',
-                              style: TextStyle(color: Colors.white),
-                            ),
+                            if (!isCircle && !isLoading)
+                              const Text(
+                                'Login',
+                                style: TextStyle(color: Colors.white),
+                              ),
                           ],
                         ),
-                      ).ripple(context, () {
+                      )
+                          // .ripple(context, toggleShape)
+                          .ripple(context, () {
                         // if (emailController.value.text == 'test' && passController.value.text == 'test') {
                         //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ManageContactPage(),));
                         //   successMotionToastInfo(context, msg: 'Login is successful');
@@ -252,14 +277,17 @@ class _LoginPageState extends State<LoginPage> {
                         // }
 
                         //
-                        FocusScope.of(context).requestFocus(FocusNode());
+                        FocusScope.of(context).requestFocus(FocusNode());                  
 
                         if (isLoading) return;
+
+                        toggleShape();
 
                         final authBloc = Provider.of<AuthBloc>(context, listen: false);
 
                         InternetConnectionChecker().hasConnection.then((isOnline) async {
                           if (!isOnline) {
+                            toggleShape();
                             await erroMotionToastInfo(context, msg: 'No Internet Connection');
                           } else {
                             if (formKeyForLogin.currentState == null) {
@@ -292,6 +320,7 @@ class _LoginPageState extends State<LoginPage> {
                                 );
 
                                 if (authResp != null && authResp.status == 'SUCCESS' && authResp.response == 'login success') {
+
                                   final token = authResp.accessToken;
 
                                   // Saving token in to SharedPreference
@@ -324,6 +353,7 @@ class _LoginPageState extends State<LoginPage> {
                                   );
                                 } else {
                                   setState(() {
+                                    isCircle = false;
                                     isLoading = false;
                                   });
                                 }

@@ -1,13 +1,13 @@
 // ignore_for_file: lines_longer_than_80_chars, invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member, inference_failure_on_instance_creation
 
 import 'package:affiliate_platform/config/ripple.dart';
-import 'package:affiliate_platform/view/profile/edit_profile.dart';
-import 'package:affiliate_platform/view/profile/profile_page.dart';
+import 'package:affiliate_platform/services/auth/auth_services.dart';
 import 'package:affiliate_platform/utils/constants/styles.dart';
-import 'package:affiliate_platform/view/checkIn/checkin.dart';
-import 'package:affiliate_platform/view/checkout/checkin.dart';
+import 'package:affiliate_platform/view/auth/login_page.dart';
 import 'package:affiliate_platform/view/common/custom_scafflod.dart';
 import 'package:affiliate_platform/view/manage_contact/manage_contact.dart';
+import 'package:affiliate_platform/view/profile/edit_profile.dart';
+import 'package:affiliate_platform/view/profile/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -180,6 +180,43 @@ class _SideBarState extends State<SideBar> {
                                           ),
                                         );
                                 },
+                                footerBuilder: (context, extended) => Align(
+                                  alignment: extended ? Alignment.topRight : Alignment.center,
+                                  child: Padding(
+                                    padding: extended ? EdgeInsets.symmetric(horizontal: 8.w) : EdgeInsets.zero,
+                                    child: Container(
+                                      // width: double.infinity,
+                                      padding: EdgeInsets.symmetric(vertical: extended ? 8.h : 3.h, horizontal: extended ? 11.w : 4.w),
+                                      // margin: extended ? EdgeInsets.symmetric(horizontal: 8.w) : null,
+                                      decoration: BoxDecoration(color: Colors.red, borderRadius: BorderRadius.circular(11.r)),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          if (extended) Text('Logout', style: TextStyle(fontSize: 14.w, color: Colors.white, fontWeight: FontWeight.w700)),
+                                          if (extended) SizedBox(width: 6.w),
+                                          Icon(
+                                            Icons.power_settings_new_sharp,
+                                            size: 22.w,
+                                            color: Colors.white,
+                                          ),
+                                        ],
+                                      ),
+                                    ).ripple(context, () async {
+                                      await AuthServices().logout();
+
+                                      await Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => const LoginPage(),
+                                        ),
+                                      );
+
+                                      currentSideBarIndex.value = 0;
+                                      currentSideBarIndex.notifyListeners();
+                                    }),
+                                  ),
+                                ),
+
                                 controller: SidebarXController(selectedIndex: currentSideBarIndex.value, extended: true),
                                 // controller: SidebarXController(selectedIndex: currentSideBarIndex.value),
                                 items: [
