@@ -3,18 +3,22 @@
 import 'dart:async';
 
 import 'package:affiliate_platform/config/ripple.dart';
+import 'package:affiliate_platform/logic/auth/auth_bloc.dart';
+import 'package:affiliate_platform/logic/manage_contact/manage_contact_bloc.dart';
+import 'package:affiliate_platform/models/manage_contact/all_contacts.dart';
 import 'package:affiliate_platform/utils/constants/styles.dart';
-import 'package:affiliate_platform/utils/custom_tools.dart';
 import 'package:affiliate_platform/view/common/custom_scafflod.dart';
 import 'package:affiliate_platform/view/common/sidebar.dart';
 import 'package:affiliate_platform/view/manage_contact/data_sample.dart';
 import 'package:affiliate_platform/view/manage_contact/new_contact.dart';
 import 'package:affiliate_platform/view/manage_contact/view_contact.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:skeletonizer/skeletonizer.dart';
+// ignore: library_prefixes
 import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
 class ManageContactPage extends StatefulWidget {
@@ -34,6 +38,7 @@ class _ManageContactPageState extends State<ManageContactPage> {
 
   @override
   Widget build(BuildContext context) {
+    final manageContactBloc = Provider.of<ManageContactBloc>(context);
     return PopScope(
       onPopInvoked: (didPop) {
         Navigator.pop(context);
@@ -81,35 +86,91 @@ class _ManageContactPageState extends State<ManageContactPage> {
 
               //
               //
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 15.w),
-                    child: Column(
-                      children: [
-                        SizedBox(height: 15.h),
-                        // _CustomExpansionTile(),
-                        // _CustomExpansionTile(),
-                        // _CustomExpansionTile(),
-                        // _CustomExpansionTile(),
-                        // _CustomExpansionTile(),
-                        // _CustomExpansionTile(),
-                        // _CustomExpansionTile(),
-                        // _CustomExpansionTile(),
-                        // _CustomExpansionTile(),
+              StreamBuilder(
+                stream: manageContactBloc.getAllContactsStream,
+                builder: (context, snapshot) {
+                  // if (snapshot.connectionState == ConnectionState.waiting) {
+                  //   return const CircularProgressIndicator();
+                  // }
 
-                        ...List.generate(sampleList['contacts']!.length, (index) {
-                          final list = sampleList['contacts']?[index];
-                          final model = Contact.fromJson(list ?? {});
-                          return _CustomExpansionTile(
-                            model: model,
-                            index: index,
-                          );
-                        }),
-                      ],
+                  if (!snapshot.hasData || snapshot.hasError) {
+                    Loader.hide();
+                    return Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Something went wrong',
+                            style: TextStyle(fontSize: 16.w),
+                          ),
+                          SizedBox(height: 30.h),
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 8.h),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.purple[100]!),
+                              borderRadius: BorderRadius.circular(15.r),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.refresh, size: 17.w),
+                                SizedBox(width: 5.w),
+                                Text('Refresh', style: TextStyle(fontSize: 15.w)),
+                              ],
+                            ),
+                          ).ripple(
+                            context,
+                            () async {
+                              await manageContactBloc.getAllContacts();
+                            },
+                            borderRadius: BorderRadius.circular(15.r),
+                            overlayColor: Colors.purple.withOpacity(.15),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+
+                  // print('2222222222222222222222222222222222222222222222 ${snapshot.data}');
+
+                  final allContactsRespModel = snapshot.data;
+
+                  return Expanded(
+                    child: SingleChildScrollView(
+                      child: Skeletonizer(
+                        enabled: snapshot.connectionState == ConnectionState.waiting,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 15.w),
+                          child: Column(
+                            children: [
+                              SizedBox(height: 15.h),
+                              // _CustomExpansionTile(),
+                              // _CustomExpansionTile(),
+                              // _CustomExpansionTile(),
+                              // _CustomExpansionTile(),
+                              // _CustomExpansionTile(),
+                              // _CustomExpansionTile(),
+                              // _CustomExpansionTile(),
+                              // _CustomExpansionTile(),
+                              // _CustomExpansionTile(),
+
+                              ...List.generate(allContactsRespModel!.data1![0].contacts!.length, (index) {
+                                // ...List.generate(sampleList['contacts']!.length, (index) {
+                                final list = sampleList['contacts']?[index];
+                                final model = Contact.fromJson(list ?? {});
+                                return _CustomExpansionTile(
+                                  model: allContactsRespModel!,
+                                  index: index,
+                                );
+                              }),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
+                  );
+                },
               ),
             ],
           ),
@@ -142,7 +203,7 @@ class _CustomExpansionTile extends StatefulWidget {
   // final String followupMsg;
   // final String followupDate;
   final int index;
-  final Contact model;
+  final GetAllContactsAndUsers model;
 
   @override
   State<_CustomExpansionTile> createState() => _CustomExpansionTileState();
@@ -209,7 +270,13 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                                   //   widget.name,
                                   //   style: AppStyles.poppins.copyWith(color: Colors.grey[800], fontSize: 12.w, overflow: TextOverflow.ellipsis),
                                   // ),
-                                  child: MyTextWidget(text: widget.model.name),
+                                  child: MyTextWidget(
+                                    text: widget.model.data1 == null || widget.model.data1!.isEmpty || widget.model.data1![0].contacts!.isEmpty
+                                        ? 'Nan'
+                                        : widget.model.data1![0].contacts![0].name == ''
+                                            ? 'Nan'
+                                            : widget.model.data1![0].contacts![0].name ?? 'Nan',
+                                  ),
                                 ),
                               ],
                             ),
@@ -230,7 +297,13 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                                   //   widget.model.companyName,
                                   //   style: AppStyles.poppins.copyWith(color: Colors.grey[800], fontSize: 12.w, overflow: TextOverflow.ellipsis),
                                   // ),
-                                  child: MyTextWidget(text: widget.model.companyName),
+                                  child: MyTextWidget(
+                                    text: widget.model.data1 == null || widget.model.data1!.isEmpty || widget.model.data1![0].contacts!.isEmpty
+                                        ? 'Nan'
+                                        : widget.model.data1![0].contacts![0].company == ''
+                                            ? 'Nan'
+                                            : widget.model.data1![0].contacts![0].company ?? 'Nan',
+                                  ),
                                 ),
                               ],
                             ),
@@ -254,7 +327,14 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                                   //   widget.model.email,
                                   //   style: AppStyles.poppins.copyWith(color: Colors.grey[800], fontSize: 12.w, overflow: TextOverflow.ellipsis),
                                   // ),
-                                  child: MyTextWidget(text: widget.model.email, isRightItem: true),
+                                  child: MyTextWidget(
+                                    text: widget.model.data1 == null || widget.model.data1!.isEmpty || widget.model.data1![0].contacts!.isEmpty
+                                        ? 'Nan'
+                                        : widget.model.data1![0].contacts![0].email == ''
+                                            ? 'Nan'
+                                            : widget.model.data1![0].contacts![0].email ?? 'Nan',
+                                    isRightItem: true,
+                                  ),
                                 ),
                               ],
                             ),
@@ -270,7 +350,11 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                                 SizedBox(width: 5.w),
                                 Text(
                                   // '971522627165',
-                                  widget.model.phoneNumber,
+                                  widget.model.data1 == null || widget.model.data1!.isEmpty || widget.model.data1![0].contacts!.isEmpty
+                                      ? 'Nan'
+                                      : widget.model.data1![0].contacts![0].mobile == ''
+                                          ? 'Nan'
+                                          : widget.model.data1![0].contacts![0].mobile ?? 'Nan',
                                   style: GoogleFonts.poppins().copyWith(color: Colors.grey[800], fontSize: 12.w),
                                 ),
                               ],
@@ -450,7 +534,9 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                           SizedBox(height: 2.h),
                           SelectableText(
                             // "I hope you're doing well. I wanted to touch base regarding the custom software development project for XYZ Corporation. Following our recent discussions, our team has been actively refining the project scope and strategies to ensure we meet your needs effectively.",
-                            widget.model.sampleFollowupMessage,
+                            widget.model.data1 == null || widget.model.data1!.isEmpty || widget.model.data1![0].contacts!.isEmpty
+                                ? 'Nan'
+                                :  widget.model.data1![0].contacts![0].nextFollowup == '' ? 'Nan' : widget.model.data1![0].contacts![0].nextFollowup ?? 'Nan',
                             // 'NA',
                             style: TextStyle(color: Colors.grey[800], fontSize: 10.w),
                             textAlign: TextAlign.justify,
@@ -469,8 +555,10 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                                     style: AppStyles.poppins.copyWith(fontWeight: FontWeight.w900, color: Colors.white, fontSize: 8.w),
                                   ),
                                   Text(
-                                    // '18/04/2024',
-                                    widget.model.followupDate,
+                                    '18/04/2024',
+                                    // widget.model.data1 == null || widget.model.data1!.isEmpty || widget.model.data1![0].contacts!.isEmpty
+                                    //     ? 'Nan'
+                                    //     : widget.model.data1![0].contacts![0]. ?? 'naN',
                                     // 'NA',
                                     style: TextStyle(color: Colors.white, fontSize: 8.w),
                                   ),
@@ -528,7 +616,9 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
 
                                   final emailLaunchUri = Uri(
                                     scheme: 'mailto',
-                                    path: widget.model.email,
+                                    path: widget.model.data1 == null || widget.model.data1!.isEmpty || widget.model.data1![0].contacts!.isEmpty
+                                        ? 'Nan'
+                                        : widget.model.data1![0].contacts![0].email ?? 'naN',
                                     query: encodeQueryParameters(<String, String>{
                                       'subject': 'Example Subject & Symbols are allowed!',
                                     }),
@@ -541,7 +631,9 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                                 color: Colors.blue[700]!,
                                 icon: Icons.phone_outlined,
                                 onTap: () {
-                                  UrlLauncher.launchUrl(Uri.parse('tel://${widget.model.phoneNumber.contains('+') ? widget.model.phoneNumber : '+971${widget.model.phoneNumber}'}'));
+                                  // UrlLauncher.launchUrl(Uri.parse('tel://${widget.model.phoneNumber.contains('+') ? widget.model.phoneNumber : '+971${widget.model.phoneNumber}'}'));
+                                  UrlLauncher.launchUrl(Uri.parse(
+                                      'tel://${(widget.model.data1 == null || widget.model.data1!.isEmpty || widget.model.data1![0].contacts!.isEmpty ? 'Nan' : widget.model.data1![0].contacts![0].name ?? 'naN').contains('+') ? widget.model.data1 == null || widget.model.data1!.isEmpty || widget.model.data1![0].contacts!.isEmpty ? 'Nan' : widget.model.data1![0].contacts![0].name ?? 'naN' : '+971${widget.model.data1 == null || widget.model.data1!.isEmpty || widget.model.data1![0].contacts!.isEmpty ? 'Nan' : widget.model.data1![0].contacts![0].name ?? 'naN'}'}'));
                                 },
                               ),
                               // _EachContachSmallButtons(
@@ -559,12 +651,12 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                                 color: Colors.green[900]!,
                                 icon: Icons.edit_outlined,
                                 onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => NewContact(model: widget.model),
-                                    ),
-                                  );
+                                  // Navigator.push(
+                                  //   context,
+                                  //   MaterialPageRoute(
+                                  //     builder: (context) => NewContact(model: widget.model),
+                                  //   ),
+                                  // );
                                 },
                               ),
                             ],
@@ -592,12 +684,12 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                           color: Colors.blue[400]!,
                           icon: Icons.remove_red_eye_outlined,
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ViewContact(model: widget.model),
-                              ),
-                            );
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (context) => ViewContact(model: widget.model),
+                            //   ),
+                            // );
                           },
                         ),
                         _EachContachSmallButtons(
@@ -687,7 +779,8 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                                 width: double.maxFinite, // Change as per your requirement
                                 child: ListView.separated(
                                   shrinkWrap: true,
-                                  itemBuilder: (context, index) => _FollowUpWidget(model: widget.model),
+                                  // itemBuilder: (context, index) => _FollowUpWidget(model: widget.model),
+                                  itemBuilder: (context, index) => Container(),
                                   separatorBuilder: (context, index) => Padding(
                                     padding: EdgeInsets.only(top: 12.h),
                                     child: Divider(
