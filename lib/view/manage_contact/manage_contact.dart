@@ -272,10 +272,10 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                                   // ),
                                   child: MyTextWidget(
                                     text: widget.model.data1 == null || widget.model.data1!.isEmpty || widget.model.data1![0].contacts!.isEmpty
-                                        ? 'Nan'
+                                        ? '-'
                                         : widget.model.data1![0].contacts![0].name == ''
-                                            ? 'Nan'
-                                            : widget.model.data1![0].contacts![0].name ?? 'Nan',
+                                            ? '-'
+                                            : widget.model.data1![0].contacts![0].name ?? '-',
                                   ),
                                 ),
                               ],
@@ -293,16 +293,16 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                                 SizedBox(
                                   width: 90.w,
                                   // child: Text(
-                                  //   // 'R.K.I.F',
+                                  //   // 'R.K.I.F',  
                                   //   widget.model.companyName,
                                   //   style: AppStyles.poppins.copyWith(color: Colors.grey[800], fontSize: 12.w, overflow: TextOverflow.ellipsis),
                                   // ),
                                   child: MyTextWidget(
                                     text: widget.model.data1 == null || widget.model.data1!.isEmpty || widget.model.data1![0].contacts!.isEmpty
-                                        ? 'Nan'
+                                        ? '-'
                                         : widget.model.data1![0].contacts![0].company == ''
-                                            ? 'Nan'
-                                            : widget.model.data1![0].contacts![0].company ?? 'Nan',
+                                            ? '-'
+                                            : widget.model.data1![0].contacts![0].company ?? '-',
                                   ),
                                 ),
                               ],
@@ -329,10 +329,10 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                                   // ),
                                   child: MyTextWidget(
                                     text: widget.model.data1 == null || widget.model.data1!.isEmpty || widget.model.data1![0].contacts!.isEmpty
-                                        ? 'Nan'
+                                        ? '-'
                                         : widget.model.data1![0].contacts![0].email == ''
-                                            ? 'Nan'
-                                            : widget.model.data1![0].contacts![0].email ?? 'Nan',
+                                            ? '-'
+                                            : widget.model.data1![0].contacts![0].email ?? '-',
                                     isRightItem: true,
                                   ),
                                 ),
@@ -351,10 +351,10 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                                 Text(
                                   // '971522627165',
                                   widget.model.data1 == null || widget.model.data1!.isEmpty || widget.model.data1![0].contacts!.isEmpty
-                                      ? 'Nan'
+                                      ? '-'
                                       : widget.model.data1![0].contacts![0].mobile == ''
-                                          ? 'Nan'
-                                          : widget.model.data1![0].contacts![0].mobile ?? 'Nan',
+                                          ? '-'
+                                          : widget.model.data1![0].contacts![0].mobile ?? '-',
                                   style: GoogleFonts.poppins().copyWith(color: Colors.grey[800], fontSize: 12.w),
                                 ),
                               ],
@@ -535,8 +535,8 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                           SelectableText(
                             // "I hope you're doing well. I wanted to touch base regarding the custom software development project for XYZ Corporation. Following our recent discussions, our team has been actively refining the project scope and strategies to ensure we meet your needs effectively.",
                             widget.model.data1 == null || widget.model.data1!.isEmpty || widget.model.data1![0].contacts!.isEmpty
-                                ? 'Nan'
-                                :  widget.model.data1![0].contacts![0].nextFollowup == '' ? 'Nan' : widget.model.data1![0].contacts![0].nextFollowup ?? 'Nan',
+                                ? '-'
+                                :  widget.model.data1![0].contacts![0].nextFollowup == '' ? '-' : widget.model.data1![0].contacts![0].nextFollowup ?? '-',
                             // 'NA',
                             style: TextStyle(color: Colors.grey[800], fontSize: 10.w),
                             textAlign: TextAlign.justify,
@@ -557,8 +557,8 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                                   Text(
                                     '18/04/2024',
                                     // widget.model.data1 == null || widget.model.data1!.isEmpty || widget.model.data1![0].contacts!.isEmpty
-                                    //     ? 'Nan'
-                                    //     : widget.model.data1![0].contacts![0]. ?? 'naN',
+                                    //     ? '-'
+                                    //     : widget.model.data1![0].contacts![0]. ?? '-',
                                     // 'NA',
                                     style: TextStyle(color: Colors.white, fontSize: 8.w),
                                   ),
@@ -617,8 +617,8 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                                   final emailLaunchUri = Uri(
                                     scheme: 'mailto',
                                     path: widget.model.data1 == null || widget.model.data1!.isEmpty || widget.model.data1![0].contacts!.isEmpty
-                                        ? 'Nan'
-                                        : widget.model.data1![0].contacts![0].email ?? 'naN',
+                                        ? '-'
+                                        : widget.model.data1![0].contacts![0].email ?? '-',
                                     query: encodeQueryParameters(<String, String>{
                                       'subject': 'Example Subject & Symbols are allowed!',
                                     }),
@@ -633,7 +633,7 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                                 onTap: () {
                                   // UrlLauncher.launchUrl(Uri.parse('tel://${widget.model.phoneNumber.contains('+') ? widget.model.phoneNumber : '+971${widget.model.phoneNumber}'}'));
                                   UrlLauncher.launchUrl(Uri.parse(
-                                      'tel://${(widget.model.data1 == null || widget.model.data1!.isEmpty || widget.model.data1![0].contacts!.isEmpty ? 'Nan' : widget.model.data1![0].contacts![0].name ?? 'naN').contains('+') ? widget.model.data1 == null || widget.model.data1!.isEmpty || widget.model.data1![0].contacts!.isEmpty ? 'Nan' : widget.model.data1![0].contacts![0].name ?? 'naN' : '+971${widget.model.data1 == null || widget.model.data1!.isEmpty || widget.model.data1![0].contacts!.isEmpty ? 'Nan' : widget.model.data1![0].contacts![0].name ?? 'naN'}'}'));
+                                      'tel://${(widget.model.data1 == null || widget.model.data1!.isEmpty || widget.model.data1![0].contacts!.isEmpty ? '-' : widget.model.data1![0].contacts![0].name ?? '-').contains('+') ? widget.model.data1 == null || widget.model.data1!.isEmpty || widget.model.data1![0].contacts!.isEmpty ? '-' : widget.model.data1![0].contacts![0].name ?? '-' : '+971${widget.model.data1 == null || widget.model.data1!.isEmpty || widget.model.data1![0].contacts!.isEmpty ? '-' : widget.model.data1![0].contacts![0].name ?? '-'}'}'));
                                 },
                               ),
                               // _EachContachSmallButtons(
