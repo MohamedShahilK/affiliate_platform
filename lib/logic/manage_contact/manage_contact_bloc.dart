@@ -2,6 +2,7 @@
 
 import 'package:affiliate_platform/models/manage_contact/all_contacts.dart';
 import 'package:affiliate_platform/models/manage_contact/contact_form_model.dart';
+import 'package:affiliate_platform/models/manage_contact/contact_view_model.dart';
 import 'package:affiliate_platform/services/manage_contact/manage_contact_services.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -12,6 +13,7 @@ class ManageContactBloc {
 
   final getAllContactsStream = BehaviorSubject<GetAllContactsAndUsers?>();
   final getContactFormStream = BehaviorSubject<ContactFormModel?>();
+  final getContactViewStream = BehaviorSubject<ContactViewModel?>();
 
   final nameStream = BehaviorSubject<String>.seeded('');
   final mobileStream = BehaviorSubject<String>.seeded('');
@@ -44,8 +46,9 @@ class ManageContactBloc {
   }
 
   Future<void> getEachContact({required String contactId}) async {
+    getContactViewStream.add(null);
     final respModel = await ManageContactSevices().getEachContact(contactId: contactId);
-    getContactFormStream.add(respModel);
+    getContactViewStream.add(respModel);
   }
 
   void clearStreams() {

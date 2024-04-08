@@ -2,11 +2,13 @@
 
 import 'package:json_annotation/json_annotation.dart';
 
-  part 'contact_view_model.g.dart';
+part 'contact_view_model.g.dart';
 
 @JsonSerializable()
 class ContactViewModel {
   ContactViewModel({this.status, this.response, this.data});
+
+  factory ContactViewModel.fromJson(Map<String, dynamic> json) => _$ContactViewModelFromJson(json);
 
   final String? status;
   final String? response;
@@ -19,7 +21,7 @@ class Data {
 
   final String? title;
   final String? id;
-  Contact? contact;
+  final Contact? contact;
   final List<ContactFollowups>? contactFollowups;
   final List<AffiliateUsers>? affiliateUsers;
   final List<UserPermissions>? userPermissions;

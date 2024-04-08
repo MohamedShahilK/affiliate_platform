@@ -11,7 +11,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class ViewContact extends StatefulWidget {
   const ViewContact({required this.model, super.key});
 
-  final Contact model;
+  final Contact1 model;
 
   @override
   State<ViewContact> createState() => _ViewContactState();

@@ -4,6 +4,7 @@ import 'package:affiliate_platform/api/api.dart';
 import 'package:affiliate_platform/api/api_contants.dart';
 import 'package:affiliate_platform/models/manage_contact/all_contacts.dart';
 import 'package:affiliate_platform/models/manage_contact/contact_form_model.dart';
+import 'package:affiliate_platform/models/manage_contact/contact_view_model.dart';
 import 'package:affiliate_platform/utils/constants/string_constants.dart';
 import 'package:affiliate_platform/utils/internal_services/storage_services.dart';
 import 'package:dio/dio.dart';
@@ -80,7 +81,7 @@ class ManageContactSevices {
   }
 
   // Get Contact Form
-  Future<ContactFormModel?> getEachContact({required String contactId}) async {
+  Future<ContactViewModel?> getEachContact({required String contactId}) async {
     try {
       final token = StorageServices.to.getString(StorageServicesKeys.token);
       final haveToken = token.isNotEmpty;
@@ -99,7 +100,7 @@ class ManageContactSevices {
 
         print('55555555555555555555555 ${response!.data}');
 
-        final respModel = ContactFormModel.fromJson(response!.data ?? {});
+        final respModel = ContactViewModel.fromJson(response!.data ?? {});
 
         return respModel;
       }

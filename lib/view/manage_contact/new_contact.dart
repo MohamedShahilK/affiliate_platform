@@ -3,6 +3,7 @@
 import 'package:affiliate_platform/config/ripple.dart';
 import 'package:affiliate_platform/logic/manage_contact/manage_contact_bloc.dart';
 import 'package:affiliate_platform/models/manage_contact/contact_form_model.dart';
+import 'package:affiliate_platform/models/manage_contact/contact_view_model.dart';
 import 'package:affiliate_platform/utils/constants/styles.dart';
 import 'package:affiliate_platform/view/common/custom_scafflod.dart';
 import 'package:affiliate_platform/view/common/sidebar.dart';
@@ -15,11 +16,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class NewContact extends StatefulWidget {
   const NewContact({this.model, this.contactId, super.key});
 
-  final Contact? model;
+  final Contact1? model;
   final String? contactId;
 
   @override
@@ -32,14 +34,19 @@ class _NewContactState extends State<NewContact> {
   @override
   void didChangeDependencies() {
     manageContactBloc ??= Provider.of<ManageContactBloc>(context);
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      manageContactBloc!.getContactForm();
-      manageContactBloc!.clearStreams();
-      print('333333333333333333333333333333 ${widget.contactId}');
-      if (widget.contactId != null) {
-        await manageContactBloc!.getEachContact(contactId: widget.contactId!);
-      }
-    });
+    manageContactBloc!.getContactForm();
+    manageContactBloc!.clearStreams();
+    if (widget.contactId == null) {
+      manageContactBloc!.getContactViewStream.add(null);
+    } else {
+      manageContactBloc!.getEachContact(contactId: widget.contactId!);
+    }
+    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+    //   print('333333333333333333333333333333 ${widget.contactId}');
+    //   if (widget.contactId != null) {
+    //     await manageContactBloc!.getEachContact(contactId: widget.contactId!);
+    //   }
+    // });
     super.didChangeDependencies();
   }
 
@@ -114,7 +121,7 @@ class _NewContactState extends State<NewContact> {
                   child: StreamBuilder(
                     stream: bloc.getContactFormStream,
                     builder: (context, snapshot) {
-                      if ((!snapshot.hasData && snapshot.connectionState != ConnectionState.waiting) || snapshot.hasError) {
+                      if (snapshot.hasError) {
                         Loader.hide();
                         return Expanded(
                           child: Column(
@@ -137,7 +144,7 @@ class _NewContactState extends State<NewContact> {
                                   children: [
                                     Icon(Icons.refresh, size: 17.w),
                                     SizedBox(width: 5.w),
-                                    Text('Refresh', style: TextStyle(fontSize: 15.w)),
+                                    Text('Refres11', style: TextStyle(fontSize: 15.w)),
                                   ],
                                 ),
                               ).ripple(
@@ -163,141 +170,208 @@ class _NewContactState extends State<NewContact> {
                       }
 
                       return StreamBuilder(
-                        stream: bloc.get,
-                        builder: (context, snapshot) {
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // Heading
-                          
-                              // Form Fields
-                          
-                              Padding(
-                                padding: EdgeInsets.only(top: 7.h),
+                        stream: bloc.getContactViewStream,
+                        builder: (context, getContactViewStreamsnapshot) {
+                          if ((!getContactViewStreamsnapshot.hasData && getContactViewStreamsnapshot.connectionState == ConnectionState.done) || getContactViewStreamsnapshot.hasError) {
+                            Loader.hide();
+                            return Expanded(
+                              child: Center(
                                 child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    NewContactField(
-                                      heading: 'Contact Name',
-                                      hintText: 'Contact Person Full Name',
-                                      textStream: bloc.nameStream,
-                                      onChanged: bloc.nameStream.add,
+                                    Text(
+                                      'Something went wrong',
+                                      style: TextStyle(fontSize: 16.w),
                                     ),
-                                    NewContactDropDown(
-                                      textStream: bloc.contactTypeStream,
-                                      heading: 'Contact Type',
-                                      hint: 'Select Contact Type',
-                                      // items:allContactsRespModel != null ? ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'] : ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'],
-                                      items: (allContactsRespModel != null &&
-                                              allContactsRespModel.data != null &&
-                                              allContactsRespModel.data!.isNotEmpty &&
-                                              allContactsRespModel.data?[0].contactType != null)
-                                          ? ['', ...allContactsRespModel.data![0].contactType!.values.toList(growable: false).map((e) => e as String)]
-                                          : [''],
-                                      label: 'Contact Type',
-                                      // initialValue: allContactsRespModel == null ? '' : allContactsRespModel.data![0].contactType!.entries.map((e) => e as String).toList().first,
-                                      initialValue: widget.model?.type ?? '',
-                                    ), //dropdown
-                                    NewContactField(
-                                      heading: 'Mobile Number',
-                                      hintText: 'eg: 9719864631313',
-                                      textInputType: TextInputType.phone,
-                                      textStream: bloc.mobileStream,
-                                      onChanged: bloc.mobileStream.add,
-                                    ),
-                                    NewContactField(
-                                      heading: 'Email Address',
-                                      hintText: 'eg: example@exm.com',
-                                      textInputType: TextInputType.emailAddress,
-                                      textStream: bloc.emailStream,
-                                      onChanged: bloc.emailStream.add,
-                                    ),
-                                    NewContactDropDown(
-                                      textStream: bloc.contactSourceStream,
-                                      heading: 'Contact Source',
-                                      hint: 'Select Contact Source',
-                                      // items: widget.model != null ? ['', 'Internet', 'Social Media', 'Email'] : ['', 'Internet', 'Social Media', 'Email'],
-                                      items: (allContactsRespModel != null &&
-                                              allContactsRespModel.data != null &&
-                                              allContactsRespModel.data!.isNotEmpty &&
-                                              allContactsRespModel.data?[0].contactSources != null)
-                                          ? ['', ...allContactsRespModel.data![0].contactSources!.map((e) => e.sourceName ?? '')]
-                                          : [''],
-                                      label: 'Contact Source',
-                                      initialValue: widget.model?.contactSource ?? '',
-                                    ), //dropdown
-                                    NewContactField(
-                                      heading: 'Contact Designation',
-                                      hintText: 'eg: CEO',
-                                      textStream: bloc.designationStream,
-                                      onChanged: bloc.designationStream.add,
-                                    ),
-                                    NewContactField(
-                                      heading: 'Company Name',
-                                      hintText: 'eg: Arabinfotec Pvt Ltd',
-                                      textStream: bloc.companyNameStream,
-                                      onChanged: bloc.companyNameStream.add,
-                                    ),
-                                    NewContactField(
-                                      heading: 'Company Landline Number',
-                                      hintText: 'eg: 97163466578',
-                                      textInputType: TextInputType.phone,
-                                      textStream: bloc.landlineStream,
-                                      onChanged: bloc.landlineStream.add,
-                                    ),
-                                    NewContactField(
-                                      heading: 'Company Website',
-                                      hintText: 'eg: https://arabinfotechllc.com/',
-                                      textInputType: TextInputType.url,
-                                      textStream: bloc.websiteStream,
-                                      onChanged: bloc.websiteStream.add,
-                                    ),
-                                    NewContactField(
-                                      heading: 'Company Location',
-                                      hintText: 'Enter Location',
-                                      textStream: bloc.companyLocationStream,
-                                      onChanged: bloc.companyLocationStream.add,
-                                    ),
-                                    NewContactLargeField(
-                                      heading: 'Company Address',
-                                      hintText: 'Enter Adress',
-                                      textStream: bloc.companyAddressStream,
-                                      onChanged: bloc.companyAddressStream.add,
-                                    ),
-                                    NewContactLargeField(
-                                      heading: 'Remarks if any',
-                                      hintText: '-- NOTE --',
-                                      textStream: bloc.remarkStream,
-                                      onChanged: bloc.remarkStream.add,
+                                    SizedBox(height: 30.h),
+                                    Container(
+                                      padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 8.h),
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.purple[100]!),
+                                        borderRadius: BorderRadius.circular(15.r),
+                                      ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Icon(Icons.refresh, size: 17.w),
+                                          SizedBox(width: 5.w),
+                                          Text('Refreshee', style: TextStyle(fontSize: 15.w)),
+                                        ],
+                                      ),
+                                    ).ripple(
+                                      context,
+                                      () async {
+                                        if (widget.contactId != null) {
+                                          await bloc.getEachContact(contactId: widget.contactId!);
+                                        }
+                                      },
+                                      borderRadius: BorderRadius.circular(15.r),
+                                      overlayColor: Colors.purple.withOpacity(.15),
                                     ),
                                   ],
                                 ),
                               ),
-                          
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Container(
-                                    padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
-                                    decoration: BoxDecoration(
-                                      color: Colors.orange,
-                                      borderRadius: BorderRadius.circular(15.r),
-                                    ),
-                                    child: Text('Reset', style: AppStyles.poppins.copyWith(fontSize: 14.w, color: Colors.white)),
+                            );
+                          }
+
+                          ContactViewModel? contactViewRespModel;
+
+                          // if (getContactViewStreamsnapshot.connectionState == ConnectionState.waiting) {
+                          //   return CircularProgressIndicator();
+                          // }
+
+                          if (getContactViewStreamsnapshot.hasData) {
+                            contactViewRespModel = getContactViewStreamsnapshot.data;
+                            // print('3333333333333333333333333333 ${contactViewRespModel}');
+
+                            if (contactViewRespModel != null && contactViewRespModel.data != null && contactViewRespModel.data!.isNotEmpty) {
+                              final contact = contactViewRespModel.data?[0].contact;
+
+                              if (contact != null) {
+                                if (contact.name != null) {
+                                  bloc.nameStream.add(contact.name ?? '');
+                                }
+                              }
+                            }
+                          }
+
+                          return Skeletonizer(
+                            enabled: getContactViewStreamsnapshot.connectionState == ConnectionState.waiting ,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // Heading
+
+                                // Form Fields
+
+                                Padding(
+                                  padding: EdgeInsets.only(top: 7.h),
+                                  child: Column(
+                                    children: [
+                                      NewContactField(
+                                        heading: 'Contact Name',
+                                        hintText: 'Contact Person Full Name',
+                                        textStream: bloc.nameStream,
+                                        onChanged: bloc.nameStream.add,
+                                      ),
+                                      NewContactDropDown(
+                                        textStream: bloc.contactTypeStream,
+                                        heading: 'Contact Type',
+                                        hint: 'Select Contact Type',
+                                        // items:allContactsRespModel != null ? ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'] : ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'],
+                                        items: (allContactsRespModel != null &&
+                                                allContactsRespModel.data != null &&
+                                                allContactsRespModel.data!.isNotEmpty &&
+                                                allContactsRespModel.data?[0].contactType != null)
+                                            ? ['', ...allContactsRespModel.data![0].contactType!.values.toList(growable: false).map((e) => e as String)]
+                                            : [''],
+                                        label: 'Contact Type',
+                                        // initialValue: allContactsRespModel == null ? '' : allContactsRespModel.data![0].contactType!.entries.map((e) => e as String).toList().first,
+                                        initialValue: widget.model?.type ?? '',
+                                      ), //dropdown
+                                      NewContactField(
+                                        heading: 'Mobile Number',
+                                        hintText: 'eg: 9719864631313',
+                                        textInputType: TextInputType.phone,
+                                        textStream: bloc.mobileStream,
+                                        onChanged: bloc.mobileStream.add,
+                                      ),
+                                      NewContactField(
+                                        heading: 'Email Address',
+                                        hintText: 'eg: example@exm.com',
+                                        textInputType: TextInputType.emailAddress,
+                                        textStream: bloc.emailStream,
+                                        onChanged: bloc.emailStream.add,
+                                      ),
+                                      NewContactDropDown(
+                                        textStream: bloc.contactSourceStream,
+                                        heading: 'Contact Source',
+                                        hint: 'Select Contact Source',
+                                        // items: widget.model != null ? ['', 'Internet', 'Social Media', 'Email'] : ['', 'Internet', 'Social Media', 'Email'],
+                                        items: (allContactsRespModel != null &&
+                                                allContactsRespModel.data != null &&
+                                                allContactsRespModel.data!.isNotEmpty &&
+                                                allContactsRespModel.data?[0].contactSources != null)
+                                            ? ['', ...allContactsRespModel.data![0].contactSources!.map((e) => e.sourceName ?? '')]
+                                            : [''],
+                                        label: 'Contact Source',
+                                        initialValue: widget.model?.contactSource ?? '',
+                                      ), //dropdown
+                                      NewContactField(
+                                        heading: 'Contact Designation',
+                                        hintText: 'eg: CEO',
+                                        textStream: bloc.designationStream,
+                                        onChanged: bloc.designationStream.add,
+                                      ),
+                                      NewContactField(
+                                        heading: 'Company Name',
+                                        hintText: 'eg: Arabinfotec Pvt Ltd',
+                                        textStream: bloc.companyNameStream,
+                                        onChanged: bloc.companyNameStream.add,
+                                      ),
+                                      NewContactField(
+                                        heading: 'Company Landline Number',
+                                        hintText: 'eg: 97163466578',
+                                        textInputType: TextInputType.phone,
+                                        textStream: bloc.landlineStream,
+                                        onChanged: bloc.landlineStream.add,
+                                      ),
+                                      NewContactField(
+                                        heading: 'Company Website',
+                                        hintText: 'eg: https://arabinfotechllc.com/',
+                                        textInputType: TextInputType.url,
+                                        textStream: bloc.websiteStream,
+                                        onChanged: bloc.websiteStream.add,
+                                      ),
+                                      NewContactField(
+                                        heading: 'Company Location',
+                                        hintText: 'Enter Location',
+                                        textStream: bloc.companyLocationStream,
+                                        onChanged: bloc.companyLocationStream.add,
+                                      ),
+                                      NewContactLargeField(
+                                        heading: 'Company Address',
+                                        hintText: 'Enter Adress',
+                                        textStream: bloc.companyAddressStream,
+                                        onChanged: bloc.companyAddressStream.add,
+                                      ),
+                                      NewContactLargeField(
+                                        heading: 'Remarks if any',
+                                        hintText: '-- NOTE --',
+                                        textStream: bloc.remarkStream,
+                                        onChanged: bloc.remarkStream.add,
+                                      ),
+                                    ],
                                   ),
-                                  SizedBox(width: 10.w),
-                                  Container(
-                                    padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
-                                    decoration: BoxDecoration(
-                                      color: Colors.purple,
-                                      borderRadius: BorderRadius.circular(15.r),
+                                ),
+
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
+                                      decoration: BoxDecoration(
+                                        color: Colors.orange,
+                                        borderRadius: BorderRadius.circular(15.r),
+                                      ),
+                                      child: Text('Reset', style: AppStyles.poppins.copyWith(fontSize: 14.w, color: Colors.white)),
                                     ),
-                                    child: Text('Submit', style: AppStyles.poppins.copyWith(fontSize: 14.w, color: Colors.white)),
-                                  ),
-                                ],
-                              ),
-                          
-                              SizedBox(height: 160.h),
-                            ],
+                                    SizedBox(width: 10.w),
+                                    Container(
+                                      padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
+                                      decoration: BoxDecoration(
+                                        color: Colors.purple,
+                                        borderRadius: BorderRadius.circular(15.r),
+                                      ),
+                                      child: Text('Submit', style: AppStyles.poppins.copyWith(fontSize: 14.w, color: Colors.white)),
+                                    ),
+                                  ],
+                                ),
+
+                                SizedBox(height: 160.h),
+                              ],
+                            ),
                           );
                         },
                       );

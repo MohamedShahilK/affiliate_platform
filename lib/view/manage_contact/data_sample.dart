@@ -243,9 +243,9 @@ const sampleList = {
   ],
 };
 
-class Contact {
+class Contact1 {
 
-  Contact({
+  Contact1({
     required this.name,
     required this.companyName,
     required this.email,
@@ -262,8 +262,8 @@ class Contact {
     required this.sampleFollowupMessage,
     required this.followupDate,
   });
-  factory Contact.fromJson(Map<String, dynamic> json) {
-    return Contact(
+  factory Contact1.fromJson(Map<String, dynamic> json) {
+    return Contact1(
       name: json['name'] as String,
       companyName: json['company_name'] as String,
       email: json['email'] as String,
