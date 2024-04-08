@@ -16,8 +16,8 @@ ContactFormModel _$ContactFormModelFromJson(Map<String, dynamic> json) => Contac
 
 Data _$DataFromJson(Map<String, dynamic> json) => Data(
       title: json['title'] as String?,
-      contactSources: (json['contactSources'] as List<dynamic>?)?.map((e) => _$ContactSourcesFromJson(e as Map<String, dynamic>)).toList(),
-      contactType: json['contactType'] as Map<String, dynamic>?,
+      contactSources: (json['contact_sources'] as List<dynamic>?)?.map((e) => _$ContactSourcesFromJson(e as Map<String, dynamic>)).toList(),
+      contactType: json['contact_type'] as Map<String, dynamic>?,
     );
 
 ContactSources _$ContactSourcesFromJson(Map<String, dynamic> json) => ContactSources(

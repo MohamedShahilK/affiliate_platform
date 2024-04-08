@@ -78,4 +78,36 @@ class ManageContactSevices {
       return null;
     }
   }
+
+  // Get Contact Form
+  Future<ContactFormModel?> getEachContact({required String contactId}) async {
+    try {
+      final token = StorageServices.to.getString(StorageServicesKeys.token);
+      final haveToken = token.isNotEmpty;
+      if (haveToken) {
+        final response = await api.dio?.get<Map<String, dynamic>>(
+          options: Options(
+            headers: {
+              // 'accept': '*/*',
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer $token',
+            },
+          ),
+          // queryParameters: {'id':contactId},
+          '${EndPoints.contactView}/$contactId',
+        );
+
+        print('55555555555555555555555 ${response!.data}');
+
+        final respModel = ContactFormModel.fromJson(response!.data ?? {});
+
+        return respModel;
+      }
+      return null;
+    } catch (e) {
+      Loader.hide();
+      print('getContactForm Error :- $e');
+      return null;
+    }
+  }
 }

@@ -8,4 +8,5 @@ class EndPoints {
   static const regenerateToken = '/auth/regenerate_token';
   static const getAllContacts= '/contacts/contact_list';
   static const contactForm= '/contacts/contact_form';
+  static const contactView= '/contacts/contact_view';
 }
