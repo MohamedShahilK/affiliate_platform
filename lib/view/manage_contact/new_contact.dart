@@ -232,12 +232,80 @@ class _NewContactState extends State<NewContact> {
                                 if (contact.name != null) {
                                   bloc.nameStream.add(contact.name ?? '');
                                 }
+
+                                if (contact.contactType != null) {
+                                  // final type =
+                                  //     snapshot.data!.data![0].contactType!.values.toList(growable: false).where((e) => (e as String) == contact.contactType).toList().first as String?;
+
+                                  // bloc.contactTypeStream.add(type ?? '');
+
+                                  final typeList = snapshot.data!.data![0].contactType!.values.toList(growable: false).map((e) => e as String).toList();
+
+                                  String currentType;
+
+                                  if (contact.contactType != '0') {
+                                    currentType = typeList[int.parse(contact.contactType!) - 1];
+                                  } else {
+                                    currentType = typeList[int.parse(contact.contactType!)];
+                                  }
+
+                                  // print(
+                                  //     '5555555555555555555555555 ${snapshot.data!.data![0].contactType!.values.toList(growable: false).map((e) => e as String).toList()[int.parse(contact.contactType!)]}');
+
+                                  bloc.contactTypeStream.add(currentType);
+                                }
+
+                                if (contact.contactSource != null) {
+                                  final source = snapshot.data!.data![0].contactSources!.where((i) => i.id == contact.contactSource).toList().first.sourceName ?? '';
+
+                                  // print('66666666666666666666666666666 ${source} ');
+
+                                  // final currentSource = ;
+
+                                  // print(
+                                  //     '5555555555555555555555555 ${snapshot.data!.data![0].contactType!.values.toList(growable: false).map((e) => e as String).toList()[int.parse(contact.contactType!)]}');
+
+                                  bloc.contactSourceStream.add(source);
+                                }
+
+                                if (contact.mobile != null) {
+                                  bloc.mobileStream.add(contact.mobile ?? '');
+                                }
+
+                                if (contact.email != null) {
+                                  bloc.emailStream.add(contact.email ?? '');
+                                }
+
+                                if (contact.designation != null) {
+                                  bloc.designationStream.add(contact.designation ?? '');
+                                }
+                                if (contact.company != null) {
+                                  bloc.companyNameStream.add(contact.company ?? '');
+                                }
+
+                                if (contact.companyLandline != null) {
+                                  bloc.landlineStream.add(contact.companyLandline ?? '');
+                                }
+                                if (contact.companyWebsite != null) {
+                                  bloc.websiteStream.add(contact.companyWebsite ?? '');
+                                }
+                                if (contact.companyLocation != null) {
+                                  bloc.companyLocationStream.add(contact.companyLocation ?? '');
+                                }
+
+                                if (contact.companyAddress != null) {
+                                  bloc.companyAddressStream.add(contact.companyAddress ?? '');
+                                }
+
+                                if (contact.remarks != null) {
+                                  bloc.remarkStream.add(contact.remarks ?? '');
+                                }
                               }
                             }
                           }
 
                           return Skeletonizer(
-                            enabled: getContactViewStreamsnapshot.connectionState == ConnectionState.waiting ,
+                            enabled: getContactViewStreamsnapshot.connectionState == ConnectionState.waiting,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [

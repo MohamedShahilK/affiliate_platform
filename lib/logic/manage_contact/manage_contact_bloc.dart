@@ -18,7 +18,7 @@ class ManageContactBloc {
   final nameStream = BehaviorSubject<String>.seeded('');
   final mobileStream = BehaviorSubject<String>.seeded('');
   final emailStream = BehaviorSubject<String>.seeded('');
-  final sourceStream = BehaviorSubject<String>.seeded('');
+  // final sourceStream = BehaviorSubject<String>.seeded('');
   final designationStream = BehaviorSubject<String>.seeded('');
   final companyNameStream = BehaviorSubject<String>.seeded('');
   final landlineStream = BehaviorSubject<String>.seeded('');
@@ -55,7 +55,7 @@ class ManageContactBloc {
     nameStream.add('');
     mobileStream.add('');
     emailStream.add('');
-    sourceStream.add('');
+    // sourceStream.add('');
     designationStream.add('');
     companyNameStream.add('');
     landlineStream.add('');
