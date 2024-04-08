@@ -1,10 +1,11 @@
-// ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: lines_longer_than_80_chars, use_build_context_synchronously
 
 import 'package:affiliate_platform/config/ripple.dart';
 import 'package:affiliate_platform/logic/manage_contact/manage_contact_bloc.dart';
 import 'package:affiliate_platform/models/manage_contact/contact_form_model.dart';
 import 'package:affiliate_platform/models/manage_contact/contact_view_model.dart';
 import 'package:affiliate_platform/utils/constants/styles.dart';
+import 'package:affiliate_platform/utils/custom_tools.dart';
 import 'package:affiliate_platform/view/common/custom_scafflod.dart';
 import 'package:affiliate_platform/view/common/sidebar.dart';
 import 'package:affiliate_platform/view/manage_contact/data_sample.dart';
@@ -256,7 +257,13 @@ class _NewContactState extends State<NewContact> {
                                 }
 
                                 if (contact.contactSource != null) {
-                                  final source = snapshot.data!.data![0].contactSources!.where((i) => i.id == contact.contactSource).toList().first.sourceName ?? '';
+                                  final list = snapshot.data!.data![0].contactSources!.where((i) => i.id == contact.contactSource).toList();
+
+                                  String source = '';
+
+                                  if (list.isNotEmpty) {
+                                    source = list.first.sourceName ?? '';
+                                  }
 
                                   // print('66666666666666666666666666666 ${source} ');
 
@@ -265,7 +272,7 @@ class _NewContactState extends State<NewContact> {
                                   // print(
                                   //     '5555555555555555555555555 ${snapshot.data!.data![0].contactType!.values.toList(growable: false).map((e) => e as String).toList()[int.parse(contact.contactType!)]}');
 
-                                  bloc.contactSourceStream.add(source);
+                                  bloc.contactSourceStream.add(source == '0' ? '' : source);
                                 }
 
                                 if (contact.mobile != null) {
@@ -433,7 +440,83 @@ class _NewContactState extends State<NewContact> {
                                         borderRadius: BorderRadius.circular(15.r),
                                       ),
                                       child: Text('Submit', style: AppStyles.poppins.copyWith(fontSize: 14.w, color: Colors.white)),
-                                    ),
+                                    ).ripple(context, () async {
+                                      if (widget.contactId == null) {
+                                        final contactTypeMap = snapshot.data!.data![0].contactType!;
+                                        final contactSourceList = snapshot.data!.data![0].contactSources!;
+
+                                        if (bloc.contactTypeStream.value != '' || bloc.contactSourceStream.value != '') {
+                                          final contactTypeKey = contactTypeMap.keys.firstWhere((k) => contactTypeMap[k] == bloc.contactTypeStream.value, orElse: () => '');
+
+                                          final contactSrcKey = contactSourceList.indexWhere((e) => e.sourceName == bloc.contactSourceStream.value);
+
+                                          // print('222222222222222222222222 ${typeList}');
+
+                                          if (contactTypeKey != '') {
+                                            bloc.contactTypeIdStream.add(contactTypeKey);
+                                          }
+
+                                          if (contactSrcKey != -1) {
+                                            bloc.contactSourceIdStream.add(contactSrcKey.toString());
+                                          }
+
+                                          final resp = await bloc.submitForm();
+
+                                          if (resp != null && resp.status == 'SUCCESS' && resp.response == 'OK') {
+                                            Navigator.pop(context);
+                                            await bloc.getAllContacts();
+                                            await successMotionToastInfo(context, msg: 'Submitted Done');
+                                          } else {
+                                            await erroMotionToastInfo(context, msg: 'Submission Failed !!');
+                                          }
+                                        } else {
+                                          final resp = await bloc.submitForm();
+
+                                          if (resp != null && resp.status == 'SUCCESS' && resp.response == 'OK') {
+                                            await successMotionToastInfo(context, msg: 'Submitted Done');
+                                          } else {
+                                            await erroMotionToastInfo(context, msg: 'Submission Failed !!');
+                                          }
+                                        }
+                                      } else {
+                                        final contactTypeMap = snapshot.data!.data![0].contactType!;
+                                        final contactSourceList = snapshot.data!.data![0].contactSources!;
+
+                                        if (bloc.contactTypeStream.value != '' || bloc.contactSourceStream.value != '') {
+                                          final contactTypeKey = contactTypeMap.keys.firstWhere((k) => contactTypeMap[k] == bloc.contactTypeStream.value, orElse: () => '');
+
+                                          final contactSrcKey = contactSourceList.indexWhere((e) => e.sourceName == bloc.contactSourceStream.value);
+
+                                          // print('222222222222222222222222 ${typeList}');
+
+                                          if (contactTypeKey != '') {
+                                            bloc.contactTypeIdStream.add(contactTypeKey);
+                                          }
+
+                                          if (contactSrcKey != -1) {
+                                            bloc.contactSourceIdStream.add(contactSrcKey.toString());
+                                          }
+
+                                          final resp = await bloc.contactEdit(contactId: widget.contactId!);
+
+                                          if (resp != null && resp.status == 'SUCCESS' && resp.response == 'OK') {
+                                            Navigator.pop(context);
+                                            await bloc.getAllContacts();
+                                            await successMotionToastInfo(context, msg: 'Updated Successfully');
+                                          } else {
+                                            await erroMotionToastInfo(context, msg: 'Submission Failed !!');
+                                          }
+                                        } else {
+                                          final resp = await bloc.contactEdit(contactId: widget.contactId!);
+
+                                          if (resp != null && resp.status == 'SUCCESS' && resp.response == 'OK') {
+                                            await successMotionToastInfo(context, msg: 'Updated Successfully');
+                                          } else {
+                                            await erroMotionToastInfo(context, msg: 'Submission Failed !!');
+                                          }
+                                        }
+                                      }
+                                    }),
                                   ],
                                 ),
 

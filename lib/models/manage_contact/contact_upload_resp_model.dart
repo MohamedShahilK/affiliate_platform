@@ -5,8 +5,11 @@ import 'package:json_annotation/json_annotation.dart';
 part 'contact_upload_resp_model.g.dart';
 
 @JsonSerializable()
-class ContactViewModel {
-  ContactViewModel({this.status, this.response, this.data});
+class ContactFormUploadRespModel {
+  ContactFormUploadRespModel({this.status, this.response, this.data});
+
+  factory ContactFormUploadRespModel.fromJson(Map<String, dynamic> json) => _$ContactFormUploadRespModelFromJson(json);
+
   final String? status;
   final String? response;
   final List<Data>? data;
@@ -14,19 +17,26 @@ class ContactViewModel {
 
 @JsonSerializable()
 class Data {
-  Data({this.title, this.id, this.contact, this.contactFollowups, this.affiliateUsers, this.userPermissions, this.permissionUserIds});
+  Data({this.title, this.contactSources, this.contactType, this.contact});
+
   final String? title;
-  final String? id;
-  final Contact? contact;
-  final List<ContactFollowups>? contactFollowups;
-  final List<AffiliateUsers>? affiliateUsers;
-  final List<UserPermissions>? userPermissions;
-  final List<String>? permissionUserIds;
+  final List<ContactSources>? contactSources;
+  final Map<String, dynamic>? contactType;
+  final Contact2? contact;
 }
 
 @JsonSerializable()
-class Contact {
-  Contact({
+class ContactSources {
+  ContactSources({this.id, this.sourceName, this.status});
+
+  final String? id;
+  final String? sourceName;
+  final String? status;
+}
+
+@JsonSerializable()
+class Contact2 {
+  Contact2({
     this.id,
     this.name,
     this.contactType,
@@ -72,52 +82,4 @@ class Contact {
   final String? username;
   final String? profilePic;
   final String? sourceName;
-}
-
-@JsonSerializable()
-class ContactFollowups {
-  ContactFollowups({
-    this.id,
-    this.title,
-    this.description,
-    this.nextFollowupDate,
-    this.type,
-    this.fKey,
-    this.status,
-    this.createdBy,
-    this.createdAt,
-    this.updatedAt,
-    this.firstName,
-    this.lastName,
-    this.profilePic,
-  });
-  final String? id;
-  final String? title;
-  final String? description;
-  final String? nextFollowupDate;
-  final String? type;
-  final String? fKey;
-  final String? status;
-  final String? createdBy;
-  final String? createdAt;
-  final String? updatedAt;
-  final String? firstName;
-  final String? lastName;
-  final String? profilePic;
-}
-
-@JsonSerializable()
-class AffiliateUsers {
-  AffiliateUsers({this.id, this.firstName, this.lastName, this.email});
-  final String? id;
-  final String? firstName;
-  final String? lastName;
-  final String? email;
-}
-
-@JsonSerializable()
-class UserPermissions {
-  UserPermissions({this.contactId, this.userId});
-  final String? contactId;
-  final String? userId;
 }

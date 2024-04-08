@@ -9,4 +9,5 @@ class EndPoints {
   static const getAllContacts= '/contacts/contact_list';
   static const contactForm= '/contacts/contact_form';
   static const contactView= '/contacts/contact_view';
+  static const submitContactForm= '/contacts/contact_submit';
 }

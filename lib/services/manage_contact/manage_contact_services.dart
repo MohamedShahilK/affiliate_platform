@@ -111,4 +111,127 @@ class ManageContactSevices {
       return null;
     }
   }
+
+  // Submit Form
+  Future<ContactViewModel?> submitForm({    
+    required String name,
+    required String mobile,
+    required String email,
+    required String contactType,
+    required String contactSource,
+    required String designation,
+    required String companyName,
+    required String landlineNumber,
+    required String companyWebsite,
+    required String companyLocation,
+    required String companyAddress,
+    required String remarks,
+  }) async {
+    try {
+      final token = StorageServices.to.getString(StorageServicesKeys.token);
+      final haveToken = token.isNotEmpty;
+      if (haveToken) {
+        final formData = FormData.fromMap({
+          'name': name,
+          'contact_type': contactType,
+          'email': email,
+          'mobile': mobile,
+          'company': companyName,
+          'designation': designation,
+          'company_address': companyAddress,
+          'company_website': companyWebsite,
+          'company_landline': landlineNumber,
+          'company_location': companyLocation,
+          'remarks': remarks,
+          'contact_source': contactSource,
+        });
+
+        final response = await api.dio?.post<Map<String, dynamic>>(
+          options: Options(
+            headers: {
+              // 'accept': '*/*',
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer $token',
+            },
+          ),
+          // queryParameters: {'id':contactId},
+          data: formData,
+          EndPoints.submitContactForm,
+        );
+
+        print('55555555555555555555555 ${response!.data}');
+
+        final respModel = ContactViewModel.fromJson(response!.data ?? {});
+
+        return respModel;
+      }
+      return null;
+    } catch (e) {
+      Loader.hide();
+      print('submitForm Error :- $e');
+      return null;
+    }
+  }
+
+  // Submit Form
+  Future<ContactViewModel?> contactEdit({    
+    required String contactId,
+    required String name,
+    required String mobile,
+    required String email,
+    required String contactType,
+    required String contactSource,
+    required String designation,
+    required String companyName,
+    required String landlineNumber,
+    required String companyWebsite,
+    required String companyLocation,
+    required String companyAddress,
+    required String remarks,
+  }) async {
+    try {
+      final token = StorageServices.to.getString(StorageServicesKeys.token);
+      final haveToken = token.isNotEmpty;
+      if (haveToken) {
+        final formData = FormData.fromMap({
+          'name': name,
+          'contact_type': contactType,
+          'email': email,
+          'mobile': mobile,
+          'company': companyName,
+          'designation': designation,
+          'company_address': companyAddress,
+          'company_website': companyWebsite,
+          'company_landline': landlineNumber,
+          'company_location': companyLocation,
+          'remarks': remarks,
+          'contact_source': contactSource,
+        });
+
+        final response = await api.dio?.post<Map<String, dynamic>>(
+          options: Options(
+            headers: {
+              // 'accept': '*/*',
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer $token',
+            },
+          ),
+          // queryParameters: {'id':contactId},
+          data: formData,
+            '${EndPoints.submitContactForm}/$contactId',
+        );
+
+        print('55555555555555555555555 ${response!.data}');
+
+        final respModel = ContactViewModel.fromJson(response!.data ?? {});
+
+        return respModel;
+      }
+      return null;
+    } catch (e) {
+      Loader.hide();
+      print('submitForm Error :- $e');
+      return null;
+    }
+  }
 }

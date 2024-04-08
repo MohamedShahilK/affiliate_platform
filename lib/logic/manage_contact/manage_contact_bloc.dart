@@ -28,7 +28,9 @@ class ManageContactBloc {
   final remarkStream = BehaviorSubject<String>.seeded('');
 
   final contactTypeStream = BehaviorSubject<String>.seeded('');
+  final contactTypeIdStream = BehaviorSubject<String>.seeded('');
   final contactSourceStream = BehaviorSubject<String>.seeded('');
+  final contactSourceIdStream = BehaviorSubject<String>.seeded('');
 
   Future<void> initDetails() async {
     await getAllContacts();
@@ -49,6 +51,45 @@ class ManageContactBloc {
     getContactViewStream.add(null);
     final respModel = await ManageContactSevices().getEachContact(contactId: contactId);
     getContactViewStream.add(respModel);
+  }
+
+  Future<ContactViewModel?> submitForm() async {
+    final respModel = ManageContactSevices().submitForm(
+      name: nameStream.value,
+      mobile: mobileStream.value,
+      email: emailStream.value,
+      contactType: contactTypeIdStream.value,
+      contactSource: contactSourceIdStream.value,
+      designation: designationStream.value,
+      companyName: companyNameStream.value,
+      landlineNumber: landlineStream.value,
+      companyWebsite: websiteStream.value,
+      companyLocation: companyLocationStream.value,
+      companyAddress: companyAddressStream.value,
+      remarks: remarkStream.value,
+    );
+
+    return respModel;
+  }
+
+  Future<ContactViewModel?> contactEdit({required String contactId}) async {
+    final respModel = ManageContactSevices().contactEdit(
+      contactId: contactId,
+      name: nameStream.value,
+      mobile: mobileStream.value,
+      email: emailStream.value,
+      contactType: contactTypeIdStream.value,
+      contactSource: contactSourceIdStream.value,
+      designation: designationStream.value,
+      companyName: companyNameStream.value,
+      landlineNumber: landlineStream.value,
+      companyWebsite: websiteStream.value,
+      companyLocation: companyLocationStream.value,
+      companyAddress: companyAddressStream.value,
+      remarks: remarkStream.value,
+    );
+
+    return respModel;
   }
 
   void clearStreams() {
