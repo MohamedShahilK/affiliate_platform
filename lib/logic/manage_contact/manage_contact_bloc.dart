@@ -1,6 +1,7 @@
 // ignore_for_file: lines_longer_than_80_chars
 
 import 'package:affiliate_platform/models/manage_contact/all_contacts.dart';
+import 'package:affiliate_platform/models/manage_contact/contact_edit_submission_model.dart';
 import 'package:affiliate_platform/models/manage_contact/contact_form_model.dart';
 import 'package:affiliate_platform/models/manage_contact/contact_view_model.dart';
 import 'package:affiliate_platform/services/manage_contact/manage_contact_services.dart';
@@ -72,7 +73,7 @@ class ManageContactBloc {
     return respModel;
   }
 
-  Future<ContactViewModel?> contactEdit({required String contactId}) async {
+  Future<ContactEditSubmissionModel?> contactEdit({required String contactId}) async {
     final respModel = ManageContactSevices().contactEdit(
       contactId: contactId,
       name: nameStream.value,

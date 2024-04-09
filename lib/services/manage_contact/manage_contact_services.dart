@@ -3,6 +3,7 @@
 import 'package:affiliate_platform/api/api.dart';
 import 'package:affiliate_platform/api/api_contants.dart';
 import 'package:affiliate_platform/models/manage_contact/all_contacts.dart';
+import 'package:affiliate_platform/models/manage_contact/contact_edit_submission_model.dart';
 import 'package:affiliate_platform/models/manage_contact/contact_form_model.dart';
 import 'package:affiliate_platform/models/manage_contact/contact_view_model.dart';
 import 'package:affiliate_platform/utils/constants/string_constants.dart';
@@ -174,7 +175,7 @@ class ManageContactSevices {
   }
 
   // Submit Form
-  Future<ContactViewModel?> contactEdit({    
+  Future<ContactEditSubmissionModel?> contactEdit({    
     required String contactId,
     required String name,
     required String mobile,
@@ -218,12 +219,12 @@ class ManageContactSevices {
           ),
           // queryParameters: {'id':contactId},
           data: formData,
-            '${EndPoints.submitEditContactForm}/$contactId',
+            '${EndPoints.submitEditContactSubmit}/$contactId',
         );
 
         print('55555555555555555555555 ${response!.data}');
 
-        final respModel = ContactViewModel.fromJson(response!.data ?? {});
+        final respModel = ContactEditSubmissionModel.fromJson(response!.data ?? {});
 
         return respModel;
       }

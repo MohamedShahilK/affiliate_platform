@@ -498,7 +498,7 @@ class _NewContactState extends State<NewContact> {
 
                                           final resp = await bloc.contactEdit(contactId: widget.contactId!);
 
-                                          if (resp != null && resp.status == 'SUCCESS' && resp.response == 'OK') {
+                                          if (resp != null && resp.status == 'SUCCESS' && resp.response == 'OK' && resp.message == 'Contact updated successfully.') {
                                             Navigator.pop(context);
                                             await bloc.getAllContacts();
                                             await successMotionToastInfo(context, msg: 'Updated Successfully');

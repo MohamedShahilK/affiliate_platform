@@ -1,3 +1,5 @@
+// ignore_for_file: lines_longer_than_80_chars
+
 import 'package:json_annotation/json_annotation.dart';
 
 part 'contact_edit_submission_model.g.dart';
@@ -10,6 +12,8 @@ class ContactEditSubmissionModel {
     this.message,
     this.data,
   });
+
+  factory ContactEditSubmissionModel.fromJson(Map<String, dynamic> json) => _$ContactEditSubmissionModelFromJson(json);
 
   final String? status;
   final String? response;
@@ -30,7 +34,7 @@ class Data {
   final String? title;
   final String? id;
   final List<ContactSources>? contactSources;
-    final Map<String, dynamic>? contactType;
+  final Map<String, dynamic>? contactType;
   final Contact? contact;
 }
 
