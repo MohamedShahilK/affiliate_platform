@@ -82,7 +82,7 @@ class ManageContactSevices {
   }
 
   // Get Contact Form
-  Future<ContactViewModel?> getEachEditContact({required String contactId}) async {
+  Future<ContactViewModel?> viewContact({required String contactId}) async {
     try {
       final token = StorageServices.to.getString(StorageServicesKeys.token);
       final haveToken = token.isNotEmpty;
@@ -108,7 +108,7 @@ class ManageContactSevices {
       return null;
     } catch (e) {
       Loader.hide();
-      print('getContactForm Error :- $e');
+      print('viewContact Error :- $e');
       return null;
     }
   }

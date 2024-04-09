@@ -624,7 +624,7 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                                     scheme: 'mailto',
                                     path: widget.model?.data1 == null || widget.model!.data1!.isEmpty || widget.model!.data1![0].contacts!.isEmpty
                                         ? '-'
-                                        : widget.model?.data1![0].contacts![0].email ?? '-',
+                                        : widget.model?.data1![0].contacts![widget.index].email ?? '-',
                                     query: encodeQueryParameters(<String, String>{
                                       'subject': 'Example Subject & Symbols are allowed!',
                                     }),
@@ -690,12 +690,12 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                           color: Colors.blue[400]!,
                           icon: Icons.remove_red_eye_outlined,
                           onTap: () {
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //     builder: (context) => ViewContact(model: widget.model),
-                            //   ),
-                            // );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ViewContact(contactId : widget.model?.data1?[0].contacts?[widget.index].id ?? '',),
+                              ),
+                            );
                           },
                         ),
                         _EachContachSmallButtons(

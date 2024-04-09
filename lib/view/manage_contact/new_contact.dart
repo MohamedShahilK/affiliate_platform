@@ -39,7 +39,7 @@ class _NewContactState extends State<NewContact> {
     if (widget.contactId == null) {
       manageContactBloc!.getContactViewStream.add(null);
     } else {
-      manageContactBloc!.getEachEditContact(contactId: widget.contactId!);
+      manageContactBloc!.viewContact(contactId: widget.contactId!);
     }
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       await manageContactBloc!.getContactForm();
@@ -203,7 +203,7 @@ class _NewContactState extends State<NewContact> {
                                       context,
                                       () async {
                                         if (widget.contactId != null) {
-                                          await bloc.getEachEditContact(contactId: widget.contactId!);
+                                          await bloc.viewContact(contactId: widget.contactId!);
                                         }
                                       },
                                       borderRadius: BorderRadius.circular(15.r),
