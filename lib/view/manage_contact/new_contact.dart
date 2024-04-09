@@ -20,9 +20,9 @@ import 'package:rxdart/rxdart.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class NewContact extends StatefulWidget {
-  const NewContact({this.model, this.contactId, super.key});
+  const NewContact({this.contactId, super.key});
 
-  final Contact1? model;
+  // final Contact1? model;
   final String? contactId;
 
   @override
@@ -228,12 +228,12 @@ class _NewContactState extends State<NewContact> {
                             if (contactViewRespModel != null && contactViewRespModel.data != null && contactViewRespModel.data!.isNotEmpty) {
                               final contact = contactViewRespModel.data?[0].contact;
 
-                              if (contact != null ) {
+                              if (contact != null) {
                                 if (bloc.nameStream.value == '' && contact.name != null && contact.name != '') {
                                   bloc.nameStream.add(contact.name ?? '');
                                 }
 
-                                if (contact.contactType != null&& (contact.contactType != '' || contact.contactType!= '0')) {
+                                if (contact.contactType != null && (contact.contactType != '' || contact.contactType != '0')) {
                                   // final type =
                                   //     snapshot.data!.data![0].contactType!.values.toList(growable: false).where((e) => (e as String) == contact.contactType).toList().first as String?;
 
@@ -342,7 +342,7 @@ class _NewContactState extends State<NewContact> {
                                             : [''],
                                         label: 'Contact Type',
                                         // initialValue: allContactsRespModel == null ? '' : allContactsRespModel.data![0].contactType!.entries.map((e) => e as String).toList().first,
-                                        initialValue: widget.model?.type ?? '',
+                                        // initialValue: widget.model?.type ?? '',
                                       ), //dropdown
                                       NewContactField(
                                         heading: 'Mobile Number',
@@ -370,7 +370,7 @@ class _NewContactState extends State<NewContact> {
                                             ? ['', ...allContactsRespModel.data![0].contactSources!.map((e) => e.sourceName ?? '')]
                                             : [''],
                                         label: 'Contact Source',
-                                        initialValue: widget.model?.contactSource ?? '',
+                                        // initialValue: widget.model?.contactSource ?? '',
                                       ), //dropdown
                                       NewContactField(
                                         heading: 'Contact Designation',
@@ -440,6 +440,7 @@ class _NewContactState extends State<NewContact> {
                                       ),
                                       child: Text('Submit', style: AppStyles.poppins.copyWith(fontSize: 14.w, color: Colors.white)),
                                     ).ripple(context, () async {
+                                      customLoader(context);
                                       if (widget.contactId == null) {
                                         final contactTypeMap = snapshot.data!.data![0].contactType!;
                                         final contactSourceList = snapshot.data!.data![0].contactSources!;
@@ -463,18 +464,24 @@ class _NewContactState extends State<NewContact> {
 
                                           if (resp != null && resp.status == 'SUCCESS' && resp.response == 'OK') {
                                             Navigator.pop(context);
-                                            await bloc.getAllContacts();
                                             await successMotionToastInfo(context, msg: 'Submitted Done');
+                                            await bloc.getAllContacts();
+                                            Loader.hide();
                                           } else {
                                             await erroMotionToastInfo(context, msg: 'Submission Failed !!');
+                                            Loader.hide();
                                           }
                                         } else {
                                           final resp = await bloc.submitForm();
 
                                           if (resp != null && resp.status == 'SUCCESS' && resp.response == 'OK') {
+                                            Navigator.pop(context);
                                             await successMotionToastInfo(context, msg: 'Submitted Done');
+                                            await bloc.getAllContacts();
+                                            Loader.hide();
                                           } else {
                                             await erroMotionToastInfo(context, msg: 'Submission Failed !!');
+                                            Loader.hide();
                                           }
                                         }
                                       } else {
@@ -500,18 +507,24 @@ class _NewContactState extends State<NewContact> {
 
                                           if (resp != null && resp.status == 'SUCCESS' && resp.response == 'OK' && resp.message == 'Contact updated successfully.') {
                                             Navigator.pop(context);
-                                            await bloc.getAllContacts();
                                             await successMotionToastInfo(context, msg: 'Updated Successfully');
+                                            await bloc.getAllContacts();
+                                            Loader.hide();
                                           } else {
                                             await erroMotionToastInfo(context, msg: 'Submission Failed !!');
+                                            Loader.hide();
                                           }
                                         } else {
                                           final resp = await bloc.contactEdit(contactId: widget.contactId!);
 
                                           if (resp != null && resp.status == 'SUCCESS' && resp.response == 'OK') {
+                                            Navigator.pop(context);
                                             await successMotionToastInfo(context, msg: 'Updated Successfully');
+                                            await bloc.getAllContacts();
+                                            Loader.hide();
                                           } else {
                                             await erroMotionToastInfo(context, msg: 'Submission Failed !!');
+                                            Loader.hide();
                                           }
                                         }
                                       }
@@ -544,7 +557,7 @@ class NewContactDropDown extends StatefulWidget {
     required this.heading,
     required this.hint,
     required this.label,
-    required this.initialValue,
+    // required this.initialValue,
     required this.items,
     super.key,
   });
@@ -553,7 +566,7 @@ class NewContactDropDown extends StatefulWidget {
   final String heading;
   final String hint;
   final String label;
-  final String initialValue;
+  // final String initialValue;
   final List<String> items;
 
   @override
@@ -568,7 +581,7 @@ class _NewContactDropDownState extends State<NewContactDropDown> {
   @override
   void initState() {
     super.initState();
-    selectedValue = widget.initialValue;
+    // selectedValue = widget.initialValue;
   }
 
   @override

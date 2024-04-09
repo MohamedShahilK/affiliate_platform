@@ -89,10 +89,8 @@ Future<void> warningMotionToastInfo(
 void customLoader(BuildContext context) {
   return Loader.show(
     context,
-    progressIndicator: LoadingAnimationWidget.discreteCircle(
+    progressIndicator: LoadingAnimationWidget.horizontalRotatingDots(
       color: Colors.purple[400]!,
-      secondRingColor: Colors.grey[700]!,
-      thirdRingColor: Colors.grey,
       size: 40.sp,
     ),
   );
