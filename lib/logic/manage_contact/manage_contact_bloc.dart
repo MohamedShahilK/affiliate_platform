@@ -47,9 +47,9 @@ class ManageContactBloc {
     getContactFormStream.add(respModel);
   }
 
-  Future<void> getEachContact({required String contactId}) async {
+  Future<void> getEachEditContact({required String contactId}) async {
     getContactViewStream.add(null);
-    final respModel = await ManageContactSevices().getEachContact(contactId: contactId);
+    final respModel = await ManageContactSevices().getEachEditContact(contactId: contactId);
     getContactViewStream.add(respModel);
   }
 

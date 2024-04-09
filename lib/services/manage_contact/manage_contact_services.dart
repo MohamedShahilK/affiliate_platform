@@ -81,7 +81,7 @@ class ManageContactSevices {
   }
 
   // Get Contact Form
-  Future<ContactViewModel?> getEachContact({required String contactId}) async {
+  Future<ContactViewModel?> getEachEditContact({required String contactId}) async {
     try {
       final token = StorageServices.to.getString(StorageServicesKeys.token);
       final haveToken = token.isNotEmpty;
@@ -218,7 +218,7 @@ class ManageContactSevices {
           ),
           // queryParameters: {'id':contactId},
           data: formData,
-            '${EndPoints.submitContactForm}/$contactId',
+            '${EndPoints.submitEditContactForm}/$contactId',
         );
 
         print('55555555555555555555555 ${response!.data}');

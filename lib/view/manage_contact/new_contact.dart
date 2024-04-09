@@ -35,19 +35,18 @@ class _NewContactState extends State<NewContact> {
   @override
   void didChangeDependencies() {
     manageContactBloc ??= Provider.of<ManageContactBloc>(context);
-    manageContactBloc!.getContactForm();
     manageContactBloc!.clearStreams();
     if (widget.contactId == null) {
       manageContactBloc!.getContactViewStream.add(null);
     } else {
-      manageContactBloc!.getEachContact(contactId: widget.contactId!);
+      manageContactBloc!.getEachEditContact(contactId: widget.contactId!);
     }
-    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-    //   print('333333333333333333333333333333 ${widget.contactId}');
-    //   if (widget.contactId != null) {
-    //     await manageContactBloc!.getEachContact(contactId: widget.contactId!);
-    //   }
-    // });
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      await manageContactBloc!.getContactForm();
+      // if (widget.contactId != null) {
+      //   await manageContactBloc!.getEachContact(contactId: widget.contactId!);
+      // }
+    });
     super.didChangeDependencies();
   }
 
@@ -204,7 +203,7 @@ class _NewContactState extends State<NewContact> {
                                       context,
                                       () async {
                                         if (widget.contactId != null) {
-                                          await bloc.getEachContact(contactId: widget.contactId!);
+                                          await bloc.getEachEditContact(contactId: widget.contactId!);
                                         }
                                       },
                                       borderRadius: BorderRadius.circular(15.r),
@@ -229,12 +228,12 @@ class _NewContactState extends State<NewContact> {
                             if (contactViewRespModel != null && contactViewRespModel.data != null && contactViewRespModel.data!.isNotEmpty) {
                               final contact = contactViewRespModel.data?[0].contact;
 
-                              if (contact != null) {
-                                if (contact.name != null) {
+                              if (contact != null ) {
+                                if (bloc.nameStream.value == '' && contact.name != null && contact.name != '') {
                                   bloc.nameStream.add(contact.name ?? '');
                                 }
 
-                                if (contact.contactType != null) {
+                                if (contact.contactType != null&& (contact.contactType != '' || contact.contactType!= '0')) {
                                   // final type =
                                   //     snapshot.data!.data![0].contactType!.values.toList(growable: false).where((e) => (e as String) == contact.contactType).toList().first as String?;
 
@@ -256,7 +255,7 @@ class _NewContactState extends State<NewContact> {
                                   bloc.contactTypeStream.add(currentType);
                                 }
 
-                                if (contact.contactSource != null) {
+                                if (contact.contactSource != null && (contact.contactSource != '' || contact.contactSource != '0')) {
                                   final list = snapshot.data!.data![0].contactSources!.where((i) => i.id == contact.contactSource).toList();
 
                                   String source = '';
@@ -275,36 +274,36 @@ class _NewContactState extends State<NewContact> {
                                   bloc.contactSourceStream.add(source == '0' ? '' : source);
                                 }
 
-                                if (contact.mobile != null) {
+                                if (contact.mobile != null && contact.mobile != '') {
                                   bloc.mobileStream.add(contact.mobile ?? '');
                                 }
 
-                                if (contact.email != null) {
+                                if (contact.email != null && contact.email != '') {
                                   bloc.emailStream.add(contact.email ?? '');
                                 }
 
-                                if (contact.designation != null) {
+                                if (contact.designation != null && contact.designation != '') {
                                   bloc.designationStream.add(contact.designation ?? '');
                                 }
-                                if (contact.company != null) {
+                                if (contact.company != null && contact.company != '') {
                                   bloc.companyNameStream.add(contact.company ?? '');
                                 }
 
-                                if (contact.companyLandline != null) {
+                                if (contact.companyLandline != null && contact.companyLandline != '') {
                                   bloc.landlineStream.add(contact.companyLandline ?? '');
                                 }
-                                if (contact.companyWebsite != null) {
+                                if (contact.companyWebsite != null && contact.companyWebsite != '') {
                                   bloc.websiteStream.add(contact.companyWebsite ?? '');
                                 }
-                                if (contact.companyLocation != null) {
+                                if (contact.companyLocation != null && contact.companyLocation != '') {
                                   bloc.companyLocationStream.add(contact.companyLocation ?? '');
                                 }
 
-                                if (contact.companyAddress != null) {
+                                if (contact.companyAddress != null && contact.companyAddress != '') {
                                   bloc.companyAddressStream.add(contact.companyAddress ?? '');
                                 }
 
-                                if (contact.remarks != null) {
+                                if (contact.remarks != null && contact.remarks != '') {
                                   bloc.remarkStream.add(contact.remarks ?? '');
                                 }
                               }
