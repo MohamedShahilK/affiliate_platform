@@ -54,6 +54,18 @@ class ManageContactBloc {
     getContactViewStream.add(respModel);
   }
 
+  Future<bool> deleteContact({required String contactId}) async {
+    var isDeleted = false;
+
+    final jsonData = await ManageContactSevices().deleteContact(contactId: contactId);
+
+    if (jsonData != null && jsonData['status'] == 'SUCCESS' && jsonData['response'] == 'OK') {
+      isDeleted = true;
+    }
+
+    return isDeleted;
+  }
+
   Future<ContactViewModel?> submitForm() async {
     final respModel = ManageContactSevices().submitForm(
       name: nameStream.value,

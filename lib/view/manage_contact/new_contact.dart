@@ -8,7 +8,6 @@ import 'package:affiliate_platform/utils/constants/styles.dart';
 import 'package:affiliate_platform/utils/custom_tools.dart';
 import 'package:affiliate_platform/view/common/custom_scafflod.dart';
 import 'package:affiliate_platform/view/common/sidebar.dart';
-import 'package:affiliate_platform/view/manage_contact/data_sample.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -32,14 +31,23 @@ class NewContact extends StatefulWidget {
 class _NewContactState extends State<NewContact> {
   ManageContactBloc? manageContactBloc;
 
+  bool loading = true;
+
   @override
   void didChangeDependencies() {
     manageContactBloc ??= Provider.of<ManageContactBloc>(context);
     manageContactBloc!.clearStreams();
     if (widget.contactId == null) {
       manageContactBloc!.getContactViewStream.add(null);
+      setState(() {
+        loading = false;
+      });
     } else {
-      manageContactBloc!.viewContact(contactId: widget.contactId!);
+      manageContactBloc!.viewContact(contactId: widget.contactId!).then(
+            (value) => setState(() {
+              loading = false;
+            }),
+          );
     }
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       await manageContactBloc!.getContactForm();
@@ -172,48 +180,49 @@ class _NewContactState extends State<NewContact> {
                       return StreamBuilder(
                         stream: bloc.getContactViewStream,
                         builder: (context, getContactViewStreamsnapshot) {
-                          if ((!getContactViewStreamsnapshot.hasData && getContactViewStreamsnapshot.connectionState == ConnectionState.done) || getContactViewStreamsnapshot.hasError) {
-                            Loader.hide();
-                            return Expanded(
-                              child: Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      'Something went wrong',
-                                      style: TextStyle(fontSize: 16.w),
-                                    ),
-                                    SizedBox(height: 30.h),
-                                    Container(
-                                      padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 8.h),
-                                      decoration: BoxDecoration(
-                                        border: Border.all(color: Colors.purple[100]!),
-                                        borderRadius: BorderRadius.circular(15.r),
-                                      ),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Icon(Icons.refresh, size: 17.w),
-                                          SizedBox(width: 5.w),
-                                          Text('Refreshee', style: TextStyle(fontSize: 15.w)),
-                                        ],
-                                      ),
-                                    ).ripple(
-                                      context,
-                                      () async {
-                                        if (widget.contactId != null) {
-                                          await bloc.viewContact(contactId: widget.contactId!);
-                                        }
-                                      },
-                                      borderRadius: BorderRadius.circular(15.r),
-                                      overlayColor: Colors.purple.withOpacity(.15),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          }
+                          // if (!getContactViewStreamsnapshot.hasData) {
+                          //   // Loader.hide();
+                          //   return Expanded(
+                          //     child: Center(
+                          //       child: Column(
+                          //         mainAxisAlignment: MainAxisAlignment.center,
+                          //         children: [
+                          //           Text(
+                          //             'Something went wrong',
+                          //             style: TextStyle(fontSize: 16.w),
+                          //           ),
+                          //           SizedBox(height: 30.h),
+                          //           Container(
+                          //             padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 8.h),
+                          //             decoration: BoxDecoration(
+                          //               border: Border.all(color: Colors.purple[100]!),
+                          //               borderRadius: BorderRadius.circular(15.r),
+                          //             ),
+                          //             child: Row(
+                          //               mainAxisSize: MainAxisSize.min,
+                          //               mainAxisAlignment: MainAxisAlignment.center,
+                          //               children: [
+                          //                 Icon(Icons.refresh, size: 17.w),
+                          //                 SizedBox(width: 5.w),
+                          //                 Text('Refreshee', style: TextStyle(fontSize: 15.w)),
+                          //               ],
+                          //             ),
+                          //           ).ripple(
+                          //             context,
+                          //             () async {
+                          //               customLoader(context);
+                          //               if (widget.contactId != null) {
+                          //                 await bloc.viewContact(contactId: widget.contactId!).then((value) => Loader.hide());
+                          //               }
+                          //             },
+                          //             borderRadius: BorderRadius.circular(15.r),
+                          //             overlayColor: Colors.purple.withOpacity(.15),
+                          //           ),
+                          //         ],
+                          //       ),
+                          //     ),
+                          //   );
+                          // }
 
                           ContactViewModel? contactViewRespModel;
 
@@ -311,7 +320,7 @@ class _NewContactState extends State<NewContact> {
                           }
 
                           return Skeletonizer(
-                            enabled: getContactViewStreamsnapshot.connectionState == ConnectionState.waiting,
+                            enabled: loading,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [

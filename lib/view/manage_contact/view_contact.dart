@@ -6,6 +6,7 @@ import 'package:affiliate_platform/view/common/custom_scafflod.dart';
 import 'package:affiliate_platform/view/common/sidebar.dart';
 import 'package:affiliate_platform/view/manage_contact/data_sample.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -24,11 +25,17 @@ class _ViewContactState extends State<ViewContact> {
   var _refreshKey = UniqueKey();
   ManageContactBloc? manageContactBloc;
 
+  bool loading = true;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     manageContactBloc ??= Provider.of<ManageContactBloc>(context);
-    manageContactBloc!.viewContact(contactId: widget.contactId);
+    manageContactBloc!.viewContact(contactId: widget.contactId).then(
+          (value) => setState(() {
+            loading = false;
+          }),
+        );
   }
 
   // To update or hot reload
@@ -58,20 +65,63 @@ class _ViewContactState extends State<ViewContact> {
                     child: StreamBuilder(
                       stream: bloc.getContactViewStream,
                       builder: (context, getContactViewStreamsnapshot) {
+
+                        //  if (!getContactViewStreamsnapshot.hasData ) {
+                        //     Loader.hide();
+                        //     return Expanded(
+                        //       child: Center(
+                        //         child: Column(
+                        //           mainAxisAlignment: MainAxisAlignment.center,
+                        //           children: [
+                        //             Text(
+                        //               'Something went wrong',
+                        //               style: TextStyle(fontSize: 16.w),
+                        //             ),
+                        //             SizedBox(height: 30.h),
+                        //             Container(
+                        //               padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 8.h),
+                        //               decoration: BoxDecoration(
+                        //                 border: Border.all(color: Colors.purple[100]!),
+                        //                 borderRadius: BorderRadius.circular(15.r),
+                        //               ),
+                        //               child: Row(
+                        //                 mainAxisSize: MainAxisSize.min,
+                        //                 mainAxisAlignment: MainAxisAlignment.center,
+                        //                 children: [
+                        //                   Icon(Icons.refresh, size: 17.w),
+                        //                   SizedBox(width: 5.w),
+                        //                   Text('Refreshee', style: TextStyle(fontSize: 15.w)),
+                        //                 ],
+                        //               ),
+                        //             ).ripple(
+                        //               context,
+                        //               () async {
+                        //                 if (widget.contactId != null) {
+                        //                   await bloc.viewContact(contactId: widget.contactId!);
+                        //                 }
+                        //               },
+                        //               borderRadius: BorderRadius.circular(15.r),
+                        //               overlayColor: Colors.purple.withOpacity(.15),
+                        //             ),
+                        //           ],
+                        //         ),
+                        //       ),
+                        //     );
+                        //   }
                         final model = getContactViewStreamsnapshot.data?.data?[0].contact;
                         return Skeletonizer(
-                          enabled: getContactViewStreamsnapshot.connectionState == ConnectionState.waiting,
+                          enabled: loading,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Container(),
-                          
-                              Align(child: Text(model?.name ?? '-', style: AppStyles.poppins.copyWith(fontSize: 18.w, color: Colors.purple[600], fontWeight: FontWeight.w800))),
-                          
-                              Align(child: Text(model?.company ?? '-', style: AppStyles.poppins.copyWith(fontSize: 14.w, color: Colors.grey[600], fontWeight: FontWeight.w800))),
-                          
+
+                              Align(child: Text(loading ? 'Mohamed' :model?.name ?? '-', style: AppStyles.poppins.copyWith(fontSize: 18.w, color: Colors.purple[600], fontWeight: FontWeight.w800))),
+
+                              Align(child: Text(loading ?'ABC Company PVT LTD' :model?.company ?? '-', style: AppStyles.poppins.copyWith(fontSize: 14.w, color: Colors.grey[600], fontWeight: FontWeight.w800))),
+
                               SizedBox(height: 30.h),
-                          
+
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -99,7 +149,7 @@ class _ViewContactState extends State<ViewContact> {
                                   //           ],
                                   //         ),
                                   //       ),
-                          
+
                                   //       //
                                   //       _NewCardItem(field: 'Company', value: model.companyName, icondata: Icons.business),
                                   Padding(
@@ -125,14 +175,14 @@ class _ViewContactState extends State<ViewContact> {
                                             ],
                                           ),
                                         ),
-                          
+
                                         // _NewCardItem(field: 'Phone Number', value: model.phoneNumber, icondata: Icons.phone_outlined),
                                         _NewCardItem(field: 'Email', value: model?.email ?? '-', icondata: Icons.email_outlined),
                                         _NewCardItem(field: 'Company Address', value: model?.companyAddress ?? '-', icondata: Icons.note_alt_outlined),
                                         _NewCardItem(field: 'Company Landline', value: model?.companyLandline ?? '-', icondata: Icons.lan_outlined),
                                         _NewCardItem(field: 'Company Location', value: model?.companyLocation ?? '-', icondata: Icons.location_on_outlined),
                                         // _NewCardItem(field: 'Company Website', value: model.companyWebsite),
-                          
+
                                         //
                                         Container(
                                           decoration: BoxDecoration(
@@ -157,10 +207,10 @@ class _ViewContactState extends State<ViewContact> {
                                   ),
                                 ],
                               ),
-                          
+
                               //
                               SizedBox(height: 20.h),
-                          
+
                               //
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -185,13 +235,14 @@ class _ViewContactState extends State<ViewContact> {
                                               SizedBox(width: 5.w),
                                               Text('Created By', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800])),
                                               const Spacer(),
-                                              SelectableText(model?.createdBy ?? '-', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800], fontWeight: FontWeight.w800)),
+                                              SelectableText(model?.createdBy ?? '-',
+                                                  style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800], fontWeight: FontWeight.w800)),
                                             ],
                                           ),
                                         ),
-                          
+
                                         //
-                          
+
                                         _NewCardItem(
                                           field: 'Contact Type',
                                           value: model?.contactType ?? '-',
@@ -207,7 +258,7 @@ class _ViewContactState extends State<ViewContact> {
                                           value: model?.designation ?? '-',
                                           icondata: Icons.location_city_rounded,
                                         ),
-                          
+
                                         //
                                         Container(
                                           decoration: BoxDecoration(

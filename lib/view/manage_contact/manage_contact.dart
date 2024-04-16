@@ -6,7 +6,9 @@ import 'package:affiliate_platform/config/ripple.dart';
 import 'package:affiliate_platform/logic/auth/auth_bloc.dart';
 import 'package:affiliate_platform/logic/manage_contact/manage_contact_bloc.dart';
 import 'package:affiliate_platform/models/manage_contact/all_contacts.dart';
+import 'package:affiliate_platform/services/manage_contact/manage_contact_services.dart';
 import 'package:affiliate_platform/utils/constants/styles.dart';
+import 'package:affiliate_platform/utils/custom_tools.dart';
 import 'package:affiliate_platform/view/common/custom_scafflod.dart';
 import 'package:affiliate_platform/view/common/sidebar.dart';
 import 'package:affiliate_platform/view/manage_contact/data_sample.dart';
@@ -218,6 +220,7 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
 
   @override
   Widget build(BuildContext context) {
+    final manageBloc = Provider.of<ManageContactBloc>(context);
     return Padding(
       padding: EdgeInsets.only(bottom: 30.h),
       child: Theme(
@@ -656,7 +659,7 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                               _EachContachSmallButtons(
                                 color: Colors.green[900]!,
                                 icon: Icons.edit_outlined,
-                                onTap: () {                                  
+                                onTap: () {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -693,7 +696,9 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => ViewContact(contactId : widget.model?.data1?[0].contacts?[widget.index].id ?? '',),
+                                builder: (context) => ViewContact(
+                                  contactId: widget.model?.data1?[0].contacts?[widget.index].id ?? '',
+                                ),
                               ),
                             );
                           },
@@ -701,7 +706,21 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                         _EachContachSmallButtons(
                           color: Colors.red[400]!,
                           icon: Icons.delete_outline_outlined,
-                          onTap: () {},
+                          onTap: () async {
+                            customLoader(context);
+                            final isDeleted = await manageBloc.deleteContact(contactId: widget.model?.data1?[0].contacts?[widget.index].id ?? '');
+
+                            if (isDeleted) {
+                              await manageBloc.getAllContacts();
+                              // ignore: use_build_context_synchronously
+                              await successMotionToastInfo(context, msg: 'Contact deleted successfully.');
+                              Loader.hide();
+                            } else {
+                              Loader.hide();
+                              // ignore: use_build_context_synchronously
+                              await erroMotionToastInfo(context, msg: "Can't able to delete contact");
+                            }
+                          },
                         ),
                       ],
                     ),

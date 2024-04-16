@@ -113,8 +113,40 @@ class ManageContactSevices {
     }
   }
 
+  // Get Contact Form
+  Future<Map<String, dynamic>?> deleteContact({required String contactId}) async {
+    try {
+      final token = StorageServices.to.getString(StorageServicesKeys.token);
+      final haveToken = token.isNotEmpty;
+      if (haveToken) {
+        final response = await api.dio?.get<Map<String, dynamic>>(
+          options: Options(
+            headers: {
+              // 'accept': '*/*',
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer $token',
+            },
+          ),
+          // queryParameters: {'id':contactId},
+          '${EndPoints.contactdelete}/$contactId',
+        );
+
+        // print('55555555555555555555555 ${response!.data}');
+
+        final jsonData = response?.data;
+
+        return jsonData;
+      }
+      return null;
+    } catch (e) {
+      Loader.hide();
+      print('viewContact Error :- $e');
+      return null;
+    }
+  }
+
   // Submit Form
-  Future<ContactViewModel?> submitForm({    
+  Future<ContactViewModel?> submitForm({
     required String name,
     required String mobile,
     required String email,
@@ -175,7 +207,7 @@ class ManageContactSevices {
   }
 
   // Submit Form
-  Future<ContactEditSubmissionModel?> contactEdit({    
+  Future<ContactEditSubmissionModel?> contactEdit({
     required String contactId,
     required String name,
     required String mobile,
@@ -219,7 +251,7 @@ class ManageContactSevices {
           ),
           // queryParameters: {'id':contactId},
           data: formData,
-            '${EndPoints.submitEditContactSubmit}/$contactId',
+          '${EndPoints.submitEditContactSubmit}/$contactId',
         );
 
         print('55555555555555555555555 ${response!.data}');
