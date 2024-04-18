@@ -695,7 +695,7 @@ class _PermissionsDropDownState extends State<PermissionsDropDown> {
                             print('333333333333333333333333333333 ${value}');
                             print('555555555555555555555555555555 ${widget.textStream.value}');
                           } else {
-                            await erroMotionToastInfo(context, msg: 'Something wrong111111111111111111!!');
+                            await erroMotionToastInfo(context, msg: 'Something wrong!!');
                             Loader.hide();
                           }
 

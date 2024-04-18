@@ -36,6 +36,10 @@ class ManageContactBloc {
 
   final permissionStream = BehaviorSubject<List<String>>.seeded([]);
 
+  final followupTitleStream = BehaviorSubject<String>.seeded('');
+  final followupDescriptionStream = BehaviorSubject<String>.seeded('');
+  final followupDateStream = BehaviorSubject<String>.seeded('');
+
   Future<void> initDetails() async {
     await getAllContacts();
     await getContactForm();
@@ -84,13 +88,41 @@ class ManageContactBloc {
   Future<bool> deletePermissionForAffUsers(BuildContext context, {required String contactId, required String affUserId}) async {
     var isPermDeleted = false;
 
-    final jsonData = await ManageContactSevices().deletePermissionForAffUsers(context,contactId: contactId, affUserId: affUserId);
+    final jsonData = await ManageContactSevices().deletePermissionForAffUsers(context, contactId: contactId, affUserId: affUserId);
 
     if (jsonData != null && jsonData['status'] == 'SUCCESS' && jsonData['response'] == 'OK') {
       isPermDeleted = true;
     }
 
     return isPermDeleted;
+  }
+
+  Future<bool> addFollowup({required String contactId}) async {
+    var isFollowUpAdded = false;
+
+    final jsonData = await ManageContactSevices().addFollowup(
+      contactId: contactId,
+      title: followupTitleStream.value,
+      description: followupDescriptionStream.value,
+    );
+
+    if (jsonData != null && jsonData['status'] == 'SUCCESS' && jsonData['response'] == 'OK') {
+      isFollowUpAdded = true;
+    }
+
+    return isFollowUpAdded;
+  }
+
+  Future<bool> deleteFollowup({required String contactId, required String followupId}) async {
+    var isFollowUpDelete = false;
+
+    final jsonData = await ManageContactSevices().deleteFollowup(contactId: contactId, followupId: followupId);
+
+    if (jsonData != null && jsonData['status'] == 'SUCCESS' && jsonData['response'] == 'OK') {
+      isFollowUpDelete = true;
+    }
+
+    return isFollowUpDelete;
   }
 
   Future<ContactViewModel?> submitForm() async {

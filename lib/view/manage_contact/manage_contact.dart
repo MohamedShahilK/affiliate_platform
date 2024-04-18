@@ -6,6 +6,7 @@ import 'package:affiliate_platform/config/ripple.dart';
 import 'package:affiliate_platform/logic/auth/auth_bloc.dart';
 import 'package:affiliate_platform/logic/manage_contact/manage_contact_bloc.dart';
 import 'package:affiliate_platform/models/manage_contact/all_contacts.dart';
+import 'package:affiliate_platform/models/manage_contact/contact_view_model.dart';
 import 'package:affiliate_platform/services/manage_contact/manage_contact_services.dart';
 import 'package:affiliate_platform/utils/constants/styles.dart';
 import 'package:affiliate_platform/utils/custom_tools.dart';
@@ -18,7 +19,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart' as intl;
 import 'package:provider/provider.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 // ignore: library_prefixes
 import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
@@ -596,8 +599,10 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                             // 'F',
                             style: AppStyles.poppins.copyWith(color: Colors.white, fontSize: 12.w),
                           ),
-                        ).ripple(context, () {
-                          _followUpDialog(context);
+                        ).ripple(context, () async {
+                          await manageBloc
+                              .viewContact(contactId: widget.model?.data1![0].contacts![widget.index].id ?? '-')
+                              .then((value) => _followUpDialog(context, widget.model?.data1![0].contacts![widget.index].id ?? '-'));
                         }),
                         // SizedBox(width: 5.w),
                         const Spacer(),
@@ -734,7 +739,8 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
     );
   }
 
-  void _followUpDialog(BuildContext context) {
+  void _followUpDialog(BuildContext context, String contactId) {
+    final bloc = Provider.of<ManageContactBloc>(context, listen: false);
     bool isAddFollowUp = false;
     // ignore: inference_failure_on_function_invocation
     showDialog(
@@ -742,190 +748,254 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (context, setState) {
-          return AlertDialog(
-            backgroundColor: Colors.transparent,
-            actionsPadding: EdgeInsets.zero,
-            iconPadding: EdgeInsets.zero,
-            buttonPadding: EdgeInsets.zero,
-            contentPadding: EdgeInsets.zero,
-            // insetPadding: EdgeInsets.zero,
-            // insetPadding: const EdgeInsets.symmetric(
-            //   horizontal: 70,
-            // ),
-            insetPadding: EdgeInsets.only(
-              top: 30.h,
-              bottom: 50.h,
-              left: 15.w,
-              right: 15.w,
-            ),
-            titlePadding: EdgeInsets.zero,
-            content: Stack(
-              children: [
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 20.h),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(15.r),
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(),
-                      // Text(
-                      //   'No Followups Found!!',
-                      //   style: AppStyles.poppins.copyWith(fontSize: 10.w, fontWeight: FontWeight.w700, color: Colors.red),
-                      // ),
+          return StreamBuilder(
+            stream: bloc.getContactViewStream,
+            builder: (context, snapshot) {
+              final model = snapshot.data;
+              return AlertDialog(
+                backgroundColor: Colors.transparent,
+                actionsPadding: EdgeInsets.zero,
+                iconPadding: EdgeInsets.zero,
+                buttonPadding: EdgeInsets.zero,
+                contentPadding: EdgeInsets.zero,
+                // insetPadding: EdgeInsets.zero,
+                // insetPadding: const EdgeInsets.symmetric(
+                //   horizontal: 70,
+                // ),
+                insetPadding: EdgeInsets.only(
+                  top: 30.h,
+                  bottom: 50.h,
+                  left: 15.w,
+                  right: 15.w,
+                ),
+                titlePadding: EdgeInsets.zero,
+                content: Stack(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.symmetric(vertical: 20.h),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(15.r),
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(),
+                          // Text(
+                          //   'No Followups Found!!',
+                          //   style: AppStyles.poppins.copyWith(fontSize: 10.w, fontWeight: FontWeight.w700, color: Colors.red),
+                          // ),
 
-                      SizedBox(height: 25.h),
+                          SizedBox(height: 25.h),
 
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 10.h),
-                        // child: Column(
-                        //   children: [
-                        //     _FollowUpWidget(widget: widget),
-                        //   ],
-                        // ),
-                        child: isAddFollowUp
-                            ? SizedBox(
-                                width: 800.w,
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 20.w),
-                                  child: const Column(
-                                    children: [
-                                      _AddFollowUpField(heading: 'Followup Text', hint: 'Followup Text'),
-                                      _AddFollowUpField(heading: 'Description', hint: 'Description'),
-                                      _AddFollowUpField(heading: 'Next followup date', hint: 'Followup date dd/mm/yy'),
-                                    ],
-                                  ),
-                                ),
-                              )
-                            : SizedBox(
-                                height: 550.h, // Change as per your requirement
-                                width: double.maxFinite, // Change as per your requirement
-                                child: ListView.separated(
-                                  shrinkWrap: true,
-                                  // itemBuilder: (context, index) => _FollowUpWidget(model: widget.model),
-                                  itemBuilder: (context, index) => Container(),
-                                  separatorBuilder: (context, index) => Padding(
-                                    padding: EdgeInsets.only(top: 12.h),
-                                    child: Divider(
-                                      indent: 10.w,
-                                      endIndent: 10.w,
-                                      color: Colors.grey[200],
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 10.h),
+                            // child: Column(
+                            //   children: [
+                            //     _FollowUpWidget(widget: widget),
+                            //   ],
+                            // ),
+                            child: isAddFollowUp
+                                ? SizedBox(
+                                    width: 800.w,
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(horizontal: 20.w),
+                                      child: Column(
+                                        children: [
+                                          _AddFollowUpField(
+                                            textStream: bloc.followupTitleStream,
+                                            onChanged: bloc.followupTitleStream.add,
+                                            heading: 'Followup Title',
+                                            hint: 'Followup Title',
+                                          ),
+                                          _AddFollowUpField(
+                                            textStream: bloc.followupDescriptionStream,
+                                            onChanged: bloc.followupDescriptionStream.add,
+                                            heading: 'Description',
+                                            hint: 'Description',
+                                          ),
+                                          _AddFollowUpField(
+                                            textStream: bloc.followupDateStream,
+                                            onChanged: bloc.followupDateStream.add,
+                                            heading: 'Next followup date',
+                                            hint: 'Followup date dd-mm-yy',
+                                            enabled: false,
+                                            onTap: () async {
+                                              // await showDatePicker(
+                                              //     context: context,
+                                              //     initialDate: DateTime.now(),
+                                              //     firstDate: DateTime(2000),
+                                              //     lastDate: DateTime.now(),
+                                              //   );
+
+                                              final dateOnly = await _selectDate(context);
+
+                                              bloc.followupDateStream.add(dateOnly);
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                : SizedBox(
+                                    height: 450.h, // Change as per your requirement
+                                    width: double.maxFinite, // Change as per your requirement
+                                    child: ListView.separated(
+                                      shrinkWrap: true,
+                                      itemBuilder: (context, index) => _FollowUpWidget(
+                                        model: model,
+                                        index: index,
+                                      ),
+                                      // itemBuilder: (context, index) => Container(),
+                                      separatorBuilder: (context, index) => Padding(
+                                        padding: EdgeInsets.only(top: 12.h),
+                                        child: Divider(
+                                          indent: 10.w,
+                                          endIndent: 10.w,
+                                          color: Colors.grey[200],
+                                        ),
+                                      ),
+                                      itemCount: model != null && model.data != null && model.data!.isNotEmpty ? model.data![0].contactFollowups!.length : 0,
                                     ),
                                   ),
-                                  itemCount: 12,
-                                ),
-                              ),
-                      ),
-
-                      SizedBox(height: 10.h),
-
-                      // New Follow up add button
-                      if (isAddFollowUp)
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 5.h),
-                          decoration: BoxDecoration(color: Colors.purple[400], borderRadius: BorderRadius.circular(15.r)),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(
-                                Icons.check,
-                                size: 18.w,
-                                color: Colors.white,
-                              ),
-                              SizedBox(width: 5.w),
-                              Text(
-                                'Add',
-                                style: AppStyles.poppins.copyWith(fontSize: 13.w, fontWeight: FontWeight.w700, color: Colors.white),
-                              ),
-                            ],
                           ),
+
+                          SizedBox(height: 10.h),
+
+                          // New Follow up add button
+                          if (isAddFollowUp)
+                            Container(
+                              padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 5.h),
+                              decoration: BoxDecoration(color: Colors.purple[400], borderRadius: BorderRadius.circular(15.r)),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    Icons.check,
+                                    size: 18.w,
+                                    color: Colors.white,
+                                  ),
+                                  SizedBox(width: 5.w),
+                                  Text(
+                                    'Add',
+                                    style: AppStyles.poppins.copyWith(fontSize: 13.w, fontWeight: FontWeight.w700, color: Colors.white),
+                                  ),
+                                ],
+                              ),
+                            ).ripple(context, () async {
+                              await bloc.addFollowup(contactId: contactId);
+                              await bloc.viewContact(contactId: contactId);
+                              setState(() {
+                                isAddFollowUp = false;
+                              });
+                            })
+                          else
+                            Container(
+                              padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 5.h),
+                              decoration: BoxDecoration(color: Colors.purple[400], borderRadius: BorderRadius.circular(15.r)),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    Icons.add,
+                                    size: 18.w,
+                                    color: Colors.white,
+                                  ),
+                                  Text(
+                                    'Add Followup',
+                                    style: AppStyles.poppins.copyWith(fontSize: 13.w, fontWeight: FontWeight.w700, color: Colors.white),
+                                  ),
+                                ],
+                              ),
+                            ).ripple(context, () {
+                              setState(() {
+                                isAddFollowUp = true;
+                              });
+                            }),
+                        ],
+                      ),
+                    ),
+                    Positioned(
+                      top: 5.h,
+                      right: 10.w,
+                      child: Container(
+                        margin: EdgeInsets.only(top: 10.h),
+                        height: 30.w,
+                        width: 30.w,
+                        decoration: BoxDecoration(
+                          // border: Border.all(color: Colors.grey),
+                          color: Colors.purple[400],
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(Icons.close, size: 18.w, color: Colors.white),
+                      ).ripple(context, () {
+                        Navigator.pop(context);
+                      }),
+                    ),
+                    if (isAddFollowUp)
+                      Positioned(
+                        top: 5.h,
+                        left: 10.w,
+                        child: Container(
+                          margin: EdgeInsets.only(top: 10.h),
+                          height: 30.w,
+                          width: 30.w,
+                          decoration: BoxDecoration(
+                            // border: Border.all(color: Colors.grey),
+                            color: Colors.purple[400],
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(Icons.arrow_back_ios_new_rounded, size: 18.w, color: Colors.white),
                         ).ripple(context, () {
                           setState(() {
                             isAddFollowUp = false;
                           });
-                        })
-                      else
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 5.h),
-                          decoration: BoxDecoration(color: Colors.purple[400], borderRadius: BorderRadius.circular(15.r)),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(
-                                Icons.add,
-                                size: 18.w,
-                                color: Colors.white,
-                              ),
-                              Text(
-                                'Add Followup',
-                                style: AppStyles.poppins.copyWith(fontSize: 13.w, fontWeight: FontWeight.w700, color: Colors.white),
-                              ),
-                            ],
-                          ),
-                        ).ripple(context, () {
-                          setState(() {
-                            isAddFollowUp = true;
-                          });
                         }),
-                    ],
-                  ),
-                ),
-                Positioned(
-                  top: 5.h,
-                  right: 10.w,
-                  child: Container(
-                    margin: EdgeInsets.only(top: 10.h),
-                    height: 30.w,
-                    width: 30.w,
-                    decoration: BoxDecoration(
-                      // border: Border.all(color: Colors.grey),
-                      color: Colors.purple[400],
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(Icons.close, size: 18.w, color: Colors.white),
-                  ).ripple(context, () {
-                    Navigator.pop(context);
-                  }),
-                ),
-                if (isAddFollowUp)
-                  Positioned(
-                    top: 5.h,
-                    left: 10.w,
-                    child: Container(
-                      margin: EdgeInsets.only(top: 10.h),
-                      height: 30.w,
-                      width: 30.w,
-                      decoration: BoxDecoration(
-                        // border: Border.all(color: Colors.grey),
-                        color: Colors.purple[400],
-                        shape: BoxShape.circle,
                       ),
-                      child: Icon(Icons.arrow_back_ios_new_rounded, size: 18.w, color: Colors.white),
-                    ).ripple(context, () {
-                      setState(() {
-                        isAddFollowUp = false;
-                      });
-                    }),
-                  ),
-              ],
-            ),
+                  ],
+                ),
+              );
+            },
           );
         },
       ),
     );
   }
+
+  Future<String> _selectDate(BuildContext context) async {
+    final now = DateTime.now();
+
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(3000),
+    );
+
+    if (picked != null) {
+      final dateOnly = DateTime(picked.year, picked.month, picked.day);
+      print('77777777777777777777777777777 ${intl.DateFormat('dd-MM-yyyy').format(dateOnly)}');
+      return intl.DateFormat('dd-MM-yyyy').format(dateOnly);
+    }
+    return '';
+  }
 }
 
-class _FollowUpWidget extends StatelessWidget {
+class _FollowUpWidget extends StatefulWidget {
   const _FollowUpWidget({
     required this.model,
+    required this.index,
     super.key,
   });
 
-  final Contact1 model;
+  final ContactViewModel? model;
+  final int index;
 
+  @override
+  State<_FollowUpWidget> createState() => _FollowUpWidgetState();
+}
+
+class _FollowUpWidgetState extends State<_FollowUpWidget> {
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -945,7 +1015,7 @@ class _FollowUpWidget extends StatelessWidget {
                     ),
                     const Spacer(),
                     Text(
-                      'Date : ${model.followupDate}',
+                      'Date : ${widget.model?.data?[0].contactFollowups?[widget.index].createdAt}',
                       style: AppStyles.poppins.copyWith(fontSize: 12.w, fontWeight: FontWeight.w700, color: Colors.purple[400]),
                     ),
                   ],
@@ -960,7 +1030,7 @@ class _FollowUpWidget extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8.r),
                 ),
                 child: Text(
-                  model.sampleFollowupMessage,
+                  widget.model?.data?[0].contactFollowups?[widget.index].description ?? '',
                   style: AppStyles.poppins.copyWith(fontSize: 12.w, fontWeight: FontWeight.w700, color: Colors.grey[700]),
                 ),
               ),
@@ -970,8 +1040,24 @@ class _FollowUpWidget extends StatelessWidget {
         Positioned(
           bottom: 0,
           right: 10.w,
-          child: Icon(Icons.delete_outline, size: 20.w, color: Colors.purple[400]).ripple(context, () {
-            Navigator.pop(context);
+          child: Icon(Icons.delete_outline, size: 20.w, color: Colors.purple[400]).ripple(context, () async {
+            customLoader(context);
+            final bloc = Provider.of<ManageContactBloc>(context, listen: false);
+
+            final contactId = widget.model?.data?[0].id;
+            final followupId = widget.model?.data?[0].contactFollowups?[widget.index].id;
+
+            final isDeleted = await bloc.deleteFollowup(contactId: contactId ?? '', followupId: followupId ?? '');
+
+            if (isDeleted) {
+              await successMotionToastInfo(context, msg: 'Followup deleted successfully.');
+              await bloc.viewContact(contactId: contactId ?? '');
+              // bool isPresent = false;
+              Loader.hide();
+            } else {
+              await erroMotionToastInfo(context, msg: 'Something wrong!!');
+              Loader.hide();
+            }
           }),
         ),
       ],
@@ -1340,78 +1426,114 @@ class _MyTextWidgetState extends State<MyTextWidget> {
   }
 }
 
-class _AddFollowUpField extends StatelessWidget {
+class _AddFollowUpField extends StatefulWidget {
   const _AddFollowUpField({
     // required this.controller,
     required this.heading,
+    required this.textStream,
     required this.hint,
-    this.initialValue = '',
+    this.onChanged,
+    this.enabled = true,
+    this.onTap,
+    // this.initialValue = '',
     this.textInputType = TextInputType.name,
     this.isLargeField = false,
     super.key,
   });
 
   // final TextEditingController controller;
+  final BehaviorSubject<String> textStream;
+  final void Function(String)? onChanged;
+  final void Function()? onTap;
+  final bool enabled;
   final String heading;
   final String hint;
-  final String initialValue;
+  // final String initialValue;
   final bool isLargeField;
   final TextInputType textInputType;
+
+  @override
+  State<_AddFollowUpField> createState() => _AddFollowUpFieldState();
+}
+
+class _AddFollowUpFieldState extends State<_AddFollowUpField> {
+  final _controller = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    widget.textStream.listen((value) {
+      if (value.isEmpty) {
+        _controller.clear();
+      } else if (_controller.text != value) {
+        _controller.text = value;
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 10.h),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Text(heading, style: AppStyles.poppins.copyWith(fontSize: 12.w, color: Colors.purple)),
-          // SizedBox(height: 7.h),
-          SizedBox(
-            height: isLargeField ? null : 50.h,
-            child: TextFormField(
-              initialValue: initialValue,
-              scrollPadding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom + 15.w * 6, // Adjust the value as needed
+      child: StreamBuilder<Object>(
+        stream: widget.textStream,
+        builder: (context, snapshot) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Text(heading, style: AppStyles.poppins.copyWith(fontSize: 12.w, color: Colors.purple)),
+              // SizedBox(height: 7.h),
+              SizedBox(
+                height: widget.isLargeField ? null : 50.h,
+                child: TextFormField(
+                  controller: _controller,
+                  onChanged: widget.onChanged,
+                  onTap: widget.onTap,
+                  // enabled: widget.enabled,
+                  // initialValue: widget.initialValue,
+                  scrollPadding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom + 15.w * 6, // Adjust the value as needed
+                  ),
+                  // controller: controller,
+                  style: AppStyles.poppins.copyWith(
+                    color: Colors.purple,
+                    fontSize: 13.w,
+                  ),
+                  keyboardType: !widget.isLargeField ? widget.textInputType : TextInputType.multiline,
+                  // minLines: !isLargeField ? null : 1,
+                  // maxLines: !isLargeField ? null : 20,
+                  // maxLength: !isLargeField ? null : 500,
+                  // expands:isLargeField ,
+                  // maxLines: null,
+                  decoration: InputDecoration(
+                    // isDense: true,
+                    floatingLabelBehavior: FloatingLabelBehavior.always,
+                    labelText: widget.heading,
+                    labelStyle: AppStyles.poppins.copyWith(fontSize: 12.w, color: Colors.purple),
+                    hintText: widget.hint,
+                    hintStyle: AppStyles.openSans.copyWith(
+                      color: Colors.purple[100],
+                      fontSize: 13.w,
+                    ),
+                    contentPadding: EdgeInsets.only(left: 15.w),
+                    border: OutlineInputBorder(
+                      borderSide: const BorderSide(color: Color.fromARGB(139, 103, 51, 137)),
+                      borderRadius: BorderRadius.circular(12.r),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(color: Color.fromARGB(139, 103, 51, 137)),
+                      borderRadius: BorderRadius.circular(12.r),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(color: Color.fromARGB(255, 152, 102, 185)),
+                      borderRadius: BorderRadius.circular(12.r),
+                    ),
+                  ),
+                ),
               ),
-              // controller: controller,
-              style: AppStyles.poppins.copyWith(
-                color: Colors.purple,
-                fontSize: 13.w,
-              ),
-              keyboardType: !isLargeField ? textInputType : TextInputType.multiline,
-              // minLines: !isLargeField ? null : 1,
-              // maxLines: !isLargeField ? null : 20,
-              // maxLength: !isLargeField ? null : 500,
-              // expands:isLargeField ,
-              // maxLines: null,
-              decoration: InputDecoration(
-                // isDense: true,
-                floatingLabelBehavior: FloatingLabelBehavior.always,
-                labelText: heading,
-                labelStyle: AppStyles.poppins.copyWith(fontSize: 12.w, color: Colors.purple),
-                hintText: hint,
-                hintStyle: AppStyles.openSans.copyWith(
-                  color: Colors.purple[100],
-                  fontSize: 13.w,
-                ),
-                contentPadding: EdgeInsets.only(left: 15.w),
-                border: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Color.fromARGB(139, 103, 51, 137)),
-                  borderRadius: BorderRadius.circular(12.r),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Color.fromARGB(139, 103, 51, 137)),
-                  borderRadius: BorderRadius.circular(12.r),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Color.fromARGB(255, 152, 102, 185)),
-                  borderRadius: BorderRadius.circular(12.r),
-                ),
-              ),
-            ),
-          ),
-        ],
+            ],
+          );
+        },
       ),
     );
   }

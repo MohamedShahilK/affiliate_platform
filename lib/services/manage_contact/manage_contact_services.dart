@@ -210,11 +210,87 @@ class ManageContactSevices {
       final errorResponse = e.response;
       final errorMsg = errorResponse!.data['message'];
       await erroMotionToastInfo(context, msg: errorMsg as String);
-      print('deletePermissionForAffUsers Error :- $e');      
+      print('deletePermissionForAffUsers Error :- $e');
       return null;
     } catch (e) {
       Loader.hide();
-      print('deletePermissionForAffUsers Error :- $e');      
+      print('deletePermissionForAffUsers Error :- $e');
+      return null;
+    }
+  }
+
+  // Add Followup
+  Future<Map<String, dynamic>?> addFollowup({
+    required String contactId,
+    required String title,
+    required String description,
+    // required String date,
+  }) async {
+    try {
+      final token = StorageServices.to.getString(StorageServicesKeys.token);
+      final haveToken = token.isNotEmpty;
+      if (haveToken) {
+        final formData = FormData.fromMap({
+          'title': title,
+          'description': description,
+          'next_followup_date': '30-04-2024',
+          'status': '1',
+        });
+        final response = await api.dio?.post<Map<String, dynamic>>(
+          options: Options(
+            headers: {
+              // 'accept': '*/*',
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer $token',
+            },
+          ),
+          // queryParameters: {'id':contactId},
+          data: formData,
+          '${EndPoints.addFollowup}/$contactId',
+        );
+
+        // print('55555555555555555555555 ${response!.data}');
+
+        final jsonData = response?.data;
+
+        return jsonData;
+      }
+      return null;
+    } catch (e) {
+      Loader.hide();
+      print('addFollowup Error :- $e');
+      return null;
+    }
+  }
+
+  // Delete Followup
+  Future<Map<String, dynamic>?> deleteFollowup({required String contactId, required String followupId}) async {
+    try {
+      final token = StorageServices.to.getString(StorageServicesKeys.token);
+      final haveToken = token.isNotEmpty;
+      if (haveToken) {
+        final response = await api.dio?.post<Map<String, dynamic>>(
+          options: Options(
+            headers: {
+              // 'accept': '*/*',
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer $token',
+            },
+          ),
+          // queryParameters: {'id':contactId},
+          '${EndPoints.deleteFollowup}/$contactId/$followupId',
+        );
+
+        // print('55555555555555555555555 ${response!.data}');
+
+        final jsonData = response?.data;
+
+        return jsonData;
+      }
+      return null;
+    } catch (e) {
+      Loader.hide();
+      print('deleteFollowup Error :- $e');
       return null;
     }
   }
