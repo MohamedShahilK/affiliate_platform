@@ -33,6 +33,8 @@ class ManageContactBloc {
   final contactSourceStream = BehaviorSubject<String>.seeded('');
   final contactSourceIdStream = BehaviorSubject<String>.seeded('');
 
+  final permissionStream = BehaviorSubject<String>.seeded('');
+
   Future<void> initDetails() async {
     await getAllContacts();
     await getContactForm();
@@ -64,6 +66,30 @@ class ManageContactBloc {
     }
 
     return isDeleted;
+  }
+
+  Future<bool> addPermissionForAffUsers({required String contactId, required String affUserId}) async {
+    var isPermAdded = false;
+
+    final jsonData = await ManageContactSevices().addPermissionForAffUsers(contactId: contactId, affUserId: affUserId);
+
+    if (jsonData != null && jsonData['status'] == 'SUCCESS' && jsonData['response'] == 'OK') {
+      isPermAdded = true;
+    }
+
+    return isPermAdded;
+  }
+
+  Future<bool> deletePermissionForAffUsers({required String contactId, required String affUserId}) async {
+    var isPermDeleted = false;
+
+    final jsonData = await ManageContactSevices().deletePermissionForAffUsers(contactId: contactId, affUserId: affUserId);
+
+    if (jsonData != null && jsonData['status'] == 'SUCCESS' && jsonData['response'] == 'OK') {
+      isPermDeleted = true;
+    }
+
+    return isPermDeleted;
   }
 
   Future<ContactViewModel?> submitForm() async {

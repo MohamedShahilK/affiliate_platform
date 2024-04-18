@@ -140,7 +140,71 @@ class ManageContactSevices {
       return null;
     } catch (e) {
       Loader.hide();
-      print('viewContact Error :- $e');
+      print('deleteContact Error :- $e');
+      return null;
+    }
+  }
+
+  // Add Permssion for aff users
+  Future<Map<String, dynamic>?> addPermissionForAffUsers({required String contactId, required String affUserId}) async {
+    try {
+      final token = StorageServices.to.getString(StorageServicesKeys.token);
+      final haveToken = token.isNotEmpty;
+      if (haveToken) {
+        final response = await api.dio?.get<Map<String, dynamic>>(
+          options: Options(
+            headers: {
+              // 'accept': '*/*',
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer $token',
+            },
+          ),
+          // queryParameters: {'id':contactId},
+          '${EndPoints.addPermForAffUsers}/$contactId/$affUserId',
+        );
+
+        // print('55555555555555555555555 ${response!.data}');
+
+        final jsonData = response?.data;
+
+        return jsonData;
+      }
+      return null;
+    } catch (e) {
+      Loader.hide();
+      print('addPermissionForAffUsers Error :- $e');
+      return null;
+    }
+  }
+
+   // Delete Permssion for aff users
+  Future<Map<String, dynamic>?> deletePermissionForAffUsers({required String contactId, required String affUserId}) async {
+    try {
+      final token = StorageServices.to.getString(StorageServicesKeys.token);
+      final haveToken = token.isNotEmpty;
+      if (haveToken) {
+        final response = await api.dio?.get<Map<String, dynamic>>(
+          options: Options(
+            headers: {
+              // 'accept': '*/*',
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer $token',
+            },
+          ),
+          // queryParameters: {'id':contactId},
+          '${EndPoints.deletePermForAffUsers}/$contactId/$affUserId',
+        );
+
+        // print('55555555555555555555555 ${response!.data}');
+
+        final jsonData = response?.data;
+
+        return jsonData;
+      }
+      return null;
+    } catch (e) {
+      Loader.hide();
+      print('addPermissionForAffUsers Error :- $e');
       return null;
     }
   }

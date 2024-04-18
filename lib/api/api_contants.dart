@@ -12,4 +12,6 @@ class EndPoints {
   static const submitContactForm = '/contacts/contact_submit';
   static const submitEditContactSubmit = '/contacts/contact_edit_submit';
   static const contactdelete = '/contacts/contact_delete';
+  static const addPermForAffUsers = '/contacts/add_contact_permission';
+  static const deletePermForAffUsers = '/contacts/delete_contact_permission';
 }
