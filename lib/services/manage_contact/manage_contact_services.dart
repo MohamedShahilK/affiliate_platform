@@ -2,13 +2,16 @@
 
 import 'package:affiliate_platform/api/api.dart';
 import 'package:affiliate_platform/api/api_contants.dart';
+import 'package:affiliate_platform/api/api_errror_handling.dart';
 import 'package:affiliate_platform/models/manage_contact/all_contacts.dart';
 import 'package:affiliate_platform/models/manage_contact/contact_edit_submission_model.dart';
 import 'package:affiliate_platform/models/manage_contact/contact_form_model.dart';
 import 'package:affiliate_platform/models/manage_contact/contact_view_model.dart';
 import 'package:affiliate_platform/utils/constants/string_constants.dart';
+import 'package:affiliate_platform/utils/custom_tools.dart';
 import 'package:affiliate_platform/utils/internal_services/storage_services.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 
 class ManageContactSevices {
@@ -177,8 +180,8 @@ class ManageContactSevices {
     }
   }
 
-   // Delete Permssion for aff users
-  Future<Map<String, dynamic>?> deletePermissionForAffUsers({required String contactId, required String affUserId}) async {
+  // Delete Permssion for aff users
+  Future<Map<String, dynamic>?> deletePermissionForAffUsers(BuildContext context, {required String contactId, required String affUserId}) async {
     try {
       final token = StorageServices.to.getString(StorageServicesKeys.token);
       final haveToken = token.isNotEmpty;
@@ -202,9 +205,16 @@ class ManageContactSevices {
         return jsonData;
       }
       return null;
+    } on BadRequestException catch (e) {
+      Loader.hide();
+      final errorResponse = e.response;
+      final errorMsg = errorResponse!.data['message'];
+      await erroMotionToastInfo(context, msg: errorMsg as String);
+      print('deletePermissionForAffUsers Error :- $e');      
+      return null;
     } catch (e) {
       Loader.hide();
-      print('addPermissionForAffUsers Error :- $e');
+      print('deletePermissionForAffUsers Error :- $e');      
       return null;
     }
   }

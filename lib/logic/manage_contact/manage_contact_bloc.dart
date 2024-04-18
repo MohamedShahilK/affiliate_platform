@@ -5,6 +5,7 @@ import 'package:affiliate_platform/models/manage_contact/contact_edit_submission
 import 'package:affiliate_platform/models/manage_contact/contact_form_model.dart';
 import 'package:affiliate_platform/models/manage_contact/contact_view_model.dart';
 import 'package:affiliate_platform/services/manage_contact/manage_contact_services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ManageContactBloc {
@@ -33,7 +34,7 @@ class ManageContactBloc {
   final contactSourceStream = BehaviorSubject<String>.seeded('');
   final contactSourceIdStream = BehaviorSubject<String>.seeded('');
 
-  final permissionStream = BehaviorSubject<String>.seeded('');
+  final permissionStream = BehaviorSubject<List<String>>.seeded([]);
 
   Future<void> initDetails() async {
     await getAllContacts();
@@ -80,10 +81,10 @@ class ManageContactBloc {
     return isPermAdded;
   }
 
-  Future<bool> deletePermissionForAffUsers({required String contactId, required String affUserId}) async {
+  Future<bool> deletePermissionForAffUsers(BuildContext context, {required String contactId, required String affUserId}) async {
     var isPermDeleted = false;
 
-    final jsonData = await ManageContactSevices().deletePermissionForAffUsers(contactId: contactId, affUserId: affUserId);
+    final jsonData = await ManageContactSevices().deletePermissionForAffUsers(context,contactId: contactId, affUserId: affUserId);
 
     if (jsonData != null && jsonData['status'] == 'SUCCESS' && jsonData['response'] == 'OK') {
       isPermDeleted = true;

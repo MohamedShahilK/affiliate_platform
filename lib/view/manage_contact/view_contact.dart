@@ -16,7 +16,7 @@ import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-ValueNotifier<List<String?>?> affUsersHavePerm = ValueNotifier([]);
+ValueNotifier<List<List<String?>?>?> affUsersHavePerm = ValueNotifier([]);
 
 class ViewContact extends StatefulWidget {
   const ViewContact({required this.contactId, super.key});
@@ -376,15 +376,18 @@ class _ViewContactState extends State<ViewContact> {
     final currentUserId = contact?.contact?.createdBy;
     final permissionUsersIdList = contact?.permissionUserIds;
 
+    // var permList = [];
+
     if (affUsersHavePerm.value!.isEmpty) {
       affUsersHavePerm = ValueNotifier(
         contact?.affiliateUsers?.map((e) {
           if (permissionUsersIdList != null) {
+            // permList = permissionUsersIdList;
             for (final id in permissionUsersIdList) {
-              print(permissionUsersIdList);
+              // print(permissionUsersIdList);
               if (id == e.id) {
-                print(currentUserId);
-                return e.firstName;
+                // print(currentUserId);
+                return [e.firstName, e.id];
               }
             }
           }
@@ -392,9 +395,19 @@ class _ViewContactState extends State<ViewContact> {
       );
     }
 
-    affUsersHavePerm.value?.removeWhere((element) => element == null);
+    affUsersHavePerm.value?.removeWhere((element) {
 
-    print(affUsersHavePerm);
+      // remove the owner name from displaying as chip in dialog box
+      if(contact?.contact?.createdBy  == element?[1]){
+        print('777777777777777777777777777777777777777777777777777777777777');
+        return true;
+      }
+
+      // remove all null values
+      return element == null;
+    });
+
+    // print(affUsersHavePerm);
 
     showDialog(
       barrierDismissible: false,
@@ -447,25 +460,33 @@ class _ViewContactState extends State<ViewContact> {
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Text(
-                                        affUsersHavePerm.value?[index] ?? 'None',
+                                        affUsersHavePerm.value?[index]?[0] ?? 'None',
                                         style: AppStyles.poppins.copyWith(fontSize: 12.w, color: Colors.white),
                                       ),
                                       SizedBox(width: 3.w),
                                       Icon(Icons.close, size: 14.w, color: Colors.white).ripple(context, () async {
-                                        // return bloc.deletePermissionForAffUsers(contactId: contactId, affUserId: affUserId);
-
-                                        final list = widget.contactModel?.affiliateUsers?.where((e) => selectedValue == e.firstName).toList();
-                                        if (list != null && list.isNotEmpty) {
-                                          final affUserId = list[0].id;
-                                          final isAdded = await bloc.addPermissionForAffUsers(contactId: widget.contactModel?.id ?? '', affUserId: affUserId ?? '');
-                                          // print('99999999999999999999999999999999999999999 $isAdded');
-                                          if (isAdded) {
-                                            await successMotionToastInfo(context, msg: 'Contact permission updated successfully.');
-                                            affUsersHavePerm.value?.add(selectedValue);
-                                            affUsersHavePerm.notifyListeners();
-                                          } else {}
+                                        customLoader(context);
+                                        final isDeleted = await bloc.deletePermissionForAffUsers(context,contactId: widget.contactId, affUserId: affUsersHavePerm.value?[index]?[1] ?? '');
+                                        if (isDeleted) {
+                                          setState(() async {
+                                            await successMotionToastInfo(context, msg: 'Contact permission deleted successfully.');
+                                            // bool isPresent = false;
+                                            for (final innerList in affUsersHavePerm.value!) {
+                                              if (innerList!.contains(affUsersHavePerm.value?[index]?[1])) {
+                                                affUsersHavePerm.value?.remove(innerList);
+                                                affUsersHavePerm.notifyListeners();
+                                                Loader.hide();
+                                                // isPresent = true;
+                                                break;
+                                              }
+                                            }
+                                            // affUsersHavePerm.value = [];
+                                            // // permList
+                                            // affUsersHavePerm.notifyListeners();
+                                          });
+                                          Loader.hide();
                                         } else {
-                                          await erroMotionToastInfo(context, msg: 'Something wrong!!');
+                                          Loader.hide();
                                         }
                                       }),
                                     ],
@@ -516,11 +537,11 @@ class _ViewContactState extends State<ViewContact> {
                           items: (contact != null && contact.affiliateUsers != null && contact.affiliateUsers!.isNotEmpty)
                               ? contact.affiliateUsers!.map((e) {
                                   if (e.id == contact.contact?.createdBy) {
-                                    return '';
+                                    return [''];
                                   }
-                                  return e.firstName!;
+                                  return [e.firstName ?? '', e.id ?? ''];
                                 }).toList()
-                              : [''],
+                              : [],
                           label: 'Affiliate Users',
                           // initialValue: widget.model?.contactSource ?? '',
                           contactModel: contact,
@@ -565,12 +586,12 @@ class PermissionsDropDown extends StatefulWidget {
     super.key,
   });
 
-  final BehaviorSubject<String> textStream;
+  final BehaviorSubject<List<String>> textStream;
   final String heading;
   final String hint;
   final String label;
   // final String initialValue;
-  final List<String> items;
+  final List<List<String>> items;
   final Data? contactModel;
   // final ValueNotifier<List<String?>?> permissionUsersNotifier;
 
@@ -581,7 +602,7 @@ class PermissionsDropDown extends StatefulWidget {
 class _PermissionsDropDownState extends State<PermissionsDropDown> {
   // final items = ['', 'a', 'b', 'c'];
 
-  String selectedValue = '';
+  // String selectedValue = '';
 
   @override
   void initState() {
@@ -591,6 +612,7 @@ class _PermissionsDropDownState extends State<PermissionsDropDown> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.items);
     final bloc = Provider.of<ManageContactBloc>(context);
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 10.h),
@@ -605,10 +627,10 @@ class _PermissionsDropDownState extends State<PermissionsDropDown> {
             child: StreamBuilder(
               stream: widget.textStream,
               builder: (ctx, snapshot) {
-                final data = snapshot.data ?? '';
-                print('44444444444444444444444 $data');
+                final data = snapshot.data ?? [];
+                // print('44444444444444444444444 $data');
                 return DropdownButtonHideUnderline(
-                  child: DropdownButton2<String>(
+                  child: DropdownButton2(
                     isExpanded: true,
                     hint: Row(
                       children: [
@@ -628,15 +650,15 @@ class _PermissionsDropDownState extends State<PermissionsDropDown> {
                       ],
                     ),
                     items: widget.items.map(
-                      (String item) {
+                      (List<String> item) {
                         var item1 = item;
-                        if (item == '') {
-                          item1 = widget.hint;
+                        if (item.isEmpty) {
+                          item1[0] = widget.hint;
                         }
-                        return DropdownMenuItem<String>(
+                        return DropdownMenuItem(
                           value: item1,
                           child: Text(
-                            item1,
+                            item1[0],
                             // style: AppStyles.poppins.copyWith(
                             //   fontSize: 12.w,
                             //   // fontWeight: FontWeight.bold,
@@ -653,36 +675,87 @@ class _PermissionsDropDownState extends State<PermissionsDropDown> {
                       overflow: TextOverflow.ellipsis,
                     ),
                     // value: selectedValue == '' ? null : selectedValue,
-                    value: data == '' ? null : data,
+                    value: data.isEmpty ? null : data,
+                    // value: data,
                     onChanged: (value) {
                       customLoader(context);
                       setState(() async {
-                        if (value == widget.hint) {
-                          selectedValue = '';
-                          widget.textStream.add(selectedValue);
+                        if (value?[0] == widget.hint) {
+                          // selectedValue = '';
+                          // widget.textStream.add([selectedValue,data[1]]);
+
+                          widget.textStream.add([]);
                           Loader.hide();
                         } else {
-                          selectedValue = value!;
-                          widget.textStream.add(selectedValue);
-
-                          final alreadyThere = affUsersHavePerm.value?.contains(selectedValue) ?? false;
-
-                          if (alreadyThere) {
-                            await erroMotionToastInfo(context, msg: 'Already Selected');
+                          // selectedValue = value![0];
+                          if (value!.isNotEmpty) {
+                            // widget.textStream.add(['Giridhar', '36']);
+                            // widget.textStream.value.c
+                            // widget.textStream.add(value.isEmpty ? [] : [value[0], value[1]]);
+                            print('333333333333333333333333333333 ${value}');
+                            print('555555555555555555555555555555 ${widget.textStream.value}');
+                          } else {
+                            await erroMotionToastInfo(context, msg: 'Something wrong111111111111111111!!');
                             Loader.hide();
-                            return;
                           }
 
-                          final list = widget.contactModel?.affiliateUsers?.where((e) => selectedValue == e.firstName).toList();
+                          // final alreadyThere = affUsersHavePerm.value?.contains([selectedValue]) ?? false;
+
+                          // if (alreadyThere) {
+                          //   await erroMotionToastInfo(context, msg: 'Already Selected');
+                          //   Loader.hide();
+                          //   return;
+                          // }
+
+                          final list = widget.contactModel?.affiliateUsers?.where((e) {
+                            if (value.isNotEmpty) {
+                              return value[0] == e.firstName && value[1] == e.id;
+                            }
+                            return false;
+                          }).toList();
                           if (list != null && list.isNotEmpty) {
                             final affUserId = list[0].id;
+
+                            // affUsersHavePerm.value?.add([list[0].firstName, affUserId]);
+
+                            // final alreadyThere = affUsersHavePerm.value?.contains([value[0], value[1]]) ?? false;
+                            // bool alreadyThere = true;
+                            // final l = affUsersHavePerm.value?.any((e) => e == ['Anakha', '37']) ?? false;
+                            // print('000000000000000000000000000000000000000000000000000000');
+                            // if (l != null && l.first == null) {
+                            //   alreadyThere = false;
+                            // } else {
+                            //   alreadyThere = true;
+                            // }
+
+                            bool isPresent = false;
+                            for (final innerList in affUsersHavePerm.value!) {
+                              if (innerList!.contains(list[0].id)) {
+                                isPresent = true;
+                                break;
+                              }
+                            }
+
+                            print('99999999999999999999999999999999999999999 $isPresent');
+                            print('wwwwwwwwwwwwwwwwwwwwwwwwwwww ${[list[0].firstName, list[0].id]}');
+
+                            if (isPresent) {
+                              // affUsersHavePerm.value?.removeLast();
+                              await erroMotionToastInfo(context, msg: 'Already Selected');
+                              Loader.hide();
+                              return;
+                            }
+
                             final isAdded = await bloc.addPermissionForAffUsers(contactId: widget.contactModel?.id ?? '', affUserId: affUserId ?? '');
-                            // print('99999999999999999999999999999999999999999 $isAdded');
+
                             if (isAdded) {
                               await successMotionToastInfo(context, msg: 'Contact permission updated successfully.');
-                              affUsersHavePerm.value?.add(selectedValue);
+                              affUsersHavePerm.value?.add([list[0].firstName, affUserId]);
                               affUsersHavePerm.notifyListeners();
-                            } else {}
+                              print('99999999999999999999999999999999999999999 ${affUsersHavePerm.value}');
+                            } else {
+                              Loader.hide();
+                            }
                           } else {
                             await erroMotionToastInfo(context, msg: 'Something wrong!!');
                           }
