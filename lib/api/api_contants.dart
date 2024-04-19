@@ -16,4 +16,5 @@ class EndPoints {
   static const deletePermForAffUsers = '/contacts/delete_contact_permission';
   static const addFollowup= '/contacts/add_contact_followup';
   static const deleteFollowup= '/contacts/delete_contact_followup';
+  static const editFollowup= '/contacts/edit_contact_followup_submit';
 }

@@ -224,7 +224,7 @@ class ManageContactSevices {
     required String contactId,
     required String title,
     required String description,
-    // required String date,
+    required String date,
   }) async {
     try {
       final token = StorageServices.to.getString(StorageServicesKeys.token);
@@ -291,6 +291,51 @@ class ManageContactSevices {
     } catch (e) {
       Loader.hide();
       print('deleteFollowup Error :- $e');
+      return null;
+    }
+  }
+
+  // Add Followup
+  Future<Map<String, dynamic>?> editFollowup({
+    required String contactId,
+    required String followupId,
+    required String title,
+    required String description,
+    required String date,
+  }) async {
+    try {
+      final token = StorageServices.to.getString(StorageServicesKeys.token);
+      final haveToken = token.isNotEmpty;
+      if (haveToken) {
+        final formData = FormData.fromMap({
+          'title': title,
+          'description': description,
+          'next_followup_date': date,
+          'status': '1',
+        });
+        final response = await api.dio?.post<Map<String, dynamic>>(
+          options: Options(
+            headers: {
+              // 'accept': '*/*',
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer $token',
+            },
+          ),
+          // queryParameters: {'id':contactId},
+          data: formData,
+          '${EndPoints.editFollowup}/$contactId/$followupId',
+        );
+
+        // print('55555555555555555555555 ${response!.data}');
+
+        final jsonData = response?.data;
+
+        return jsonData;
+      }
+      return null;
+    } catch (e) {
+      Loader.hide();
+      print('addFollowup Error :- $e');
       return null;
     }
   }

@@ -104,6 +104,7 @@ class ManageContactBloc {
       contactId: contactId,
       title: followupTitleStream.value,
       description: followupDescriptionStream.value,
+      date: followupDateStream.value,
     );
 
     if (jsonData != null && jsonData['status'] == 'SUCCESS' && jsonData['response'] == 'OK') {
@@ -124,6 +125,26 @@ class ManageContactBloc {
 
     return isFollowUpDelete;
   }
+
+
+  Future<bool> editFollowup({required String contactId, required String followupId}) async {
+    var isFollowUpAdded = false;
+
+    final jsonData = await ManageContactSevices().editFollowup(
+      contactId: contactId,
+      followupId: followupId,
+      title: followupTitleStream.value,
+      description: followupDescriptionStream.value,
+      date: followupDateStream.value,
+    );
+
+    if (jsonData != null && jsonData['status'] == 'SUCCESS' && jsonData['response'] == 'OK') {
+      isFollowUpAdded = true;
+    }
+
+    return isFollowUpAdded;
+  }
+
 
   Future<ContactViewModel?> submitForm() async {
     final respModel = ManageContactSevices().submitForm(
