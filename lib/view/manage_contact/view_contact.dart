@@ -315,7 +315,14 @@ class _ViewContactState extends State<ViewContact> {
                                               color: Colors.green,
                                               borderRadius: BorderRadius.circular(30.r),
                                             ),
-                                            child: Text('ADD PERMISSIONS', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.white)),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Icon(Icons.add,size: 15.w , color: Colors.white),
+                                                SizedBox(width: 5.w),
+                                                Text('ADD PERMISSIONS', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.white)),
+                                              ],
+                                            ),
                                           ).ripple(context, () {
                                             //  bloc.viewContact(contactId: data?.id ?? '');
                                             _addPermissionsDialog(context, data);
@@ -396,9 +403,8 @@ class _ViewContactState extends State<ViewContact> {
     }
 
     affUsersHavePerm.value?.removeWhere((element) {
-
       // remove the owner name from displaying as chip in dialog box
-      if(contact?.contact?.createdBy  == element?[1]){
+      if (contact?.contact?.createdBy == element?[1]) {
         print('777777777777777777777777777777777777777777777777777777777777');
         return true;
       }
@@ -465,28 +471,38 @@ class _ViewContactState extends State<ViewContact> {
                                       ),
                                       SizedBox(width: 3.w),
                                       Icon(Icons.close, size: 14.w, color: Colors.white).ripple(context, () async {
-                                        customLoader(context);
-                                        final isDeleted = await bloc.deletePermissionForAffUsers(context,contactId: widget.contactId, affUserId: affUsersHavePerm.value?[index]?[1] ?? '');
-                                        if (isDeleted) {
-                                          setState(() async {
-                                            await successMotionToastInfo(context, msg: 'Contact permission deleted successfully.');
-                                            // bool isPresent = false;
-                                            for (final innerList in affUsersHavePerm.value!) {
-                                              if (innerList!.contains(affUsersHavePerm.value?[index]?[1])) {
-                                                affUsersHavePerm.value?.remove(innerList);
-                                                affUsersHavePerm.notifyListeners();
-                                                Loader.hide();
-                                                // isPresent = true;
-                                                break;
+                                        final isTrue = await showWarningDialog(
+                                          context,
+                                          title: 'Remove User',
+                                          description: 'Are you sure want to delete the user from permissions?',
+                                          yes: 'Remove',
+                                          no: 'Cancel',
+                                        );
+
+                                        if (isTrue != null && isTrue) {
+                                          customLoader(context);
+                                          final isDeleted = await bloc.deletePermissionForAffUsers(context, contactId: widget.contactId, affUserId: affUsersHavePerm.value?[index]?[1] ?? '');
+                                          if (isDeleted) {
+                                            setState(() async {
+                                              await successMotionToastInfo(context, msg: 'Contact permission deleted successfully.');
+                                              // bool isPresent = false;
+                                              for (final innerList in affUsersHavePerm.value!) {
+                                                if (innerList!.contains(affUsersHavePerm.value?[index]?[1])) {
+                                                  affUsersHavePerm.value?.remove(innerList);
+                                                  affUsersHavePerm.notifyListeners();
+                                                  Loader.hide();
+                                                  // isPresent = true;
+                                                  break;
+                                                }
                                               }
-                                            }
-                                            // affUsersHavePerm.value = [];
-                                            // // permList
-                                            // affUsersHavePerm.notifyListeners();
-                                          });
-                                          Loader.hide();
-                                        } else {
-                                          Loader.hide();
+                                              // affUsersHavePerm.value = [];
+                                              // // permList
+                                              // affUsersHavePerm.notifyListeners();
+                                            });
+                                            Loader.hide();
+                                          } else {
+                                            Loader.hide();
+                                          }
                                         }
                                       }),
                                     ],

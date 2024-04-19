@@ -605,9 +605,13 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                             style: AppStyles.poppins.copyWith(color: Colors.white, fontSize: 12.w),
                           ),
                         ).ripple(context, () async {
+                          customLoader(context);
+                          isAddFollowUp.value = false;
+                          isAddFollowUp.notifyListeners();
                           await manageBloc
                               .viewContact(contactId: widget.model?.data1![0].contacts![widget.index].id ?? '-')
                               .then((value) => _followUpDialog(context, widget.model?.data1![0].contacts![widget.index].id ?? '-'));
+                          Loader.hide();
                         }),
                         // SizedBox(width: 5.w),
                         const Spacer(),
@@ -717,18 +721,28 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                           color: Colors.red[400]!,
                           icon: Icons.delete_outline_outlined,
                           onTap: () async {
-                            customLoader(context);
-                            final isDeleted = await manageBloc.deleteContact(contactId: widget.model?.data1?[0].contacts?[widget.index].id ?? '');
+                            final isTrue = await showWarningDialog(
+                              context,
+                              title: 'Remove Contact',
+                              description: 'Are you sure want to delete the contact?',
+                              yes: 'Delete',
+                              no: 'Cancel',
+                            );
 
-                            if (isDeleted) {
-                              await manageBloc.getAllContacts();
-                              // ignore: use_build_context_synchronously
-                              await successMotionToastInfo(context, msg: 'Contact deleted successfully.');
-                              Loader.hide();
-                            } else {
-                              Loader.hide();
-                              // ignore: use_build_context_synchronously
-                              await erroMotionToastInfo(context, msg: "Can't able to delete contact");
+                            if (isTrue != null && isTrue) {
+                              customLoader(context);
+                              final isDeleted = await manageBloc.deleteContact(contactId: widget.model?.data1?[0].contacts?[widget.index].id ?? '');
+
+                              if (isDeleted) {
+                                await manageBloc.getAllContacts();
+                                // ignore: use_build_context_synchronously
+                                await successMotionToastInfo(context, msg: 'Contact deleted successfully.');
+                                Loader.hide();
+                              } else {
+                                Loader.hide();
+                                // ignore: use_build_context_synchronously
+                                await erroMotionToastInfo(context, msg: "Can't able to delete contact");
+                              }
                             }
                           },
                         ),
@@ -840,9 +854,9 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                                                         //     firstDate: DateTime(2000),
                                                         //     lastDate: DateTime.now(),
                                                         //   );
-                                                
+
                                                         final dateOnly = await _selectDate(context);
-                                                
+
                                                         if (dateOnly != null) {
                                                           bloc.followupDateStream.add(dateOnly);
                                                         } else {
@@ -1108,22 +1122,32 @@ class _FollowUpWidgetState extends State<_FollowUpWidget> {
           bottom: 0,
           right: 10.w,
           child: Icon(Icons.delete_outline, size: 20.w, color: Colors.purple[400]).ripple(context, () async {
-            customLoader(context);
-            final bloc = Provider.of<ManageContactBloc>(context, listen: false);
+            final isTrue = await showWarningDialog(
+              context,
+              title: 'Remove Followup',
+              description: 'Are you sure want to delete the followup?',
+              yes: 'Delete',
+              no: 'Cancel',
+            );
 
-            final contactId = widget.model?.data?[0].id;
-            final followupId = widget.model?.data?[0].contactFollowups?[widget.index].id;
+            if (isTrue != null && isTrue) {
+              customLoader(context);
+              final bloc = Provider.of<ManageContactBloc>(context, listen: false);
 
-            final isDeleted = await bloc.deleteFollowup(contactId: contactId ?? '', followupId: followupId ?? '');
+              final contactId = widget.model?.data?[0].id;
+              final followupId = widget.model?.data?[0].contactFollowups?[widget.index].id;
 
-            if (isDeleted) {
-              await successMotionToastInfo(context, msg: 'Followup deleted successfully.');
-              await bloc.viewContact(contactId: contactId ?? '');
-              // bool isPresent = false;
-              Loader.hide();
-            } else {
-              await erroMotionToastInfo(context, msg: 'Something wrong!!');
-              Loader.hide();
+              final isDeleted = await bloc.deleteFollowup(contactId: contactId ?? '', followupId: followupId ?? '');
+
+              if (isDeleted) {
+                await successMotionToastInfo(context, msg: 'Followup deleted successfully.');
+                await bloc.viewContact(contactId: contactId ?? '');
+                // bool isPresent = false;
+                Loader.hide();
+              } else {
+                await erroMotionToastInfo(context, msg: 'Something wrong!!');
+                Loader.hide();
+              }
             }
           }),
         ),

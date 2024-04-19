@@ -149,3 +149,95 @@ void customInternetLoader(BuildContext context) {
     ),
   );
 }
+
+Future<bool?> showWarningDialog(
+  BuildContext context, {
+  required String title,
+  required String description,
+  required String yes,
+  required String no,
+  Color yesColor = Colors.green,
+}) async {
+  final isTrue = await showDialog<bool>(
+    // barrierDismissible: false,
+    context: context,
+    builder: (BuildContext ctx) {
+      return MediaQuery.withClampedTextScaling(
+        minScaleFactor: 0.85, // set min scale value here
+        maxScaleFactor: .95,
+        child: AlertDialog(
+          shape: RoundedRectangleBorder(
+            side: const BorderSide(color: Colors.purple),
+            borderRadius: BorderRadius.circular(15.r),
+          ),
+          actionsPadding: EdgeInsets.symmetric(
+            horizontal: 12.w,
+            vertical: 15.h,
+          ),
+          iconPadding: EdgeInsets.symmetric(horizontal: 12.w),
+          buttonPadding: EdgeInsets.symmetric(horizontal: 12.w),
+          contentPadding: EdgeInsets.symmetric(horizontal: 12.w),
+          titlePadding: EdgeInsets.symmetric(
+            horizontal: 12.w,
+            vertical: 10.h,
+          ),
+          title: Text(
+           title,
+            style: TextStyle(
+              fontSize: 13.w,
+              color: const Color.fromARGB(255, 104, 0, 239),
+            ),
+          ),
+          content: Text(
+            description,
+            style: TextStyle(fontSize: 14.w),
+          ),
+          actions: <Widget>[
+            SizedBox(
+              height: 24.h,
+              child: OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  side: const BorderSide(
+                    // color: Color.fromARGB(255, 209, 174, 226),
+                    color: Colors.transparent,
+                  ),
+                  // foregroundColor: const Color.fromARGB(255, 146, 80, 177),
+                  backgroundColor: yesColor,
+                  foregroundColor: Colors.white,
+                ),
+                onPressed: () async {
+                  Navigator.pop(context, true);
+                },
+                child: Text(
+                  yes,
+                  style: TextStyle(fontSize: 12.w),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 24.h,
+              child: OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  side: const BorderSide(
+                    color: Color.fromARGB(255, 209, 174, 226),
+                  ),
+                  // backgroundColor:
+                  //     Color.fromARGB(255, 146, 80, 177),
+                  foregroundColor: const Color.fromARGB(255, 146, 80, 177),
+                ),
+                onPressed: () {
+                  Navigator.pop(context, false);
+                },
+                child: Text(
+                  no,
+                  style: TextStyle(fontSize: 12.w),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    },
+  );
+  return isTrue;
+}
