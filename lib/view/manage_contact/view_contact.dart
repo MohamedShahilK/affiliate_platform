@@ -5,6 +5,7 @@ import 'package:affiliate_platform/logic/manage_contact/manage_contact_bloc.dart
 import 'package:affiliate_platform/models/manage_contact/contact_view_model.dart';
 import 'package:affiliate_platform/utils/constants/styles.dart';
 import 'package:affiliate_platform/utils/custom_tools.dart';
+import 'package:affiliate_platform/view/common/custom_header.dart';
 import 'package:affiliate_platform/view/common/custom_scafflod.dart';
 import 'package:affiliate_platform/view/common/sidebar.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';

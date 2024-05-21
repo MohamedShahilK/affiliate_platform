@@ -10,6 +10,7 @@ import 'package:affiliate_platform/models/manage_contact/contact_view_model.dart
 import 'package:affiliate_platform/services/manage_contact/manage_contact_services.dart';
 import 'package:affiliate_platform/utils/constants/styles.dart';
 import 'package:affiliate_platform/utils/custom_tools.dart';
+import 'package:affiliate_platform/view/common/custom_header.dart';
 import 'package:affiliate_platform/view/common/custom_scafflod.dart';
 import 'package:affiliate_platform/view/common/sidebar.dart';
 import 'package:affiliate_platform/view/manage_contact/data_sample.dart';
@@ -70,123 +71,125 @@ class _ManageContactPageState extends State<ManageContactPage> {
               ),
             );
           },
-          body: Column(
-            children: [
-              const CustomHeader(),
-              // Align(
-              //   alignment: Alignment.topRight,
-              //   child: Padding(
-              //     padding: EdgeInsets.only(right: 15.w, top: 3.h, bottom: 3.h),
-              //     child: ElevatedButton(
-              //       onPressed: () {
-              //         Navigator.push(
-              //           context,
-              //           MaterialPageRoute(
-              //             builder: (context) => const NewContact(),
-              //           ),
-              //         );
-              //       },
-              //       child: Text(
-              //         'Create New Contact',
-              //         style: AppStyles.poppins.copyWith(fontSize: 10.w, fontWeight: FontWeight.w700, color: Colors.purple[800]),
-              //       ),
-              //     ),
-              //   ),
-              // ),
-
-              //
-              //
-              StreamBuilder(
-                stream: manageContactBloc.getAllContactsStream,
-                builder: (context, snapshot) {
-                  // if (snapshot.connectionState == ConnectionState.waiting) {
-                  //   return const CircularProgressIndicator();
-                  // }
-
-                  if ((!snapshot.hasData && snapshot.connectionState != ConnectionState.waiting) || snapshot.hasError) {
-                    Loader.hide();
-                    return Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Something went wrong',
-                            style: TextStyle(fontSize: 16.w),
-                          ),
-                          SizedBox(height: 30.h),
-                          Container(
-                            padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 8.h),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.purple[100]!),
-                              borderRadius: BorderRadius.circular(15.r),
+          body: SafeArea(
+            child: Column(
+              children: [
+                const CustomHeader(),
+                // Align(
+                //   alignment: Alignment.topRight,
+                //   child: Padding(
+                //     padding: EdgeInsets.only(right: 15.w, top: 3.h, bottom: 3.h),
+                //     child: ElevatedButton(
+                //       onPressed: () {
+                //         Navigator.push(
+                //           context,
+                //           MaterialPageRoute(
+                //             builder: (context) => const NewContact(),
+                //           ),
+                //         );
+                //       },
+                //       child: Text(
+                //         'Create New Contact',
+                //         style: AppStyles.poppins.copyWith(fontSize: 10.w, fontWeight: FontWeight.w700, color: Colors.purple[800]),
+                //       ),
+                //     ),
+                //   ),
+                // ),
+            
+                //
+                //
+                StreamBuilder(
+                  stream: manageContactBloc.getAllContactsStream,
+                  builder: (context, snapshot) {
+                    // if (snapshot.connectionState == ConnectionState.waiting) {
+                    //   return const CircularProgressIndicator();
+                    // }
+            
+                    if ((!snapshot.hasData && snapshot.connectionState != ConnectionState.waiting) || snapshot.hasError) {
+                      Loader.hide();
+                      return Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Something went wrong',
+                              style: TextStyle(fontSize: 16.w),
                             ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.center,
+                            SizedBox(height: 30.h),
+                            Container(
+                              padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 8.h),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.purple[100]!),
+                                borderRadius: BorderRadius.circular(15.r),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.refresh, size: 17.w),
+                                  SizedBox(width: 5.w),
+                                  Text('Refresh', style: TextStyle(fontSize: 15.w)),
+                                ],
+                              ),
+                            ).ripple(
+                              context,
+                              () async {
+                                await manageContactBloc.getAllContacts();
+                              },
+                              borderRadius: BorderRadius.circular(15.r),
+                              overlayColor: Colors.purple.withOpacity(.15),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+            
+                    // print('2222222222222222222222222222222222222222222222 ${snapshot.data}');
+            
+                    GetAllContactsAndUsers? allContactsRespModel;
+            
+                    if (snapshot.hasData) {
+                      allContactsRespModel = snapshot.data;
+                    }
+            
+                    return Expanded(
+                      child: SingleChildScrollView(
+                        child: Skeletonizer(
+                          enabled: snapshot.connectionState == ConnectionState.waiting,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 15.w),
+                            child: Column(
                               children: [
-                                Icon(Icons.refresh, size: 17.w),
-                                SizedBox(width: 5.w),
-                                Text('Refresh', style: TextStyle(fontSize: 15.w)),
+                                SizedBox(height: 15.h),
+                                // _CustomExpansionTile(),
+                                // _CustomExpansionTile(),
+                                // _CustomExpansionTile(),
+                                // _CustomExpansionTile(),
+                                // _CustomExpansionTile(),
+                                // _CustomExpansionTile(),
+                                // _CustomExpansionTile(),
+                                // _CustomExpansionTile(),
+                                // _CustomExpansionTile(),
+            
+                                ...List.generate((allContactsRespModel == null) ? 5 : allContactsRespModel.data1![0].contacts!.length, (index) {
+                                  // ...List.generate(sampleList['contacts']!.length, (index) {
+                                  // final list = sampleList['contacts']?[index];
+                                  // final model = Contact1.fromJson(list ?? {});
+                                  return _CustomExpansionTile(
+                                    model: allContactsRespModel,
+                                    index: index,
+                                  );
+                                }),
                               ],
                             ),
-                          ).ripple(
-                            context,
-                            () async {
-                              await manageContactBloc.getAllContacts();
-                            },
-                            borderRadius: BorderRadius.circular(15.r),
-                            overlayColor: Colors.purple.withOpacity(.15),
-                          ),
-                        ],
-                      ),
-                    );
-                  }
-
-                  // print('2222222222222222222222222222222222222222222222 ${snapshot.data}');
-
-                  GetAllContactsAndUsers? allContactsRespModel;
-
-                  if (snapshot.hasData) {
-                    allContactsRespModel = snapshot.data;
-                  }
-
-                  return Expanded(
-                    child: SingleChildScrollView(
-                      child: Skeletonizer(
-                        enabled: snapshot.connectionState == ConnectionState.waiting,
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 15.w),
-                          child: Column(
-                            children: [
-                              SizedBox(height: 15.h),
-                              // _CustomExpansionTile(),
-                              // _CustomExpansionTile(),
-                              // _CustomExpansionTile(),
-                              // _CustomExpansionTile(),
-                              // _CustomExpansionTile(),
-                              // _CustomExpansionTile(),
-                              // _CustomExpansionTile(),
-                              // _CustomExpansionTile(),
-                              // _CustomExpansionTile(),
-
-                              ...List.generate((allContactsRespModel == null) ? 5 : allContactsRespModel.data1![0].contacts!.length, (index) {
-                                // ...List.generate(sampleList['contacts']!.length, (index) {
-                                // final list = sampleList['contacts']?[index];
-                                // final model = Contact1.fromJson(list ?? {});
-                                return _CustomExpansionTile(
-                                  model: allContactsRespModel,
-                                  index: index,
-                                );
-                              }),
-                            ],
                           ),
                         ),
                       ),
-                    ),
-                  );
-                },
-              ),
-            ],
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),

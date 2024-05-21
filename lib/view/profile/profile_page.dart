@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:affiliate_platform/config/ripple.dart';
+import 'package:affiliate_platform/view/common/custom_header.dart';
 import 'package:affiliate_platform/view/profile/edit_profile.dart';
 import 'package:affiliate_platform/utils/constants/styles.dart';
 import 'package:affiliate_platform/utils/image_related.dart';

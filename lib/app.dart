@@ -1,4 +1,5 @@
 import 'package:affiliate_platform/config/flavor_banner.dart';
+import 'package:affiliate_platform/controllers/sidemenu_controller.dart';
 import 'package:affiliate_platform/logic/auth/auth_bloc.dart';
 import 'package:affiliate_platform/logic/manage_contact/manage_contact_bloc.dart';
 import 'package:affiliate_platform/splash.dart';
@@ -25,6 +26,7 @@ class App extends StatelessWidget {
         builder: (_, child) {
           return MultiProvider(
             providers: [
+              ChangeNotifierProvider(create: (context) => SideMenuController()),
                Provider(
                 create: (context) => AuthBloc(),
                 dispose: (context, bloc) => bloc.dispose(),

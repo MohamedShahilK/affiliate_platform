@@ -1,6 +1,7 @@
 // ignore_for_file: lines_longer_than_80_chars, invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member, inference_failure_on_instance_creation
 
 import 'package:affiliate_platform/config/ripple.dart';
+import 'package:affiliate_platform/view/common/side_menu.dart';
 import 'package:affiliate_platform/view/profile/profile_page.dart';
 import 'package:affiliate_platform/view/manage_contact/manage_contact.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,7 @@ class _CustomScaffoldState extends State<CustomScaffold> {
   Widget build(BuildContext context) {
     final pages = [const ManageContactPage(), const ProfilePage()];
     return Scaffold(
+      drawer: SideMenu(),
       resizeToAvoidBottomInset: false,
       floatingActionButton: !widget.haveFloatingButton
           ? null

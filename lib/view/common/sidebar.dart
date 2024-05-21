@@ -2,15 +2,13 @@
 
 import 'package:affiliate_platform/config/ripple.dart';
 import 'package:affiliate_platform/services/auth/auth_services.dart';
-import 'package:affiliate_platform/utils/constants/styles.dart';
 import 'package:affiliate_platform/view/auth/login_page.dart';
 import 'package:affiliate_platform/view/common/custom_scafflod.dart';
+import 'package:affiliate_platform/view/employee/attendance.dart';
 import 'package:affiliate_platform/view/manage_contact/manage_contact.dart';
-import 'package:affiliate_platform/view/profile/edit_profile.dart';
 import 'package:affiliate_platform/view/profile/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sidebarx/sidebarx.dart';
 
 final menuVisibility = ValueNotifier<bool>(false);
@@ -30,7 +28,11 @@ class SideBar extends StatefulWidget {
 class _SideBarState extends State<SideBar> {
   @override
   Widget build(BuildContext context) {
-    final pages = [const ManageContactPage(), const ProfilePage()];
+    final pages = [
+      const ManageContactPage(),
+      const AttendancePage(),
+      const ProfilePage(),
+    ];
     return CustomScaffold(
       haveFloatingButton: false,
       body: SafeArea(
@@ -292,11 +294,30 @@ class _SideBarState extends State<SideBar> {
                                       // );
                                     },
                                   ),
+
+                                  SidebarXItem(
+                                    icon: Icons.account_box_outlined,
+                                    label: 'Employee',
+                                    onTap: () {
+                                      currentSideBarIndex.value = 1;
+                                      currentSideBarIndex.notifyListeners();
+
+                                      menuVisibility.value = false;
+                                      menuVisibility.notifyListeners();
+
+                                      // Navigator.push(
+                                      //   context,
+                                      //   MaterialPageRoute(
+                                      //     builder: (context) => const ManageContactPage(),
+                                      //   ),
+                                      // );
+                                    },
+                                  ),
                                   SidebarXItem(
                                     icon: Icons.person,
                                     label: 'Profile',
                                     onTap: () {
-                                      currentSideBarIndex.value = 1;
+                                      currentSideBarIndex.value = 2;
                                       currentSideBarIndex.notifyListeners();
 
                                       menuVisibility.value = false;
@@ -328,132 +349,3 @@ class _SideBarState extends State<SideBar> {
   }
 }
 
-class CustomHeader extends StatelessWidget {
-  const CustomHeader({
-    this.isBackButtonNeeded = false,
-    this.isTrailingButtonNeeded = false,
-    this.heading = '',
-    super.key,
-  });
-
-  final bool isBackButtonNeeded;
-  final bool isTrailingButtonNeeded;
-  final String heading;
-
-  @override
-  Widget build(BuildContext context) {
-    return isBackButtonNeeded
-        ? Container(
-            margin: EdgeInsets.only(top: 10.h, bottom: 15.h),
-            padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 11.w),
-            child: Row(
-              children: [
-                const Icon(Icons.arrow_back_ios_new_rounded).ripple(context, () => Navigator.pop(context)),
-                const Spacer(),
-                Text(
-                  heading,
-                  style: AppStyles.openSans.copyWith(fontSize: 16.w, fontWeight: FontWeight.w700, color: Colors.grey[600]),
-                ),
-                if (!isTrailingButtonNeeded) SizedBox(width: 25.w),
-                const Spacer(),
-                if (isTrailingButtonNeeded)
-                  const Icon(FontAwesomeIcons.userPen).ripple(context, () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const EditProfile(),
-                      ),
-                    );
-                  }),
-              ],
-            ),
-          )
-        : Container(
-            //  margin: EdgeInsets.only(left: 10.w, right: 10.w),r
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15.r),
-              // border: Border.all(color: Colors.grey[50]!)
-            ),
-            child: Container(
-              margin: EdgeInsets.only(top: 10.h, left: 4.w, right: 4.w, bottom: 15.h),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30.r),
-                color: Colors.white,
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.grey,
-                    offset: Offset(-1, 0),
-                    blurRadius: 6,
-                    spreadRadius: -1,
-                  ),
-                ],
-              ),
-              padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 11.w),
-              child: Row(
-                children: [
-                  if (isBackButtonNeeded)
-                    const Icon(Icons.arrow_back_ios_new_rounded).ripple(context, () => Navigator.pop(context))
-                  else
-                    Image.asset('assets/images/logo-dark.png', width: 90.w),
-
-                  const Spacer(),
-
-                  if (isBackButtonNeeded) ...[
-                    // SizedBox(width: 15.w),
-                    Text(
-                      heading,
-                      style: AppStyles.openSans.copyWith(fontSize: 16.w, fontWeight: FontWeight.w700, color: Colors.grey[600]),
-                    ),
-                  ],
-
-                  const Spacer(),
-                  if (!isBackButtonNeeded)
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text('Welcome, Mohamed', style: AppStyles.openSans.copyWith(fontSize: 12.w, color: Colors.black)),
-                        Text('EMPLOYEE', style: AppStyles.openSans.copyWith(fontSize: 12.w, color: Colors.black)),
-                      ],
-                    ),
-                  // Text('EMPLOYEE', style: TextStyle(fontSize: 12.w)),
-
-                  if (!isBackButtonNeeded) SizedBox(width: 10.w),
-
-                  Stack(
-                    children: [
-                      Container(
-                        height: 40.w,
-                        width: 40.w,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.white,
-                          image: DecorationImage(image: AssetImage('assets/images/avatar2.png')),
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 5.w,
-                        right: 0,
-                        child: Container(
-                          width: 10.w,
-                          height: 10.w,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.green,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ).ripple(
-                    borderRadius: BorderRadius.circular(30.r),
-                    context,
-                    () {
-                      menuVisibility.value = !menuVisibility.value;
-                      menuVisibility.notifyListeners();
-                    },
-                  ),
-                ],
-              ),
-            ),
-          );
-  }
-}
