@@ -4,6 +4,8 @@ import 'package:affiliate_platform/logic/auth/auth_bloc.dart';
 import 'package:affiliate_platform/logic/manage_contact/manage_contact_bloc.dart';
 import 'package:affiliate_platform/splash.dart';
 import 'package:affiliate_platform/utils/l10n/l10n.dart';
+import 'package:affiliate_platform/view/employee/attendance/attendance.dart';
+import 'package:affiliate_platform/view/employee/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -56,9 +58,9 @@ class App extends StatelessWidget {
                 debugShowCheckedModeBanner: false,
                 localizationsDelegates: AppLocalizations.localizationsDelegates,
                 supportedLocales: AppLocalizations.supportedLocales,
-                home: const SplashPage(),
-                // home: SideBar(),
-                // home: LoginPage(),
+                // home: const SplashPage(),
+                home: const ProjectPage(),
+                
               ),
             ),
           );

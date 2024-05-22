@@ -19,16 +19,19 @@ import 'package:skeletonizer/skeletonizer.dart';
 
 ValueNotifier<List<List<String?>?>?> affUsersHavePerm = ValueNotifier([]);
 
-class ViewContact extends StatefulWidget {
-  const ViewContact({required this.contactId, super.key});
+class ViewProject extends StatefulWidget {
+  const ViewProject({
+    // required this.contactId,
+    super.key,
+  });
 
-  final String contactId;
+  // final String contactId;
 
   @override
-  State<ViewContact> createState() => _ViewContactState();
+  State<ViewProject> createState() => _ViewProjectState();
 }
 
-class _ViewContactState extends State<ViewContact> {
+class _ViewProjectState extends State<ViewProject> {
   var _refreshKey = UniqueKey();
   ManageContactBloc? manageContactBloc;
 
@@ -44,12 +47,16 @@ class _ViewContactState extends State<ViewContact> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    manageContactBloc ??= Provider.of<ManageContactBloc>(context);
-    manageContactBloc!.viewContact(contactId: widget.contactId).then(
-          (value) => setState(() {
-            loading = false;
-          }),
-        );
+    // manageContactBloc ??= Provider.of<ManageContactBloc>(context);
+    // manageContactBloc!.viewContact(contactId: widget.contactId).then(
+    //       (value) => setState(() {
+    //         loading = false;
+    //       }),
+    //     );
+
+    setState(() {
+      loading = false;
+    });
   }
 
   // To update or hot reload
@@ -69,7 +76,7 @@ class _ViewContactState extends State<ViewContact> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const CustomHeader(isBackButtonNeeded: true, heading: 'Contact Details'),
+              const CustomHeader(isBackButtonNeeded: true, heading: 'Project Details'),
 
               //
               Expanded(
@@ -79,49 +86,48 @@ class _ViewContactState extends State<ViewContact> {
                     child: StreamBuilder(
                       stream: bloc.getContactViewStream,
                       builder: (context, getContactViewStreamsnapshot) {
-                         if (!getContactViewStreamsnapshot.hasData && !loading) {
-                            Loader.hide();
-                            return SizedBox(
-                              height: MediaQuery.of(context).size.height - 60,
-                              // color: Colors.red,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(),
-                                  Text(
-                                    'Something went wrong',
-                                    style: TextStyle(fontSize: 16.w),
-                                  ),
-                                  SizedBox(height: 30.h),
-                                  Container(
-                                    padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 8.h),
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.purple[100]!),
-                                      borderRadius: BorderRadius.circular(15.r),
-                                    ),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Icon(Icons.refresh, size: 17.w),
-                                        SizedBox(width: 5.w),
-                                        Text('Refresh', style: TextStyle(fontSize: 15.w)),
-                                      ],
-                                    ),
-                                  ).ripple(
-                                    context,
-                                    () async {
-                                      if (widget.contactId != null) {
-                                        await bloc.viewContact(contactId: widget.contactId!);
-                                      }
-                                    },
-                                    borderRadius: BorderRadius.circular(15.r),
-                                    overlayColor: Colors.purple.withOpacity(.15),
-                                  ),
-                                ],
-                              ),
-                            );
-                          }
+                        //  if (!getContactViewStreamsnapshot.hasData ) {
+                        //     Loader.hide();
+                        //     return Expanded(
+                        //       child: Center(
+                        //         child: Column(
+                        //           mainAxisAlignment: MainAxisAlignment.center,
+                        //           children: [
+                        //             Text(
+                        //               'Something went wrong',
+                        //               style: TextStyle(fontSize: 16.w),
+                        //             ),
+                        //             SizedBox(height: 30.h),
+                        //             Container(
+                        //               padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 8.h),
+                        //               decoration: BoxDecoration(
+                        //                 border: Border.all(color: Colors.purple[100]!),
+                        //                 borderRadius: BorderRadius.circular(15.r),
+                        //               ),
+                        //               child: Row(
+                        //                 mainAxisSize: MainAxisSize.min,
+                        //                 mainAxisAlignment: MainAxisAlignment.center,
+                        //                 children: [
+                        //                   Icon(Icons.refresh, size: 17.w),
+                        //                   SizedBox(width: 5.w),
+                        //                   Text('Refreshee', style: TextStyle(fontSize: 15.w)),
+                        //                 ],
+                        //               ),
+                        //             ).ripple(
+                        //               context,
+                        //               () async {
+                        //                 if (widget.contactId != null) {
+                        //                   await bloc.viewContact(contactId: widget.contactId!);
+                        //                 }
+                        //               },
+                        //               borderRadius: BorderRadius.circular(15.r),
+                        //               overlayColor: Colors.purple.withOpacity(.15),
+                        //             ),
+                        //           ],
+                        //         ),
+                        //       ),
+                        //     );
+                        //   }
                         final data = getContactViewStreamsnapshot.data?.data?[0];
                         final model = getContactViewStreamsnapshot.data?.data?[0].contact;
                         return Skeletonizer(
@@ -130,53 +136,12 @@ class _ViewContactState extends State<ViewContact> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Container(),
-
-                              Align(
-                                child: Text(
-                                  loading ? 'Mohamed' : model?.name ?? '-',
-                                  style: AppStyles.poppins.copyWith(fontSize: 18.w, color: Colors.purple[600], fontWeight: FontWeight.w800),
-                                ),
-                              ),
-
-                              Align(
-                                child: Text(
-                                  loading ? 'ABC Company PVT LTD' : model?.company ?? '-',
-                                  style: AppStyles.poppins.copyWith(fontSize: 14.w, color: Colors.grey[600], fontWeight: FontWeight.w800),
-                                ),
-                              ),
-
-                              SizedBox(height: 30.h),
-
+                              SizedBox(height: 10.h),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('Company Information', style: AppStyles.poppins.copyWith(fontSize: 13.w, color: Colors.grey[800], fontWeight: FontWeight.w800)),
-                                  // Padding(
-                                  //   padding: EdgeInsets.only(top: 10.h),
-                                  //   // child: _NewCardItem(model: model),
-                                  //   child: Column(
-                                  //     children: [
-                                  //       Container(
-                                  //         margin: EdgeInsets.only(bottom: 2.h),
-                                  //         decoration: BoxDecoration(
-                                  //           // border: Border.all(color: Colors.grey),
-                                  //           color: Color(0xFFFEFBFF),
-                                  //           borderRadius: BorderRadius.only(topRight: Radius.circular(12.r), topLeft: Radius.circular(12.r)),
-                                  //         ),
-                                  //         padding: EdgeInsets.symmetric(vertical: 13.h, horiz20ontal: 5.w),
-                                  //         child: Row(
-                                  //           children: [
-                                  //             Icon(Icons.person, size: 13.w),
-                                  //             SizedBox(width: 5.w),
-                                  //             Text('Name', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800])),
-                                  //             const Spacer(),
-                                  //             Text(model.name, style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800], fontWeight: FontWeight.w800)),
-                                  //           ],
-                                  //         ),
-                                  //       ),
+                                  // Text('Company Information', style: AppStyles.poppins.copyWith(fontSize: 13.w, color: Colors.grey[800], fontWeight: FontWeight.w800)),
 
-                                  //       //
-                                  //       _NewCardItem(field: 'Company', value: model.companyName, icondata: Icons.business),
                                   Padding(
                                     padding: EdgeInsets.only(top: 10.h),
                                     // child: _NewCardItem(model: model),
@@ -192,9 +157,9 @@ class _ViewContactState extends State<ViewContact> {
                                           padding: EdgeInsets.symmetric(vertical: 13.h, horizontal: 5.w),
                                           child: Row(
                                             children: [
-                                              Icon(Icons.person, size: 13.w),
+                                              Icon(Icons.book_outlined, size: 13.w),
                                               SizedBox(width: 5.w),
-                                              Text('Phone Number', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800])),
+                                              Text('Project Name', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800])),
                                               const Spacer(),
                                               SelectableText(model?.mobile ?? '-', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800], fontWeight: FontWeight.w800)),
                                             ],
@@ -202,11 +167,12 @@ class _ViewContactState extends State<ViewContact> {
                                         ),
 
                                         // _NewCardItem(field: 'Phone Number', value: model.phoneNumber, icondata: Icons.phone_outlined),
-                                        _NewCardItem(field: 'Email', value: model?.email ?? '-', icondata: Icons.email_outlined),
-                                        _NewCardItem(field: 'Company Address', value: model?.companyAddress ?? '-', icondata: Icons.note_alt_outlined),
-                                        _NewCardItem(field: 'Company Landline', value: model?.companyLandline ?? '-', icondata: Icons.lan_outlined),
-                                        _NewCardItem(field: 'Company Location', value: model?.companyLocation ?? '-', icondata: Icons.location_on_outlined),
-                                        // _NewCardItem(field: 'Company Website', value: model.companyWebsite),
+                                        _NewCardItem(field: 'Name', value: model?.email ?? '-', icondata: Icons.person_2_outlined),
+                                        _NewCardItem(field: 'Client', value: model?.email ?? '-', icondata: Icons.person_pin_outlined),
+                                        _NewCardItem(field: 'Quotation', value: model?.companyAddress ?? '-', icondata: Icons.note_alt_outlined),
+                                        _NewCardItem(field: 'Start Date', value: model?.companyLandline ?? '-', icondata: Icons.date_range),
+                                        _NewCardItem(field: 'End Date', value: model?.companyLocation ?? '-', icondata: Icons.date_range),
+                                        _NewCardItem(field: 'Description', value: model?.companyLocation ?? '-', icondata: Icons.description_outlined),
 
                                         //
                                         Container(
@@ -218,9 +184,9 @@ class _ViewContactState extends State<ViewContact> {
                                           padding: EdgeInsets.symmetric(vertical: 13.h, horizontal: 5.w),
                                           child: Row(
                                             children: [
-                                              Icon(FontAwesomeIcons.earthAfrica, size: 13.w),
+                                              Icon(Icons.stairs_outlined, size: 13.w),
                                               SizedBox(width: 5.w),
-                                              Text('Company Website', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800])),
+                                              Text('Status', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800])),
                                               const Spacer(),
                                               SelectableText(
                                                 model?.companyWebsite ?? '-',
@@ -228,107 +194,6 @@ class _ViewContactState extends State<ViewContact> {
                                               ),
                                             ],
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-
-                              //
-                              SizedBox(height: 20.h),
-
-                              //
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text('Contact Information', style: AppStyles.poppins.copyWith(fontSize: 13.w, color: Colors.grey[800], fontWeight: FontWeight.w800)),
-                                  Padding(
-                                    padding: EdgeInsets.only(top: 10.h),
-                                    // child: _NewCardItem(model: model),
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                          margin: EdgeInsets.only(bottom: 2.h),
-                                          decoration: BoxDecoration(
-                                            // border: Border.all(color: Colors.grey),
-                                            color: const Color(0xFFFEFBFF),
-                                            borderRadius: BorderRadius.only(topRight: Radius.circular(12.r), topLeft: Radius.circular(12.r)),
-                                          ),
-                                          padding: EdgeInsets.symmetric(vertical: 13.h, horizontal: 5.w),
-                                          child: Row(
-                                            children: [
-                                              Icon(Icons.person_add_alt, size: 13.w),
-                                              SizedBox(width: 5.w),
-                                              Text('Created By', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800])),
-                                              const Spacer(),
-                                              SelectableText(
-                                                model?.createdBy ?? '-',
-                                                style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800], fontWeight: FontWeight.w800),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-
-                                        //
-
-                                        _NewCardItem(
-                                          field: 'Contact Type',
-                                          value: model?.contactType ?? '-',
-                                          icondata: Icons.type_specimen_outlined,
-                                        ),
-                                        _NewCardItem(
-                                          field: 'Contact Source',
-                                          value: model?.contactSource ?? '-',
-                                          icondata: Icons.source_outlined,
-                                        ),
-                                        _NewCardItem(
-                                          field: 'Contact Designation',
-                                          value: model?.designation ?? '-',
-                                          icondata: Icons.location_city_rounded,
-                                        ),
-
-                                        //
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            // border: Border.all(color: Colors.grey),
-                                            color: const Color(0xFFFEFBFF),
-                                            borderRadius: BorderRadius.only(bottomRight: Radius.circular(12.r), bottomLeft: Radius.circular(12.r)),
-                                          ),
-                                          padding: EdgeInsets.symmetric(vertical: 13.h, horizontal: 5.w),
-                                          child: Row(
-                                            children: [
-                                              Icon(FontAwesomeIcons.readme, size: 13.w),
-                                              SizedBox(width: 5.w),
-                                              Text('Remarks', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800])),
-                                              const Spacer(),
-                                              SelectableText(model?.remarks ?? '-', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800], fontWeight: FontWeight.w800)),
-                                            ],
-                                          ),
-                                        ),
-
-                                        // Add Permissions
-                                        Align(
-                                          alignment: Alignment.topRight,
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
-                                            margin: EdgeInsets.symmetric(vertical: 15.h),
-                                            decoration: BoxDecoration(
-                                              color: Colors.green,
-                                              borderRadius: BorderRadius.circular(30.r),
-                                            ),
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Icon(Icons.add,size: 15.w , color: Colors.white),
-                                                SizedBox(width: 5.w),
-                                                Text('ADD PERMISSIONS', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.white)),
-                                              ],
-                                            ),
-                                          ).ripple(context, () {
-                                            //  bloc.viewContact(contactId: data?.id ?? '');
-                                            _addPermissionsDialog(context, data);
-                                          }),
                                         ),
                                       ],
                                     ),
@@ -483,28 +348,28 @@ class _ViewContactState extends State<ViewContact> {
 
                                         if (isTrue != null && isTrue) {
                                           customLoader(context);
-                                          final isDeleted = await bloc.deletePermissionForAffUsers(context, contactId: widget.contactId, affUserId: affUsersHavePerm.value?[index]?[1] ?? '');
-                                          if (isDeleted) {
-                                            setState(() async {
-                                              await successMotionToastInfo(context, msg: 'Contact permission deleted successfully.');
-                                              // bool isPresent = false;
-                                              for (final innerList in affUsersHavePerm.value!) {
-                                                if (innerList!.contains(affUsersHavePerm.value?[index]?[1])) {
-                                                  affUsersHavePerm.value?.remove(innerList);
-                                                  affUsersHavePerm.notifyListeners();
-                                                  Loader.hide();
-                                                  // isPresent = true;
-                                                  break;
-                                                }
-                                              }
-                                              // affUsersHavePerm.value = [];
-                                              // // permList
-                                              // affUsersHavePerm.notifyListeners();
-                                            });
-                                            Loader.hide();
-                                          } else {
-                                            Loader.hide();
-                                          }
+                                          // final isDeleted = await bloc.deletePermissionForAffUsers(context, contactId: widget.contactId, affUserId: affUsersHavePerm.value?[index]?[1] ?? '');
+                                          // if (isDeleted) {
+                                          //   setState(() async {
+                                          //     await successMotionToastInfo(context, msg: 'Contact permission deleted successfully.');
+                                          //     // bool isPresent = false;
+                                          //     for (final innerList in affUsersHavePerm.value!) {
+                                          //       if (innerList!.contains(affUsersHavePerm.value?[index]?[1])) {
+                                          //         affUsersHavePerm.value?.remove(innerList);
+                                          //         affUsersHavePerm.notifyListeners();
+                                          //         Loader.hide();
+                                          //         // isPresent = true;
+                                          //         break;
+                                          //       }
+                                          //     }
+                                          //     // affUsersHavePerm.value = [];
+                                          //     // // permList
+                                          //     // affUsersHavePerm.notifyListeners();
+                                          //   });
+                                          //   Loader.hide();
+                                          // } else {
+                                          //   Loader.hide();
+                                          // }
                                         }
                                       }),
                                     ],

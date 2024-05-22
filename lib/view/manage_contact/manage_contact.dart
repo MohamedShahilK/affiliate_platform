@@ -245,7 +245,8 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
         ),
         child: DecoratedBox(
           decoration: BoxDecoration(
-            color: Colors.grey[100],
+            // color: Colors.grey[100],
+            color: Colors.purple.withOpacity(.05),
             borderRadius: BorderRadius.circular(15.r),
           ),
           child: ExpansionTile(
@@ -258,6 +259,97 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
               child: Stack(
                 clipBehavior: Clip.none,
                 children: [
+
+                  // For Sales Person
+                  Positioned(
+                    // top: -18.h,
+                    top: -17.h,
+                    left: 0,
+                    child: Container(
+                      padding: EdgeInsets.only(right: 8.w, bottom: 15.h, left: 8.w, top: 2.h),
+                      decoration: BoxDecoration(color: Colors.grey[100], borderRadius: BorderRadius.circular(15.r)),
+                      child: Row(
+                        children: [
+                          // Container(
+                          //   height: 22.w,
+                          //   width: 22.w,
+                          //   decoration: const BoxDecoration(
+                          //     shape: BoxShape.circle,
+                          //     color: Colors.white,
+                          //     image: DecorationImage(image: AssetImage('assets/images/user.png')),
+                          //   ),
+                          // ),
+                          // SizedBox(width: 5.w),
+                          Text(
+                            // 'Giridhar | Qtn2015',
+                            'Contact #${widget.index + 1}',
+                            style: AppStyles.poppins.copyWith(color: Colors.grey[800], fontSize: 9.w, fontWeight: FontWeight.w900),
+                          ),
+                          // SizedBox(width: 3.w),
+                          // Text(
+                          //   'Qtn2015',
+                          //   style: AppStyles.poppins.copyWith(color: Colors.blueGrey, fontSize: 9.w),
+                          // ),
+                          // SizedBox(width: 2.w),
+                          // Container(
+                          //   padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 3.w),
+                          //   decoration: BoxDecoration(color: Colors.cyan[900], borderRadius: BorderRadius.circular(15.r)),
+                          //   child: Text('Qtn2015', style: AppStyles.poppins.copyWith(fontSize: 7.w, color: Colors.white)),
+                          // ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  // For Admin
+                  // Positioned(
+                  //   // top: -18.h,
+                  //   top: -22.h,
+                  //   left: 0,
+                  //   child: Container(
+                  //     padding: EdgeInsets.only(right: 8.w),
+                  //     decoration: BoxDecoration(color: Colors.grey[100]!, borderRadius: BorderRadius.circular(15.r)),
+                  //     child: Row(
+                  //       children: [
+                  //         Container(
+                  //           height: 22.w,
+                  //           width: 22.w,
+                  //           decoration: const BoxDecoration(
+                  //             shape: BoxShape.circle,
+                  //             color: Colors.white,
+                  //             image: DecorationImage(image: AssetImage('assets/images/user.png')),
+                  //           ),
+                  //         ),
+                  //         SizedBox(width: 5.w),
+                  //         Text(
+                  //           // 'Giridhar | Qtn2015',
+                  //           '${widget.user} | ${widget.type}',
+                  //           style: AppStyles.poppins.copyWith(color: Colors.grey[800], fontSize: 9.w),
+                  //         ),
+                  //         // SizedBox(width: 3.w),
+                  //         // Text(
+                  //         //   'Qtn2015',
+                  //         //   style: AppStyles.poppins.copyWith(color: Colors.blueGrey, fontSize: 9.w),
+                  //         // ),
+                  //         // SizedBox(width: 2.w),
+                  //         // Container(
+                  //         //   padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 3.w),
+                  //         //   decoration: BoxDecoration(color: Colors.cyan[900], borderRadius: BorderRadius.circular(15.r)),
+                  //         //   child: Text('Qtn2015', style: AppStyles.poppins.copyWith(fontSize: 7.w, color: Colors.white)),
+                  //         // ),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
+                  // Positioned(
+                  //   top: -18.h,
+                  //   right: 0,
+                  //   child: Container(
+                  //     padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 3.w),
+                  //     decoration: BoxDecoration(color: Colors.grey, borderRadius: BorderRadius.circular(15.r)),
+                  //     child: Text('Mar 12th 2024', style: AppStyles.poppins.copyWith (fontSize: 7.w, color: Colors.white)),
+                  //   ),
+                  // ),
                   Container(
                     padding: EdgeInsets.only(top: 5.h, bottom: 5.h, left: 20.w, right: 0.w),
                     // margin: EdgeInsets.symmetric(horizontal: 5.w),
@@ -383,99 +475,11 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                     ),
                   ),
 
-                  // For Sales Person
-                  Positioned(
-                    // top: -18.h,
-                    top: -22.h,
-                    left: 0,
-                    child: Container(
-                      padding: EdgeInsets.only(right: 8.w, bottom: 15.h, left: 8.w, top: 2.h),
-                      decoration: BoxDecoration(color: Colors.grey[100], borderRadius: BorderRadius.circular(15.r)),
-                      child: Row(
-                        children: [
-                          // Container(
-                          //   height: 22.w,
-                          //   width: 22.w,
-                          //   decoration: const BoxDecoration(
-                          //     shape: BoxShape.circle,
-                          //     color: Colors.white,
-                          //     image: DecorationImage(image: AssetImage('assets/images/user.png')),
-                          //   ),
-                          // ),
-                          // SizedBox(width: 5.w),
-                          Text(
-                            // 'Giridhar | Qtn2015',
-                            'Contact #${widget.index + 1}',
-                            style: AppStyles.poppins.copyWith(color: Colors.grey[800], fontSize: 9.w, fontWeight: FontWeight.w900),
-                          ),
-                          // SizedBox(width: 3.w),
-                          // Text(
-                          //   'Qtn2015',
-                          //   style: AppStyles.poppins.copyWith(color: Colors.blueGrey, fontSize: 9.w),
-                          // ),
-                          // SizedBox(width: 2.w),
-                          // Container(
-                          //   padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 3.w),
-                          //   decoration: BoxDecoration(color: Colors.cyan[900], borderRadius: BorderRadius.circular(15.r)),
-                          //   child: Text('Qtn2015', style: AppStyles.poppins.copyWith(fontSize: 7.w, color: Colors.white)),
-                          // ),
-                        ],
-                      ),
-                    ),
-                  ),
-
-                  // For Admin
-                  // Positioned(
-                  //   // top: -18.h,
-                  //   top: -22.h,
-                  //   left: 0,
-                  //   child: Container(
-                  //     padding: EdgeInsets.only(right: 8.w),
-                  //     decoration: BoxDecoration(color: Colors.grey[100]!, borderRadius: BorderRadius.circular(15.r)),
-                  //     child: Row(
-                  //       children: [
-                  //         Container(
-                  //           height: 22.w,
-                  //           width: 22.w,
-                  //           decoration: const BoxDecoration(
-                  //             shape: BoxShape.circle,
-                  //             color: Colors.white,
-                  //             image: DecorationImage(image: AssetImage('assets/images/user.png')),
-                  //           ),
-                  //         ),
-                  //         SizedBox(width: 5.w),
-                  //         Text(
-                  //           // 'Giridhar | Qtn2015',
-                  //           '${widget.user} | ${widget.type}',
-                  //           style: AppStyles.poppins.copyWith(color: Colors.grey[800], fontSize: 9.w),
-                  //         ),
-                  //         // SizedBox(width: 3.w),
-                  //         // Text(
-                  //         //   'Qtn2015',
-                  //         //   style: AppStyles.poppins.copyWith(color: Colors.blueGrey, fontSize: 9.w),
-                  //         // ),
-                  //         // SizedBox(width: 2.w),
-                  //         // Container(
-                  //         //   padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 3.w),
-                  //         //   decoration: BoxDecoration(color: Colors.cyan[900], borderRadius: BorderRadius.circular(15.r)),
-                  //         //   child: Text('Qtn2015', style: AppStyles.poppins.copyWith(fontSize: 7.w, color: Colors.white)),
-                  //         // ),
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
-                  // Positioned(
-                  //   top: -18.h,
-                  //   right: 0,
-                  //   child: Container(
-                  //     padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 3.w),
-                  //     decoration: BoxDecoration(color: Colors.grey, borderRadius: BorderRadius.circular(15.r)),
-                  //     child: Text('Mar 12th 2024', style: AppStyles.poppins.copyWith (fontSize: 7.w, color: Colors.white)),
-                  //   ),
-                  // ),
+                  
                 ],
               ),
             ),
+            
             children: [
               Container(
                 // padding: EdgeInsets.only(top: 5.h, bottom: 10.h, left: 20.w, right: 40.w),

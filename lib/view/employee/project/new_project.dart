@@ -19,42 +19,48 @@ import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-class NewContact extends StatefulWidget {
-  const NewContact({this.contactId, super.key});
+class NewProject extends StatefulWidget {
+  const NewProject({
+    // this.contactId,
+    super.key,
+  });
 
-  // final Contact1? model;
-  final String? contactId;
+  // final String? contactId;
 
   @override
-  State<NewContact> createState() => _NewContactState();
+  State<NewProject> createState() => _NewProjectState();
 }
 
-class _NewContactState extends State<NewContact> {
+class _NewProjectState extends State<NewProject> {
   ManageContactBloc? manageContactBloc;
 
   bool loading = true;
 
   @override
   void didChangeDependencies() {
-    manageContactBloc ??= Provider.of<ManageContactBloc>(context);
-    manageContactBloc!.clearStreams();
-    if (widget.contactId == null) {
-      manageContactBloc!.getContactViewStream.add(null);
-      setState(() {
-        loading = false;
-      });
-    } else {
-      manageContactBloc!.viewContact(contactId: widget.contactId!).then(
-            (value) => setState(() {
-              loading = false;
-            }),
-          );
-    }
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      await manageContactBloc!.getContactForm();
-      // if (widget.contactId != null) {
-      //   await manageContactBloc!.getEachContact(contactId: widget.contactId!);
-      // }
+    // manageContactBloc ??= Provider.of<ManageContactBloc>(context);
+    // manageContactBloc!.clearStreams();
+    // if (widget.contactId == null) {
+    //   manageContactBloc!.getContactViewStream.add(null);
+    //   setState(() {
+    //     loading = false;
+    //   });
+    // } else {
+    //   manageContactBloc!.viewContact(contactId: widget.contactId!).then(
+    //         (value) => setState(() {
+    //           loading = false;
+    //         }),
+    //       );
+    // }
+    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+    //   await manageContactBloc!.getContactForm();
+    //   // if (widget.contactId != null) {
+    //   //   await manageContactBloc!.getEachContact(contactId: widget.contactId!);
+    //   // }
+    // });
+
+    setState(() {
+      loading = false;
     });
     super.didChangeDependencies();
   }
@@ -132,12 +138,10 @@ class _NewContactState extends State<NewContact> {
                     builder: (context, snapshot) {
                       if (snapshot.hasError) {
                         Loader.hide();
-                        return SizedBox(
-                          height: MediaQuery.of(context).size.height - 60,
+                        return Expanded(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Container(),
                               Text(
                                 'Something went wrong',
                                 style: TextStyle(fontSize: 16.w),
@@ -155,7 +159,7 @@ class _NewContactState extends State<NewContact> {
                                   children: [
                                     Icon(Icons.refresh, size: 17.w),
                                     SizedBox(width: 5.w),
-                                    Text('Refresh', style: TextStyle(fontSize: 15.w)),
+                                    Text('Refres11', style: TextStyle(fontSize: 15.w)),
                                   ],
                                 ),
                               ).ripple(
@@ -183,49 +187,49 @@ class _NewContactState extends State<NewContact> {
                       return StreamBuilder(
                         stream: bloc.getContactViewStream,
                         builder: (context, getContactViewStreamsnapshot) {
-                          if (!getContactViewStreamsnapshot.hasData && !loading) {
-                            // Loader.hide();
-                            return SizedBox(
-                              height: MediaQuery.of(context).size.height - 60,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(),
-                                  Text(
-                                    'Something went wrong',
-                                    style: TextStyle(fontSize: 16.w),
-                                  ),
-                                  SizedBox(height: 30.h),
-                                  Container(
-                                    padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 8.h),
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.purple[100]!),
-                                      borderRadius: BorderRadius.circular(15.r),
-                                    ),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Icon(Icons.refresh, size: 17.w),
-                                        SizedBox(width: 5.w),
-                                        Text('Refresh', style: TextStyle(fontSize: 15.w)),
-                                      ],
-                                    ),
-                                  ).ripple(
-                                    context,
-                                    () async {
-                                      customLoader(context);
-                                      if (widget.contactId != null) {
-                                        await bloc.viewContact(contactId: widget.contactId!).then((value) => Loader.hide());
-                                      }
-                                    },
-                                    borderRadius: BorderRadius.circular(15.r),
-                                    overlayColor: Colors.purple.withOpacity(.15),
-                                  ),
-                                ],
-                              ),
-                            );
-                          }
+                          // if (!getContactViewStreamsnapshot.hasData && !loading) {
+                          //   // Loader.hide();
+                          //   return SizedBox(
+                          //     height: MediaQuery.of(context).size.height - 60,
+                          //     child: Column(
+                          //       mainAxisAlignment: MainAxisAlignment.center,
+                          //       children: [
+                          //         Container(),
+                          //         Text(
+                          //           'Something went wrong',
+                          //           style: TextStyle(fontSize: 16.w),
+                          //         ),
+                          //         SizedBox(height: 30.h),
+                          //         Container(
+                          //           padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 8.h),
+                          //           decoration: BoxDecoration(
+                          //             border: Border.all(color: Colors.purple[100]!),
+                          //             borderRadius: BorderRadius.circular(15.r),
+                          //           ),
+                          //           child: Row(
+                          //             mainAxisSize: MainAxisSize.min,
+                          //             mainAxisAlignment: MainAxisAlignment.center,
+                          //             children: [
+                          //               Icon(Icons.refresh, size: 17.w),
+                          //               SizedBox(width: 5.w),
+                          //               Text('Refresh', style: TextStyle(fontSize: 15.w)),
+                          //             ],
+                          //           ),
+                          //         ).ripple(
+                          //           context,
+                          //           () async {
+                          //             // customLoader(context);
+                          //             // if (widget.contactId != null) {
+                          //             //   await bloc.viewContact(contactId: widget.contactId!).then((value) => Loader.hide());
+                          //             // }
+                          //           },
+                          //           borderRadius: BorderRadius.circular(15.r),
+                          //           overlayColor: Colors.purple.withOpacity(.15),
+                          //         ),
+                          //       ],
+                          //     ),
+                          //   );
+                          // }
 
                           ContactViewModel? contactViewRespModel;
 
@@ -452,94 +456,94 @@ class _NewContactState extends State<NewContact> {
                                       ),
                                       child: Text('Submit', style: AppStyles.poppins.copyWith(fontSize: 14.w, color: Colors.white)),
                                     ).ripple(context, () async {
-                                      customLoader(context);
-                                      if (widget.contactId == null) {
-                                        final contactTypeMap = snapshot.data!.data![0].contactType!;
-                                        final contactSourceList = snapshot.data!.data![0].contactSources!;
+                                      // customLoader(context);
+                                      // if (widget.contactId == null) {
+                                      //   final contactTypeMap = snapshot.data!.data![0].contactType!;
+                                      //   final contactSourceList = snapshot.data!.data![0].contactSources!;
 
-                                        if (bloc.contactTypeStream.value != '' || bloc.contactSourceStream.value != '') {
-                                          final contactTypeKey = contactTypeMap.keys.firstWhere((k) => contactTypeMap[k] == bloc.contactTypeStream.value, orElse: () => '');
+                                      //   if (bloc.contactTypeStream.value != '' || bloc.contactSourceStream.value != '') {
+                                      //     final contactTypeKey = contactTypeMap.keys.firstWhere((k) => contactTypeMap[k] == bloc.contactTypeStream.value, orElse: () => '');
 
-                                          final contactSrcKey = contactSourceList.indexWhere((e) => e.sourceName == bloc.contactSourceStream.value);
+                                      //     final contactSrcKey = contactSourceList.indexWhere((e) => e.sourceName == bloc.contactSourceStream.value);
 
-                                          // print('222222222222222222222222 ${typeList}');
+                                      //     // print('222222222222222222222222 ${typeList}');
 
-                                          if (contactTypeKey != '') {
-                                            bloc.contactTypeIdStream.add(contactTypeKey);
-                                          }
+                                      //     if (contactTypeKey != '') {
+                                      //       bloc.contactTypeIdStream.add(contactTypeKey);
+                                      //     }
 
-                                          if (contactSrcKey != -1) {
-                                            bloc.contactSourceIdStream.add(contactSrcKey.toString());
-                                          }
+                                      //     if (contactSrcKey != -1) {
+                                      //       bloc.contactSourceIdStream.add(contactSrcKey.toString());
+                                      //     }
 
-                                          final resp = await bloc.submitForm();
+                                      //     final resp = await bloc.submitForm();
 
-                                          if (resp != null && resp.status == 'SUCCESS' && resp.response == 'OK') {
-                                            Navigator.pop(context);
-                                            await successMotionToastInfo(context, msg: 'Submitted Done');
-                                            await bloc.getAllContacts();
-                                            Loader.hide();
-                                          } else {
-                                            await erroMotionToastInfo(context, msg: 'Submission Failed !!');
-                                            Loader.hide();
-                                          }
-                                        } else {
-                                          final resp = await bloc.submitForm();
+                                      //     if (resp != null && resp.status == 'SUCCESS' && resp.response == 'OK') {
+                                      //       Navigator.pop(context);
+                                      //       await successMotionToastInfo(context, msg: 'Submitted Done');
+                                      //       await bloc.getAllContacts();
+                                      //       Loader.hide();
+                                      //     } else {
+                                      //       await erroMotionToastInfo(context, msg: 'Submission Failed !!');
+                                      //       Loader.hide();
+                                      //     }
+                                      //   } else {
+                                      //     final resp = await bloc.submitForm();
 
-                                          if (resp != null && resp.status == 'SUCCESS' && resp.response == 'OK') {
-                                            Navigator.pop(context);
-                                            await successMotionToastInfo(context, msg: 'Submitted Done');
-                                            await bloc.getAllContacts();
-                                            Loader.hide();
-                                          } else {
-                                            await erroMotionToastInfo(context, msg: 'Submission Failed !!');
-                                            Loader.hide();
-                                          }
-                                        }
-                                      } else {
-                                        final contactTypeMap = snapshot.data!.data![0].contactType!;
-                                        final contactSourceList = snapshot.data!.data![0].contactSources!;
+                                      //     if (resp != null && resp.status == 'SUCCESS' && resp.response == 'OK') {
+                                      //       Navigator.pop(context);
+                                      //       await successMotionToastInfo(context, msg: 'Submitted Done');
+                                      //       await bloc.getAllContacts();
+                                      //       Loader.hide();
+                                      //     } else {
+                                      //       await erroMotionToastInfo(context, msg: 'Submission Failed !!');
+                                      //       Loader.hide();
+                                      //     }
+                                      //   }
+                                      // } else {
+                                      //   final contactTypeMap = snapshot.data!.data![0].contactType!;
+                                      //   final contactSourceList = snapshot.data!.data![0].contactSources!;
 
-                                        if (bloc.contactTypeStream.value != '' || bloc.contactSourceStream.value != '') {
-                                          final contactTypeKey = contactTypeMap.keys.firstWhere((k) => contactTypeMap[k] == bloc.contactTypeStream.value, orElse: () => '');
+                                      //   if (bloc.contactTypeStream.value != '' || bloc.contactSourceStream.value != '') {
+                                      //     final contactTypeKey = contactTypeMap.keys.firstWhere((k) => contactTypeMap[k] == bloc.contactTypeStream.value, orElse: () => '');
 
-                                          final contactSrcKey = contactSourceList.indexWhere((e) => e.sourceName == bloc.contactSourceStream.value);
+                                      //     final contactSrcKey = contactSourceList.indexWhere((e) => e.sourceName == bloc.contactSourceStream.value);
 
-                                          // print('222222222222222222222222 ${typeList}');
+                                      //     // print('222222222222222222222222 ${typeList}');
 
-                                          if (contactTypeKey != '') {
-                                            bloc.contactTypeIdStream.add(contactTypeKey);
-                                          }
+                                      //     if (contactTypeKey != '') {
+                                      //       bloc.contactTypeIdStream.add(contactTypeKey);
+                                      //     }
 
-                                          if (contactSrcKey != -1) {
-                                            bloc.contactSourceIdStream.add(contactSrcKey.toString());
-                                          }
+                                      //     if (contactSrcKey != -1) {
+                                      //       bloc.contactSourceIdStream.add(contactSrcKey.toString());
+                                      //     }
 
-                                          final resp = await bloc.contactEdit(contactId: widget.contactId!);
+                                      //     final resp = await bloc.contactEdit(contactId: widget.contactId!);
 
-                                          if (resp != null && resp.status == 'SUCCESS' && resp.response == 'OK' && resp.message == 'Contact updated successfully.') {
-                                            Navigator.pop(context);
-                                            await successMotionToastInfo(context, msg: 'Updated Successfully');
-                                            await bloc.getAllContacts();
-                                            Loader.hide();
-                                          } else {
-                                            await erroMotionToastInfo(context, msg: 'Submission Failed !!');
-                                            Loader.hide();
-                                          }
-                                        } else {
-                                          final resp = await bloc.contactEdit(contactId: widget.contactId!);
+                                      //     if (resp != null && resp.status == 'SUCCESS' && resp.response == 'OK' && resp.message == 'Contact updated successfully.') {
+                                      //       Navigator.pop(context);
+                                      //       await successMotionToastInfo(context, msg: 'Updated Successfully');
+                                      //       await bloc.getAllContacts();
+                                      //       Loader.hide();
+                                      //     } else {
+                                      //       await erroMotionToastInfo(context, msg: 'Submission Failed !!');
+                                      //       Loader.hide();
+                                      //     }
+                                      //   } else {
+                                      //     final resp = await bloc.contactEdit(contactId: widget.contactId!);
 
-                                          if (resp != null && resp.status == 'SUCCESS' && resp.response == 'OK') {
-                                            Navigator.pop(context);
-                                            await successMotionToastInfo(context, msg: 'Updated Successfully');
-                                            await bloc.getAllContacts();
-                                            Loader.hide();
-                                          } else {
-                                            await erroMotionToastInfo(context, msg: 'Submission Failed !!');
-                                            Loader.hide();
-                                          }
-                                        }
-                                      }
+                                      //     if (resp != null && resp.status == 'SUCCESS' && resp.response == 'OK') {
+                                      //       Navigator.pop(context);
+                                      //       await successMotionToastInfo(context, msg: 'Updated Successfully');
+                                      //       await bloc.getAllContacts();
+                                      //       Loader.hide();
+                                      //     } else {
+                                      //       await erroMotionToastInfo(context, msg: 'Submission Failed !!');
+                                      //       Loader.hide();
+                                      //     }
+                                      //   }
+                                      // }
                                     }),
                                   ],
                                 ),

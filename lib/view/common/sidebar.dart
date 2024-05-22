@@ -4,7 +4,7 @@ import 'package:affiliate_platform/config/ripple.dart';
 import 'package:affiliate_platform/services/auth/auth_services.dart';
 import 'package:affiliate_platform/view/auth/login_page.dart';
 import 'package:affiliate_platform/view/common/custom_scafflod.dart';
-import 'package:affiliate_platform/view/employee/attendance.dart';
+import 'package:affiliate_platform/view/employee/attendance/attendance.dart';
 import 'package:affiliate_platform/view/manage_contact/manage_contact.dart';
 import 'package:affiliate_platform/view/profile/profile_page.dart';
 import 'package:flutter/material.dart';
