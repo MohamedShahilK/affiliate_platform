@@ -1,6 +1,7 @@
 import 'package:affiliate_platform/config/flavor_banner.dart';
 import 'package:affiliate_platform/controllers/sidemenu_controller.dart';
 import 'package:affiliate_platform/logic/auth/auth_bloc.dart';
+import 'package:affiliate_platform/logic/employee/project/project_bloc.dart';
 import 'package:affiliate_platform/logic/manage_contact/manage_contact_bloc.dart';
 import 'package:affiliate_platform/splash.dart';
 import 'package:affiliate_platform/utils/l10n/l10n.dart';
@@ -35,6 +36,10 @@ class App extends StatelessWidget {
               ),
               Provider(
                 create: (context) => ManageContactBloc(),
+                dispose: (context, bloc) => bloc.dispose(),
+              ),
+               Provider(
+                create: (context) => ProjectBloc(),
                 dispose: (context, bloc) => bloc.dispose(),
               ),
             ],

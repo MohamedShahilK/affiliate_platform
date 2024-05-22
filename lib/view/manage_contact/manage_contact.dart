@@ -58,8 +58,9 @@ class _ManageContactPageState extends State<ManageContactPage> {
         // onTap: _handleLocaleChanged,
         onTap: () {
           // _handleLocaleChanged();
-          menuVisibility.value = false;
-          menuVisibility.notifyListeners();
+          // menuVisibility.value = false;
+          // menuVisibility.notifyListeners();
+          Scaffold.of(context).closeDrawer();
         },
         child: CustomScaffold(
           key: _refreshKey,
@@ -95,7 +96,7 @@ class _ManageContactPageState extends State<ManageContactPage> {
                 //     ),
                 //   ),
                 // ),
-            
+
                 //
                 //
                 StreamBuilder(
@@ -104,7 +105,7 @@ class _ManageContactPageState extends State<ManageContactPage> {
                     // if (snapshot.connectionState == ConnectionState.waiting) {
                     //   return const CircularProgressIndicator();
                     // }
-            
+
                     if ((!snapshot.hasData && snapshot.connectionState != ConnectionState.waiting) || snapshot.hasError) {
                       Loader.hide();
                       return Expanded(
@@ -143,15 +144,15 @@ class _ManageContactPageState extends State<ManageContactPage> {
                         ),
                       );
                     }
-            
+
                     // print('2222222222222222222222222222222222222222222222 ${snapshot.data}');
-            
+
                     GetAllContactsAndUsers? allContactsRespModel;
-            
+
                     if (snapshot.hasData) {
                       allContactsRespModel = snapshot.data;
                     }
-            
+
                     return Expanded(
                       child: SingleChildScrollView(
                         child: Skeletonizer(
@@ -170,7 +171,7 @@ class _ManageContactPageState extends State<ManageContactPage> {
                                 // _CustomExpansionTile(),
                                 // _CustomExpansionTile(),
                                 // _CustomExpansionTile(),
-            
+
                                 ...List.generate((allContactsRespModel == null) ? 5 : allContactsRespModel.data1![0].contacts!.length, (index) {
                                   // ...List.generate(sampleList['contacts']!.length, (index) {
                                   // final list = sampleList['contacts']?[index];
@@ -259,7 +260,6 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
               child: Stack(
                 clipBehavior: Clip.none,
                 children: [
-
                   // For Sales Person
                   Positioned(
                     // top: -18.h,
@@ -474,12 +474,10 @@ class _CustomExpansionTileState extends State<_CustomExpansionTile> {
                       ],
                     ),
                   ),
-
-                  
                 ],
               ),
             ),
-            
+
             children: [
               Container(
                 // padding: EdgeInsets.only(top: 5.h, bottom: 10.h, left: 20.w, right: 40.w),

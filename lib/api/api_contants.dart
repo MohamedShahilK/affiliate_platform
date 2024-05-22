@@ -6,6 +6,8 @@ class EndPoints {
   static const login = '/auth/login';
   static const validateToken = '/auth/validate_token';
   static const regenerateToken = '/auth/regenerate_token';
+
+  // Contacts
   static const getAllContacts = '/contacts/contact_list';
   static const contactForm = '/contacts/contact_form';
   static const contactView = '/contacts/contact_view';
@@ -17,4 +19,7 @@ class EndPoints {
   static const addFollowup= '/contacts/add_contact_followup';
   static const deleteFollowup= '/contacts/delete_contact_followup';
   static const editFollowup= '/contacts/edit_contact_followup_submit';
+
+  // Projects
+  static const getAllProjects = '/project/list';
 }

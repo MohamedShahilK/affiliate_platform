@@ -75,7 +75,7 @@ class _NewProjectState extends State<NewProject> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const CustomHeader(isBackButtonNeeded: true, heading: 'Add New Contact'),
+            const CustomHeader(isBackButtonNeeded: true, heading: 'Add New Project'),
             // Padding(
             //   padding: EdgeInsets.only(top: 15.h),
             //   // child: Row(
@@ -340,15 +340,15 @@ class _NewProjectState extends State<NewProject> {
                                   child: Column(
                                     children: [
                                       NewContactField(
-                                        heading: 'Contact Name',
-                                        hintText: 'Contact Person Full Name',
+                                        heading: 'Project Name',
+                                        hintText: 'Project',
                                         textStream: bloc.nameStream,
                                         onChanged: bloc.nameStream.add,
                                       ),
                                       NewContactDropDown(
                                         textStream: bloc.contactTypeStream,
-                                        heading: 'Contact Type',
-                                        hint: 'Select Contact Type',
+                                        heading: 'Client',
+                                        hint: 'Select Client',
                                         // items:allContactsRespModel != null ? ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'] : ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'],
                                         items: (allContactsRespModel != null &&
                                                 allContactsRespModel.data != null &&
@@ -356,78 +356,55 @@ class _NewProjectState extends State<NewProject> {
                                                 allContactsRespModel.data?[0].contactType != null)
                                             ? ['', ...allContactsRespModel.data![0].contactType!.values.toList(growable: false).map((e) => e as String)]
                                             : [''],
-                                        label: 'Contact Type',
+                                        label: 'Client',
                                         // initialValue: allContactsRespModel == null ? '' : allContactsRespModel.data![0].contactType!.entries.map((e) => e as String).toList().first,
                                         // initialValue: widget.model?.type ?? '',
                                       ), //dropdown
-                                      NewContactField(
-                                        heading: 'Mobile Number',
-                                        hintText: 'eg: 9719864631313',
-                                        textInputType: TextInputType.phone,
-                                        textStream: bloc.mobileStream,
-                                        onChanged: bloc.mobileStream.add,
-                                      ),
-                                      NewContactField(
-                                        heading: 'Email Address',
-                                        hintText: 'eg: example@exm.com',
-                                        textInputType: TextInputType.emailAddress,
-                                        textStream: bloc.emailStream,
-                                        onChanged: bloc.emailStream.add,
-                                      ),
                                       NewContactDropDown(
-                                        textStream: bloc.contactSourceStream,
-                                        heading: 'Contact Source',
-                                        hint: 'Select Contact Source',
-                                        // items: widget.model != null ? ['', 'Internet', 'Social Media', 'Email'] : ['', 'Internet', 'Social Media', 'Email'],
+                                        textStream: bloc.contactTypeStream,
+                                        heading: 'Quotation',
+                                        hint: 'Select Quotation',
+                                        // items:allContactsRespModel != null ? ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'] : ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'],
                                         items: (allContactsRespModel != null &&
                                                 allContactsRespModel.data != null &&
                                                 allContactsRespModel.data!.isNotEmpty &&
-                                                allContactsRespModel.data?[0].contactSources != null)
-                                            ? ['', ...allContactsRespModel.data![0].contactSources!.map((e) => e.sourceName ?? '')]
+                                                allContactsRespModel.data?[0].contactType != null)
+                                            ? ['', ...allContactsRespModel.data![0].contactType!.values.toList(growable: false).map((e) => e as String)]
                                             : [''],
-                                        label: 'Contact Source',
-                                        // initialValue: widget.model?.contactSource ?? '',
+                                        label: 'Quotation',
+                                        // initialValue: allContactsRespModel == null ? '' : allContactsRespModel.data![0].contactType!.entries.map((e) => e as String).toList().first,
+                                        // initialValue: widget.model?.type ?? '',
                                       ), //dropdown
-                                      NewContactField(
-                                        heading: 'Contact Designation',
-                                        hintText: 'eg: CEO',
-                                        textStream: bloc.designationStream,
-                                        onChanged: bloc.designationStream.add,
-                                      ),
-                                      NewContactField(
-                                        heading: 'Company Name',
-                                        hintText: 'eg: Arabinfotec Pvt Ltd',
-                                        textStream: bloc.companyNameStream,
-                                        onChanged: bloc.companyNameStream.add,
-                                      ),
-                                      NewContactField(
-                                        heading: 'Company Landline Number',
-                                        hintText: 'eg: 97163466578',
-                                        textInputType: TextInputType.phone,
+                                      NewContactDropDown(
+                                        textStream: bloc.contactTypeStream,
+                                        heading: 'Status',
+                                        hint: 'Select Status',
+                                        // items:allContactsRespModel != null ? ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'] : ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'],
+                                        items: (allContactsRespModel != null &&
+                                                allContactsRespModel.data != null &&
+                                                allContactsRespModel.data!.isNotEmpty &&
+                                                allContactsRespModel.data?[0].contactType != null)
+                                            ? ['', ...allContactsRespModel.data![0].contactType!.values.toList(growable: false).map((e) => e as String)]
+                                            : [''],
+                                        label: 'Status',
+                                        // initialValue: allContactsRespModel == null ? '' : allContactsRespModel.data![0].contactType!.entries.map((e) => e as String).toList().first,
+                                        // initialValue: widget.model?.type ?? '',
+                                      ), //dropdown
+                                       NewContactField(
+                                        heading: 'Start Date',
+                                        hintText: '',
+                                        textInputType: TextInputType.text,
+                                        textStream: bloc.landlineStream,
+                                        onChanged: bloc.landlineStream.add,
+                                      ), NewContactField(
+                                        heading: 'End Date',
+                                        hintText: '',
+                                        textInputType: TextInputType.text,
                                         textStream: bloc.landlineStream,
                                         onChanged: bloc.landlineStream.add,
                                       ),
-                                      NewContactField(
-                                        heading: 'Company Website',
-                                        hintText: 'eg: https://arabinfotechllc.com/',
-                                        textInputType: TextInputType.url,
-                                        textStream: bloc.websiteStream,
-                                        onChanged: bloc.websiteStream.add,
-                                      ),
-                                      NewContactField(
-                                        heading: 'Company Location',
-                                        hintText: 'Enter Location',
-                                        textStream: bloc.companyLocationStream,
-                                        onChanged: bloc.companyLocationStream.add,
-                                      ),
                                       NewContactLargeField(
-                                        heading: 'Company Address',
-                                        hintText: 'Enter Adress',
-                                        textStream: bloc.companyAddressStream,
-                                        onChanged: bloc.companyAddressStream.add,
-                                      ),
-                                      NewContactLargeField(
-                                        heading: 'Remarks if any',
+                                        heading: 'Description',
                                         hintText: '-- NOTE --',
                                         textStream: bloc.remarkStream,
                                         onChanged: bloc.remarkStream.add,

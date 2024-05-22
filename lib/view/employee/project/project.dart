@@ -1,6 +1,8 @@
-// ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: lines_longer_than_80_chars, inference_failure_on_instance_creation
 
 import 'package:affiliate_platform/config/ripple.dart';
+import 'package:affiliate_platform/logic/employee/project/project_bloc.dart';
+import 'package:affiliate_platform/models/employee/project/get_all_projects.dart';
 import 'package:affiliate_platform/utils/constants/styles.dart';
 import 'package:affiliate_platform/view/common/custom_header.dart';
 import 'package:affiliate_platform/view/common/custom_scafflod.dart';
@@ -9,10 +11,11 @@ import 'package:affiliate_platform/view/employee/project/new_project.dart';
 import 'package:affiliate_platform/view/employee/project/view_project.dart';
 import 'package:affiliate_platform/view/manage_contact/manage_contact.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class ProjectPage extends StatefulWidget {
   const ProjectPage({super.key});
@@ -31,28 +34,29 @@ class _ProjectPageState extends State<ProjectPage> {
 
   @override
   Widget build(BuildContext context) {
+    final projectBloc = Provider.of<ProjectBloc>(context);
     return PopScope(
       onPopInvoked: (didPop) {
         Navigator.pop(context);
       },
       child: CustomScaffold(
         key: _refreshKey,
-        // floatingActionButtonIcon: FontAwesomeIcons.userPen,
-        // onTapFloatingButton: () {
-        //   Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //       builder: (context) => const EditProfile(),
-        //     ),
-        //   );
-        // },
+        onTapFloatingButton: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const NewProject(),
+            ),
+          );
+        },
         body: SafeArea(
           child: GestureDetector(
             // onTap: _handleLocaleChanged,
             onTap: () {
               // _handleLocaleChanged();
-              menuVisibility.value = false;
-              menuVisibility.notifyListeners();
+              // menuVisibility.value = false;
+              // menuVisibility.notifyListeners();
+              Scaffold.of(context).closeDrawer();
             },
             child: SingleChildScrollView(
               child: Column(
@@ -67,22 +71,74 @@ class _ProjectPageState extends State<ProjectPage> {
 
                   //
                   // _body(),
-                  Padding(
-                    padding: EdgeInsets.only(top: 30.h, bottom: 5.h, left: 20.w, right: 20.w),
-                    child: const Column(
-                      children: [
-                        _ProjectCard(index: 0),
-                        _ProjectCard(index: 1),
-                        _ProjectCard(index: 2),
-                        _ProjectCard(index: 3),
-                        _ProjectCard(index: 4),
-                        _ProjectCard(index: 5),
-                        _ProjectCard(index: 6),
-                        _ProjectCard(index: 7),
-                        _ProjectCard(index: 8),
-                        _ProjectCard(index: 9),
-                      ],
-                    ),
+                  StreamBuilder(
+                    stream: projectBloc.getAllProjectsStream,
+                    builder: (context, getAllProjectsStreamsnapshot) {
+                      if ((!getAllProjectsStreamsnapshot.hasData && getAllProjectsStreamsnapshot.connectionState != ConnectionState.waiting) || getAllProjectsStreamsnapshot.hasError) {
+                        Loader.hide();
+                        return Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Something went wrong',
+                                style: TextStyle(fontSize: 16.w),
+                              ),
+                              SizedBox(height: 30.h),
+                              Container(
+                                padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 8.h),
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.purple[100]!),
+                                  borderRadius: BorderRadius.circular(15.r),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.refresh, size: 17.w),
+                                    SizedBox(width: 5.w),
+                                    Text('Refresh', style: TextStyle(fontSize: 15.w)),
+                                  ],
+                                ),
+                              ).ripple(
+                                context,
+                                () async {
+                                  await projectBloc.getAllProjects();
+                                },
+                                borderRadius: BorderRadius.circular(15.r),
+                                overlayColor: Colors.purple.withOpacity(.15),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+
+                      // print('2222222222222222222222222222222222222222222222 ${snapshot.data}');
+
+                      GetAllProjects? allProjectsRespModel;
+
+                      List<ProjectList>? projectList = [];
+
+                      if (getAllProjectsStreamsnapshot.hasData) {
+                        allProjectsRespModel = getAllProjectsStreamsnapshot.data;
+                        if (allProjectsRespModel!.data != null && allProjectsRespModel.data!.isNotEmpty) {
+                          projectList = allProjectsRespModel.data?[0].projectList ?? [];
+                        }
+                      }
+
+                      // print('232314343 ${projectList}');
+
+                      return Skeletonizer(
+                        enabled: getAllProjectsStreamsnapshot.connectionState == ConnectionState.waiting,
+                        child: Padding(
+                          padding: EdgeInsets.only(top: 30.h, bottom: 5.h, left: 20.w, right: 20.w),
+                          child: Column(
+                            children: List.generate(
+                                (allProjectsRespModel == null) ? 5 : allProjectsRespModel.data![0].projectList!.length, (index) => _ProjectCard(index: index, model: allProjectsRespModel)),
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),
@@ -97,13 +153,20 @@ class _ProjectPageState extends State<ProjectPage> {
 class _ProjectCard extends StatelessWidget {
   const _ProjectCard({
     required this.index,
+    this.model,
     super.key,
   });
 
   final int index;
+  final GetAllProjects? model;
 
   @override
   Widget build(BuildContext context) {
+    final status = model?.data == null || model!.data!.isEmpty || model!.data![0].projectList!.isEmpty || model!.data![0].projectList!.isEmpty
+        ? 'status'
+        : model?.data![0].projectStatus![int.parse(model?.data![0].projectList![index].status ?? '1')] == 'status'
+            ? 'status'
+            : model?.data![0].projectStatus![int.parse(model?.data![0].projectList![index].status ?? '1')] ?? 'status';
     return SizedBox(
       // height: 150.h,
       child: Stack(
@@ -150,13 +213,12 @@ class _ProjectCard extends StatelessWidget {
                               //   widget.name,
                               //   style: AppStyles.poppins.copyWith(color: Colors.grey[800], fontSize: 12.w, overflow: TextOverflow.ellipsis),
                               // ),
-                              child: const MyTextWidget(
-                                //   text: widget.model?.data1 == null || widget.model!.data1!.isEmpty || widget.model!.data1![0].contacts!.isEmpty
-                                //       ? '-'
-                                //       : widget.model?.data1![0].contacts![widget.index].name == ''
-                                //           ? '-'
-                                //           : widget.model?.data1![0].contacts![widget.index].name ?? '-',
-                                text: 'AL Fursan',
+                              child: MyTextWidget(
+                                text: model?.data == null || model!.data!.isEmpty || model!.data![0].projectList!.isEmpty
+                                    ? '-'
+                                    : model?.data![0].projectList![index].name == ''
+                                        ? '-'
+                                        : model?.data![0].projectList![index].name ?? '-',
                               ),
                             ),
                           ],
@@ -178,13 +240,12 @@ class _ProjectCard extends StatelessWidget {
                               //   widget.model.companyName,
                               //   style: AppStyles.poppins.copyWith(color: Colors.grey[800], fontSize: 12.w, overflow: TextOverflow.ellipsis),
                               // ),
-                              child: const MyTextWidget(
-                                // text: widget.model?.data1 == null || widget.model!.data1!.isEmpty || widget.model!.data1![0].contacts!.isEmpty
-                                //     ? '-'
-                                //     : widget.model?.data1![0].contacts![widget.index].company == ''
-                                //         ? '-'
-                                //         : widget.model?.data1![0].contacts![widget.index].company ?? '-',
-                                text: 'Hakkeem Neerad',
+                              child: MyTextWidget(
+                                text: model?.data == null || model!.data!.isEmpty || model!.data![0].projectList!.isEmpty
+                                    ? '-'
+                                    : model?.data![0].projectList![index].contactName == ''
+                                        ? '-'
+                                        : model?.data![0].projectList![index].contactName ?? '-',
                               ),
                             ),
                           ],
@@ -211,13 +272,12 @@ class _ProjectCard extends StatelessWidget {
                                   //   widget.model.email,
                                   //   style: AppStyles.poppins.copyWith(color: Colors.grey[800], fontSize: 12.w, overflow: TextOverflow.ellipsis),
                                   // ),
-                                  child: const MyTextWidget(
-                                    // text: widget.model?.data1 == null || widget.model!.data1!.isEmpty || widget.model!.data1![0].contacts!.isEmpty
-                                    //     ? '-'
-                                    //     : widget.model?.data1![0].contacts![widget.index].email == ''
-                                    //         ? '-'
-                                    //         : widget.model?.data1![0].contacts![widget.index].email ?? '-',
-                                    text: '1000 AED',
+                                  child: MyTextWidget(
+                                    text: model?.data == null || model!.data!.isEmpty || model!.data![0].projectList!.isEmpty
+                                        ? '-'
+                                        : model?.data![0].projectList![index].quotationName == ''
+                                            ? '-'
+                                            : model?.data![0].projectList![index].quotationName ?? '-',
                                     isRightItem: true,
                                   ),
                                 ),
@@ -235,15 +295,10 @@ class _ProjectCard extends StatelessWidget {
                                 // SizedBox(width: 5.w),
                                 Container(
                                   padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
-                                  decoration: BoxDecoration(color: _statusColor('Active'), borderRadius: BorderRadius.circular(15.r)),
+                                  decoration: BoxDecoration(color: _statusColor(status: status), borderRadius: BorderRadius.circular(15.r)),
                                   child: Text(
-                                    // '971522627165',
-                                    // widget.model?.data1 == null || widget.model!.data1!.isEmpty || widget.model!.data1![0].contacts!.isEmpty
-                                    //     ? '-'
-                                    //     : widget.model?.data1![0].contacts![widget.index].mobile == ''
-                                    //         ? '-'
-                                    //         : widget.model?.data1![0].contacts![widget.index].mobile ?? '-',
-                                    'Active',
+                                    status,
+                                    // 'Active',
                                     // style: GoogleFonts.poppins().copyWith(color: Colors.grey[800], fontSize: 12.w),
                                     style: GoogleFonts.poppins().copyWith(color: Colors.white, fontSize: 10.w),
                                   ),
@@ -422,15 +477,17 @@ class _ProjectCard extends StatelessWidget {
     );
   }
 
-  Color? _statusColor(status) {
+  Color? _statusColor({required String status}) {
     if (status == 'Active') {
       return Colors.green[600];
     } else if (status == 'Inactive') {
       return Colors.red;
     } else if (status == 'On Hold') {
       return Colors.purple[600];
-    } else {
+    } else if (status == 'Completed') {
       return Colors.blue[600];
+    } else {
+      return Colors.green[600];
     }
   }
 }
