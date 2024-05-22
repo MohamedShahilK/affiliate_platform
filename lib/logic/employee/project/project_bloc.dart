@@ -4,6 +4,7 @@ import 'package:affiliate_platform/models/employee/project/get_all_projects.dart
 import 'package:affiliate_platform/models/manage_contact/contact_form_model.dart';
 import 'package:affiliate_platform/models/manage_contact/contact_view_model.dart';
 import 'package:affiliate_platform/services/employee/project/project_services.dart';
+import 'package:affiliate_platform/services/manage_contact/manage_contact_services.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ProjectBloc {
@@ -11,29 +12,40 @@ class ProjectBloc {
     initDetails();
   }
 
+  // final projectNameStream = BehaviorSubject<String>.seeded('');
+  // final clientStream = BehaviorSubject<String>.seeded('');
+  // final quotationStream = BehaviorSubject<String>.seeded('');
+  // final statusStream = BehaviorSubject<String>.seeded('');
+  // final startDateStream = BehaviorSubject<String>.seeded('');
+  // final endDateStream = BehaviorSubject<String>.seeded('');
+  // final descriptionStream = BehaviorSubject<String>.seeded('');
+
   final getAllProjectsStream = BehaviorSubject<GetAllProjects?>();
   final getContactFormStream = BehaviorSubject<ContactFormModel?>();
   final getContactViewStream = BehaviorSubject<ContactViewModel?>();
 
-  final projectNameStream = BehaviorSubject<String>.seeded('');
-  final clientStream = BehaviorSubject<String>.seeded('');
-  final quotationStream = BehaviorSubject<String>.seeded('');
-  final statusStream = BehaviorSubject<String>.seeded('');
-  final startDateStream = BehaviorSubject<String>.seeded('');
-  final endDateStream = BehaviorSubject<String>.seeded('');
-  final descriptionStream = BehaviorSubject<String>.seeded('');
+  final nameStream = BehaviorSubject<String>.seeded('');
+  final mobileStream = BehaviorSubject<String>.seeded('');
+  final emailStream = BehaviorSubject<String>.seeded('');
+  // final sourceStream = BehaviorSubject<String>.seeded('');
+  final designationStream = BehaviorSubject<String>.seeded('');
+  final companyNameStream = BehaviorSubject<String>.seeded('');
+  final landlineStream = BehaviorSubject<String>.seeded('');
+  final websiteStream = BehaviorSubject<String>.seeded('');
+  final companyLocationStream = BehaviorSubject<String>.seeded('');
+  final companyAddressStream = BehaviorSubject<String>.seeded('');
+  final remarkStream = BehaviorSubject<String>.seeded('');
 
+  final contactTypeStream = BehaviorSubject<String>.seeded('');
+  final contactTypeIdStream = BehaviorSubject<String>.seeded('');
+  final contactSourceStream = BehaviorSubject<String>.seeded('');
+  final contactSourceIdStream = BehaviorSubject<String>.seeded('');
 
-  // final contactTypeStream = BehaviorSubject<String>.seeded('');
-  // final contactTypeIdStream = BehaviorSubject<String>.seeded('');
-  // final contactSourceStream = BehaviorSubject<String>.seeded('');
-  // final contactSourceIdStream = BehaviorSubject<String>.seeded('');
+  final permissionStream = BehaviorSubject<List<String>>.seeded([]);
 
-  // final permissionStream = BehaviorSubject<List<String>>.seeded([]);
-
-  // final followupTitleStream = BehaviorSubject<String>.seeded('');
-  // final followupDescriptionStream = BehaviorSubject<String>.seeded('');
-  // final followupDateStream = BehaviorSubject<String>.seeded('');
+  final followupTitleStream = BehaviorSubject<String>.seeded('');
+  final followupDescriptionStream = BehaviorSubject<String>.seeded('');
+  final followupDateStream = BehaviorSubject<String>.seeded('');
 
   Future<void> initDetails() async {
     await getAllProjects();
@@ -45,10 +57,10 @@ class ProjectBloc {
     getAllProjectsStream.add(respModel);
   }
 
-  // Future<void> getContactForm() async {
-  //   final respModel = await ManageContactSevices().getContactForm();
-  //   getContactFormStream.add(respModel);
-  // }
+  Future<void> getContactForm() async {
+    final respModel = await ManageContactSevices().getContactForm();
+    getContactFormStream.add(respModel);
+  }
 
   // Future<void> viewContact({required String contactId}) async {
   //   getContactViewStream.add(null);
@@ -121,7 +133,6 @@ class ProjectBloc {
   //   return isFollowUpDelete;
   // }
 
-
   // Future<bool> editFollowup({required String contactId, required String followupId}) async {
   //   var isFollowUpAdded = false;
 
@@ -139,7 +150,6 @@ class ProjectBloc {
 
   //   return isFollowUpAdded;
   // }
-
 
   // Future<ContactViewModel?> submitForm() async {
   //   final respModel = ManageContactSevices().submitForm(

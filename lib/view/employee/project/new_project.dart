@@ -1,6 +1,7 @@
 // ignore_for_file: lines_longer_than_80_chars, use_build_context_synchronously
 
 import 'package:affiliate_platform/config/ripple.dart';
+import 'package:affiliate_platform/logic/employee/project/project_bloc.dart';
 import 'package:affiliate_platform/logic/manage_contact/manage_contact_bloc.dart';
 import 'package:affiliate_platform/models/manage_contact/contact_form_model.dart';
 import 'package:affiliate_platform/models/manage_contact/contact_view_model.dart';
@@ -67,7 +68,7 @@ class _NewProjectState extends State<NewProject> {
 
   @override
   Widget build(BuildContext context) {
-    final bloc = Provider.of<ManageContactBloc>(context);
+    final bloc = Provider.of<ProjectBloc>(context);
 
     return CustomScaffold(
       haveFloatingButton: false,
