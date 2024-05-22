@@ -8,6 +8,8 @@ part 'view_project.g.dart';
 class ProjectView {
   ProjectView({required this.status, required this.response, required this.data});
 
+    factory ProjectView.fromJson(Map<String, dynamic> json) => _$ProjectViewFromJson(json);
+
   final String? status;
   final String? response;
   final List<Data>? data;

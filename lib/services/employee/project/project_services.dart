@@ -5,6 +5,7 @@ import 'package:affiliate_platform/api/api_contants.dart';
 import 'package:affiliate_platform/api/api_errror_handling.dart';
 import 'package:affiliate_platform/models/employee/project/get_all_projects.dart';
 import 'package:affiliate_platform/models/employee/project/project_form.dart';
+import 'package:affiliate_platform/models/employee/project/view_project.dart';
 import 'package:affiliate_platform/models/manage_contact/all_contacts.dart';
 import 'package:affiliate_platform/models/manage_contact/contact_edit_submission_model.dart';
 import 'package:affiliate_platform/models/manage_contact/contact_form_model.dart';
@@ -87,7 +88,7 @@ class ProjectServices {
   }
 
   // Get Contact Form
-  Future<ContactViewModel?> viewProject({required String contactId}) async {
+  Future<ProjectView?> viewProject({required String contactId}) async {
     try {
       final token = StorageServices.to.getString(StorageServicesKeys.token);
       final haveToken = token.isNotEmpty;
@@ -97,16 +98,16 @@ class ProjectServices {
             headers: {
               // 'accept': '*/*',
               'Content-Type': 'application/json',
-              'Authorization': 'Bearer ${token}',
+              'Authorization': 'Bearer $token',
             },
           ),
           // queryParameters: {'id':contactId},
-          '${EndPoints.contactView}/$contactId',
+          '${EndPoints.projectView}/$contactId',
         );
 
         print('55555555555555555555555 ${response!.data}');
 
-        final respModel = ContactViewModel.fromJson(response!.data ?? {});
+        final respModel = ProjectView.fromJson(response!.data ?? {});
 
         return respModel;
       }

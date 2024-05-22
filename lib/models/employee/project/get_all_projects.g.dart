@@ -19,7 +19,7 @@ Data _$DataFromJson(Map<String, dynamic> json) => Data(
       userDesignation: json['user_designation'] as String?,
       keywordSearch: json['keyword_search'] as String?,
       statusSearch: json['status_search'] as int?,
-      userID: json['user_iD'] as String?,
+      userID: json['user_ID'] as String?,
       projectStatus: (json['project_status'] as List<dynamic>?)?.map((e) => e as String).toList(),
       projectList: (json['project_list'] as List<dynamic>?)?.map((e) => _$ProjectListFromJson(e as Map<String, dynamic>)).toList(),
     );

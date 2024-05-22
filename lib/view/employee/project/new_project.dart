@@ -4,6 +4,7 @@ import 'package:affiliate_platform/config/ripple.dart';
 import 'package:affiliate_platform/logic/employee/project/project_bloc.dart';
 import 'package:affiliate_platform/logic/manage_contact/manage_contact_bloc.dart';
 import 'package:affiliate_platform/models/employee/project/project_form.dart';
+import 'package:affiliate_platform/models/employee/project/view_project.dart';
 import 'package:affiliate_platform/models/manage_contact/contact_form_model.dart';
 import 'package:affiliate_platform/models/manage_contact/contact_view_model.dart';
 import 'package:affiliate_platform/utils/constants/styles.dart';
@@ -187,7 +188,7 @@ class _NewProjectState extends State<NewProject> {
                       }
 
                       return StreamBuilder(
-                        stream: bloc.getContactViewStream,
+                        stream: bloc.getProjectViewStream,
                         builder: (context, getContactViewStreamsnapshot) {
                           // if (!getContactViewStreamsnapshot.hasData && !loading) {
                           //   // Loader.hide();
@@ -233,7 +234,7 @@ class _NewProjectState extends State<NewProject> {
                           //   );
                           // }
 
-                          ContactViewModel? contactViewRespModel;
+                          ProjectView? contactViewRespModel;
 
                           // if (getContactViewStreamsnapshot.connectionState == ConnectionState.waiting) {
                           //   return CircularProgressIndicator();
@@ -244,14 +245,14 @@ class _NewProjectState extends State<NewProject> {
                             // print('3333333333333333333333333333 ${contactViewRespModel}');
 
                             if (contactViewRespModel != null && contactViewRespModel.data != null && contactViewRespModel.data!.isNotEmpty) {
-                              final contact = contactViewRespModel.data?[0].contact;
+                              final project = contactViewRespModel.data?[0].projects;
 
-                              if (contact != null) {
-                                if (bloc.nameStream.value == '' && contact.name != null && contact.name != '') {
-                                  bloc.nameStream.add(contact.name ?? '');
+                              if (project != null) {
+                                if (bloc.projectNameStream.value == '' && project.name != null && project.name != '') {
+                                  bloc.projectNameStream.add(project.name ?? '');
                                 }
 
-                                if (contact.contactType != null && (contact.contactType != '' || contact.contactType != '0')) {
+                                if (project.contactType != null && (project.contactType != '' || project.contactType != '0')) {
                                   // final type =
                                   //     snapshot.data!.data![0].contactType!.values.toList(growable: false).where((e) => (e as String) == contact.contactType).toList().first as String?;
 
