@@ -3,6 +3,7 @@
 import 'package:affiliate_platform/config/ripple.dart';
 import 'package:affiliate_platform/logic/employee/project/project_bloc.dart';
 import 'package:affiliate_platform/logic/manage_contact/manage_contact_bloc.dart';
+import 'package:affiliate_platform/models/employee/project/project_form.dart';
 import 'package:affiliate_platform/models/manage_contact/contact_form_model.dart';
 import 'package:affiliate_platform/models/manage_contact/contact_view_model.dart';
 import 'package:affiliate_platform/utils/constants/styles.dart';
@@ -135,7 +136,7 @@ class _NewProjectState extends State<NewProject> {
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 12.h),
                   child: StreamBuilder(
-                    stream: bloc.getContactFormStream,
+                    stream: bloc.getProjectFormStream,
                     builder: (context, snapshot) {
                       if (snapshot.hasError) {
                         Loader.hide();
@@ -176,13 +177,13 @@ class _NewProjectState extends State<NewProject> {
                         );
                       }
 
-                      ContactFormModel? allContactsRespModel;
+                      ProjectForm? allContactsRespModel;
 
                       if (snapshot.hasData) {
                         allContactsRespModel = snapshot.data;
-                        if (allContactsRespModel!.data![0].contactType != null) {
-                          // print('22222222222222222222222222222222222 ${allContactsRespModel.data![0].contactType!.values.toList(growable: false)}');
-                        }
+                        // if (allContactsRespModel!.data![0].contactType != null) {
+                        //   // print('22222222222222222222222222222222222 ${allContactsRespModel.data![0].contactType!.values.toList(growable: false)}');
+                        // }
                       }
 
                       return StreamBuilder(

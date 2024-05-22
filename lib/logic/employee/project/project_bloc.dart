@@ -1,6 +1,7 @@
 // ignore_for_file: lines_longer_than_80_chars
 
 import 'package:affiliate_platform/models/employee/project/get_all_projects.dart';
+import 'package:affiliate_platform/models/employee/project/project_form.dart';
 import 'package:affiliate_platform/models/manage_contact/contact_form_model.dart';
 import 'package:affiliate_platform/models/manage_contact/contact_view_model.dart';
 import 'package:affiliate_platform/services/employee/project/project_services.dart';
@@ -21,7 +22,7 @@ class ProjectBloc {
   // final descriptionStream = BehaviorSubject<String>.seeded('');
 
   final getAllProjectsStream = BehaviorSubject<GetAllProjects?>();
-  final getContactFormStream = BehaviorSubject<ContactFormModel?>();
+  final getProjectFormStream = BehaviorSubject<ProjectForm?>();
   final getContactViewStream = BehaviorSubject<ContactViewModel?>();
 
   final nameStream = BehaviorSubject<String>.seeded('');
@@ -53,13 +54,13 @@ class ProjectBloc {
   }
 
   Future<void> getAllProjects() async {
-    final respModel = await ProjectServices().getAllContacts();
+    final respModel = await ProjectServices().getAllProjects();
     getAllProjectsStream.add(respModel);
   }
 
   Future<void> getContactForm() async {
-    final respModel = await ManageContactSevices().getContactForm();
-    getContactFormStream.add(respModel);
+    final respModel = await ProjectServices().getProjectForm();
+    getProjectFormStream.add(respModel);
   }
 
   // Future<void> viewContact({required String contactId}) async {

@@ -6,25 +6,22 @@ import 'package:affiliate_platform/models/employee/project/get_all_projects.dart
 import 'package:affiliate_platform/utils/constants/styles.dart';
 import 'package:affiliate_platform/view/common/custom_header.dart';
 import 'package:affiliate_platform/view/common/custom_scafflod.dart';
-import 'package:affiliate_platform/view/common/sidebar.dart';
 import 'package:affiliate_platform/view/employee/project/new_project.dart';
-import 'package:affiliate_platform/view/employee/project/view_project.dart';
 import 'package:affiliate_platform/view/manage_contact/manage_contact.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-class ProjectPage extends StatefulWidget {
-  const ProjectPage({super.key});
+class CheckInPage extends StatefulWidget {
+  const CheckInPage({super.key});
 
   @override
-  State<ProjectPage> createState() => _ProjectPageState();
+  State<CheckInPage> createState() => _CheckInPageState();
 }
 
-class _ProjectPageState extends State<ProjectPage> {
+class _CheckInPageState extends State<CheckInPage> {
   var _refreshKey = UniqueKey();
 
   // To update or hot reload
@@ -134,9 +131,7 @@ class _ProjectPageState extends State<ProjectPage> {
                           padding: EdgeInsets.only(top: 30.h, bottom: 5.h, left: 20.w, right: 20.w),
                           child: Column(
                             children: List.generate(
-                              (allProjectsRespModel == null) ? 5 : allProjectsRespModel.data![0].projectList!.length,
-                              (index) => _ProjectCard(index: index, model: allProjectsRespModel),
-                            ),
+                                (allProjectsRespModel == null) ? 5 : allProjectsRespModel.data![0].projectList!.length, (index) => _ProjectCard(index: index, model: allProjectsRespModel)),
                           ),
                         ),
                       );
@@ -187,12 +182,24 @@ class _ProjectCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  // 'Giridhar | Qtn2015',
-                  'Project #${index + 1}',
-                  // '1',
-                  style: AppStyles.poppins.copyWith(color: Colors.grey[800], fontSize: 9.w, fontWeight: FontWeight.w900),
+                Row(
+                  children: [
+                    Text(
+                      // 'Giridhar | Qtn2015',
+                      'Project #${index + 1}',
+                      // '1',
+                      style: AppStyles.poppins.copyWith(color: Colors.grey[800], fontSize: 9.w, fontWeight: FontWeight.w900),
+                    ),
+                    const Spacer(),
+                    Text(
+                      // 'Giridhar | Qtn2015',
+                      'No. of Projects : 2',
+                      // '1',
+                      style: AppStyles.poppins.copyWith(color: Colors.grey[800], fontSize: 11.w, fontWeight: FontWeight.w900),
+                    ),
+                  ],
                 ),
+                const SizedBox(height: 5),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -206,7 +213,7 @@ class _ProjectCard extends StatelessWidget {
                             //   'Name: ',
                             //   style: TextStyle(fontWeight: FontWeight.w900, color: Colors.grey[800], fontSize: 12.w),
                             // ),
-                            Icon(Icons.book_outlined, size: 17.w, color: Colors.purple[400]),
+                            Icon(Icons.person_2_outlined, size: 17.w, color: Colors.purple[400]),
                             SizedBox(width: 5.w),
                             SizedBox(
                               width: 90.w,
@@ -215,12 +222,13 @@ class _ProjectCard extends StatelessWidget {
                               //   widget.name,
                               //   style: AppStyles.poppins.copyWith(color: Colors.grey[800], fontSize: 12.w, overflow: TextOverflow.ellipsis),
                               // ),
-                              child: MyTextWidget(
-                                text: model?.data == null || model!.data!.isEmpty || model!.data![0].projectList!.isEmpty
-                                    ? '-'
-                                    : model?.data![0].projectList![index].name == ''
-                                        ? '-'
-                                        : model?.data![0].projectList![index].name ?? '-',
+                              child: const MyTextWidget(
+                                // text: model?.data == null || model!.data!.isEmpty || model!.data![0].projectList!.isEmpty
+                                //     ? '-'
+                                //     : model?.data![0].projectList![index].name == ''
+                                //         ? '-'
+                                //         : model?.data![0].projectList![index].name ?? '-',
+                                text: 'Shahil',
                               ),
                             ),
                           ],
@@ -233,7 +241,7 @@ class _ProjectCard extends StatelessWidget {
                             //   'Company Name: ',
                             //   style: AppStyles.poppins.copyWith(fontWeight: FontWeight.w900, color: Colors.grey[800], fontSize: 12.w),
                             // ),
-                            Icon(Icons.person_2_outlined, size: 17.w, color: Colors.purple[400]),
+                            Icon(Icons.av_timer_sharp, size: 17.w, color: Colors.purple[400]),
                             SizedBox(width: 5.w),
                             SizedBox(
                               width: 90.w,
@@ -242,12 +250,13 @@ class _ProjectCard extends StatelessWidget {
                               //   widget.model.companyName,
                               //   style: AppStyles.poppins.copyWith(color: Colors.grey[800], fontSize: 12.w, overflow: TextOverflow.ellipsis),
                               // ),
-                              child: MyTextWidget(
-                                text: model?.data == null || model!.data!.isEmpty || model!.data![0].projectList!.isEmpty
-                                    ? '-'
-                                    : model?.data![0].projectList![index].contactName == ''
-                                        ? '-'
-                                        : model?.data![0].projectList![index].contactName ?? '-',
+                              child: const MyTextWidget(
+                                // text: model?.data == null || model!.data!.isEmpty || model!.data![0].projectList!.isEmpty
+                                //     ? '-'
+                                //     : model?.data![0].projectList![index].contactName == ''
+                                //         ? '-'
+                                //         : model?.data![0].projectList![index].contactName ?? '-',
+                                text: '22-05-2024 09:51 AM',
                               ),
                             ),
                           ],
@@ -265,8 +274,8 @@ class _ProjectCard extends StatelessWidget {
                                 //   'Name: ',
                                 //   style: AppStyles.poppins.copyWith(fontWeight: FontWeight.w900, color: Colors.grey[800], fontSize: 12.w),
                                 // ),
-                                // Icon(Icons.email_outlined, size: 17.w),
-                                // SizedBox(width: 5.w),
+                                Icon(Icons.timer_outlined, size: 17.w, color: Colors.purple[400]),
+                                SizedBox(width: 5.w),
                                 SizedBox(
                                   width: 70.w,
                                   // child: Text(
@@ -274,12 +283,13 @@ class _ProjectCard extends StatelessWidget {
                                   //   widget.model.email,
                                   //   style: AppStyles.poppins.copyWith(color: Colors.grey[800], fontSize: 12.w, overflow: TextOverflow.ellipsis),
                                   // ),
-                                  child: MyTextWidget(
-                                    text: model?.data == null || model!.data!.isEmpty || model!.data![0].projectList!.isEmpty
-                                        ? '-'
-                                        : model?.data![0].projectList![index].quotationName == ''
-                                            ? '-'
-                                            : model?.data![0].projectList![index].quotationName ?? '-',
+                                  child: const MyTextWidget(
+                                    // text: model?.data == null || model!.data!.isEmpty || model!.data![0].projectList!.isEmpty
+                                    //     ? '-'
+                                    //     : model?.data![0].projectList![index].quotationName == ''
+                                    //         ? '-'
+                                    //         : model?.data![0].projectList![index].quotationName ?? '-',
+                                    text: '08:30:00',
                                     isRightItem: true,
                                   ),
                                 ),
@@ -290,19 +300,26 @@ class _ProjectCard extends StatelessWidget {
                             Row(
                               children: [
                                 // Text(
-                                //   'Company Name: ',
+                                //   'Name: ',
                                 //   style: AppStyles.poppins.copyWith(fontWeight: FontWeight.w900, color: Colors.grey[800], fontSize: 12.w),
                                 // ),
-                                // Icon(Icons., size: 17.w),
-                                // SizedBox(width: 5.w),
-                                Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
-                                  decoration: BoxDecoration(color: _statusColor(status: status), borderRadius: BorderRadius.circular(15.r)),
-                                  child: Text(
-                                    status,
-                                    // 'Active',
-                                    // style: GoogleFonts.poppins().copyWith(color: Colors.grey[800], fontSize: 12.w),
-                                    style: GoogleFonts.poppins().copyWith(color: Colors.white, fontSize: 10.w),
+                                Icon(Icons.business, size: 17.w, color: Colors.purple[400]),
+                                SizedBox(width: 5.w),
+                                SizedBox(
+                                  width: 70.w,
+                                  // child: Text(
+                                  //   // 'info@sgtf.ae',
+                                  //   widget.model.email,
+                                  //   style: AppStyles.poppins.copyWith(color: Colors.grey[800], fontSize: 12.w, overflow: TextOverflow.ellipsis),
+                                  // ),
+                                  child: const MyTextWidget(
+                                    // text: model?.data == null || model!.data!.isEmpty || model!.data![0].projectList!.isEmpty
+                                    //     ? '-'
+                                    //     : model?.data![0].projectList![index].quotationName == ''
+                                    //         ? '-'
+                                    //         : model?.data![0].projectList![index].quotationName ?? '-',
+                                    text: 'Office',
+                                    isRightItem: true,
                                   ),
                                 ),
                               ],
@@ -311,70 +328,70 @@ class _ProjectCard extends StatelessWidget {
                         ),
 
                         //
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            _EachProjectSmallButtons(
-                              color: Colors.green[900]!,
-                              icon: Icons.edit_outlined,
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const NewProject(),
-                                  ),
-                                );
-                              },
-                            ),
-                            SizedBox(height: 3.h),
-                            _EachProjectSmallButtons(
-                              color: Colors.blue[400]!,
-                              icon: Icons.remove_red_eye_outlined,
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const ViewProject(),
-                                  ),
-                                );
-                              },
-                            ),
-                            SizedBox(height: 3.h),
-                            _EachProjectSmallButtons(
-                              color: Colors.red[400]!,
-                              icon: Icons.delete_outline_outlined,
-                              onTap: () {},
-                            ),
-                          ],
-                        ),
+                        // Column(
+                        //   mainAxisAlignment: MainAxisAlignment.end,
+                        //   children: [
+                        //     _EachProjectSmallButtons(
+                        //       color: Colors.green[900]!,
+                        //       icon: Icons.edit_outlined,
+                        //       onTap: () {
+                        //         Navigator.push(
+                        //           context,
+                        //           MaterialPageRoute(
+                        //             builder: (context) => const NewProject(),
+                        //           ),
+                        //         );
+                        //       },
+                        //     ),
+                        //     SizedBox(height: 3.h),
+                        //     _EachProjectSmallButtons(
+                        //       color: Colors.blue[400]!,
+                        //       icon: Icons.remove_red_eye_outlined,
+                        //       onTap: () {
+                        //         Navigator.push(
+                        //           context,
+                        //           MaterialPageRoute(
+                        //             builder: (context) => const ViewProject(),
+                        //           ),
+                        //         );
+                        //       },
+                        //     ),
+                        //     SizedBox(height: 3.h),
+                        //     _EachProjectSmallButtons(
+                        //       color: Colors.red[400]!,
+                        //       icon: Icons.delete_outline_outlined,
+                        //       onTap: () {},
+                        //     ),
+                        //   ],
+                        // ),
                       ],
                     ),
                   ],
                 ),
 
-                //  SizedBox(height: 15.h),
+                SizedBox(height: 15.h),
 
-                //     //
-                //     Column(
-                //       mainAxisAlignment: MainAxisAlignment.end,
-                //       children: [
-                //         _EachProjectSmallButtons(
-                //           color: Colors.green[900]!,
-                //           icon: Icons.edit_outlined,
-                //           onTap: () {},
-                //         ),
-                //         _EachProjectSmallButtons(
-                //           color: Colors.blue[400]!,
-                //           icon: Icons.remove_red_eye_outlined,
-                //           onTap: () {},
-                //         ),
-                //         _EachProjectSmallButtons(
-                //           color: Colors.red[400]!,
-                //           icon: Icons.delete_outline_outlined,
-                //           onTap: () {},
-                //         ),
-                //       ],
-                //     )
+                //
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    _EachProjectSmallButtons(
+                      color: Colors.green[900]!,
+                      icon: Icons.edit_outlined,
+                      onTap: () {},
+                    ),
+                    _EachProjectSmallButtons(
+                      color: Colors.blue[400]!,
+                      icon: Icons.remove_red_eye_outlined,
+                      onTap: () {},
+                    ),
+                    _EachProjectSmallButtons(
+                      color: Colors.red[400]!,
+                      icon: Icons.delete_outline_outlined,
+                      onTap: () {},
+                    ),
+                  ],
+                )
               ],
             ),
           ),
@@ -512,15 +529,15 @@ class _EachProjectSmallButtons extends StatelessWidget {
         Container(
           padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 3.h),
           decoration: BoxDecoration(
-            // color: color,
-            color: Colors.purple[400],
+            // color: Colors.purple[400],
+            border: Border.all(color: Colors.purple[400]!),
             // borderRadius: BorderRadius.only(topRight: Radius.circular(15.r), bottomLeft: Radius.circular(15.r)),
             shape: BoxShape.circle,
           ),
           child: Icon(
             icon,
             size: 16.w,
-            color: Colors.white,
+            color: Colors.purple[400],
           ),
         ),
         SizedBox(width: 5.w),

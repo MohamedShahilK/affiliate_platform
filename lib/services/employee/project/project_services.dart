@@ -4,6 +4,7 @@ import 'package:affiliate_platform/api/api.dart';
 import 'package:affiliate_platform/api/api_contants.dart';
 import 'package:affiliate_platform/api/api_errror_handling.dart';
 import 'package:affiliate_platform/models/employee/project/get_all_projects.dart';
+import 'package:affiliate_platform/models/employee/project/project_form.dart';
 import 'package:affiliate_platform/models/manage_contact/all_contacts.dart';
 import 'package:affiliate_platform/models/manage_contact/contact_edit_submission_model.dart';
 import 'package:affiliate_platform/models/manage_contact/contact_form_model.dart';
@@ -26,7 +27,7 @@ class ProjectServices {
   final api = Api();
 
   // Get All Contacts
-  Future<GetAllProjects?> getAllContacts() async {
+  Future<GetAllProjects?> getAllProjects() async {
     try {
       final token = StorageServices.to.getString(StorageServicesKeys.token);
       final haveToken = token.isNotEmpty;
@@ -56,7 +57,7 @@ class ProjectServices {
   }
 
   // Get Contact Form
-  Future<ContactFormModel?> getProjectForm() async {
+  Future<ProjectForm?> getProjectForm() async {
     try {
       final token = StorageServices.to.getString(StorageServicesKeys.token);
       final haveToken = token.isNotEmpty;
@@ -70,10 +71,10 @@ class ProjectServices {
             },
           ),
           // queryParameters: {},
-          EndPoints.contactForm,
+          EndPoints.projectForm,
         );
 
-        final respModel = ContactFormModel.fromJson(response!.data ?? {});
+        final respModel = ProjectForm.fromJson(response!.data ?? {});
 
         return respModel;
       }
@@ -86,7 +87,7 @@ class ProjectServices {
   }
 
   // Get Contact Form
-  Future<ContactViewModel?> viewContact({required String contactId}) async {
+  Future<ContactViewModel?> viewProject({required String contactId}) async {
     try {
       final token = StorageServices.to.getString(StorageServicesKeys.token);
       final haveToken = token.isNotEmpty;
