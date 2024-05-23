@@ -336,7 +336,7 @@ class _ProjectCard extends StatelessWidget {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => const ViewProject(),
+                                    builder: (context) =>  ViewProject(contactId: contactId),
                                   ),
                                 );
                               },

@@ -249,9 +249,11 @@ class _NewProjectState extends State<NewProject> {
                               final project = contactViewRespModel.data?[0].projects;
 
                               if (project != null) {
-                                if (bloc.projectNameStream.value == '' && project.name != null && project.name != '') {
-                                  // if (project.name != null && project.name != '') {
+                                // if (bloc.projectNameStream.value == '' && project.name != null && project.name != '') {                                 
+                                if (project.name != null && project.name != '') {
                                   bloc.projectNameStream.add(project.name ?? '');
+                                } else {
+                                  bloc.projectNameStream.add('');
                                 }
 
                                 if (project.contactName != null && (project.contactName != '')) {
@@ -329,6 +331,8 @@ class _NewProjectState extends State<NewProject> {
                                 if (project.description != null && project.description != '') {
                                   bloc.descriptionStream.add(project.description ?? '');
                                 }
+                              }else{
+                                bloc.projectNameStream.add('');
                               }
                             }
                           }
@@ -672,7 +676,7 @@ class _NewContactDropDownState extends State<NewContactDropDown> {
                           widget.textStream.add('');
                         } else {
                           // selectedValue = value!;
-                          widget.textStream.add(data);
+                          widget.textStream.add(value!);
                         }
                       });
                     },

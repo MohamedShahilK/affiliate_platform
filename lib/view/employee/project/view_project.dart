@@ -1,6 +1,8 @@
 // ignore_for_file: lines_longer_than_80_chars, invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
 
 import 'package:affiliate_platform/config/ripple.dart';
+import 'package:affiliate_platform/logic/employee/project/project_bloc.dart';
+import 'package:affiliate_platform/logic/employee/project/project_bloc.dart';
 import 'package:affiliate_platform/logic/manage_contact/manage_contact_bloc.dart';
 import 'package:affiliate_platform/models/manage_contact/contact_view_model.dart';
 import 'package:affiliate_platform/utils/constants/styles.dart';
@@ -21,11 +23,11 @@ ValueNotifier<List<List<String?>?>?> affUsersHavePerm = ValueNotifier([]);
 
 class ViewProject extends StatefulWidget {
   const ViewProject({
-    // required this.contactId,
+     this.contactId,
     super.key,
   });
 
-  // final String contactId;
+  final String? contactId;
 
   @override
   State<ViewProject> createState() => _ViewProjectState();
@@ -33,7 +35,7 @@ class ViewProject extends StatefulWidget {
 
 class _ViewProjectState extends State<ViewProject> {
   var _refreshKey = UniqueKey();
-  ManageContactBloc? manageContactBloc;
+  ProjectBloc? projectBloc;
 
   bool loading = true;
 
@@ -47,16 +49,16 @@ class _ViewProjectState extends State<ViewProject> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // manageContactBloc ??= Provider.of<ManageContactBloc>(context);
-    // manageContactBloc!.viewContact(contactId: widget.contactId).then(
-    //       (value) => setState(() {
-    //         loading = false;
-    //       }),
-    //     );
+    projectBloc ??= Provider.of<ProjectBloc>(context);
+    projectBloc!.viewProject(contactId: widget.contactId!).then(
+          (value) => setState(() {
+            loading = false;
+          }),
+        );
 
-    setState(() {
-      loading = false;
-    });
+    // setState(() {
+    //   loading = false;
+    // });
   }
 
   // To update or hot reload
@@ -65,7 +67,7 @@ class _ViewProjectState extends State<ViewProject> {
       });
   @override
   Widget build(BuildContext context) {
-    final bloc = Provider.of<ManageContactBloc>(context);
+    final bloc = Provider.of<ProjectBloc>(context);
     return CustomScaffold(
       key: _refreshKey,
       haveFloatingButton: false,
@@ -84,52 +86,52 @@ class _ViewProjectState extends State<ViewProject> {
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 16.h),
                     child: StreamBuilder(
-                      stream: bloc.getContactViewStream,
+                      stream: bloc.getProjectViewStream,
                       builder: (context, getContactViewStreamsnapshot) {
-                        //  if (!getContactViewStreamsnapshot.hasData ) {
-                        //     Loader.hide();
-                        //     return Expanded(
-                        //       child: Center(
-                        //         child: Column(
-                        //           mainAxisAlignment: MainAxisAlignment.center,
-                        //           children: [
-                        //             Text(
-                        //               'Something went wrong',
-                        //               style: TextStyle(fontSize: 16.w),
-                        //             ),
-                        //             SizedBox(height: 30.h),
-                        //             Container(
-                        //               padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 8.h),
-                        //               decoration: BoxDecoration(
-                        //                 border: Border.all(color: Colors.purple[100]!),
-                        //                 borderRadius: BorderRadius.circular(15.r),
-                        //               ),
-                        //               child: Row(
-                        //                 mainAxisSize: MainAxisSize.min,
-                        //                 mainAxisAlignment: MainAxisAlignment.center,
-                        //                 children: [
-                        //                   Icon(Icons.refresh, size: 17.w),
-                        //                   SizedBox(width: 5.w),
-                        //                   Text('Refreshee', style: TextStyle(fontSize: 15.w)),
-                        //                 ],
-                        //               ),
-                        //             ).ripple(
-                        //               context,
-                        //               () async {
-                        //                 if (widget.contactId != null) {
-                        //                   await bloc.viewContact(contactId: widget.contactId!);
-                        //                 }
-                        //               },
-                        //               borderRadius: BorderRadius.circular(15.r),
-                        //               overlayColor: Colors.purple.withOpacity(.15),
-                        //             ),
-                        //           ],
-                        //         ),
-                        //       ),
-                        //     );
-                        //   }
+                         if (!getContactViewStreamsnapshot.hasData && !loading) {
+                            Loader.hide();
+                            return Expanded(
+                              child: Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Something went wrong',
+                                      style: TextStyle(fontSize: 16.w),
+                                    ),
+                                    SizedBox(height: 30.h),
+                                    Container(
+                                      padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 8.h),
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.purple[100]!),
+                                        borderRadius: BorderRadius.circular(15.r),
+                                      ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Icon(Icons.refresh, size: 17.w),
+                                          SizedBox(width: 5.w),
+                                          Text('Refreshee', style: TextStyle(fontSize: 15.w)),
+                                        ],
+                                      ),
+                                    ).ripple(
+                                      context,
+                                      () async {
+                                        if (widget.contactId != null) {
+                                          await bloc.viewProject(contactId: widget.contactId!);
+                                        }
+                                      },
+                                      borderRadius: BorderRadius.circular(15.r),
+                                      overlayColor: Colors.purple.withOpacity(.15),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }
                         final data = getContactViewStreamsnapshot.data?.data?[0];
-                        final model = getContactViewStreamsnapshot.data?.data?[0].contact;
+                        final model = getContactViewStreamsnapshot.data?.data?[0].projects;
                         return Skeletonizer(
                           enabled: loading,
                           child: Column(
@@ -161,18 +163,18 @@ class _ViewProjectState extends State<ViewProject> {
                                               SizedBox(width: 5.w),
                                               Text('Project Name', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800])),
                                               const Spacer(),
-                                              SelectableText(model?.mobile ?? '-', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800], fontWeight: FontWeight.w800)),
+                                              SelectableText(model?.name ?? '-', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800], fontWeight: FontWeight.w800)),
                                             ],
                                           ),
                                         ),
 
                                         // _NewCardItem(field: 'Phone Number', value: model.phoneNumber, icondata: Icons.phone_outlined),
-                                        _NewCardItem(field: 'Name', value: model?.email ?? '-', icondata: Icons.person_2_outlined),
-                                        _NewCardItem(field: 'Client', value: model?.email ?? '-', icondata: Icons.person_pin_outlined),
-                                        _NewCardItem(field: 'Quotation', value: model?.companyAddress ?? '-', icondata: Icons.note_alt_outlined),
-                                        _NewCardItem(field: 'Start Date', value: model?.companyLandline ?? '-', icondata: Icons.date_range),
-                                        _NewCardItem(field: 'End Date', value: model?.companyLocation ?? '-', icondata: Icons.date_range),
-                                        _NewCardItem(field: 'Description', value: model?.companyLocation ?? '-', icondata: Icons.description_outlined),
+                                        // _NewCardItem(field: 'Name', value: model?.name ?? '-', icondata: Icons.person_2_outlined),
+                                        _NewCardItem(field: 'Client', value: model?.contactName ?? '-', icondata: Icons.person_pin_outlined),
+                                        _NewCardItem(field: 'Quotation', value: model?.quotationRefr ?? '-', icondata: Icons.note_alt_outlined),
+                                        _NewCardItem(field: 'Start Date', value: model?.startDate ?? '-', icondata: Icons.date_range),
+                                        _NewCardItem(field: 'End Date', value: model?.endDate ?? '-', icondata: Icons.date_range),
+                                        // _NewCardItem(field: 'Description', value: model?.description ?? '-', icondata: Icons.description_outlined),
 
                                         //
                                         Container(
@@ -186,10 +188,10 @@ class _ViewProjectState extends State<ViewProject> {
                                             children: [
                                               Icon(Icons.stairs_outlined, size: 13.w),
                                               SizedBox(width: 5.w),
-                                              Text('Status', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800])),
+                                              Text('Description', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800])),
                                               const Spacer(),
                                               SelectableText(
-                                                model?.companyWebsite ?? '-',
+                                                model?.description ?? '-',
                                                 style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800], fontWeight: FontWeight.w800),
                                               ),
                                             ],

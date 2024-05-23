@@ -24,7 +24,7 @@ class ProjectBloc {
   final clientIdStream = BehaviorSubject<String>.seeded('');
 
   final quotationRefereneceStream = BehaviorSubject<String>.seeded('');
-  final quotationPersonNameStream = BehaviorSubject<String>.seeded(''); // Pending to implement by praveen 
+  final quotationPersonNameStream = BehaviorSubject<String>.seeded(''); // Pending to implement by praveen
   final quotationIdStream = BehaviorSubject<String>.seeded('');
 
   final statusStream = BehaviorSubject<String>.seeded('');
@@ -192,6 +192,18 @@ class ProjectBloc {
 
     // contactTypeStream.add('');
     // contactSourceStream.add('');
+
+    projectNameStream.add('');
+    clientStream.add('');
+    clientIdStream.add('');
+    quotationRefereneceStream.add('');
+    quotationPersonNameStream.add('');
+    quotationIdStream.add('');
+    statusStream.add('');
+    statusIdStream.add('');
+    startDateStream.add('');
+    endDateStream.add('');
+    descriptionStream.add('');
   }
 
   void dispose() {
