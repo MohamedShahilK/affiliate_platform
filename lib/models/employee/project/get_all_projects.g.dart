@@ -36,6 +36,6 @@ ProjectList _$ProjectListFromJson(Map<String, dynamic> json) => ProjectList(
       createdAt: json['created_at'] as String?,
       updatedAt: json['updated_at'] as String?,
       contactName: json['contact_name'] as String?,
-      quotationRefr: json['quotation_refr'] as int?,
+      quotationRefr: json['quotation_refr'] as String?,
       quotationName: json['quotation_name'] as String?,
     );

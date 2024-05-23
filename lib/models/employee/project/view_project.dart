@@ -55,7 +55,7 @@ class Projects {
   final String? createdAt;
   final String? updatedAt;
   final String? contactName;
-  final int? quotationRefr;
+  final String? quotationRefr;
   final String? quotationName;
 }
 

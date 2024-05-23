@@ -135,7 +135,7 @@ class _ProjectPageState extends State<ProjectPage> {
                           child: Column(
                             children: List.generate(
                               (allProjectsRespModel == null) ? 5 : allProjectsRespModel.data![0].projectList!.length,
-                              (index) => _ProjectCard(index: index, model: allProjectsRespModel),
+                              (index) => _ProjectCard(index: index, model: allProjectsRespModel,contactId: allProjectsRespModel?.data![0].projectList![index].id),
                             ),
                           ),
                         ),
@@ -156,9 +156,11 @@ class _ProjectCard extends StatelessWidget {
   const _ProjectCard({
     required this.index,
     this.model,
+    this.contactId,
     super.key,
   });
 
+  final String? contactId;
   final int index;
   final GetAllProjects? model;
 
@@ -277,9 +279,9 @@ class _ProjectCard extends StatelessWidget {
                                   child: MyTextWidget(
                                     text: model?.data == null || model!.data!.isEmpty || model!.data![0].projectList!.isEmpty
                                         ? '-'
-                                        : model?.data![0].projectList![index].quotationName == ''
+                                        : model?.data![0].projectList![index].quotationRefr == ''
                                             ? '-'
-                                            : model?.data![0].projectList![index].quotationName ?? '-',
+                                            : model?.data![0].projectList![index].quotationRefr ?? '-',
                                     isRightItem: true,
                                   ),
                                 ),
@@ -321,7 +323,7 @@ class _ProjectCard extends StatelessWidget {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => const NewProject(),
+                                    builder: (context) =>  NewProject(contactId: contactId),
                                   ),
                                 );
                               },

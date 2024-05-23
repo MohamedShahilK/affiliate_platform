@@ -28,6 +28,6 @@ ContactList _$ContactListFromJson(Map<String, dynamic> json) => ContactList(
     );
 
 QuotationList _$QuotationListFromJson(Map<String, dynamic> json) => QuotationList(
-      quoteID: json['quoteID'] as String?,
-      quoteRefr: json['quoteRefr'] as String?,
+      quoteID: json['QuoteID'] as String?,
+      quoteRefr: json['QuoteRefr'] as String?,
     );

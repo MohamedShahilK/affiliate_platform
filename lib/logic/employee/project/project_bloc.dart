@@ -19,9 +19,17 @@ class ProjectBloc {
   final getProjectViewStream = BehaviorSubject<ProjectView?>();
 
   final projectNameStream = BehaviorSubject<String>.seeded('');
+
   final clientStream = BehaviorSubject<String>.seeded('');
-  final quotationStream = BehaviorSubject<String>.seeded('');
+  final clientIdStream = BehaviorSubject<String>.seeded('');
+
+  final quotationRefereneceStream = BehaviorSubject<String>.seeded('');
+  final quotationPersonNameStream = BehaviorSubject<String>.seeded(''); // Pending to implement by praveen 
+  final quotationIdStream = BehaviorSubject<String>.seeded('');
+
   final statusStream = BehaviorSubject<String>.seeded('');
+  final statusIdStream = BehaviorSubject<String>.seeded('');
+
   final startDateStream = BehaviorSubject<String>.seeded('');
   final endDateStream = BehaviorSubject<String>.seeded('');
   final descriptionStream = BehaviorSubject<String>.seeded('');
@@ -41,7 +49,7 @@ class ProjectBloc {
     getProjectFormStream.add(respModel);
   }
 
-  Future<void> viewContact({required String contactId}) async {
+  Future<void> viewProject({required String contactId}) async {
     getProjectViewStream.add(null);
     final respModel = await ProjectServices().viewProject(contactId: contactId);
     getProjectViewStream.add(respModel);
