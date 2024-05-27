@@ -179,12 +179,12 @@ class _NewProjectState extends State<NewProject> {
                         );
                       }
 
-                      ProjectForm? allContactsRespModel;
+                      ProjectForm? projectFormModel;
 
                       if (snapshot.hasData) {
-                        allContactsRespModel = snapshot.data;
-                        // if (allContactsRespModel!.data![0].contactType != null) {
-                        //   // print('22222222222222222222222222222222222 ${allContactsRespModel.data![0].contactType!.values.toList(growable: false)}');
+                        projectFormModel = snapshot.data;
+                        // if (projectFormModel!.data![0].contactType != null) {
+                        //   // print('22222222222222222222222222222222222 ${projectFormModel.data![0].contactType!.values.toList(growable: false)}');
                         // }
                       }
 
@@ -249,7 +249,7 @@ class _NewProjectState extends State<NewProject> {
                               final project = contactViewRespModel.data?[0].projects;
 
                               if (project != null) {
-                                // if (bloc.projectNameStream.value == '' && project.name != null && project.name != '') {                                 
+                                // if (bloc.projectNameStream.value == '' && project.name != null && project.name != '') {
                                 if (project.name != null && project.name != '') {
                                   bloc.projectNameStream.add(project.name ?? '');
                                 } else {
@@ -331,7 +331,7 @@ class _NewProjectState extends State<NewProject> {
                                 if (project.description != null && project.description != '') {
                                   bloc.descriptionStream.add(project.description ?? '');
                                 }
-                              }else{
+                              } else {
                                 bloc.projectNameStream.add('');
                               }
                             }
@@ -361,45 +361,45 @@ class _NewProjectState extends State<NewProject> {
 
                                         heading: 'Client',
                                         hint: 'Select Client',
-                                        // items:allContactsRespModel != null ? ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'] : ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'],
-                                        items: (allContactsRespModel != null &&
-                                                allContactsRespModel.data != null &&
-                                                allContactsRespModel.data!.isNotEmpty &&
-                                                allContactsRespModel.data?[0].contactList != null)
-                                            ? ['', ...allContactsRespModel.data![0].contactList!.map((e) => e.contactName ?? '')]
+                                        // items:projectFormModel != null ? ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'] : ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'],
+                                        items: (projectFormModel != null &&
+                                                projectFormModel.data != null &&
+                                                projectFormModel.data!.isNotEmpty &&
+                                                projectFormModel.data?[0].contactList != null)
+                                            ? ['', ...projectFormModel.data![0].contactList!.map((e) => e.contactName ?? '')]
                                             : [''],
                                         label: 'Client',
-                                        // initialValue: allContactsRespModel == null ? '' : allContactsRespModel.data![0].contactType!.entries.map((e) => e as String).toList().first,
+                                        // initialValue: projectFormModel == null ? '' : projectFormModel.data![0].contactType!.entries.map((e) => e as String).toList().first,
                                         // initialValue: widget.model?.type ?? '',
                                       ), //dropdown
                                       NewContactDropDown(
                                         textStream: bloc.quotationRefereneceStream,
                                         heading: 'Quotation',
                                         hint: 'Select Quotation',
-                                        // items:allContactsRespModel != null ? ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'] : ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'],
-                                        items: (allContactsRespModel != null &&
-                                                allContactsRespModel.data != null &&
-                                                allContactsRespModel.data!.isNotEmpty &&
-                                                allContactsRespModel.data?[0].quotationList != null)
-                                            ? ['', ...allContactsRespModel.data![0].quotationList!.map((e) => e.quoteRefr ?? '')]
+                                        // items:projectFormModel != null ? ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'] : ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'],
+                                        items: (projectFormModel != null &&
+                                                projectFormModel.data != null &&
+                                                projectFormModel.data!.isNotEmpty &&
+                                                projectFormModel.data?[0].quotationList != null)
+                                            ? ['', ...projectFormModel.data![0].quotationList!.map((e) => e.quoteRefr ?? '')]
                                             : [''],
                                         label: 'Quotation',
-                                        // initialValue: allContactsRespModel == null ? '' : allContactsRespModel.data![0].contactType!.entries.map((e) => e as String).toList().first,
+                                        // initialValue: projectFormModel == null ? '' : projectFormModel.data![0].contactType!.entries.map((e) => e as String).toList().first,
                                         // initialValue: widget.model?.type ?? '',
                                       ), //dropdown
                                       NewContactDropDown(
                                         textStream: bloc.statusStream,
                                         heading: 'Status',
                                         hint: 'Select Status',
-                                        // items:allContactsRespModel != null ? ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'] : ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'],
-                                        items: (allContactsRespModel != null &&
-                                                allContactsRespModel.data != null &&
-                                                allContactsRespModel.data!.isNotEmpty &&
-                                                allContactsRespModel.data?[0].projectStatus != null)
-                                            ? ['', ...allContactsRespModel.data![0].projectStatus ?? []]
+                                        // items:projectFormModel != null ? ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'] : ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'],
+                                        items: (projectFormModel != null &&
+                                                projectFormModel.data != null &&
+                                                projectFormModel.data!.isNotEmpty &&
+                                                projectFormModel.data?[0].projectStatus != null)
+                                            ? ['', ...projectFormModel.data![0].projectStatus ?? []]
                                             : [''],
                                         label: 'Status',
-                                        // initialValue: allContactsRespModel == null ? '' : allContactsRespModel.data![0].contactType!.entries.map((e) => e as String).toList().first,
+                                        // initialValue: projectFormModel == null ? '' : projectFormModel.data![0].contactType!.entries.map((e) => e as String).toList().first,
                                         // initialValue: widget.model?.type ?? '',
                                       ), //dropdown
                                       NewContactField(
@@ -446,94 +446,39 @@ class _NewProjectState extends State<NewProject> {
                                       ),
                                       child: Text('Submit', style: AppStyles.poppins.copyWith(fontSize: 14.w, color: Colors.white)),
                                     ).ripple(context, () async {
-                                      // customLoader(context);
-                                      // if (widget.contactId == null) {
-                                      //   final contactTypeMap = snapshot.data!.data![0].contactType!;
-                                      //   final contactSourceList = snapshot.data!.data![0].contactSources!;
+                                      customLoader(context);
+                                      if (widget.contactId == null) {
+                                        // final contactList = snapshot.data!.data![0].contactList;
+                                        // final contactSourceList = snapshot.data!.data![0].quotationList;
 
-                                      //   if (bloc.contactTypeStream.value != '' || bloc.contactSourceStream.value != '') {
-                                      //     final contactTypeKey = contactTypeMap.keys.firstWhere((k) => contactTypeMap[k] == bloc.contactTypeStream.value, orElse: () => '');
+                                        // if (bloc.contactTypeStream.value != '' || bloc.contactSourceStream.value != '') {
+                                        //   final contactTypeKey = contactTypeMap.keys.firstWhere((k) => contactTypeMap[k] == bloc.contactTypeStream.value, orElse: () => '');
 
-                                      //     final contactSrcKey = contactSourceList.indexWhere((e) => e.sourceName == bloc.contactSourceStream.value);
+                                        //   final contactSrcKey = contactSourceList.indexWhere((e) => e.sourceName == bloc.contactSourceStream.value);
 
-                                      //     // print('222222222222222222222222 ${typeList}');
+                                        //   // print('222222222222222222222222 ${typeList}');
 
-                                      //     if (contactTypeKey != '') {
-                                      //       bloc.contactTypeIdStream.add(contactTypeKey);
-                                      //     }
+                                        //   if (contactTypeKey != '') {
+                                        //     bloc.contactTypeIdStream.add(contactTypeKey);
+                                        //   }
 
-                                      //     if (contactSrcKey != -1) {
-                                      //       bloc.contactSourceIdStream.add(contactSrcKey.toString());
-                                      //     }
+                                        //   if (contactSrcKey != -1) {
+                                        //     bloc.contactSourceIdStream.add(contactSrcKey.toString());
+                                        //   }
 
-                                      //     final resp = await bloc.submitForm();
+                                        final resp = await bloc.submitProjectForm();
 
-                                      //     if (resp != null && resp.status == 'SUCCESS' && resp.response == 'OK') {
-                                      //       Navigator.pop(context);
-                                      //       await successMotionToastInfo(context, msg: 'Submitted Done');
-                                      //       await bloc.getAllContacts();
-                                      //       Loader.hide();
-                                      //     } else {
-                                      //       await erroMotionToastInfo(context, msg: 'Submission Failed !!');
-                                      //       Loader.hide();
-                                      //     }
-                                      //   } else {
-                                      //     final resp = await bloc.submitForm();
-
-                                      //     if (resp != null && resp.status == 'SUCCESS' && resp.response == 'OK') {
-                                      //       Navigator.pop(context);
-                                      //       await successMotionToastInfo(context, msg: 'Submitted Done');
-                                      //       await bloc.getAllContacts();
-                                      //       Loader.hide();
-                                      //     } else {
-                                      //       await erroMotionToastInfo(context, msg: 'Submission Failed !!');
-                                      //       Loader.hide();
-                                      //     }
-                                      //   }
-                                      // } else {
-                                      //   final contactTypeMap = snapshot.data!.data![0].contactType!;
-                                      //   final contactSourceList = snapshot.data!.data![0].contactSources!;
-
-                                      //   if (bloc.contactTypeStream.value != '' || bloc.contactSourceStream.value != '') {
-                                      //     final contactTypeKey = contactTypeMap.keys.firstWhere((k) => contactTypeMap[k] == bloc.contactTypeStream.value, orElse: () => '');
-
-                                      //     final contactSrcKey = contactSourceList.indexWhere((e) => e.sourceName == bloc.contactSourceStream.value);
-
-                                      //     // print('222222222222222222222222 ${typeList}');
-
-                                      //     if (contactTypeKey != '') {
-                                      //       bloc.contactTypeIdStream.add(contactTypeKey);
-                                      //     }
-
-                                      //     if (contactSrcKey != -1) {
-                                      //       bloc.contactSourceIdStream.add(contactSrcKey.toString());
-                                      //     }
-
-                                      //     final resp = await bloc.contactEdit(contactId: widget.contactId!);
-
-                                      //     if (resp != null && resp.status == 'SUCCESS' && resp.response == 'OK' && resp.message == 'Contact updated successfully.') {
-                                      //       Navigator.pop(context);
-                                      //       await successMotionToastInfo(context, msg: 'Updated Successfully');
-                                      //       await bloc.getAllContacts();
-                                      //       Loader.hide();
-                                      //     } else {
-                                      //       await erroMotionToastInfo(context, msg: 'Submission Failed !!');
-                                      //       Loader.hide();
-                                      //     }
-                                      //   } else {
-                                      //     final resp = await bloc.contactEdit(contactId: widget.contactId!);
-
-                                      //     if (resp != null && resp.status == 'SUCCESS' && resp.response == 'OK') {
-                                      //       Navigator.pop(context);
-                                      //       await successMotionToastInfo(context, msg: 'Updated Successfully');
-                                      //       await bloc.getAllContacts();
-                                      //       Loader.hide();
-                                      //     } else {
-                                      //       await erroMotionToastInfo(context, msg: 'Submission Failed !!');
-                                      //       Loader.hide();
-                                      //     }
-                                      //   }
-                                      // }
+                                        if (resp != null && resp.status == 'SUCCESS' && resp.response == 'OK') {
+                                          Navigator.pop(context);
+                                          await successMotionToastInfo(context, msg: 'Submitted Done');
+                                          await bloc.getAllContacts();
+                                          Loader.hide();
+                                        } else {
+                                          await erroMotionToastInfo(context, msg: 'Submission Failed !!');
+                                          Loader.hide();
+                                        }
+                                        // }
+                                      }
                                     }),
                                   ],
                                 ),
@@ -606,6 +551,7 @@ class _NewContactDropDownState extends State<NewContactDropDown> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.items);
     // final bloc = Provider.of<ManageContactBloc>(context);
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 10.h),
@@ -621,7 +567,7 @@ class _NewContactDropDownState extends State<NewContactDropDown> {
               stream: widget.textStream,
               builder: (context, snapshot) {
                 final data = snapshot.data ?? '';
-                print('44444444444444444444444 $data');
+                // print('44444444444444444444444 $data');
                 return DropdownButtonHideUnderline(
                   child: DropdownButton2<String>(
                     isExpanded: true,
@@ -648,6 +594,8 @@ class _NewContactDropDownState extends State<NewContactDropDown> {
                         if (item == '') {
                           item1 = widget.hint;
                         }
+
+                        // print('9898988999898989898988 $item1');
                         return DropdownMenuItem<String>(
                           value: item1,
                           child: Text(

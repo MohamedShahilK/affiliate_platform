@@ -55,6 +55,19 @@ class ProjectBloc {
     getProjectViewStream.add(respModel);
   }
 
+  Future<Map<String, dynamic>?> submitProjectForm() async {
+    final respModel = ProjectServices().submitProjectForm(
+      name: projectNameStream.value,
+      description: descriptionStream.value,
+      startDate: startDateStream.value,
+      endDate: endDateStream.value,
+      customerId: custome,
+      quotationId: quotationId,
+    );
+
+    return respModel;
+  }
+
   // Future<bool> deleteContact({required String contactId}) async {
   //   var isDeleted = false;
 
@@ -136,25 +149,6 @@ class ProjectBloc {
   //   }
 
   //   return isFollowUpAdded;
-  // }
-
-  // Future<ContactViewModel?> submitForm() async {
-  //   final respModel = ManageContactSevices().submitForm(
-  //     name: nameStream.value,
-  //     mobile: mobileStream.value,
-  //     email: emailStream.value,
-  //     contactType: contactTypeIdStream.value,
-  //     contactSource: contactSourceIdStream.value,
-  //     designation: designationStream.value,
-  //     companyName: companyNameStream.value,
-  //     landlineNumber: landlineStream.value,
-  //     companyWebsite: websiteStream.value,
-  //     companyLocation: companyLocationStream.value,
-  //     companyAddress: companyAddressStream.value,
-  //     remarks: remarkStream.value,
-  //   );
-
-  //   return respModel;
   // }
 
   // Future<ContactEditSubmissionModel?> contactEdit({required String contactId}) async {

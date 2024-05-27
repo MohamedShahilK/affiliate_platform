@@ -45,7 +45,9 @@ class ProjectServices {
           EndPoints.getAllProjects,
         );
 
+        print('adanskjdnasjkdn ');
         final respModel = GetAllProjects.fromJson(response!.data ?? {});
+
 
         return respModel;
       }
@@ -115,6 +117,55 @@ class ProjectServices {
     } catch (e) {
       Loader.hide();
       print('viewContact Error :- $e');
+      return null;
+    }
+  }
+
+  // Submit Form
+  Future<Map<String,dynamic>?> submitProjectForm({
+    required String name,
+    required String description,
+    required String startDate,
+    required String endDate,
+    required String customerId,
+    required String quotationId,
+  }) async {
+    try {
+      final token = StorageServices.to.getString(StorageServicesKeys.token);
+      final haveToken = token.isNotEmpty;
+      if (haveToken) {
+        final formData = FormData.fromMap({
+          'name': name,
+          'description': description,
+          'start_date': startDate,
+          'end_date': endDate,
+          'customer_id': customerId,
+          'quotation_id': quotationId,
+        });
+
+        final response = await api.dio?.post<Map<String, dynamic>>(
+          options: Options(
+            headers: {
+              // 'accept': '*/*',
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer $token',
+            },
+          ),
+          // queryParameters: {'id':contactId},
+          data: formData,
+          EndPoints.submitProjectForm,
+        );
+
+        print('55555555555555555555555 ${response!.data}');
+
+        // final respModel = ContactViewModel.fromJson(response!.data ?? {});
+
+        return {};
+      }
+      return null;
+    } catch (e) {
+      Loader.hide();
+      print('submitForm Error :- $e');
       return null;
     }
   }
@@ -339,67 +390,6 @@ class ProjectServices {
     } catch (e) {
       Loader.hide();
       print('addFollowup Error :- $e');
-      return null;
-    }
-  }
-
-  // Submit Form
-  Future<ContactViewModel?> submitForm({
-    required String name,
-    required String mobile,
-    required String email,
-    required String contactType,
-    required String contactSource,
-    required String designation,
-    required String companyName,
-    required String landlineNumber,
-    required String companyWebsite,
-    required String companyLocation,
-    required String companyAddress,
-    required String remarks,
-  }) async {
-    try {
-      final token = StorageServices.to.getString(StorageServicesKeys.token);
-      final haveToken = token.isNotEmpty;
-      if (haveToken) {
-        final formData = FormData.fromMap({
-          'name': name,
-          'contact_type': contactType,
-          'email': email,
-          'mobile': mobile,
-          'company': companyName,
-          'designation': designation,
-          'company_address': companyAddress,
-          'company_website': companyWebsite,
-          'company_landline': landlineNumber,
-          'company_location': companyLocation,
-          'remarks': remarks,
-          'contact_source': contactSource,
-        });
-
-        final response = await api.dio?.post<Map<String, dynamic>>(
-          options: Options(
-            headers: {
-              // 'accept': '*/*',
-              'Content-Type': 'application/json',
-              'Authorization': 'Bearer $token',
-            },
-          ),
-          // queryParameters: {'id':contactId},
-          data: formData,
-          EndPoints.submitContactForm,
-        );
-
-        print('55555555555555555555555 ${response!.data}');
-
-        final respModel = ContactViewModel.fromJson(response!.data ?? {});
-
-        return respModel;
-      }
-      return null;
-    } catch (e) {
-      Loader.hide();
-      print('submitForm Error :- $e');
       return null;
     }
   }

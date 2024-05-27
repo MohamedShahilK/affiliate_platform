@@ -24,4 +24,5 @@ class EndPoints {
   static const getAllProjects = '/project/list';
   static const projectForm = '/project/form';
   static const projectView = '/project/view';
+  static const submitProjectForm = '/project/submit';
 }
