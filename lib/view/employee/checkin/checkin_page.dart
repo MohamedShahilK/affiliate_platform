@@ -1,9 +1,12 @@
 // ignore_for_file: lines_longer_than_80_chars, inference_failure_on_instance_creation
 
 import 'package:affiliate_platform/config/ripple.dart';
+import 'package:affiliate_platform/logic/employee/checkin/checkin_bloc.dart';
 import 'package:affiliate_platform/logic/employee/project/project_bloc.dart';
+import 'package:affiliate_platform/models/employee/checkin/getall_checkins.dart';
 import 'package:affiliate_platform/models/employee/project/get_all_projects.dart';
 import 'package:affiliate_platform/utils/constants/styles.dart';
+import 'package:affiliate_platform/utils/utility_functions.dart';
 import 'package:affiliate_platform/view/common/custom_header.dart';
 import 'package:affiliate_platform/view/common/custom_scafflod.dart';
 import 'package:affiliate_platform/view/employee/project/new_project.dart';
@@ -31,7 +34,7 @@ class _CheckInPageState extends State<CheckInPage> {
 
   @override
   Widget build(BuildContext context) {
-    final projectBloc = Provider.of<ProjectBloc>(context);
+    final checkinBloc = Provider.of<CheckInBloc>(context);
     return PopScope(
       onPopInvoked: (didPop) {
         Navigator.pop(context);
@@ -69,7 +72,7 @@ class _CheckInPageState extends State<CheckInPage> {
                   //
                   // _body(),
                   StreamBuilder(
-                    stream: projectBloc.getAllProjectsStream,
+                    stream: checkinBloc.getAllCheckInsStream,
                     builder: (context, getAllProjectsStreamsnapshot) {
                       if ((!getAllProjectsStreamsnapshot.hasData && getAllProjectsStreamsnapshot.connectionState != ConnectionState.waiting) || getAllProjectsStreamsnapshot.hasError) {
                         Loader.hide();
@@ -100,7 +103,7 @@ class _CheckInPageState extends State<CheckInPage> {
                               ).ripple(
                                 context,
                                 () async {
-                                  await projectBloc.getAllProjects();
+                                  await checkinBloc.getAllCheckins();
                                 },
                                 borderRadius: BorderRadius.circular(15.r),
                                 overlayColor: Colors.purple.withOpacity(.15),
@@ -112,14 +115,14 @@ class _CheckInPageState extends State<CheckInPage> {
 
                       // print('2222222222222222222222222222222222222222222222 ${snapshot.data}');
 
-                      GetAllProjects? allProjectsRespModel;
+                      GetAllCheckIns? allCheckinsRespModel;
 
-                      List<ProjectList>? projectList = [];
+                      List<CheckinData>? checkinData = [];
 
                       if (getAllProjectsStreamsnapshot.hasData) {
-                        allProjectsRespModel = getAllProjectsStreamsnapshot.data;
-                        if (allProjectsRespModel!.data != null && allProjectsRespModel.data!.isNotEmpty) {
-                          projectList = allProjectsRespModel.data?[0].projectList ?? [];
+                        allCheckinsRespModel = getAllProjectsStreamsnapshot.data;
+                        if (allCheckinsRespModel!.data != null && allCheckinsRespModel.data!.isNotEmpty) {
+                          checkinData = allCheckinsRespModel.data?[0].checkinData ?? [];
                         }
                       }
 
@@ -131,7 +134,7 @@ class _CheckInPageState extends State<CheckInPage> {
                           padding: EdgeInsets.only(top: 30.h, bottom: 5.h, left: 20.w, right: 20.w),
                           child: Column(
                             children: List.generate(
-                                (allProjectsRespModel == null) ? 5 : allProjectsRespModel.data![0].projectList!.length, (index) => _ProjectCard(index: index, model: allProjectsRespModel)),
+                                (allCheckinsRespModel == null) ? 5 : allCheckinsRespModel.data![0].checkinData!.length, (index) => _ProjectCard(index: index, model: allCheckinsRespModel)),
                           ),
                         ),
                       );
@@ -155,15 +158,15 @@ class _ProjectCard extends StatelessWidget {
   });
 
   final int index;
-  final GetAllProjects? model;
+  final GetAllCheckIns? model;
 
   @override
   Widget build(BuildContext context) {
-    final status = model?.data == null || model!.data!.isEmpty || model!.data![0].projectList!.isEmpty || model!.data![0].projectList!.isEmpty
-        ? 'status'
-        : model?.data![0].projectStatus![int.parse(model?.data![0].projectList![index].status ?? '1')] == 'status'
-            ? 'status'
-            : model?.data![0].projectStatus![int.parse(model?.data![0].projectList![index].status ?? '1')] ?? 'status';
+    // final status = model?.data == null || model!.data!.isEmpty || model!.data![0].projectList!.isEmpty || model!.data![0].projectList!.isEmpty
+    //     ? 'status'
+    //     : model?.data![0].projectStatus![int.parse(model?.data![0].projectList![index].status ?? '1')] == 'status'
+    //         ? 'status'
+    //         : model?.data![0].projectStatus![int.parse(model?.data![0].projectList![index].status ?? '1')] ?? 'status';
     return SizedBox(
       // height: 150.h,
       child: Stack(
@@ -193,7 +196,8 @@ class _ProjectCard extends StatelessWidget {
                     const Spacer(),
                     Text(
                       // 'Giridhar | Qtn2015',
-                      'No. of Projects : 2',
+                      // 'No. of Projects : 2',
+                      'No. of Projects : ${model?.data == null || model!.data!.isEmpty || model!.data![0].checkinData!.isEmpty ? '-' : model?.data![0].checkinData![index].projects == '' ? '-' : model?.data![0].checkinData![index].projects ?? '-'}',
                       // '1',
                       style: AppStyles.poppins.copyWith(color: Colors.grey[800], fontSize: 11.w, fontWeight: FontWeight.w900),
                     ),
@@ -222,13 +226,13 @@ class _ProjectCard extends StatelessWidget {
                               //   widget.name,
                               //   style: AppStyles.poppins.copyWith(color: Colors.grey[800], fontSize: 12.w, overflow: TextOverflow.ellipsis),
                               // ),
-                              child: const MyTextWidget(
-                                // text: model?.data == null || model!.data!.isEmpty || model!.data![0].projectList!.isEmpty
-                                //     ? '-'
-                                //     : model?.data![0].projectList![index].name == ''
-                                //         ? '-'
-                                //         : model?.data![0].projectList![index].name ?? '-',
-                                text: 'Shahil',
+                              child: MyTextWidget(
+                                // text: 'Shahilasdadas',
+                                text: model?.data == null || model!.data!.isEmpty || model!.data![0].checkinData!.isEmpty
+                                    ? '-'
+                                    : model?.data![0].checkinData![index].firstName == ''
+                                        ? '-'
+                                        : model?.data![0].checkinData![index].firstName ?? '-',
                               ),
                             ),
                           ],
@@ -244,19 +248,19 @@ class _ProjectCard extends StatelessWidget {
                             Icon(Icons.av_timer_sharp, size: 17.w, color: Colors.purple[400]),
                             SizedBox(width: 5.w),
                             SizedBox(
-                              width: 90.w,
+                              // width: 127.w,
                               // child: Text(
                               //   // 'R.K.I.F',
                               //   widget.model.companyName,
                               //   style: AppStyles.poppins.copyWith(color: Colors.grey[800], fontSize: 12.w, overflow: TextOverflow.ellipsis),
                               // ),
-                              child: const MyTextWidget(
-                                // text: model?.data == null || model!.data!.isEmpty || model!.data![0].projectList!.isEmpty
-                                //     ? '-'
-                                //     : model?.data![0].projectList![index].contactName == ''
-                                //         ? '-'
-                                //         : model?.data![0].projectList![index].contactName ?? '-',
-                                text: '22-05-2024 09:51 AM',
+                              child: MyTextWidget(
+                                text: model?.data == null || model!.data!.isEmpty || model!.data![0].checkinData!.isEmpty
+                                    ? '-'
+                                    : model?.data![0].checkinData![index].createdAt == ''
+                                        ? '-'
+                                        : UtilityFunctions.convertIntoNormalDateTimeStringFromDateTimeString(model?.data![0].checkinData![index].createdAt ?? '2014-05-27 08:53:53'),
+                                // text: '22-05-2024 09:51 AM',
                               ),
                             ),
                           ],
@@ -283,13 +287,13 @@ class _ProjectCard extends StatelessWidget {
                                   //   widget.model.email,
                                   //   style: AppStyles.poppins.copyWith(color: Colors.grey[800], fontSize: 12.w, overflow: TextOverflow.ellipsis),
                                   // ),
-                                  child: const MyTextWidget(
-                                    // text: model?.data == null || model!.data!.isEmpty || model!.data![0].projectList!.isEmpty
-                                    //     ? '-'
-                                    //     : model?.data![0].projectList![index].quotationName == ''
-                                    //         ? '-'
-                                    //         : model?.data![0].projectList![index].quotationName ?? '-',
-                                    text: '08:30:00',
+                                  child: MyTextWidget(
+                                    text: model?.data == null || model!.data!.isEmpty || model!.data![0].checkinData!.isEmpty
+                                        ? '-'
+                                        : model?.data![0].checkinData![index].hours == ''
+                                            ? '-'
+                                            : model?.data![0].checkinData![index].hours ?? '-',
+                                    // text: '08:30:00',
                                     isRightItem: true,
                                   ),
                                 ),
@@ -312,13 +316,13 @@ class _ProjectCard extends StatelessWidget {
                                   //   widget.model.email,
                                   //   style: AppStyles.poppins.copyWith(color: Colors.grey[800], fontSize: 12.w, overflow: TextOverflow.ellipsis),
                                   // ),
-                                  child: const MyTextWidget(
-                                    // text: model?.data == null || model!.data!.isEmpty || model!.data![0].projectList!.isEmpty
-                                    //     ? '-'
-                                    //     : model?.data![0].projectList![index].quotationName == ''
-                                    //         ? '-'
-                                    //         : model?.data![0].projectList![index].quotationName ?? '-',
-                                    text: 'Office',
+                                  child: MyTextWidget(
+                                    text: model?.data == null || model!.data!.isEmpty || model!.data![0].checkinData!.isEmpty
+                                        ? '-'
+                                        : model?.data![0].checkinData![index].workFrom == ''
+                                            ? '-'
+                                            : model?.data![0].checkinData![index].workFrom ?? '-',
+                                    // text: 'Office',
                                     isRightItem: true,
                                   ),
                                 ),

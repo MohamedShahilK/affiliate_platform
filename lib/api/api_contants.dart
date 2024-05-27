@@ -25,4 +25,8 @@ class EndPoints {
   static const projectForm = '/project/form';
   static const projectView = '/project/view';
   static const submitProjectForm = '/project/submit';
+
+  // CheckIns
+  static const getAllCheckins = '/checkin/list';
+
 }

@@ -8,6 +8,8 @@ part 'getall_checkins.g.dart';
 class GetAllCheckIns {
   GetAllCheckIns({required this.status, required this.response, required this.data});
 
+  factory GetAllCheckIns.fromJson(Map<String, dynamic> json) => _$GetAllCheckInsFromJson(json);
+
   final String? status;
   final String? response;
   final List<Data>? data;
@@ -62,12 +64,14 @@ class CheckinData {
     required this.workingRemarks,
     required this.projects,
     required this.workFrom,
+    required this.workFromId,
     required this.hours,
   });
   final String? id;
   final String? employee;
   final String? datetime;
   final String? workFrom;
+  final String? workFromId;
   final String? remarks;
   final String? createdAt;
   final String? updatedAt;
@@ -83,7 +87,6 @@ class CheckinData {
   final String? projects;
   final String? hours;
 }
-
 
 @JsonSerializable()
 class ProjectList {
@@ -109,8 +112,7 @@ class ProjectList {
   final String? endDate;
   final String? customerId;
   final String? quotationId;
-  final String? status;
-  String? workFrom;
+  final String? status;  
   final String? createdAt;
   final String? updatedAt;
   final String? contactName;
