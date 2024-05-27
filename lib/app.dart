@@ -63,8 +63,8 @@ class App extends StatelessWidget {
                 debugShowCheckedModeBanner: false,
                 localizationsDelegates: AppLocalizations.localizationsDelegates,
                 supportedLocales: AppLocalizations.supportedLocales,
-                // home: const SplashPage(),
-                home: const ProjectPage(),
+                home: const SplashPage(),
+                // home: const ProjectPage(),
                 
               ),
             ),
