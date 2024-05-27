@@ -57,7 +57,7 @@ class CheckInServices {
   }
 
   // Get Contact Form
-  Future<ProjectForm?> getProjectForm() async {
+  Future<ProjectForm?> getCheckinForm() async {
     try {
       final token = StorageServices.to.getString(StorageServicesKeys.token);
       final haveToken = token.isNotEmpty;
@@ -71,7 +71,7 @@ class CheckInServices {
             },
           ),
           // queryParameters: {},
-          EndPoints.projectForm,
+          EndPoints.checkinForm,
         );
 
         final respModel = ProjectForm.fromJson(response!.data ?? {});

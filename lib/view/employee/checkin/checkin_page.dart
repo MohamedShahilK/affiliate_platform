@@ -134,7 +134,9 @@ class _CheckInPageState extends State<CheckInPage> {
                           padding: EdgeInsets.only(top: 30.h, bottom: 5.h, left: 20.w, right: 20.w),
                           child: Column(
                             children: List.generate(
-                                (allCheckinsRespModel == null) ? 5 : allCheckinsRespModel.data![0].checkinData!.length, (index) => _ProjectCard(index: index, model: allCheckinsRespModel)),
+                              (allCheckinsRespModel == null) ? 5 : allCheckinsRespModel.data![0].checkinData!.length,
+                              (index) => _ProjectCard(index: index, model: allCheckinsRespModel),
+                            ),
                           ),
                         ),
                       );
@@ -380,22 +382,22 @@ class _ProjectCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     _EachProjectSmallButtons(
-                      color: Colors.green[900]!,
+                      // color: Colors.green[900]!,
                       icon: Icons.edit_outlined,
                       onTap: () {},
                     ),
                     _EachProjectSmallButtons(
-                      color: Colors.blue[400]!,
+                      // color: Colors.blue[400]!,
                       icon: Icons.remove_red_eye_outlined,
                       onTap: () {},
                     ),
                     _EachProjectSmallButtons(
-                      color: Colors.red[400]!,
+                      // color: Colors.red[400]!,
                       icon: Icons.delete_outline_outlined,
                       onTap: () {},
                     ),
                   ],
-                )
+                ),
               ],
             ),
           ),
@@ -517,12 +519,12 @@ class _ProjectCard extends StatelessWidget {
 
 class _EachProjectSmallButtons extends StatelessWidget {
   const _EachProjectSmallButtons({
-    required this.color,
+    // required this.color,
     required this.icon,
     required this.onTap,
   });
 
-  final Color color;
+  // final Color color;
   final IconData icon;
   final VoidCallback onTap;
 

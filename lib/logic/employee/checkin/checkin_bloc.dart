@@ -45,7 +45,7 @@ class CheckInBloc {
   }
 
   Future<void> getContactForm() async {
-    final respModel = await ProjectServices().getProjectForm();
+    final respModel = await CheckInServices().getCheckinForm();
     getProjectFormStream.add(respModel);
   }
 
