@@ -7,6 +7,7 @@ import 'package:affiliate_platform/models/manage_contact/contact_form_model.dart
 import 'package:affiliate_platform/models/manage_contact/contact_view_model.dart';
 import 'package:affiliate_platform/services/employee/project/project_services.dart';
 import 'package:affiliate_platform/services/manage_contact/manage_contact_services.dart';
+import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ProjectBloc {
@@ -55,13 +56,14 @@ class ProjectBloc {
     getProjectViewStream.add(respModel);
   }
 
-  Future<Map<String, dynamic>?> submitProjectForm() async {
+  Future<Map<String, dynamic>?> submitProjectForm(BuildContext context,{required String? customerId, required String? quotationId}) async {
     final respModel = ProjectServices().submitProjectForm(
+      context,
       name: projectNameStream.value,
-      description: descriptionStream.value,
-      startDate: startDateStream.value,
-      endDate: endDateStream.value,
-      customerId: custome,
+      description: descriptionStream.valueOrNull,
+      startDate: startDateStream.valueOrNull,
+      endDate: endDateStream.valueOrNull,
+      customerId: customerId,
       quotationId: quotationId,
     );
 

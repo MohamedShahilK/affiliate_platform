@@ -357,22 +357,22 @@ class _NewProjectState extends State<NewProject> {
                                         onChanged: bloc.projectNameStream.add,
                                       ),
                                       NewContactDropDown(
+                                        projectFormModel: projectFormModel,
                                         textStream: bloc.clientStream,
 
                                         heading: 'Client',
                                         hint: 'Select Client',
                                         // items:projectFormModel != null ? ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'] : ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'],
-                                        items: (projectFormModel != null &&
-                                                projectFormModel.data != null &&
-                                                projectFormModel.data!.isNotEmpty &&
-                                                projectFormModel.data?[0].contactList != null)
-                                            ? ['', ...projectFormModel.data![0].contactList!.map((e) => e.contactName ?? '')]
-                                            : [''],
+                                        items:
+                                            (projectFormModel != null && projectFormModel.data != null && projectFormModel.data!.isNotEmpty && projectFormModel.data?[0].contactList != null)
+                                                ? ['', ...projectFormModel.data![0].contactList!.map((e) => e.contactName ?? '')]
+                                                : [''],
                                         label: 'Client',
                                         // initialValue: projectFormModel == null ? '' : projectFormModel.data![0].contactType!.entries.map((e) => e as String).toList().first,
                                         // initialValue: widget.model?.type ?? '',
                                       ), //dropdown
                                       NewContactDropDown(
+                                        projectFormModel: projectFormModel,
                                         textStream: bloc.quotationRefereneceStream,
                                         heading: 'Quotation',
                                         hint: 'Select Quotation',
@@ -388,6 +388,7 @@ class _NewProjectState extends State<NewProject> {
                                         // initialValue: widget.model?.type ?? '',
                                       ), //dropdown
                                       NewContactDropDown(
+                                        projectFormModel: projectFormModel,
                                         textStream: bloc.statusStream,
                                         heading: 'Status',
                                         hint: 'Select Status',
@@ -447,37 +448,27 @@ class _NewProjectState extends State<NewProject> {
                                       child: Text('Submit', style: AppStyles.poppins.copyWith(fontSize: 14.w, color: Colors.white)),
                                     ).ripple(context, () async {
                                       customLoader(context);
-                                      if (widget.contactId == null) {
-                                        // final contactList = snapshot.data!.data![0].contactList;
-                                        // final contactSourceList = snapshot.data!.data![0].quotationList;
+                                      // if new project
+                                      if (widget.contactId == null && projectFormModel != null && projectFormModel.data != null && projectFormModel.data!.isNotEmpty) {
+                                        final customerId = projectFormModel.data?[0].contactList?.firstWhereOrNull((e) => e.contactName == bloc.clientStream.value)?.contactID;
+                                        final quotationId = projectFormModel.data?[0].quotationList?.firstWhereOrNull((e) => e.quoteRefr == bloc.quotationRefereneceStream.value)?.quoteID;
 
-                                        // if (bloc.contactTypeStream.value != '' || bloc.contactSourceStream.value != '') {
-                                        //   final contactTypeKey = contactTypeMap.keys.firstWhere((k) => contactTypeMap[k] == bloc.contactTypeStream.value, orElse: () => '');
+                                        final resp = await bloc.submitProjectForm(context, customerId: customerId, quotationId: quotationId);
 
-                                        //   final contactSrcKey = contactSourceList.indexWhere((e) => e.sourceName == bloc.contactSourceStream.value);
-
-                                        //   // print('222222222222222222222222 ${typeList}');
-
-                                        //   if (contactTypeKey != '') {
-                                        //     bloc.contactTypeIdStream.add(contactTypeKey);
-                                        //   }
-
-                                        //   if (contactSrcKey != -1) {
-                                        //     bloc.contactSourceIdStream.add(contactSrcKey.toString());
-                                        //   }
-
-                                        final resp = await bloc.submitProjectForm();
-
-                                        if (resp != null && resp.status == 'SUCCESS' && resp.response == 'OK') {
-                                          Navigator.pop(context);
-                                          await successMotionToastInfo(context, msg: 'Submitted Done');
-                                          await bloc.getAllContacts();
+                                        if (resp != null && resp['status'] == 'SUCCESS' && resp['response'] == 'OK') {
+                                          // Navigator.pop(context);
+                                          await successMotionToastInfo(context, msg: resp['message'] as String);
+                                          await bloc.getAllProjects();
                                           Loader.hide();
                                         } else {
                                           await erroMotionToastInfo(context, msg: 'Submission Failed !!');
                                           Loader.hide();
                                         }
                                         // }
+                                      }
+                                      // else existing project
+                                      else if (widget.contactId != null && projectFormModel != null && projectFormModel.data != null && projectFormModel.data!.isNotEmpty) {
+                                        
                                       }
                                     }),
                                   ],
@@ -525,6 +516,7 @@ class NewContactDropDown extends StatefulWidget {
     // required this.initialValue,
     required this.items,
     super.key,
+    this.projectFormModel,
   });
 
   final BehaviorSubject<String> textStream;
@@ -533,6 +525,7 @@ class NewContactDropDown extends StatefulWidget {
   final String label;
   // final String initialValue;
   final List<String> items;
+  final ProjectForm? projectFormModel;
 
   @override
   State<NewContactDropDown> createState() => _NewContactDropDownState();
@@ -551,8 +544,7 @@ class _NewContactDropDownState extends State<NewContactDropDown> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.items);
-    // final bloc = Provider.of<ManageContactBloc>(context);
+    // print(widget.items);
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 10.h),
       child: Stack(
@@ -625,6 +617,11 @@ class _NewContactDropDownState extends State<NewContactDropDown> {
                         } else {
                           // selectedValue = value!;
                           widget.textStream.add(value!);
+                          // if (widget.heading == 'Client') {
+
+                          // }else  if (widget.heading == 'Quotation') {
+
+                          // }else if (widget.heading == 'Status'){}
                         }
                       });
                     },

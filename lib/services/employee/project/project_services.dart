@@ -48,7 +48,6 @@ class ProjectServices {
         print('adanskjdnasjkdn ');
         final respModel = GetAllProjects.fromJson(response!.data ?? {});
 
-
         return respModel;
       }
       return null;
@@ -122,13 +121,14 @@ class ProjectServices {
   }
 
   // Submit Form
-  Future<Map<String,dynamic>?> submitProjectForm({
+  Future<Map<String, dynamic>?> submitProjectForm(
+    BuildContext context, {
     required String name,
-    required String description,
-    required String startDate,
-    required String endDate,
-    required String customerId,
-    required String quotationId,
+    required String? description,
+    required String? startDate,
+    required String? endDate,
+    required String? customerId,
+    required String? quotationId,
   }) async {
     try {
       final token = StorageServices.to.getString(StorageServicesKeys.token);
@@ -160,8 +160,23 @@ class ProjectServices {
 
         // final respModel = ContactViewModel.fromJson(response!.data ?? {});
 
-        return {};
+        return response.data;
       }
+      return null;
+    } on BadRequestException catch (e) {
+      Loader.hide();
+      final errorResponse = e.response;
+      final errorMsg = errorResponse!.data['errors']['name'];
+
+      // final mobileNumberError = errorMsg['mobile_number'];
+      // final plateNumberError = errorMsg['guest_name'];
+      try {
+        await erroMotionToastInfo(context, msg: errorMsg as String);
+      } catch (e) {
+        //
+      }
+      
+      print('submitForm Error :- $e');
       return null;
     } catch (e) {
       Loader.hide();
