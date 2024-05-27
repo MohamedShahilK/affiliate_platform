@@ -1,8 +1,7 @@
 // ignore_for_file: lines_longer_than_80_chars
 
+import 'package:affiliate_platform/models/employee/checkin/get_checkin_form.dart';
 import 'package:affiliate_platform/models/employee/checkin/getall_checkins.dart';
-import 'package:affiliate_platform/models/employee/project/get_all_projects.dart';
-import 'package:affiliate_platform/models/employee/project/project_form.dart';
 import 'package:affiliate_platform/models/employee/project/view_project.dart';
 import 'package:affiliate_platform/services/employee/checkin/checkin_services.dart';
 import 'package:affiliate_platform/services/employee/project/project_services.dart';
@@ -15,7 +14,7 @@ class CheckInBloc {
   }
 
   final getAllCheckInsStream = BehaviorSubject<GetAllCheckIns?>();
-  final getProjectFormStream = BehaviorSubject<ProjectForm?>();
+  final getProjectFormStream = BehaviorSubject<GetCheckinForm?>();
   final getProjectViewStream = BehaviorSubject<ProjectView?>();
 
   final projectNameStream = BehaviorSubject<String>.seeded('');
@@ -51,7 +50,7 @@ class CheckInBloc {
 
   Future<void> viewProject({required String contactId}) async {
     getProjectViewStream.add(null);
-    final respModel = await ProjectServices().viewProject(contactId: contactId);
+    final respModel = await CheckInServices().viewCheckin(contactId: contactId);
     getProjectViewStream.add(respModel);
   }
 

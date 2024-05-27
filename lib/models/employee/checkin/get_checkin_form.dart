@@ -7,6 +7,9 @@ part 'get_checkin_form.g.dart';
 @JsonSerializable()
 class GetCheckinForm {
   GetCheckinForm({required this.status, required this.response, required this.data});
+
+  factory GetCheckinForm.fromJson(Map<String, dynamic> json) => _$GetCheckinFormFromJson(json);
+
   final String? status;
   final String? response;
   final List<Data>? data;
@@ -97,7 +100,7 @@ class EmployeeList {
   final String? previousExperiences;
   final String? maritalStatus;
   final String? createdAt;
-  final String? updatedAt;  
+  final String? updatedAt;
   final String? firstName;
   final String? lastName;
   final String? userCode;

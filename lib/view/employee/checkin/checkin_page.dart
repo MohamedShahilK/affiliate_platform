@@ -135,7 +135,11 @@ class _CheckInPageState extends State<CheckInPage> {
                           child: Column(
                             children: List.generate(
                               (allCheckinsRespModel == null) ? 5 : allCheckinsRespModel.data![0].checkinData!.length,
-                              (index) => _ProjectCard(index: index, model: allCheckinsRespModel),
+                              (index) => _ProjectCard(
+                                index: index,
+                                model: allCheckinsRespModel,
+                                isLoading: getAllProjectsStreamsnapshot.connectionState == ConnectionState.waiting,
+                              ),
                             ),
                           ),
                         ),
@@ -156,11 +160,13 @@ class _ProjectCard extends StatelessWidget {
   const _ProjectCard({
     required this.index,
     this.model,
+    this.isLoading = false,
     super.key,
   });
 
   final int index;
   final GetAllCheckIns? model;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -191,7 +197,7 @@ class _ProjectCard extends StatelessWidget {
                   children: [
                     Text(
                       // 'Giridhar | Qtn2015',
-                      'Project #${index + 1}',
+                      'CheckIn #${index + 1}',
                       // '1',
                       style: AppStyles.poppins.copyWith(color: Colors.grey[800], fontSize: 9.w, fontWeight: FontWeight.w900),
                     ),
@@ -381,18 +387,43 @@ class _ProjectCard extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
+                    Row(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 3.h),
+                          decoration: BoxDecoration(
+                            color: isLoading ? Colors.transparent : Colors.green[600],
+                            // border: Border.all(color: Colors.purple[400]!),
+                            // borderRadius: BorderRadius.only(topRight: Radius.circular(15.r), bottomLeft: Radius.circular(15.r)),
+                            // shape: BoxShape.circle,
+                            borderRadius: BorderRadius.circular(5.r),
+                          ),
+                          child: Icon(
+                            Icons.subdirectory_arrow_right_rounded,
+                            size: 19.w,
+                            // color: Colors.purple[400],
+                            color: Colors.white,
+                          ),
+                        ),
+                        // SizedBox(width: 5.w),
+                      ],
+                    ).ripple(context, () {}),
+                    const Spacer(),
                     _EachProjectSmallButtons(
                       // color: Colors.green[900]!,
+                      isLoading: isLoading,
                       icon: Icons.edit_outlined,
                       onTap: () {},
                     ),
                     _EachProjectSmallButtons(
                       // color: Colors.blue[400]!,
+                      isLoading: isLoading,
                       icon: Icons.remove_red_eye_outlined,
                       onTap: () {},
                     ),
                     _EachProjectSmallButtons(
                       // color: Colors.red[400]!,
+                      isLoading: isLoading,
                       icon: Icons.delete_outline_outlined,
                       onTap: () {},
                     ),
@@ -522,11 +553,13 @@ class _EachProjectSmallButtons extends StatelessWidget {
     // required this.color,
     required this.icon,
     required this.onTap,
+    this.isLoading = false,
   });
 
   // final Color color;
   final IconData icon;
   final VoidCallback onTap;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -536,7 +569,7 @@ class _EachProjectSmallButtons extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 3.h),
           decoration: BoxDecoration(
             // color: Colors.purple[400],
-            border: Border.all(color: Colors.purple[400]!),
+            border: Border.all(color: isLoading ? Colors.transparent : Colors.purple[400]!),
             // borderRadius: BorderRadius.only(topRight: Radius.circular(15.r), bottomLeft: Radius.circular(15.r)),
             shape: BoxShape.circle,
           ),

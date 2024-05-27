@@ -3,6 +3,7 @@
 import 'package:affiliate_platform/api/api.dart';
 import 'package:affiliate_platform/api/api_contants.dart';
 import 'package:affiliate_platform/api/api_errror_handling.dart';
+import 'package:affiliate_platform/models/employee/checkin/get_checkin_form.dart';
 import 'package:affiliate_platform/models/employee/checkin/getall_checkins.dart';
 import 'package:affiliate_platform/models/employee/project/get_all_projects.dart';
 import 'package:affiliate_platform/models/employee/project/project_form.dart';
@@ -57,7 +58,7 @@ class CheckInServices {
   }
 
   // Get Contact Form
-  Future<ProjectForm?> getCheckinForm() async {
+  Future<GetCheckinForm?> getCheckinForm() async {
     try {
       final token = StorageServices.to.getString(StorageServicesKeys.token);
       final haveToken = token.isNotEmpty;
@@ -74,7 +75,7 @@ class CheckInServices {
           EndPoints.checkinForm,
         );
 
-        final respModel = ProjectForm.fromJson(response!.data ?? {});
+        final respModel = GetCheckinForm.fromJson(response!.data ?? {});
 
         return respModel;
       }
@@ -87,7 +88,7 @@ class CheckInServices {
   }
 
   // Get Contact Form
-  Future<ProjectView?> viewProject({required String contactId}) async {
+  Future<ProjectView?> viewCheckin({required String contactId}) async {
     try {
       final token = StorageServices.to.getString(StorageServicesKeys.token);
       final haveToken = token.isNotEmpty;
