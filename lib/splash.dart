@@ -4,10 +4,8 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:affiliate_platform/logic/auth/auth_bloc.dart';
-import 'package:affiliate_platform/services/auth/auth_services.dart';
 import 'package:affiliate_platform/utils/constants/string_constants.dart';
 import 'package:affiliate_platform/utils/constants/styles.dart';
-import 'package:affiliate_platform/utils/custom_tools.dart';
 import 'package:affiliate_platform/utils/internal_services/storage_services.dart';
 import 'package:affiliate_platform/view/auth/login_page.dart';
 import 'package:affiliate_platform/view/common/sidebar.dart';

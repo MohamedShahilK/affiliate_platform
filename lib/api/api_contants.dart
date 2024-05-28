@@ -35,4 +35,7 @@ class EndPoints {
 
   // Profile
   static const getProfileView = '/profile/view';
+
+  // Leave
+  static const getAllLeaves= '/leaves/leave_list';
 }
