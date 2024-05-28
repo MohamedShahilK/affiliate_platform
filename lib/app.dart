@@ -5,12 +5,14 @@ import 'package:affiliate_platform/logic/employee/checkin/checkin_bloc.dart';
 import 'package:affiliate_platform/logic/employee/checkout/checkout_bloc.dart';
 import 'package:affiliate_platform/logic/employee/project/project_bloc.dart';
 import 'package:affiliate_platform/logic/manage_contact/manage_contact_bloc.dart';
+import 'package:affiliate_platform/logic/profile/profile_bloc.dart';
 import 'package:affiliate_platform/splash.dart';
 import 'package:affiliate_platform/utils/l10n/l10n.dart';
 import 'package:affiliate_platform/view/employee/attendance/attendance.dart';
 import 'package:affiliate_platform/view/employee/checkin/checkin_page.dart';
 import 'package:affiliate_platform/view/employee/checkout/checkout_page.dart';
 import 'package:affiliate_platform/view/employee/project/project.dart';
+import 'package:affiliate_platform/view/profile/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -34,7 +36,7 @@ class App extends StatelessWidget {
           return MultiProvider(
             providers: [
               ChangeNotifierProvider(create: (context) => SideMenuController()),
-               Provider(
+              Provider(
                 create: (context) => AuthBloc(),
                 dispose: (context, bloc) => bloc.dispose(),
               ),
@@ -42,7 +44,7 @@ class App extends StatelessWidget {
                 create: (context) => ManageContactBloc(),
                 dispose: (context, bloc) => bloc.dispose(),
               ),
-               Provider(
+              Provider(
                 create: (context) => ProjectBloc(),
                 dispose: (context, bloc) => bloc.dispose(),
               ),
@@ -54,6 +56,10 @@ class App extends StatelessWidget {
                 create: (context) => CheckOutBloc(),
                 dispose: (context, bloc) => bloc.dispose(),
               ),
+              Provider(
+                create: (context) => ProfileBloc(),
+                dispose: (context, bloc) => bloc.dispose(),
+              ),
             ],
             child: MediaQuery.withClampedTextScaling(
               minScaleFactor: 0.85, // set min scale value here
@@ -63,9 +69,9 @@ class App extends StatelessWidget {
                 theme: ThemeData(
                   // canvas color transparent for modal bottom sheet
                   canvasColor: Colors.transparent,
-            
+
                   // visualDensity: VisualDensity.adaptivePlatformDensity,
-            
+
                   // scaffoldBackgroundColor: Colors.blue[700],
                   // scaffoldBackgroundColor: AppColors.mainColor,
                   // primarySwatch: Colors.blue,
@@ -76,8 +82,7 @@ class App extends StatelessWidget {
                 localizationsDelegates: AppLocalizations.localizationsDelegates,
                 supportedLocales: AppLocalizations.supportedLocales,
                 // home: const SplashPage(),
-                home: const CheckOutPage(),
-                
+                home: const ProfilePage(),
               ),
             ),
           );

@@ -13,4 +13,11 @@ class UtilityFunctions {
     final normalDateString = DateFormat('yyyy-MM-dd HH:mm:ss').format(toDateTime);
     return normalDateString;
   }
+
+
+  static String convertIntoNormalDateStringFromDateTimeString(String dateTimeString) {
+    final toDateTime = DateTime.parse(dateTimeString);
+    final normalDateString = DateFormat('dd-MM-yyyy').format(toDateTime);
+    return normalDateString;
+  }
 }
