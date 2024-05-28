@@ -16,7 +16,7 @@ GetCheckinForm _$GetCheckinFormFromJson(Map<String, dynamic> json) => GetCheckin
 
 Data _$DataFromJson(Map<String, dynamic> json) => Data(
       tableTitle: json['table_title'] as String?,
-      userDesignation: json['user_designation'] as String?,
+      userDesignation: json['user_Designation'] as String?,
       userID: json['user_ID'] as String?,
       projectList: (json['project_list'] as List<dynamic>?)?.map((e) => _$ProjectListFromJson(e as Map<String, dynamic>)).toList(),
       employeeList: (json['employee_list'] as List<dynamic>?)?.map((e) => _$EmployeeListFromJson(e as Map<String, dynamic>)).toList(),

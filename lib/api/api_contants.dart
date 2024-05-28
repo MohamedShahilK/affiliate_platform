@@ -16,9 +16,9 @@ class EndPoints {
   static const contactdelete = '/contacts/contact_delete';
   static const addPermForAffUsers = '/contacts/add_contact_permission';
   static const deletePermForAffUsers = '/contacts/delete_contact_permission';
-  static const addFollowup= '/contacts/add_contact_followup';
-  static const deleteFollowup= '/contacts/delete_contact_followup';
-  static const editFollowup= '/contacts/edit_contact_followup_submit';
+  static const addFollowup = '/contacts/add_contact_followup';
+  static const deleteFollowup = '/contacts/delete_contact_followup';
+  static const editFollowup = '/contacts/edit_contact_followup_submit';
 
   // Projects
   static const getAllProjects = '/project/list';
@@ -30,4 +30,6 @@ class EndPoints {
   static const getAllCheckins = '/checkin/list';
   static const checkinForm = '/checkin/form';
 
+  // CheckOuts
+  static const getAllCheckouts = '/checkout/list';
 }

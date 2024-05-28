@@ -2,12 +2,14 @@ import 'package:affiliate_platform/config/flavor_banner.dart';
 import 'package:affiliate_platform/controllers/sidemenu_controller.dart';
 import 'package:affiliate_platform/logic/auth/auth_bloc.dart';
 import 'package:affiliate_platform/logic/employee/checkin/checkin_bloc.dart';
+import 'package:affiliate_platform/logic/employee/checkout/checkout_bloc.dart';
 import 'package:affiliate_platform/logic/employee/project/project_bloc.dart';
 import 'package:affiliate_platform/logic/manage_contact/manage_contact_bloc.dart';
 import 'package:affiliate_platform/splash.dart';
 import 'package:affiliate_platform/utils/l10n/l10n.dart';
 import 'package:affiliate_platform/view/employee/attendance/attendance.dart';
 import 'package:affiliate_platform/view/employee/checkin/checkin_page.dart';
+import 'package:affiliate_platform/view/employee/checkout/checkout_page.dart';
 import 'package:affiliate_platform/view/employee/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -48,6 +50,10 @@ class App extends StatelessWidget {
                 create: (context) => CheckInBloc(),
                 dispose: (context, bloc) => bloc.dispose(),
               ),
+              Provider(
+                create: (context) => CheckOutBloc(),
+                dispose: (context, bloc) => bloc.dispose(),
+              ),
             ],
             child: MediaQuery.withClampedTextScaling(
               minScaleFactor: 0.85, // set min scale value here
@@ -70,7 +76,7 @@ class App extends StatelessWidget {
                 localizationsDelegates: AppLocalizations.localizationsDelegates,
                 supportedLocales: AppLocalizations.supportedLocales,
                 // home: const SplashPage(),
-                home: const CheckInPage(),
+                home: const CheckOutPage(),
                 
               ),
             ),
