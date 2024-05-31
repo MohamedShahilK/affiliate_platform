@@ -2,9 +2,7 @@
 
 import 'package:affiliate_platform/config/ripple.dart';
 import 'package:affiliate_platform/logic/employee/checkin/checkin_bloc.dart';
-import 'package:affiliate_platform/logic/employee/project/project_bloc.dart';
 import 'package:affiliate_platform/models/employee/checkin/getall_checkins.dart';
-import 'package:affiliate_platform/models/employee/project/get_all_projects.dart';
 import 'package:affiliate_platform/utils/constants/styles.dart';
 import 'package:affiliate_platform/utils/utility_functions.dart';
 import 'package:affiliate_platform/view/common/custom_header.dart';
@@ -76,40 +74,38 @@ class _CheckInPageState extends State<CheckInPage> {
                     builder: (context, getAllProjectsStreamsnapshot) {
                       if ((!getAllProjectsStreamsnapshot.hasData && getAllProjectsStreamsnapshot.connectionState != ConnectionState.waiting) || getAllProjectsStreamsnapshot.hasError) {
                         Loader.hide();
-                        return Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Something went wrong',
-                                style: TextStyle(fontSize: 16.w),
-                              ),
-                              SizedBox(height: 30.h),
-                              Container(
-                                padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 8.h),
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.purple[100]!),
-                                  borderRadius: BorderRadius.circular(15.r),
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(Icons.refresh, size: 17.w),
-                                    SizedBox(width: 5.w),
-                                    Text('Refresh', style: TextStyle(fontSize: 15.w)),
-                                  ],
-                                ),
-                              ).ripple(
-                                context,
-                                () async {
-                                  await checkinBloc.getAllCheckins();
-                                },
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Something went wrong',
+                              style: TextStyle(fontSize: 16.w),
+                            ),
+                            SizedBox(height: 30.h),
+                            Container(
+                              padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 8.h),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.purple[100]!),
                                 borderRadius: BorderRadius.circular(15.r),
-                                overlayColor: Colors.purple.withOpacity(.15),
                               ),
-                            ],
-                          ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.refresh, size: 17.w),
+                                  SizedBox(width: 5.w),
+                                  Text('Refresh', style: TextStyle(fontSize: 15.w)),
+                                ],
+                              ),
+                            ).ripple(
+                              context,
+                              () async {
+                                await checkinBloc.getAllCheckins();
+                              },
+                              borderRadius: BorderRadius.circular(15.r),
+                              overlayColor: Colors.purple.withOpacity(.15),
+                            ),
+                          ],
                         );
                       }
 

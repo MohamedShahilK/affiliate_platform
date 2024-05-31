@@ -23,11 +23,11 @@ ValueNotifier<List<List<String?>?>?> affUsersHavePerm = ValueNotifier([]);
 
 class ViewProject extends StatefulWidget {
   const ViewProject({
-     this.contactId,
+     this.projectId,
     super.key,
   });
 
-  final String? contactId;
+  final String? projectId;
 
   @override
   State<ViewProject> createState() => _ViewProjectState();
@@ -50,7 +50,7 @@ class _ViewProjectState extends State<ViewProject> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     projectBloc ??= Provider.of<ProjectBloc>(context);
-    projectBloc!.viewProject(contactId: widget.contactId!).then(
+    projectBloc!.viewProject(projectId: widget.projectId!).then(
           (value) => setState(() {
             loading = false;
           }),
@@ -118,8 +118,8 @@ class _ViewProjectState extends State<ViewProject> {
                                     ).ripple(
                                       context,
                                       () async {
-                                        if (widget.contactId != null) {
-                                          await bloc.viewProject(contactId: widget.contactId!);
+                                        if (widget.projectId != null) {
+                                          await bloc.viewProject(projectId: widget.projectId!);
                                         }
                                       },
                                       borderRadius: BorderRadius.circular(15.r),

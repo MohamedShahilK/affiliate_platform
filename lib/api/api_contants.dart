@@ -23,8 +23,10 @@ class EndPoints {
   // Projects
   static const getAllProjects = '/project/list';
   static const projectForm = '/project/form';
+  static const projectEditContactSubmit = '/project/editsubmit';
   static const projectView = '/project/view';
   static const submitProjectForm = '/project/submit';
+  static const projectdelete = '/project/delete';
 
   // CheckIns
   static const getAllCheckins = '/checkin/list';

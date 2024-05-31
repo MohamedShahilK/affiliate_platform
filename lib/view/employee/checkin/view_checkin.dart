@@ -49,7 +49,7 @@ class _ViewCheckInState extends State<ViewCheckIn> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     projectBloc ??= Provider.of<ProjectBloc>(context);
-    projectBloc!.viewProject(contactId: widget.contactId!).then(
+    projectBloc!.viewProject(projectId: widget.contactId!).then(
           (value) => setState(() {
             loading = false;
           }),
@@ -118,7 +118,7 @@ class _ViewCheckInState extends State<ViewCheckIn> {
                                       context,
                                       () async {
                                         if (widget.contactId != null) {
-                                          await bloc.viewProject(contactId: widget.contactId!);
+                                          await bloc.viewProject(projectId: widget.contactId!);
                                         }
                                       },
                                       borderRadius: BorderRadius.circular(15.r),

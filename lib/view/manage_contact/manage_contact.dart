@@ -108,40 +108,38 @@ class _ManageContactPageState extends State<ManageContactPage> {
 
                     if ((!snapshot.hasData && snapshot.connectionState != ConnectionState.waiting) || snapshot.hasError) {
                       Loader.hide();
-                      return Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Something went wrong',
-                              style: TextStyle(fontSize: 16.w),
-                            ),
-                            SizedBox(height: 30.h),
-                            Container(
-                              padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 8.h),
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.purple[100]!),
-                                borderRadius: BorderRadius.circular(15.r),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.refresh, size: 17.w),
-                                  SizedBox(width: 5.w),
-                                  Text('Refresh', style: TextStyle(fontSize: 15.w)),
-                                ],
-                              ),
-                            ).ripple(
-                              context,
-                              () async {
-                                await manageContactBloc.getAllContacts();
-                              },
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Something went wrong',
+                            style: TextStyle(fontSize: 16.w),
+                          ),
+                          SizedBox(height: 30.h),
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 8.h),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.purple[100]!),
                               borderRadius: BorderRadius.circular(15.r),
-                              overlayColor: Colors.purple.withOpacity(.15),
                             ),
-                          ],
-                        ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.refresh, size: 17.w),
+                                SizedBox(width: 5.w),
+                                Text('Refresh', style: TextStyle(fontSize: 15.w)),
+                              ],
+                            ),
+                          ).ripple(
+                            context,
+                            () async {
+                              await manageContactBloc.getAllContacts();
+                            },
+                            borderRadius: BorderRadius.circular(15.r),
+                            overlayColor: Colors.purple.withOpacity(.15),
+                          ),
+                        ],
                       );
                     }
 

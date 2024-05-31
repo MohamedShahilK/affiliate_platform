@@ -1,4 +1,4 @@
-// ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: lines_longer_than_80_chars, avoid_print, avoid_dynamic_calls
 
 import 'package:affiliate_platform/api/api.dart';
 import 'package:affiliate_platform/api/api_contants.dart';
@@ -6,10 +6,7 @@ import 'package:affiliate_platform/api/api_errror_handling.dart';
 import 'package:affiliate_platform/models/employee/project/get_all_projects.dart';
 import 'package:affiliate_platform/models/employee/project/project_form.dart';
 import 'package:affiliate_platform/models/employee/project/view_project.dart';
-import 'package:affiliate_platform/models/manage_contact/all_contacts.dart';
 import 'package:affiliate_platform/models/manage_contact/contact_edit_submission_model.dart';
-import 'package:affiliate_platform/models/manage_contact/contact_form_model.dart';
-import 'package:affiliate_platform/models/manage_contact/contact_view_model.dart';
 import 'package:affiliate_platform/utils/constants/string_constants.dart';
 import 'package:affiliate_platform/utils/custom_tools.dart';
 import 'package:affiliate_platform/utils/internal_services/storage_services.dart';
@@ -33,7 +30,8 @@ class ProjectServices {
       final token = StorageServices.to.getString(StorageServicesKeys.token);
       final haveToken = token.isNotEmpty;
       if (haveToken) {
-        final response = await api.dio?.get<Map<String, dynamic>>(
+        final formData = FormData.fromMap({'status_search': '1'});
+        final response = await api.dio?.post<Map<String, dynamic>>(
           options: Options(
             headers: {
               // 'accept': '*/*',
@@ -41,6 +39,7 @@ class ProjectServices {
               'Authorization': 'Bearer $token',
             },
           ),
+          data: formData,
           // queryParameters: {},
           EndPoints.getAllProjects,
         );
@@ -53,7 +52,7 @@ class ProjectServices {
       return null;
     } catch (e) {
       Loader.hide();
-      print('getAllContacts Error :- $e');
+      print('getAllProjects Error :- $e');
       return null;
     }
   }
@@ -83,13 +82,13 @@ class ProjectServices {
       return null;
     } catch (e) {
       Loader.hide();
-      print('getContactForm Error :- $e');
+      print('getProjectForm Error :- $e');
       return null;
     }
   }
 
   // Get Contact Form
-  Future<ProjectView?> viewProject({required String contactId}) async {
+  Future<ProjectView?> viewProject({required String projectId}) async {
     try {
       final token = StorageServices.to.getString(StorageServicesKeys.token);
       final haveToken = token.isNotEmpty;
@@ -102,8 +101,8 @@ class ProjectServices {
               'Authorization': 'Bearer $token',
             },
           ),
-          // queryParameters: {'id':contactId},
-          '${EndPoints.projectView}/$contactId',
+          // queryParameters: {'id':projectId},
+          '${EndPoints.projectView}/$projectId',
         );
 
         print('55555555555555555555555 ${response!.data}');
@@ -115,7 +114,7 @@ class ProjectServices {
       return null;
     } catch (e) {
       Loader.hide();
-      print('viewContact Error :- $e');
+      print('viewProject Error :- $e');
       return null;
     }
   }
@@ -175,18 +174,66 @@ class ProjectServices {
       } catch (e) {
         //
       }
-      
-      print('submitForm Error :- $e');
+
+      print('submitProjectForm Error :- $e');
       return null;
     } catch (e) {
       Loader.hide();
-      print('submitForm Error :- $e');
+      print('submitProjectForm Error :- $e');
+      return null;
+    }
+  }
+
+  // Submit Form
+  Future<Map<String, dynamic>?> projectEdit({
+    required String projectId,
+    required String name,
+    required String? description,
+    required String? startDate,
+    required String? endDate,
+    required String? customerId,
+    required String? quotationId,
+  }) async {
+    try {
+      final token = StorageServices.to.getString(StorageServicesKeys.token);
+      final haveToken = token.isNotEmpty;
+      if (haveToken) {
+        final formData = FormData.fromMap({
+          'name': name,
+          'description': description,
+          'start_date': startDate,
+          'end_date': endDate,
+          'customer_id': customerId,
+          'quotation_id': quotationId,
+        });
+
+        final response = await api.dio?.post<Map<String, dynamic>>(
+          options: Options(
+            headers: {
+              // 'accept': '*/*',
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer $token',
+            },
+          ),
+          // queryParameters: {'id':contactId},
+          data: formData,
+          '${EndPoints.projectEditContactSubmit}/$projectId',
+        );
+
+        print('55555555555555555555555 ${response!.data}');
+
+        return response.data;
+      }
+      return null;
+    } catch (e) {
+      Loader.hide();
+      print('projectEdit Error :- $e');
       return null;
     }
   }
 
   // Get Contact Form
-  Future<Map<String, dynamic>?> deleteContact({required String contactId}) async {
+  Future<Map<String, dynamic>?> deleteProject({required String? projectId}) async {
     try {
       final token = StorageServices.to.getString(StorageServicesKeys.token);
       final haveToken = token.isNotEmpty;
@@ -199,8 +246,8 @@ class ProjectServices {
               'Authorization': 'Bearer $token',
             },
           ),
-          // queryParameters: {'id':contactId},
-          '${EndPoints.contactdelete}/$contactId',
+          // queryParameters: {'id':projectId},
+          '${EndPoints.projectdelete}/$projectId',
         );
 
         // print('55555555555555555555555 ${response!.data}');
@@ -212,7 +259,7 @@ class ProjectServices {
       return null;
     } catch (e) {
       Loader.hide();
-      print('deleteContact Error :- $e');
+      print('deleteProject Error :- $e');
       return null;
     }
   }
@@ -405,68 +452,6 @@ class ProjectServices {
     } catch (e) {
       Loader.hide();
       print('addFollowup Error :- $e');
-      return null;
-    }
-  }
-
-  // Submit Form
-  Future<ContactEditSubmissionModel?> contactEdit({
-    required String contactId,
-    required String name,
-    required String mobile,
-    required String email,
-    required String contactType,
-    required String contactSource,
-    required String designation,
-    required String companyName,
-    required String landlineNumber,
-    required String companyWebsite,
-    required String companyLocation,
-    required String companyAddress,
-    required String remarks,
-  }) async {
-    try {
-      final token = StorageServices.to.getString(StorageServicesKeys.token);
-      final haveToken = token.isNotEmpty;
-      if (haveToken) {
-        final formData = FormData.fromMap({
-          'name': name,
-          'contact_type': contactType,
-          'email': email,
-          'mobile': mobile,
-          'company': companyName,
-          'designation': designation,
-          'company_address': companyAddress,
-          'company_website': companyWebsite,
-          'company_landline': landlineNumber,
-          'company_location': companyLocation,
-          'remarks': remarks,
-          'contact_source': contactSource,
-        });
-
-        final response = await api.dio?.post<Map<String, dynamic>>(
-          options: Options(
-            headers: {
-              // 'accept': '*/*',
-              'Content-Type': 'application/json',
-              'Authorization': 'Bearer $token',
-            },
-          ),
-          // queryParameters: {'id':contactId},
-          data: formData,
-          '${EndPoints.submitEditContactSubmit}/$contactId',
-        );
-
-        print('55555555555555555555555 ${response!.data}');
-
-        final respModel = ContactEditSubmissionModel.fromJson(response!.data ?? {});
-
-        return respModel;
-      }
-      return null;
-    } catch (e) {
-      Loader.hide();
-      print('submitForm Error :- $e');
       return null;
     }
   }

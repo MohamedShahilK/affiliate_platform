@@ -33,7 +33,7 @@ class Data {
   final String? tableTitle;
   final String? userDesignation;
   final String? keywordSearch;
-  final int? statusSearch;
+  final String? statusSearch;
   final String? userID;
   final List<String>? projectStatus;
   final List<ProjectList>? projectList;

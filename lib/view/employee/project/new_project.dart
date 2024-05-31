@@ -25,11 +25,11 @@ import 'package:skeletonizer/skeletonizer.dart';
 
 class NewProject extends StatefulWidget {
   const NewProject({
-    this.contactId,
+    this.projectId,
     super.key,
   });
 
-  final String? contactId;
+  final String? projectId;
 
   @override
   State<NewProject> createState() => _NewProjectState();
@@ -44,13 +44,13 @@ class _NewProjectState extends State<NewProject> {
   void didChangeDependencies() {
     projectBloc ??= Provider.of<ProjectBloc>(context);
     projectBloc!.clearStreams();
-    if (widget.contactId == null) {
+    if (widget.projectId == null) {
       projectBloc!.getProjectViewStream.add(null);
       setState(() {
         loading = false;
       });
     } else {
-      projectBloc!.viewProject(contactId: widget.contactId!).then(
+      projectBloc!.viewProject(projectId: widget.projectId!).then(
             (value) => setState(() {
               loading = false;
             }),
@@ -449,14 +449,14 @@ class _NewProjectState extends State<NewProject> {
                                     ).ripple(context, () async {
                                       customLoader(context);
                                       // if new project
-                                      if (widget.contactId == null && projectFormModel != null && projectFormModel.data != null && projectFormModel.data!.isNotEmpty) {
+                                      if (widget.projectId == null && projectFormModel != null && projectFormModel.data != null && projectFormModel.data!.isNotEmpty) {
                                         final customerId = projectFormModel.data?[0].contactList?.firstWhereOrNull((e) => e.contactName == bloc.clientStream.value)?.contactID;
                                         final quotationId = projectFormModel.data?[0].quotationList?.firstWhereOrNull((e) => e.quoteRefr == bloc.quotationRefereneceStream.value)?.quoteID;
 
                                         final resp = await bloc.submitProjectForm(context, customerId: customerId, quotationId: quotationId);
 
                                         if (resp != null && resp['status'] == 'SUCCESS' && resp['response'] == 'OK') {
-                                          // Navigator.pop(context);
+                                          Navigator.pop(context);
                                           await successMotionToastInfo(context, msg: resp['message'] as String);
                                           await bloc.getAllProjects();
                                           Loader.hide();
@@ -467,8 +467,24 @@ class _NewProjectState extends State<NewProject> {
                                         // }
                                       }
                                       // else existing project
-                                      else if (widget.contactId != null && projectFormModel != null && projectFormModel.data != null && projectFormModel.data!.isNotEmpty) {
-                                        
+                                      else if (widget.projectId != null && projectFormModel != null && projectFormModel.data != null && projectFormModel.data!.isNotEmpty) {
+                                        final customerId = projectFormModel.data?[0].contactList?.firstWhereOrNull((e) => e.contactName == bloc.clientStream.value)?.contactID;
+                                        final quotationId = projectFormModel.data?[0].quotationList?.firstWhereOrNull((e) => e.quoteRefr == bloc.quotationRefereneceStream.value)?.quoteID;
+
+                                        print('211231223213212323 $customerId');
+                                        print('211231223213212323 $quotationId');
+
+                                        final resp = await bloc.projectEdit(projectId: widget.projectId ?? '', customerId: customerId, quotationId: quotationId);
+
+                                        if (resp != null && resp['status'] == 'SUCCESS' && resp['response'] == 'OK') {
+                                          Navigator.pop(context);
+                                          await successMotionToastInfo(context, msg: (resp['message'] as String?) ?? 'Project updated successfully');
+                                          await bloc.getAllProjects();
+                                          Loader.hide();
+                                        } else {
+                                          await erroMotionToastInfo(context, msg: 'Updation Failed !!');
+                                          Loader.hide();
+                                        }
                                       }
                                     }),
                                   ],

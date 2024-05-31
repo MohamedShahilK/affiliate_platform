@@ -50,13 +50,13 @@ class ProjectBloc {
     getProjectFormStream.add(respModel);
   }
 
-  Future<void> viewProject({required String contactId}) async {
+  Future<void> viewProject({required String projectId}) async {
     getProjectViewStream.add(null);
-    final respModel = await ProjectServices().viewProject(contactId: contactId);
+    final respModel = await ProjectServices().viewProject(projectId: projectId);
     getProjectViewStream.add(respModel);
   }
 
-  Future<Map<String, dynamic>?> submitProjectForm(BuildContext context,{required String? customerId, required String? quotationId}) async {
+  Future<Map<String, dynamic>?> submitProjectForm(BuildContext context, {required String? customerId, required String? quotationId}) async {
     final respModel = ProjectServices().submitProjectForm(
       context,
       name: projectNameStream.value,
@@ -70,17 +70,31 @@ class ProjectBloc {
     return respModel;
   }
 
-  // Future<bool> deleteContact({required String contactId}) async {
-  //   var isDeleted = false;
+  Future<Map<String, dynamic>?> projectEdit({required String projectId, required String? customerId, required String? quotationId}) async {
+    final respModel = ProjectServices().projectEdit(      
+      projectId: projectId,
+      name: projectNameStream.value,
+      description: descriptionStream.valueOrNull,
+      startDate: startDateStream.valueOrNull,
+      endDate: endDateStream.valueOrNull,
+      customerId: customerId,
+      quotationId: quotationId,
+    );
 
-  //   final jsonData = await ManageContactSevices().deleteContact(contactId: contactId);
+    return respModel;
+  }
 
-  //   if (jsonData != null && jsonData['status'] == 'SUCCESS' && jsonData['response'] == 'OK') {
-  //     isDeleted = true;
-  //   }
+  Future<Map<String, dynamic>?> deleteProject({required String? projectId}) async {
+    var isDeleted = false;
 
-  //   return isDeleted;
-  // }
+    final jsonData = await ProjectServices().deleteProject(projectId: projectId);
+
+    // if (jsonData != null && jsonData['status'] == 'SUCCESS' && jsonData['response'] == 'OK') {
+    //   isDeleted = true;
+    // }
+
+    return jsonData;
+  }
 
   // Future<bool> addPermissionForAffUsers({required String contactId, required String affUserId}) async {
   //   var isPermAdded = false;
