@@ -84,7 +84,7 @@ class App extends StatelessWidget {
                 localizationsDelegates: AppLocalizations.localizationsDelegates,
                 supportedLocales: AppLocalizations.supportedLocales,
                 // home: const SplashPage(),
-                home: const ProjectPage(),
+                home: const LeavePage(),
               ),
             ),
           );

@@ -19,7 +19,7 @@ class GetAllLeaves {
 class Data {
   Data({
     required this.tableTitle,
-    required this.userDesignation,
+    // required this.userDesignation,
     required this.userID,
     required this.totalLeaves,
     required this.leavesList,
@@ -28,7 +28,7 @@ class Data {
     required this.users,
   });
   final String? tableTitle;
-  final String? userDesignation;
+  // final String? userDesignation;
   final String? userID;
   final int? totalLeaves;
   final List<LeavesList>? leavesList;
@@ -112,9 +112,9 @@ class LeavesDuration {
 
 @JsonSerializable()
 class Users {
-  Users({required this.id, required this.firstName, required this.lastName, required this.email});
+  Users({required this.id, required this.firstName, required this.lastName, required this.userCode});
   final String? id;
   final String? firstName;
   final String? lastName;
-  final String? email;
+  final String? userCode;
 }

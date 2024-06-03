@@ -16,7 +16,7 @@ GetAllLeaves _$GetAllLeavesFromJson(Map<String, dynamic> json) => GetAllLeaves(
 
 Data _$DataFromJson(Map<String, dynamic> json) => Data(
       tableTitle: json['table_title'] as String?,
-      userDesignation: json['user_Designation'] as String?,
+      // userDesignation: json['user_Designation'] as String?,
       userID: json['user_ID'] as String?,
       totalLeaves: json['total_leaves'] as int?,
       leavesList: (json['leaves_list'] as List<dynamic>?)?.map((e) => _$LeavesListFromJson(e as Map<String, dynamic>)).toList(),
@@ -26,7 +26,7 @@ Data _$DataFromJson(Map<String, dynamic> json) => Data(
           : _$LeavesDurationFromJson(
               json['leaves_duration'] as Map<String, dynamic>,
             ),
-      users: (json['users'] as List<dynamic>?)?.map((e) => _$UsersFromJson(e as Map<String, dynamic>)).toList(),
+      users: (json['employee_list'] as List<dynamic>?)?.map((e) => _$UsersFromJson(e as Map<String, dynamic>)).toList(),
     );
 
 LeavesList _$LeavesListFromJson(Map<String, dynamic> json) => LeavesList(
@@ -75,5 +75,5 @@ Users _$UsersFromJson(Map<String, dynamic> json) => Users(
       id: json['id'] as String?,
       firstName: json['first_name'] as String?,
       lastName: json['last_name'] as String?,
-      email: json['email'] as String?,
+      userCode: json['user_code'] as String?,
     );
