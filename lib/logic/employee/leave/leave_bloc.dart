@@ -1,8 +1,8 @@
 // ignore_for_file: lines_longer_than_80_chars
 
-import 'package:affiliate_platform/models/employee/checkin/get_checkin_form.dart';
+import 'package:affiliate_platform/models/employee/leave/leave_form_model.dart';
+import 'package:affiliate_platform/models/employee/leave/leave_model.dart';
 import 'package:affiliate_platform/models/employee/project/view_project.dart';
-import 'package:affiliate_platform/models/leave/leave_model.dart';
 import 'package:affiliate_platform/services/employee/leave/leave_services.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -12,7 +12,7 @@ class LeaveBloc {
   }
 
   final getAllLeavesStream = BehaviorSubject<GetAllLeaves?>();
-  final getProjectFormStream = BehaviorSubject<GetCheckinForm?>();
+  final getProjectFormStream = BehaviorSubject<GetLeaveForm?>();
   final getProjectViewStream = BehaviorSubject<ProjectView?>();
 
   final projectNameStream = BehaviorSubject<String>.seeded('');
@@ -41,10 +41,10 @@ class LeaveBloc {
     getAllLeavesStream.add(respModel);
   }
 
-  // Future<void> getContactForm() async {
-  //   final respModel = await CheckInServices().getCheckinForm();
-  //   getProjectFormStream.add(respModel);
-  // }
+  Future<void> getProjectForm() async {
+    final respModel = await LeavesServices().getLeaveForm();
+    getProjectFormStream.add(respModel);
+  }
 
   // Future<void> viewProject({required String contactId}) async {
   //   getProjectViewStream.add(null);

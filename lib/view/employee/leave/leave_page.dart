@@ -2,11 +2,12 @@
 
 import 'package:affiliate_platform/config/ripple.dart';
 import 'package:affiliate_platform/logic/employee/leave/leave_bloc.dart';
-import 'package:affiliate_platform/models/leave/leave_model.dart';
+import 'package:affiliate_platform/models/employee/leave/leave_model.dart';
 import 'package:affiliate_platform/utils/constants/styles.dart';
 import 'package:affiliate_platform/utils/utility_functions.dart';
 import 'package:affiliate_platform/view/common/custom_header.dart';
 import 'package:affiliate_platform/view/common/custom_scafflod.dart';
+import 'package:affiliate_platform/view/employee/leave/view_leave.dart';
 import 'package:affiliate_platform/view/manage_contact/manage_contact.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
@@ -331,7 +332,14 @@ class _ProjectCard extends StatelessWidget {
                       // color: Colors.blue[400]!,
                       isLoading: isLoading,
                       icon: Icons.remove_red_eye_outlined,
-                      onTap: () {},
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ViewLeave(
+                            leaveModel: model?.data![0].leavesList![index],
+                          ),
+                        ),
+                      ),
                     ),
                     _EachProjectSmallButtons(
                       // color: Colors.red[400]!,
