@@ -5,6 +5,7 @@ import 'package:affiliate_platform/logic/employee/leave/leave_bloc.dart';
 import 'package:affiliate_platform/models/employee/leave/leave_form_model.dart';
 import 'package:affiliate_platform/models/employee/leave/leave_model.dart';
 import 'package:affiliate_platform/utils/constants/styles.dart';
+import 'package:affiliate_platform/utils/custom_tools.dart';
 import 'package:affiliate_platform/view/common/custom_header.dart';
 import 'package:affiliate_platform/view/common/custom_scafflod.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -13,6 +14,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -137,7 +139,7 @@ class _NewLeaveState extends State<NewLeave> {
                         }
 
                         if (widget.leaveModel?.leaveDuration != null && (widget.leaveModel?.leaveDuration != '')) {
-                          bloc.leaveDurationStream.add(getLeaveDuration(durationId: widget.leaveModel?.leaveDuration ?? '1'));
+                          bloc.leaveDurationStream.add(getLeaveDuration(durationId: widget.leaveModel?.leaveDuration ?? ''));
                         }
 
                         if (widget.leaveModel?.leavesIntervals != null && (widget.leaveModel?.leavesIntervals != '')) {
@@ -196,22 +198,37 @@ class _NewLeaveState extends State<NewLeave> {
                                     label: 'Employee',
                                   ), //dropdown
                                   NewContactField(
+                                    enabled: false,
                                     heading: 'Apply Date',
                                     hintText: 'Select Apply Date',
                                     textStream: bloc.leaveApplyDateStream,
-                                    onChanged: bloc.leaveApplyDateStream.add,
+                                    // onChanged: bloc.leaveApplyDateStream.add,
+                                    onTap: () async {
+                                      final date = await _selectDate(context);
+                                      bloc.leaveApplyDateStream.add(date ?? '');
+                                    },
                                   ),
                                   NewContactField(
+                                    enabled: false,
                                     heading: 'Start Date',
                                     hintText: 'Select Start Date',
                                     textStream: bloc.leaveStartDateStream,
-                                    onChanged: bloc.leaveStartDateStream.add,
+                                    // onChanged: bloc.leaveStartDateStream.add,
+                                    onTap: () async {
+                                      final date = await _selectDate(context);
+                                      bloc.leaveStartDateStream.add(date ?? '');
+                                    },
                                   ),
                                   NewContactField(
+                                    enabled: false,
                                     heading: 'End Date',
                                     hintText: 'Select End Date',
                                     textStream: bloc.leaveEndDateStream,
-                                    onChanged: bloc.leaveEndDateStream.add,
+                                    // onChanged: bloc.leaveEndDateStream.add,
+                                    onTap: () async {
+                                      final date = await _selectDate(context);
+                                      bloc.leaveEndDateStream.add(date ?? '');
+                                    },
                                   ),
                                   NewContactDropDown(
                                     leaveFormModel: leaveFormModel,
@@ -232,19 +249,41 @@ class _NewLeaveState extends State<NewLeave> {
                                     // initialValue: leaveFormModel == null ? '' : leaveFormModel.data![0].contactType!.entries.map((e) => e as String).toList().first,
                                     // initialValue: widget.model?.type ?? '',
                                   ), //dropdown
-                                  NewContactField(
-                                    heading: 'No. of Hours',
-                                    hintText: '',
-                                    textInputType: TextInputType.number,
-                                    textStream: bloc.noOfHoursStream,
-                                    onChanged: bloc.noOfHoursStream.add,
+                                  // if (bloc.leaveDurationStream.value != '')
+                                  StreamBuilder(
+                                    stream: bloc.leaveDurationStream,
+                                    builder: (context, snapshot) {
+                                      if (snapshot.data == 'Full day') {
+                                        bloc.noOfHoursStream.add('1');
+                                      } else {
+                                        bloc.noOfHoursStream.add('');
+                                      }
+                                      return snapshot.data == ''
+                                          ? const SizedBox.shrink()
+                                          : NewContactField(
+                                              enabled: snapshot.data != 'Full day',
+                                              heading: 'No. of Hours',
+                                              hintText: '',
+                                              textInputType: TextInputType.number,
+                                              textStream: bloc.noOfHoursStream,
+                                              onChanged: bloc.noOfHoursStream.add,
+                                            );
+                                    },
                                   ),
-                                  NewContactField(
-                                    heading: 'Hour off Start and End Time',
-                                    hintText: 'Hour off Start and End Time',
-                                    textInputType: TextInputType.text,
-                                    textStream: bloc.hourOffStartAndEndDateStream,
-                                    onChanged: bloc.hourOffStartAndEndDateStream.add,
+                                  // if (bloc.leaveDurationStream.value != '' && bloc.leaveDurationStream.value == 'Hour Off')
+                                  StreamBuilder(
+                                    stream: bloc.leaveDurationStream,
+                                    builder: (context, snapshot) {
+                                      return snapshot.data != '' && snapshot.data == 'Hour Off'
+                                          ? NewContactField(
+                                              heading: 'Hour off Start and End Time',
+                                              hintText: 'Hour off Start and End Time',
+                                              textInputType: TextInputType.text,
+                                              textStream: bloc.hourOffStartAndEndDateStream,
+                                              onChanged: bloc.hourOffStartAndEndDateStream.add,
+                                            )
+                                          : const SizedBox.shrink();
+                                    },
                                   ),
                                   NewContactDropDown(
                                     leaveFormModel: leaveFormModel,
@@ -267,6 +306,8 @@ class _NewLeaveState extends State<NewLeave> {
                               ),
                             ),
 
+                            SizedBox(height: 20.h),
+
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
@@ -287,45 +328,26 @@ class _NewLeaveState extends State<NewLeave> {
                                   ),
                                   child: Text('Submit', style: AppStyles.poppins.copyWith(fontSize: 14.w, color: Colors.white)),
                                 ).ripple(context, () async {
-                                  // customLoader(context);
-                                  // // if new project
-                                  // if (widget.projectId == null && leaveFormModel != null && leaveFormModel.data != null && leaveFormModel.data!.isNotEmpty) {
-                                  //   final customerId = leaveFormModel.data?[0].contactList?.firstWhereOrNull((e) => e.contactName == bloc.clientStream.value)?.contactID;
-                                  //   final quotationId = leaveFormModel.data?[0].quotationList?.firstWhereOrNull((e) => e.quoteRefr == bloc.quotationRefereneceStream.value)?.quoteID;
+                                  customLoader(context);
+                                  // if new project
+                                  if (widget.leaveModel == null) {
+                                    final employeeId = leaveFormModel?.data?[0].employeeList?.firstWhere((e) => e.firstName == bloc.employeeNameStream.value).id ?? '0';
+                                    final durationId = getDurationI(status: bloc.leaveDurationStream.value);
+                                    final leaveTypeId = leaveFormModel?.data?[0].leavesType?.firstWhere((e) => e.name == bloc.leaveTypeStream.value).id ?? '0';
 
-                                  //   final resp = await bloc.submitProjectForm(context, customerId: customerId, quotationId: quotationId);
+                                    final resp = await bloc.submitLeaveForm(employeeId: employeeId, durationId: durationId, leaveTypeId: leaveTypeId);
 
-                                  //   if (resp != null && resp['status'] == 'SUCCESS' && resp['response'] == 'OK') {
-                                  //     Navigator.pop(context);
-                                  //     await successMotionToastInfo(context, msg: resp['message'] as String);
-                                  //     await bloc.getAllProjects();
-                                  //     Loader.hide();
-                                  //   } else {
-                                  //     await erroMotionToastInfo(context, msg: 'Submission Failed !!');
-                                  //     Loader.hide();
-                                  //   }
-                                  //   // }
-                                  // }
-                                  // // else existing project
-                                  // else if (widget.projectId != null && leaveFormModel != null && leaveFormModel.data != null && leaveFormModel.data!.isNotEmpty) {
-                                  //   final customerId = leaveFormModel.data?[0].contactList?.firstWhereOrNull((e) => e.contactName == bloc.clientStream.value)?.contactID;
-                                  //   final quotationId = leaveFormModel.data?[0].quotationList?.firstWhereOrNull((e) => e.quoteRefr == bloc.quotationRefereneceStream.value)?.quoteID;
-
-                                  //   print('211231223213212323 $customerId');
-                                  //   print('211231223213212323 $quotationId');
-
-                                  //   final resp = await bloc.projectEdit(projectId: widget.projectId ?? '', customerId: customerId, quotationId: quotationId);
-
-                                  //   if (resp != null && resp['status'] == 'SUCCESS' && resp['response'] == 'OK') {
-                                  //     Navigator.pop(context);
-                                  //     await successMotionToastInfo(context, msg: (resp['message'] as String?) ?? 'Project updated successfully');
-                                  //     await bloc.getAllProjects();
-                                  //     Loader.hide();
-                                  //   } else {
-                                  //     await erroMotionToastInfo(context, msg: 'Updation Failed !!');
-                                  //     Loader.hide();
-                                  //   }
-                                  // }
+                                    if (resp != null && resp['status'] == 'SUCCESS' && resp['response'] == 'OK') {
+                                      Navigator.pop(context);
+                                      await successMotionToastInfo(context, msg: resp['message'] as String);
+                                      await bloc.getAllLeaves();
+                                      Loader.hide();
+                                    } else {
+                                      await erroMotionToastInfo(context, msg: 'Submission Failed !!');
+                                      Loader.hide();
+                                    }
+                                    // }
+                                  }
                                 }),
                               ],
                             ),
@@ -344,6 +366,39 @@ class _NewLeaveState extends State<NewLeave> {
       ),
     );
   }
+
+  Future<String?> _selectDate(BuildContext context) async {
+    var date = DateTime.now();
+    final now = DateTime.now();
+
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(3000),
+    );
+
+    if (picked != null) {
+      date = DateTime(
+        picked.year,
+        picked.month,
+        picked.day,
+      );
+
+      // print('77777777777777777777777777777 ${DateFormat('dd/MM/yyyy').format(date)}');
+      final dateStr = DateFormat('dd/MM/yyyy').format(date);
+
+      if (dateStr == '') {
+        await erroMotionToastInfo(context, msg: 'Something wrong !!');
+        return null;
+      }
+
+      return dateStr;
+    }
+
+    // await erroMotionToastInfo(context, msg: 'Something wrong !!');
+    return null;
+  }
 }
 
 String getStatusId({required String status}) {
@@ -360,15 +415,29 @@ String getStatusId({required String status}) {
   }
 }
 
+String getDurationI({required String status}) {
+  if (status == 'Hour Off') {
+    return '1';
+  } else if (status == 'Half day - Morning') {
+    return '2';
+  } else if (status == 'Full day') {
+    return '3';
+  } else if (status == 'Half day - Afternoon') {
+    return '4';
+  } else {
+    return '-1';
+  }
+}
+
 String getLeaveDuration({required String durationId}) {
   if (durationId == '1') {
     return 'Hour Off';
   } else if (durationId == '2') {
     return 'Half day - Morning';
   } else if (durationId == '3') {
-    return 'Half day - Afternoon';
-  } else {
     return 'Full day';
+  } else {
+    return 'Half day - Afternoon';
   }
 }
 
@@ -571,6 +640,9 @@ class NewContactField extends StatefulWidget {
     super.key,
   });
 
+
+  
+
   // final TextEditingController controller;
   final String heading;
   // final String initialValue;
@@ -614,63 +686,66 @@ class _NewContactFieldState extends State<NewContactField> {
       child: StreamBuilder<Object>(
         stream: widget.textStream,
         builder: (context, snapshot) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Text(heading, style: AppStyles.poppins.copyWith(fontSize: 12.w, color: Colors.purple)),
-              // SizedBox(height: 7.h),
-              SizedBox(
-                height: widget.isLargeField ? null : 50.h,
-                child: TextFormField(
-                  // initialValue: widget.initialValue,
-                  scrollPadding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewInsets.bottom + 15.w * 6, // Adjust the value as needed
-                  ),
-                  // controller: controller,
-                  style: AppStyles.poppins.copyWith(
-                    color: Colors.purple,
-                    fontSize: 13.w,
-                  ),
-                  keyboardType: !widget.isLargeField ? widget.textInputType : TextInputType.multiline,
-                  // minLines: !isLargeField ? null : 1,
-                  // maxLines: !isLargeField ? null : 20,
-                  // maxLength: !isLargeField ? null : 500,
-                  // expands:isLargeField ,
-                  // maxLines: null,
-                  controller: _controller,
-                  validator: widget.validator,
-                  onChanged: widget.onChanged,
-                  onTap: widget.onTap,
-                  obscuringCharacter: '*',
-                  obscureText: widget.isObscure,
-                  enabled: widget.enabled,
-                  decoration: InputDecoration(
-                    // isDense: true,
-                    floatingLabelBehavior: FloatingLabelBehavior.always,
-                    labelText: widget.heading,
-                    labelStyle: AppStyles.poppins.copyWith(fontSize: 12.w, color: Colors.purple),
-                    hintText: widget.hintText,
-                    hintStyle: AppStyles.openSans.copyWith(
-                      color: Colors.purple[100],
+          return InkWell(
+            onTap: widget.onTap,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Text(heading, style: AppStyles.poppins.copyWith(fontSize: 12.w, color: Colors.purple)),
+                // SizedBox(height: 7.h),
+                SizedBox(
+                  height: widget.isLargeField ? null : 50.h,
+                  child: TextFormField(
+                    // initialValue: widget.initialValue,
+                    scrollPadding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom + 15.w * 6, // Adjust the value as needed
+                    ),
+                    // controller: controller,
+                    style: AppStyles.poppins.copyWith(
+                      color: Colors.purple,
                       fontSize: 13.w,
                     ),
-                    contentPadding: EdgeInsets.only(left: 15.w),
-                    border: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Color.fromARGB(139, 103, 51, 137)),
-                      borderRadius: BorderRadius.circular(12.r),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Color.fromARGB(139, 103, 51, 137)),
-                      borderRadius: BorderRadius.circular(12.r),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Color.fromARGB(255, 152, 102, 185)),
-                      borderRadius: BorderRadius.circular(12.r),
+                    keyboardType: !widget.isLargeField ? widget.textInputType : TextInputType.multiline,
+                    // minLines: !isLargeField ? null : 1,
+                    // maxLines: !isLargeField ? null : 20,
+                    // maxLength: !isLargeField ? null : 500,
+                    // expands:isLargeField ,
+                    // maxLines: null,
+                    controller: _controller,
+                    validator: widget.validator,
+                    onChanged: widget.onChanged,
+                    // onTap: widget.onTap,
+                    obscuringCharacter: '*',
+                    obscureText: widget.isObscure,
+                    enabled: widget.enabled,
+                    decoration: InputDecoration(
+                      // isDense: true,
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      labelText: widget.heading,
+                      labelStyle: AppStyles.poppins.copyWith(fontSize: 12.w, color: Colors.purple),
+                      hintText: widget.hintText,
+                      hintStyle: AppStyles.openSans.copyWith(
+                        color: Colors.purple[100],
+                        fontSize: 13.w,
+                      ),
+                      contentPadding: EdgeInsets.only(left: 15.w),
+                      border: OutlineInputBorder(
+                        borderSide: const BorderSide(color: Color.fromARGB(139, 103, 51, 137)),
+                        borderRadius: BorderRadius.circular(12.r),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(color: Color.fromARGB(139, 103, 51, 137)),
+                        borderRadius: BorderRadius.circular(12.r),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(color: Color.fromARGB(255, 152, 102, 185)),
+                        borderRadius: BorderRadius.circular(12.r),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           );
         },
       ),

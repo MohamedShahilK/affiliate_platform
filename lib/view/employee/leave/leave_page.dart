@@ -41,10 +41,18 @@ class _LeavePageState extends State<LeavePage> {
       },
       child: CustomScaffold(
         key: _refreshKey,
+        onTapFloatingButton: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const NewLeave(),
+            ),
+          );
+        },
         body: SafeArea(
           child: GestureDetector(
             onTap: () {
-              // Scaffold.of(context).closeDrawer();
+              Scaffold.of(context).closeDrawer();
             },
             child: SingleChildScrollView(
               child: Column(

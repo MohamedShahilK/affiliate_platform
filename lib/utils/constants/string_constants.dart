@@ -4,4 +4,8 @@ class StorageServicesKeys {
   static const String token = 'Token';
   static const String maxValue = 'maxValue';
   static const String minValue = 'minValue';
+
+  // 
+  static const String userId = 'userId';
+
 }

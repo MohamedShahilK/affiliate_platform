@@ -3,6 +3,8 @@
 import 'package:affiliate_platform/models/employee/leave/leave_form_model.dart';
 import 'package:affiliate_platform/models/employee/leave/leave_model.dart';
 import 'package:affiliate_platform/services/employee/leave/leave_services.dart';
+import 'package:affiliate_platform/utils/constants/string_constants.dart';
+import 'package:affiliate_platform/utils/internal_services/storage_services.dart';
 import 'package:rxdart/rxdart.dart';
 
 class LeaveBloc {
@@ -40,6 +42,42 @@ class LeaveBloc {
   Future<void> getLeaveForm() async {
     final respModel = await LeavesServices().getLeaveForm();
     getLeaveFormStream.add(respModel);
+  }
+
+  Future<void> userDetails() async {
+    final respModel = await LeavesServices().userDetails();
+    if (respModel != null) {
+      final data = respModel['data'];
+
+      if (data is List? && data != null && data.isNotEmpty) {
+        final item = data[0] as Map?;
+        final userId = item?['user_ID'] as String?;
+
+        if (userId != null) {
+          await StorageServices.to.setString(StorageServicesKeys.userId, userId);
+        }
+      }
+    }
+  }
+
+  Future<Map<String, dynamic>?> submitLeaveForm({
+    required String employeeId,
+    required String durationId,
+    required String leaveTypeId,
+  }) async {
+    final respModel = LeavesServices().submitLeaveForm(
+      employee: employeeId,
+      leaveApplyDate: leaveApplyDateStream.value,
+      leaveDuration: durationId,
+      leaveType: leaveTypeId,
+      leaveStartDate: leaveStartDateStream.value,
+      leaveEndDate: leaveEndDateStream.value,
+      leaveReason: leaveReasonStream.value,
+      leaveDurationIntervals: noOfHoursStream.valueOrNull,
+      leavesHouroffText: hourOffStartAndEndDateStream.valueOrNull,
+    );
+
+    return respModel;
   }
 
   void clearStreams() {

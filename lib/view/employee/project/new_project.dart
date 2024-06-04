@@ -19,6 +19,7 @@ import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -67,8 +68,8 @@ class _NewProjectState extends State<NewProject> {
 
   @override
   void didChangeDependencies() {
-      projectBloc ??= Provider.of<ProjectBloc>(context);
-      projectBloc!.clearStreams();
+    projectBloc ??= Provider.of<ProjectBloc>(context);
+    projectBloc!.clearStreams();
 
     // WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
     //   await projectBloc!.getContactForm();
@@ -533,6 +534,8 @@ class _NewProjectState extends State<NewProject> {
     );
   }
 }
+
+
 
 String getStatusId({required String status}) {
   if (status == 'Inactive') {

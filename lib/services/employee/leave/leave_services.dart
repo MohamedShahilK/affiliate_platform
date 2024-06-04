@@ -2,6 +2,7 @@
 
 import 'package:affiliate_platform/api/api.dart';
 import 'package:affiliate_platform/api/api_contants.dart';
+import 'package:affiliate_platform/api/api_errror_handling.dart';
 import 'package:affiliate_platform/models/employee/leave/leave_form_model.dart';
 import 'package:affiliate_platform/models/employee/leave/leave_model.dart';
 import 'package:affiliate_platform/models/employee/project/view_project.dart';
@@ -45,7 +46,7 @@ class LeavesServices {
       return null;
     } catch (e) {
       Loader.hide();
-      print('getAllContacts Error :- $e');
+      print('getAllLeaves Error :- $e');
       return null;
     }
   }
@@ -68,7 +69,6 @@ class LeavesServices {
           EndPoints.leaveForm,
         );
 
-
         print(response!.data);
         final respModel = GetLeaveForm.fromJson(response!.data ?? {});
 
@@ -82,8 +82,84 @@ class LeavesServices {
     }
   }
 
-  // Get Contact Form
-  Future<ProjectView?> viewProject({required String projectId}) async {
+  
+
+  // Submit Form
+  Future<Map<String, dynamic>?> submitLeaveForm({
+    required String employee,
+    required String leaveApplyDate,
+    required String leaveDuration,
+    required String leaveType,
+    required String leaveStartDate,
+    required String leaveEndDate,
+    required String leaveReason,
+    String? leaveDurationIntervals,
+    String? leavesHouroffText,
+  }) async {
+    try {
+      final token = StorageServices.to.getString(StorageServicesKeys.token);
+      final userId = StorageServices.to.getString(StorageServicesKeys.userId);
+      final haveToken = token.isNotEmpty;
+      if (haveToken) {
+        final formData = FormData.fromMap({ 
+          'approval_status': '1',
+          'employee': employee,
+          'leave_date': leaveApplyDate,
+          'leave_duration': leaveDuration,
+          'leave_type': leaveType,
+          'leave_start_date': leaveStartDate,
+          'leave_end_date': leaveEndDate,
+          'leave_reason': leaveReason,
+          'created_by':userId,
+          'leave_duration_intervals': leaveDurationIntervals,
+          'leaves_houroff_text': leavesHouroffText,
+        });
+
+        final response = await api.dio?.post<Map<String, dynamic>>(
+          options: Options(
+            headers: {
+              // 'accept': '*/*',
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer $token',
+            },
+          ),
+          // queryParameters: {'id':contactId},
+          data: formData,
+          EndPoints.submitLeaveForm,
+        );
+
+        print('55555555555555555555555 ${response!.data}');
+
+        // final respModel = ContactViewModel.fromJson(response!.data ?? {});
+
+        return response.data;
+      }
+      return null;
+    } on DioException catch (e) {
+      Loader.hide();
+      // final errorResponse = e.response;
+      // final errorMsg = errorResponse!.data['errors']['name'];
+
+      // final mobileNumberError = errorMsg['mobile_number'];
+      // final plateNumberError = errorMsg['guest_name'];
+      // try {
+      //   await erroMotionToastInfo(context, msg: errorMsg as String);
+      // } catch (e) {
+      //   //
+      // }
+
+      // print('submitProjectForm Error :- ${e.response?.statusCode}');
+      print('submitProjectForm Error :- $e');
+      return null;
+    } catch (e) {
+      Loader.hide();
+      print('submitProjectForm Error :- $e');
+      return null;
+    }
+  }
+
+    // Get All Contacts
+  Future<Map<String, dynamic>?> userDetails() async {
     try {
       final token = StorageServices.to.getString(StorageServicesKeys.token);
       final haveToken = token.isNotEmpty;
@@ -96,20 +172,18 @@ class LeavesServices {
               'Authorization': 'Bearer $token',
             },
           ),
-          // queryParameters: {'id':projectId},
-          '${EndPoints.projectView}/$projectId',
+          // queryParameters: {},
+          EndPoints.userDetails,
         );
 
-        print('55555555555555555555555 ${response!.data}');
+        // final respModel = GetAllLeaves.fromJson(response!.data ?? {});
 
-        final respModel = ProjectView.fromJson(response!.data ?? {});
-
-        return respModel;
+        return response?.data;
       }
       return null;
     } catch (e) {
       Loader.hide();
-      print('viewProject Error :- $e');
+      print('userDetails Error :- $e');
       return null;
     }
   }
