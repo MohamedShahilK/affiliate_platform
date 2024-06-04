@@ -19,7 +19,7 @@ GetLeaveFormData _$DataFromJson(Map<String, dynamic> json) => GetLeaveFormData(
       title: json['title'] as String?,
       employeeList: (json['employee_list'] as List<dynamic>?)?.map((e) => _$EmployeeListFromJson(e as Map<String, dynamic>)).toList(),
       leavesType: (json['leaves_type'] as List<dynamic>?)?.map((e) => _$LeavesTypeFromJson(e as Map<String, dynamic>)).toList(),
-      leavesDuration: json['leaves_duration'] == null ? null :  _$LeavesDurationFromJson(json['leavesDuration'] as Map<String, dynamic>),
+      leavesDuration: json['leaves_duration'] == null ? null :  _$LeavesDurationFromJson(json['leaves_duration'] as Map<String, dynamic>),
     );
 
 GetLeaveFormEmployeeList _$EmployeeListFromJson(Map<String, dynamic> json) => GetLeaveFormEmployeeList(

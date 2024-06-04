@@ -2,7 +2,6 @@
 
 import 'package:affiliate_platform/models/employee/leave/leave_form_model.dart';
 import 'package:affiliate_platform/models/employee/leave/leave_model.dart';
-import 'package:affiliate_platform/models/employee/project/view_project.dart';
 import 'package:affiliate_platform/services/employee/leave/leave_services.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -12,28 +11,25 @@ class LeaveBloc {
   }
 
   final getAllLeavesStream = BehaviorSubject<GetAllLeaves?>();
-  final getProjectFormStream = BehaviorSubject<GetLeaveForm?>();
-  final getProjectViewStream = BehaviorSubject<ProjectView?>();
+  final getLeaveFormStream = BehaviorSubject<GetLeaveForm?>();
+  // final getProjectViewStream = BehaviorSubject<ProjectView?>();
 
-  final projectNameStream = BehaviorSubject<String>.seeded('');
+  final employeeNameStream = BehaviorSubject<String>.seeded('');
+  final leaveApplyDateStream = BehaviorSubject<String>.seeded('');
+  final leaveStartDateStream = BehaviorSubject<String>.seeded('');
+  final leaveEndDateStream = BehaviorSubject<String>.seeded('');
 
-  final clientStream = BehaviorSubject<String>.seeded('');
-  final clientIdStream = BehaviorSubject<String>.seeded('');
+  final leaveDurationStream = BehaviorSubject<String>.seeded('');
 
-  final quotationRefereneceStream = BehaviorSubject<String>.seeded('');
-  final quotationPersonNameStream = BehaviorSubject<String>.seeded(''); // Pending to implement by praveen
-  final quotationIdStream = BehaviorSubject<String>.seeded('');
+  final noOfHoursStream = BehaviorSubject<String>.seeded('');
+  final hourOffStartAndEndDateStream = BehaviorSubject<String>.seeded(''); // Only for hour off
 
-  final statusStream = BehaviorSubject<String>.seeded('');
-  final statusIdStream = BehaviorSubject<String>.seeded('');
-
-  final startDateStream = BehaviorSubject<String>.seeded('');
-  final endDateStream = BehaviorSubject<String>.seeded('');
-  final descriptionStream = BehaviorSubject<String>.seeded('');
+  final leaveTypeStream = BehaviorSubject<String>.seeded('');
+  final leaveReasonStream = BehaviorSubject<String>.seeded('');
 
   Future<void> initDetails() async {
     await getAllLeaves();
-    // await getContactForm();
+    await getLeaveForm();
   }
 
   Future<void> getAllLeaves() async {
@@ -41,161 +37,20 @@ class LeaveBloc {
     getAllLeavesStream.add(respModel);
   }
 
-  Future<void> getProjectForm() async {
+  Future<void> getLeaveForm() async {
     final respModel = await LeavesServices().getLeaveForm();
-    getProjectFormStream.add(respModel);
+    getLeaveFormStream.add(respModel);
   }
 
-  // Future<void> viewProject({required String contactId}) async {
-  //   getProjectViewStream.add(null);
-  //   final respModel = await CheckInServices().viewCheckin(contactId: contactId);
-  //   getProjectViewStream.add(respModel);
-  // }
-
-  // Future<Map<String, dynamic>?> submitProjectForm(BuildContext context,{required String? customerId, required String? quotationId}) async {
-  //   final respModel = ProjectServices().submitProjectForm(
-  //     context,
-  //     name: projectNameStream.value,
-  //     description: descriptionStream.valueOrNull,
-  //     startDate: startDateStream.valueOrNull,
-  //     endDate: endDateStream.valueOrNull,
-  //     customerId: customerId,
-  //     quotationId: quotationId,
-  //   );
-
-  //   return respModel;
-  // }
-
-  // Future<bool> deleteContact({required String contactId}) async {
-  //   var isDeleted = false;
-
-  //   final jsonData = await ManageContactSevices().deleteContact(contactId: contactId);
-
-  //   if (jsonData != null && jsonData['status'] == 'SUCCESS' && jsonData['response'] == 'OK') {
-  //     isDeleted = true;
-  //   }
-
-  //   return isDeleted;
-  // }
-
-  // Future<bool> addPermissionForAffUsers({required String contactId, required String affUserId}) async {
-  //   var isPermAdded = false;
-
-  //   final jsonData = await ManageContactSevices().addPermissionForAffUsers(contactId: contactId, affUserId: affUserId);
-
-  //   if (jsonData != null && jsonData['status'] == 'SUCCESS' && jsonData['response'] == 'OK') {
-  //     isPermAdded = true;
-  //   }
-
-  //   return isPermAdded;
-  // }
-
-  // Future<bool> deletePermissionForAffUsers(BuildContext context, {required String contactId, required String affUserId}) async {
-  //   var isPermDeleted = false;
-
-  //   final jsonData = await ManageContactSevices().deletePermissionForAffUsers(context, contactId: contactId, affUserId: affUserId);
-
-  //   if (jsonData != null && jsonData['status'] == 'SUCCESS' && jsonData['response'] == 'OK') {
-  //     isPermDeleted = true;
-  //   }
-
-  //   return isPermDeleted;
-  // }
-
-  // Future<bool> addFollowup({required String contactId}) async {
-  //   var isFollowUpAdded = false;
-
-  //   final jsonData = await ManageContactSevices().addFollowup(
-  //     contactId: contactId,
-  //     title: followupTitleStream.value,
-  //     description: followupDescriptionStream.value,
-  //     date: followupDateStream.value,
-  //   );
-
-  //   if (jsonData != null && jsonData['status'] == 'SUCCESS' && jsonData['response'] == 'OK') {
-  //     isFollowUpAdded = true;
-  //   }
-
-  //   return isFollowUpAdded;
-  // }
-
-  // Future<bool> deleteFollowup({required String contactId, required String followupId}) async {
-  //   var isFollowUpDelete = false;
-
-  //   final jsonData = await ManageContactSevices().deleteFollowup(contactId: contactId, followupId: followupId);
-
-  //   if (jsonData != null && jsonData['status'] == 'SUCCESS' && jsonData['response'] == 'OK') {
-  //     isFollowUpDelete = true;
-  //   }
-
-  //   return isFollowUpDelete;
-  // }
-
-  // Future<bool> editFollowup({required String contactId, required String followupId}) async {
-  //   var isFollowUpAdded = false;
-
-  //   final jsonData = await ManageContactSevices().editFollowup(
-  //     contactId: contactId,
-  //     followupId: followupId,
-  //     title: followupTitleStream.value,
-  //     description: followupDescriptionStream.value,
-  //     date: followupDateStream.value,
-  //   );
-
-  //   if (jsonData != null && jsonData['status'] == 'SUCCESS' && jsonData['response'] == 'OK') {
-  //     isFollowUpAdded = true;
-  //   }
-
-  //   return isFollowUpAdded;
-  // }
-
-  // Future<ContactEditSubmissionModel?> contactEdit({required String contactId}) async {
-  //   final respModel = ManageContactSevices().contactEdit(
-  //     contactId: contactId,
-  //     name: nameStream.value,
-  //     mobile: mobileStream.value,
-  //     email: emailStream.value,
-  //     contactType: contactTypeIdStream.value,
-  //     contactSource: contactSourceIdStream.value,
-  //     designation: designationStream.value,
-  //     companyName: companyNameStream.value,
-  //     landlineNumber: landlineStream.value,
-  //     companyWebsite: websiteStream.value,
-  //     companyLocation: companyLocationStream.value,
-  //     companyAddress: companyAddressStream.value,
-  //     remarks: remarkStream.value,
-  //   );
-
-  //   return respModel;
-  // }
-
   void clearStreams() {
-    // nameStream.add('');
-    // mobileStream.add('');
-    // emailStream.add('');
-    // // sourceStream.add('');
-    // designationStream.add('');
-    // companyNameStream.add('');
-    // landlineStream.add('');
-    // websiteStream.add('');
-    // companyLocationStream.add('');
-    // companyAddressStream.add('');
-    // remarkStream.add('');
-
-    // contactTypeStream.add('');
-    // contactSourceStream.add('');
-
-    projectNameStream.add('');
-    clientStream.add('');
-    clientIdStream.add('');
-    quotationRefereneceStream.add('');
-    quotationPersonNameStream.add('');
-    quotationIdStream.add('');
-    statusStream.add('');
-    statusIdStream.add('');
-    startDateStream.add('');
-    endDateStream.add('');
-    descriptionStream.add('');
+    employeeNameStream.add('');
+    leaveApplyDateStream.add('');
+    leaveStartDateStream.add('');
+    leaveEndDateStream.add('');
+    leaveDurationStream.add('');
+    noOfHoursStream.add('');
+    leaveTypeStream.add('');
+    leaveReasonStream.add('');
   }
 
   void dispose() {

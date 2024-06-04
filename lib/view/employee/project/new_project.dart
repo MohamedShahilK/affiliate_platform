@@ -41,27 +41,53 @@ class _NewProjectState extends State<NewProject> {
   bool loading = true;
 
   @override
-  void didChangeDependencies() {
-    projectBloc ??= Provider.of<ProjectBloc>(context);
-    projectBloc!.clearStreams();
-    if (widget.projectId == null) {
-      projectBloc!.getProjectViewStream.add(null);
-      setState(() {
-        loading = false;
-      });
-    } else {
-      projectBloc!.viewProject(projectId: widget.projectId!).then(
-            (value) => setState(() {
-              loading = false;
-            }),
-          );
-    }
+  void initState() {
+    super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      // projectBloc ??= Provider.of<ProjectBloc>(context);
+      // projectBloc!.clearStreams();
       await projectBloc!.getContactForm();
+      if (widget.projectId == null) {
+        projectBloc!.getProjectViewStream.add(null);
+        setState(() {
+          loading = false;
+        });
+      } else {
+        await projectBloc!.viewProject(projectId: widget.projectId!).then(
+              (value) => setState(() {
+                loading = false;
+              }),
+            );
+      }
       // if (widget.contactId != null) {
       //   await manageContactBloc!.getEachContact(contactId: widget.contactId!);
       // }
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+      projectBloc ??= Provider.of<ProjectBloc>(context);
+      projectBloc!.clearStreams();
+
+    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+    //   await projectBloc!.getContactForm();
+    //   if (widget.projectId == null) {
+    //     projectBloc!.getProjectViewStream.add(null);
+    //     setState(() {
+    //       loading = false;
+    //     });
+    //   } else {
+    //     await projectBloc!.viewProject(projectId: widget.projectId!).then(
+    //           (value) => setState(() {
+    //             loading = false;
+    //           }),
+    //         );
+    //   }
+    //   // if (widget.contactId != null) {
+    //   //   await manageContactBloc!.getEachContact(contactId: widget.contactId!);
+    //   // }
+    // });
 
     // setState(() {
     //   loading = false;

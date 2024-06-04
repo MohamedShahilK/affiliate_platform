@@ -7,6 +7,7 @@ import 'package:affiliate_platform/utils/constants/styles.dart';
 import 'package:affiliate_platform/utils/utility_functions.dart';
 import 'package:affiliate_platform/view/common/custom_header.dart';
 import 'package:affiliate_platform/view/common/custom_scafflod.dart';
+import 'package:affiliate_platform/view/employee/leave/new_leave.dart';
 import 'package:affiliate_platform/view/employee/leave/view_leave.dart';
 import 'package:affiliate_platform/view/manage_contact/manage_contact.dart';
 import 'package:flutter/material.dart';
@@ -42,7 +43,9 @@ class _LeavePageState extends State<LeavePage> {
         key: _refreshKey,
         body: SafeArea(
           child: GestureDetector(
-            onTap: () => Scaffold.of(context).closeDrawer(),
+            onTap: () {
+              // Scaffold.of(context).closeDrawer();
+            },
             child: SingleChildScrollView(
               child: Column(
                 children: [
@@ -326,7 +329,14 @@ class _ProjectCard extends StatelessWidget {
                       // color: Colors.green[900]!,
                       isLoading: isLoading,
                       icon: Icons.edit_outlined,
-                      onTap: () {},
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => NewLeave(
+                            leaveModel: model?.data![0].leavesList![index],
+                          ),
+                        ),
+                      ),
                     ),
                     _EachProjectSmallButtons(
                       // color: Colors.blue[400]!,

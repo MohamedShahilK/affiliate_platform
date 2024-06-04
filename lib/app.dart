@@ -9,7 +9,6 @@ import 'package:affiliate_platform/logic/manage_contact/manage_contact_bloc.dart
 import 'package:affiliate_platform/logic/profile/profile_bloc.dart';
 import 'package:affiliate_platform/splash.dart';
 import 'package:affiliate_platform/utils/l10n/l10n.dart';
-import 'package:affiliate_platform/view/employee/project/project.dart';
 import 'package:affiliate_platform/view/employee/leave/leave_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

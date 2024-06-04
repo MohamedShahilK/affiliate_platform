@@ -4,6 +4,7 @@ import 'package:affiliate_platform/config/ripple.dart';
 import 'package:affiliate_platform/controllers/sidemenu_controller.dart';
 import 'package:affiliate_platform/view/employee/attendance/attendance.dart';
 import 'package:affiliate_platform/view/employee/checkin/checkin_page.dart';
+import 'package:affiliate_platform/view/employee/leave/leave_page.dart';
 import 'package:affiliate_platform/view/employee/project/project.dart';
 import 'package:affiliate_platform/view/manage_contact/manage_contact.dart';
 import 'package:affiliate_platform/view/profile/profile_page.dart';
@@ -150,6 +151,7 @@ class SideMenu extends StatelessWidget {
                                   press: () {
                                     menu.setMyMenu('Leave Request');
                                     menu.setmyMenuExpand('Employee');
+                                     _handlePageNavigation(context, route: const LeavePage());
                                     // _handlePageNavigation(context, '/masterreport');
                                   },
                                 ),
