@@ -6,6 +6,7 @@ import 'package:affiliate_platform/models/employee/leave/leave_form_model.dart';
 import 'package:affiliate_platform/models/employee/leave/leave_model.dart';
 import 'package:affiliate_platform/utils/constants/styles.dart';
 import 'package:affiliate_platform/utils/custom_tools.dart';
+import 'package:affiliate_platform/utils/utility_functions.dart';
 import 'package:affiliate_platform/view/common/custom_header.dart';
 import 'package:affiliate_platform/view/common/custom_scafflod.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -199,6 +200,7 @@ class _NewLeaveState extends State<NewLeave> {
                                   ), //dropdown
                                   NewContactField(
                                     enabled: false,
+                                    isForDateField: true,
                                     heading: 'Apply Date',
                                     hintText: 'Select Apply Date',
                                     textStream: bloc.leaveApplyDateStream,
@@ -210,6 +212,7 @@ class _NewLeaveState extends State<NewLeave> {
                                   ),
                                   NewContactField(
                                     enabled: false,
+                                    isForDateField: true,
                                     heading: 'Start Date',
                                     hintText: 'Select Start Date',
                                     textStream: bloc.leaveStartDateStream,
@@ -221,6 +224,7 @@ class _NewLeaveState extends State<NewLeave> {
                                   ),
                                   NewContactField(
                                     enabled: false,
+                                    isForDateField: true,
                                     heading: 'End Date',
                                     hintText: 'Select End Date',
                                     textStream: bloc.leaveEndDateStream,
@@ -255,13 +259,15 @@ class _NewLeaveState extends State<NewLeave> {
                                     builder: (context, snapshot) {
                                       if (snapshot.data == 'Full day') {
                                         bloc.noOfHoursStream.add('1');
+                                      } else if (snapshot.data == 'Half day - Morning' || snapshot.data == 'Half day - Afternoon') {
+                                        bloc.noOfHoursStream.add('4');
                                       } else {
                                         bloc.noOfHoursStream.add('');
                                       }
                                       return snapshot.data == ''
                                           ? const SizedBox.shrink()
                                           : NewContactField(
-                                              enabled: snapshot.data != 'Full day',
+                                              enabled: !['Full day','Half day - Morning','Half day - Afternoon'].contains(snapshot.data) ,
                                               heading: 'No. of Hours',
                                               hintText: '',
                                               textInputType: TextInputType.number,
@@ -637,12 +643,11 @@ class NewContactField extends StatefulWidget {
     // this.initialValue = '',
     this.textInputType = TextInputType.name,
     this.isLargeField = false,
+    this.isForDateField = false,
     super.key,
   });
 
-
-  
-
+  final bool isForDateField;
   // final TextEditingController controller;
   final String heading;
   // final String initialValue;
@@ -674,7 +679,7 @@ class _NewContactFieldState extends State<NewContactField> {
       if (value.isEmpty) {
         _controller.clear();
       } else if (_controller.text != value) {
-        _controller.text = value;
+        _controller.text = widget.isForDateField ? UtilityFunctions.convertIntoNormalDateStringFromDateTimeString(value) : value;
       }
     });
   }
