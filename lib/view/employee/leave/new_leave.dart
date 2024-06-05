@@ -68,7 +68,6 @@ class _NewLeaveState extends State<NewLeave> {
                   child: StreamBuilder(
                     stream: bloc.getLeaveFormStream,
                     builder: (context, snapshot) {
-                      print(snapshot.data);
                       if (snapshot.hasError) {
                         Loader.hide();
                         return Expanded(
@@ -201,6 +200,7 @@ class _NewLeaveState extends State<NewLeave> {
                                   NewContactField(
                                     enabled: false,
                                     isForDateField: true,
+                                    isNewLeave: widget.leaveModel != null,
                                     heading: 'Apply Date',
                                     hintText: 'Select Apply Date',
                                     textStream: bloc.leaveApplyDateStream,
@@ -213,6 +213,7 @@ class _NewLeaveState extends State<NewLeave> {
                                   NewContactField(
                                     enabled: false,
                                     isForDateField: true,
+                                    isNewLeave: widget.leaveModel != null,
                                     heading: 'Start Date',
                                     hintText: 'Select Start Date',
                                     textStream: bloc.leaveStartDateStream,
@@ -225,13 +226,25 @@ class _NewLeaveState extends State<NewLeave> {
                                   NewContactField(
                                     enabled: false,
                                     isForDateField: true,
+                                    isNewLeave: widget.leaveModel != null,
                                     heading: 'End Date',
                                     hintText: 'Select End Date',
                                     textStream: bloc.leaveEndDateStream,
                                     // onChanged: bloc.leaveEndDateStream.add,
                                     onTap: () async {
-                                      final date = await _selectDate(context);
-                                      bloc.leaveEndDateStream.add(date ?? '');
+                                      if (bloc.leaveStartDateStream.value == '') {
+                                        await erroMotionToastInfo(context, msg: 'Starting Date Is Not Selected');
+                                      } else {
+                                        // print('132131231231232113 ${DateFormat('yyyy-MM-dd').parse(bloc.leaveStartDateStream.value)}');
+
+                                        final date = await _selectDate(context);
+
+                                        if (date != null) {
+                                          bloc.leaveDurationStream.add('Full day');
+
+                                          bloc.leaveEndDateStream.add(date);
+                                        }
+                                      }
                                     },
                                   ),
                                   NewContactDropDown(
@@ -258,17 +271,53 @@ class _NewLeaveState extends State<NewLeave> {
                                     stream: bloc.leaveDurationStream,
                                     builder: (context, snapshot) {
                                       if (snapshot.data == 'Full day') {
-                                        bloc.noOfHoursStream.add('1');
+                                        if (widget.leaveModel == null) {
+                                          final inputS = DateFormat('dd-MM-yyyy').parse(bloc.leaveStartDateStream.value);
+                                          final outputFormatS = DateFormat('yyyy-MM-dd');
+                                          final outputDateStringS = outputFormatS.format(inputS);
+
+
+                                          final start = DateTime.parse(outputDateStringS);
+
+                                          final inputE = DateFormat('dd-MM-yyyy').parse(bloc.leaveEndDateStream.value);
+                                          final outputFormatE = DateFormat('yyyy-MM-dd');
+                                          final outputDateStringE = outputFormatE.format(inputE);
+
+
+                                          final end = DateTime.parse(outputDateStringE);
+
+                                          // final end = DateTime.parse(date ?? '20-01-2023');
+
+                                          // print('132131231231232113 $end');
+
+                                          final normalizedDate1 = DateTime(start.year, start.month, start.day);
+                                          final normalizedDate2 = DateTime(end.year, end.month, end.day);
+
+                                          final differenceInDays = normalizedDate2.difference(normalizedDate1).inDays + 1;
+
+                                          if (differenceInDays < 1 || differenceInDays.isNegative) {
+                                            bloc.noOfHoursStream.add('0');
+                                          } else {
+                                            bloc.noOfHoursStream.add(differenceInDays.toString());
+                                          }
+                                        } else {
+                                         
+                                        }
+
+                                        // bloc.noOfHoursStream.add('1');
                                       } else if (snapshot.data == 'Half day - Morning' || snapshot.data == 'Half day - Afternoon') {
                                         bloc.noOfHoursStream.add('4');
-                                      } else {
+                                      } else if (snapshot.data == 'Hour Off') {
                                         bloc.noOfHoursStream.add('');
                                       }
+                                      //  else {
+
+                                      // }
                                       return snapshot.data == ''
                                           ? const SizedBox.shrink()
                                           : NewContactField(
-                                              enabled: !['Full day','Half day - Morning','Half day - Afternoon'].contains(snapshot.data) ,
-                                              heading: 'No. of Hours',
+                                              enabled: !['Full day', 'Half day - Morning', 'Half day - Afternoon'].contains(snapshot.data),
+                                              heading: snapshot.data == 'Full day' ? 'No. of Days' : 'No. of Hours',
                                               hintText: '',
                                               textInputType: TextInputType.number,
                                               textStream: bloc.noOfHoursStream,
@@ -392,12 +441,12 @@ class _NewLeaveState extends State<NewLeave> {
       );
 
       // print('77777777777777777777777777777 ${DateFormat('dd/MM/yyyy').format(date)}');
-      final dateStr = DateFormat('dd/MM/yyyy').format(date);
+      final dateStr = DateFormat('dd-MM-yyyy').format(date);
 
-      if (dateStr == '') {
-        await erroMotionToastInfo(context, msg: 'Something wrong !!');
-        return null;
-      }
+      // if (dateStr == '') {
+      //   await erroMotionToastInfo(context, msg: 'Something wrong !!');
+      //   return null;
+      // }
 
       return dateStr;
     }
@@ -485,7 +534,6 @@ class _NewContactDropDownState extends State<NewContactDropDown> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.items);
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 10.h),
       child: Stack(
@@ -500,7 +548,6 @@ class _NewContactDropDownState extends State<NewContactDropDown> {
               stream: widget.textStream,
               builder: (context, snapshot) {
                 final data = snapshot.data ?? '';
-                print('44444444444444444444444 $data');
                 return DropdownButtonHideUnderline(
                   child: DropdownButton2<String>(
                     isExpanded: true,
@@ -644,10 +691,12 @@ class NewContactField extends StatefulWidget {
     this.textInputType = TextInputType.name,
     this.isLargeField = false,
     this.isForDateField = false,
+    this.isNewLeave = false,
     super.key,
   });
 
   final bool isForDateField;
+  final bool isNewLeave;
   // final TextEditingController controller;
   final String heading;
   // final String initialValue;
@@ -679,7 +728,7 @@ class _NewContactFieldState extends State<NewContactField> {
       if (value.isEmpty) {
         _controller.clear();
       } else if (_controller.text != value) {
-        _controller.text = widget.isForDateField ? UtilityFunctions.convertIntoNormalDateStringFromDateTimeString(value) : value;
+        _controller.text = (widget.isForDateField && widget.isNewLeave) ? UtilityFunctions.convertIntoNormalDateStringFromDateTimeString(value) : value;
       }
     });
   }

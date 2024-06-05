@@ -41,6 +41,8 @@ class LeavesServices {
 
         final respModel = GetAllLeaves.fromJson(response!.data ?? {});
 
+        print('111111111111111111 ${respModel.data?[0].totalLeaves}');
+
         return respModel;
       }
       return null;
