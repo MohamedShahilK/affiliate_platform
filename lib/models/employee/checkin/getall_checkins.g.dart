@@ -23,7 +23,7 @@ Data _$DataFromJson(Map<String, dynamic> json) => Data(
       fromdate: json['fromdate'] as String?,
       todate: json['todate'] as String?,
       workfrom: json['workfrom'] as String?,
-      checkinData: (json['checkin_data'] as List<dynamic>?)?.map((e) => _$CheckinDataFromJson(e as Map<String, dynamic>)).toList(),
+      checkinData: (json['checkinlist'] as List<dynamic>?)?.map((e) => _$CheckinDataFromJson(e as Map<String, dynamic>)).toList(),
       projectList: (json['project_list'] as List<dynamic>?)?.map((e) => _$ProjectListFromJson(e as Map<String, dynamic>)).toList(),
       employeeList: (json['employee_list'] as List<dynamic>?)?.map((e) => _$EmployeeListFromJson(e as Map<String, dynamic>)).toList(),
     );
@@ -48,6 +48,8 @@ CheckinData _$CheckinDataFromJson(Map<String, dynamic> json) => CheckinData(
       workFrom: json['WorkFrom'] as String?,
       workFromId: json['work_from'] as String?,
       hours: json['Hours'] as String?,
+      checkOutStatus: json['check_Out_Status'] as String?,
+      checkOutId: json['check_Out_Id'] as String?,
     );
 
 ProjectList _$ProjectListFromJson(Map<String, dynamic> json) => ProjectList(

@@ -66,6 +66,8 @@ class CheckinData {
     required this.workFrom,
     required this.workFromId,
     required this.hours,
+    required this.checkOutStatus,
+    required this.checkOutId,
   });
   final String? id;
   final String? employee;
@@ -86,6 +88,8 @@ class CheckinData {
   final String? workingRemarks;
   final String? projects;
   final String? hours;
+  final String? checkOutStatus;
+  final String? checkOutId;
 }
 
 @JsonSerializable()

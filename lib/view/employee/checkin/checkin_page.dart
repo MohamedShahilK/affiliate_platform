@@ -7,6 +7,7 @@ import 'package:affiliate_platform/utils/constants/styles.dart';
 import 'package:affiliate_platform/utils/utility_functions.dart';
 import 'package:affiliate_platform/view/common/custom_header.dart';
 import 'package:affiliate_platform/view/common/custom_scafflod.dart';
+import 'package:affiliate_platform/view/employee/checkin/view_checkin.dart';
 import 'package:affiliate_platform/view/employee/project/new_project.dart';
 import 'package:affiliate_platform/view/manage_contact/manage_contact.dart';
 import 'package:flutter/material.dart';
@@ -119,6 +120,7 @@ class _CheckInPageState extends State<CheckInPage> {
                         allCheckinsRespModel = getAllProjectsStreamsnapshot.data;
                         if (allCheckinsRespModel!.data != null && allCheckinsRespModel.data!.isNotEmpty) {
                           checkinData = allCheckinsRespModel.data?[0].checkinData ?? [];
+                          print('11111111111111111111111 $checkinData');
                         }
                       }
 
@@ -130,7 +132,7 @@ class _CheckInPageState extends State<CheckInPage> {
                           padding: EdgeInsets.only(top: 30.h, bottom: 5.h, left: 20.w, right: 20.w),
                           child: Column(
                             children: List.generate(
-                              (allCheckinsRespModel == null) ? 5 : allCheckinsRespModel.data![0].checkinData!.length,
+                              (allCheckinsRespModel == null) ? 5 : checkinData.length,
                               (index) => _ProjectCard(
                                 index: index,
                                 model: allCheckinsRespModel,
@@ -201,7 +203,7 @@ class _ProjectCard extends StatelessWidget {
                     Text(
                       // 'Giridhar | Qtn2015',
                       // 'No. of Projects : 2',
-                      'No. of Projects : ${model?.data == null || model!.data!.isEmpty || model!.data![0].checkinData!.isEmpty ? '-' : model?.data![0].checkinData![index].projects == '' ? '-' : model?.data![0].checkinData![index].projects ?? '-'}',
+                      'No. of Projects : ${model?.data == null || model!.data!.isEmpty || model!.data![0].checkinData == null || model!.data![0].checkinData!.isEmpty ? '-' : model?.data![0].checkinData![index].projects == '' ? '-' : model?.data![0].checkinData![index].projects ?? '-'}',
                       // '1',
                       style: AppStyles.poppins.copyWith(color: Colors.grey[800], fontSize: 11.w, fontWeight: FontWeight.w900),
                     ),
@@ -232,7 +234,7 @@ class _ProjectCard extends StatelessWidget {
                               // ),
                               child: MyTextWidget(
                                 // text: 'Shahilasdadas',
-                                text: model?.data == null || model!.data!.isEmpty || model!.data![0].checkinData!.isEmpty
+                                text: model?.data == null || model!.data!.isEmpty || model!.data![0].checkinData == null || model!.data![0].checkinData!.isEmpty
                                     ? '-'
                                     : model?.data![0].checkinData![index].firstName == ''
                                         ? '-'
@@ -259,11 +261,11 @@ class _ProjectCard extends StatelessWidget {
                               //   style: AppStyles.poppins.copyWith(color: Colors.grey[800], fontSize: 12.w, overflow: TextOverflow.ellipsis),
                               // ),
                               child: MyTextWidget(
-                                text: model?.data == null || model!.data!.isEmpty || model!.data![0].checkinData!.isEmpty
+                                text: model?.data == null || model!.data!.isEmpty || model!.data![0].checkinData == null || model!.data![0].checkinData!.isEmpty
                                     ? '-'
                                     : model?.data![0].checkinData![index].createdAt == ''
                                         ? '-'
-                                        : UtilityFunctions.convertIntoNormalDateTimeStringFromDateTimeString(model?.data![0].checkinData![index].createdAt ?? '2014-05-27 08:53:53'),
+                                        : UtilityFunctions.convertIntoNormalDateTimeStringFromDateTimeString(model?.data![0].checkinData![index].datetime ?? '2014-05-27 08:53:53'),
                                 // text: '22-05-2024 09:51 AM',
                               ),
                             ),
@@ -292,7 +294,7 @@ class _ProjectCard extends StatelessWidget {
                                   //   style: AppStyles.poppins.copyWith(color: Colors.grey[800], fontSize: 12.w, overflow: TextOverflow.ellipsis),
                                   // ),
                                   child: MyTextWidget(
-                                    text: model?.data == null || model!.data!.isEmpty || model!.data![0].checkinData!.isEmpty
+                                    text: model?.data == null || model!.data!.isEmpty || model!.data![0].checkinData == null || model!.data![0].checkinData!.isEmpty
                                         ? '-'
                                         : model?.data![0].checkinData![index].hours == ''
                                             ? '-'
@@ -321,7 +323,7 @@ class _ProjectCard extends StatelessWidget {
                                   //   style: AppStyles.poppins.copyWith(color: Colors.grey[800], fontSize: 12.w, overflow: TextOverflow.ellipsis),
                                   // ),
                                   child: MyTextWidget(
-                                    text: model?.data == null || model!.data!.isEmpty || model!.data![0].checkinData!.isEmpty
+                                    text: model?.data == null || model!.data!.isEmpty || model!.data![0].checkinData == null || model!.data![0].checkinData!.isEmpty
                                         ? '-'
                                         : model?.data![0].checkinData![index].workFrom == ''
                                             ? '-'
@@ -381,47 +383,84 @@ class _ProjectCard extends StatelessWidget {
 
                 //
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Row(
                       children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 3.h),
-                          decoration: BoxDecoration(
-                            color: isLoading ? Colors.transparent : Colors.green[600],
-                            // border: Border.all(color: Colors.purple[400]!),
-                            // borderRadius: BorderRadius.only(topRight: Radius.circular(15.r), bottomLeft: Radius.circular(15.r)),
-                            // shape: BoxShape.circle,
-                            borderRadius: BorderRadius.circular(5.r),
-                          ),
-                          child: Icon(
-                            Icons.subdirectory_arrow_right_rounded,
-                            size: 19.w,
-                            // color: Colors.purple[400],
-                            color: Colors.white,
-                          ),
+                        Builder(
+                          builder: (context) {
+                            final checkoutStatus = model?.data == null || model!.data!.isEmpty || model!.data![0].checkinData == null || model!.data![0].checkinData!.isEmpty
+                                ? 'No'
+                                : model?.data![0].checkinData![index].checkOutStatus == ''
+                                    ? 'No'
+                                    : model?.data![0].checkinData![index].checkOutStatus ?? 'No';
+                            return Container(
+                              padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 3.h),
+                              decoration: BoxDecoration(
+                                color: isLoading
+                                    ? Colors.transparent
+                                    : checkoutStatus == 'No'
+                                        ? Colors.red[600]
+                                        : Colors.green[600],
+                                // border: Border.all(color: Colors.purple[400]!),
+                                // borderRadius: BorderRadius.only(topRight: Radius.circular(15.r), bottomLeft: Radius.circular(15.r)),
+                                // shape: BoxShape.circle,
+                                borderRadius: BorderRadius.circular(5.r),
+                              ),
+                              child: Icon(
+                                Icons.subdirectory_arrow_right_rounded,
+                                size: 19.w,
+                                // color: Colors.purple[400],
+                                color: Colors.white,
+                              ),
+                            );
+                          },
                         ),
                         // SizedBox(width: 5.w),
                       ],
-                    ).ripple(context, () {}),
+                    ).ripple(context, () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ViewCheckIn(),
+                        ),
+                      );
+                    }),
                     const Spacer(),
-                    _EachProjectSmallButtons(
-                      // color: Colors.green[900]!,
-                      isLoading: isLoading,
-                      icon: Icons.edit_outlined,
-                      onTap: () {},
-                    ),
-                    _EachProjectSmallButtons(
-                      // color: Colors.blue[400]!,
-                      isLoading: isLoading,
-                      icon: Icons.remove_red_eye_outlined,
-                      onTap: () {},
-                    ),
-                    _EachProjectSmallButtons(
-                      // color: Colors.red[400]!,
-                      isLoading: isLoading,
-                      icon: Icons.delete_outline_outlined,
-                      onTap: () {},
+                    // _EachProjectSmallButtons(
+                    //   // color: Colors.green[900]!,
+                    //   isLoading: isLoading,
+                    //   icon: Icons.edit_outlined,
+                    //   onTap: () {},
+                    // ),
+                    // _EachProjectSmallButtons(
+                    //   // color: Colors.blue[400]!,
+                    //   isLoading: isLoading,
+                    //   icon: Icons.remove_red_eye_outlined,
+                    //   onTap: () {},
+                    // ),
+                    // _EachProjectSmallButtons(
+                    //   // color: Colors.red[400]!,
+                    //   isLoading: isLoading,
+                    //   icon: Icons.delete_outline_outlined,
+                    //   onTap: () {},
+                    // ),
+
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 3.h),
+                      decoration: BoxDecoration(
+                        // color:  Colors.red[600],
+                        border: Border.all(color: Colors.red[600]!),
+                        // borderRadius: BorderRadius.only(topRight: Radius.circular(15.r), bottomLeft: Radius.circular(15.r)),
+                        shape: BoxShape.circle,
+                        // borderRadius: BorderRadius.circular(5.r),
+                      ),
+                      child: Icon(
+                        Icons.delete_outline_outlined,
+                        size: 19.w,
+                        // color: Colors.purple[400],
+                        color: Colors.red,
+                      ),
                     ),
                   ],
                 ),

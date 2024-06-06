@@ -407,12 +407,12 @@ class _ProjectCard extends StatelessWidget {
                     //   ],
                     // ).ripple(context, () {}),
                     // const Spacer(),
-                    _EachProjectSmallButtons(
-                      // color: Colors.green[900]!,
-                      isLoading: isLoading,
-                      icon: Icons.edit_outlined,
-                      onTap: () {},
-                    ),
+                    // _EachProjectSmallButtons(
+                    //   // color: Colors.green[900]!,
+                    //   isLoading: isLoading,
+                    //   icon: Icons.edit_outlined,
+                    //   onTap: () {},
+                    // ),
                     _EachProjectSmallButtons(
                       // color: Colors.blue[400]!,
                       isLoading: isLoading,
