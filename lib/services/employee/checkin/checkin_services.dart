@@ -3,6 +3,7 @@
 import 'package:affiliate_platform/api/api.dart';
 import 'package:affiliate_platform/api/api_contants.dart';
 import 'package:affiliate_platform/models/employee/checkin/get_checkin_form.dart';
+import 'package:affiliate_platform/models/employee/checkin/get_checkin_view.dart';
 import 'package:affiliate_platform/models/employee/checkin/getall_checkins.dart';
 import 'package:affiliate_platform/models/employee/project/view_project.dart';
 import 'package:affiliate_platform/utils/constants/string_constants.dart';
@@ -81,7 +82,7 @@ class CheckInServices {
   }
 
   // Get Contact Form
-  Future<ProjectView?> viewCheckin({required String checkInID}) async {
+  Future<GetCheckInView?> viewCheckin({required String checkInID}) async {
     try {
       final token = StorageServices.to.getString(StorageServicesKeys.token);
       final haveToken = token.isNotEmpty;
@@ -100,7 +101,7 @@ class CheckInServices {
 
         print('55555555555555555555555 ${response!.data}');
 
-        final respModel = ProjectView.fromJson(response!.data ?? {});
+        final respModel = GetCheckInView.fromJson(response!.data ?? {});
 
         return respModel;
       }

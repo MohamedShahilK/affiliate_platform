@@ -1,5 +1,10 @@
 // ignore_for_file: lines_longer_than_80_chars
 
+import 'package:json_annotation/json_annotation.dart';
+
+part 'get_checkin_view.g.dart';
+
+@JsonSerializable()
 class GetCheckInView {
   GetCheckInView({required this.status, required this.response, required this.data});
   final String? status;
@@ -7,6 +12,7 @@ class GetCheckInView {
   final List<Data>? data;
 }
 
+@JsonSerializable()
 class Data {
   Data({
     required this.tableTitle,
@@ -28,6 +34,7 @@ class Data {
   final List<CheckinProjects>? checkinProjects;
 }
 
+@JsonSerializable()
 class Checkout {
   Checkout({
     required this.id,
@@ -59,6 +66,7 @@ class Checkout {
   final String? checkoutWorkFrom;
 }
 
+@JsonSerializable()
 class CheckoutDetails {
   CheckoutDetails({
     required this.projectname,
@@ -80,6 +88,7 @@ class CheckoutDetails {
   final String? projectsStatus;
 }
 
+@JsonSerializable()
 class CheckinData {
   CheckinData({
     required this.id,
@@ -111,6 +120,7 @@ class CheckinData {
   final String? userCode;
 }
 
+@JsonSerializable()
 class CheckinProjects {
   CheckinProjects({
     required this.id,

@@ -14,8 +14,8 @@ class CheckInBloc {
   }
 
   final getAllCheckInsStream = BehaviorSubject<GetAllCheckIns?>();
-  final getProjectFormStream = BehaviorSubject<GetCheckinForm?>();
-  final getProjectViewStream = BehaviorSubject<ProjectView?>();
+  final getCheckInFormStream = BehaviorSubject<GetCheckinForm?>();
+  final getCheckinViewStream = BehaviorSubject<ProjectView?>();
 
   final projectNameStream = BehaviorSubject<String>.seeded('');
 
@@ -45,13 +45,13 @@ class CheckInBloc {
 
   Future<void> getCheckinForm() async {
     final respModel = await CheckInServices().getCheckinForm();
-    getProjectFormStream.add(respModel);
+    getCheckInFormStream.add(respModel);
   }
 
   Future<void> viewCheckin({required String checkInID}) async {
-    getProjectViewStream.add(null);
+    getCheckinViewStream.add(null);
     final respModel = await CheckInServices().viewCheckin(checkInID: checkInID);
-    getProjectViewStream.add(respModel);
+    getCheckinViewStream.add(respModel);
   }
 
   Future<Map<String, dynamic>?> submitProjectForm(BuildContext context,{required String? customerId, required String? quotationId}) async {

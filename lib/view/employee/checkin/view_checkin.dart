@@ -14,11 +14,11 @@ import 'package:skeletonizer/skeletonizer.dart';
 
 class ViewCheckIn extends StatefulWidget {
   const ViewCheckIn({
-    this.contactId,
+    this.checkInId,
     super.key,
   });
 
-  final String? contactId;
+  final String? checkInId;
 
   @override
   State<ViewCheckIn> createState() => _ViewCheckInState();
@@ -39,11 +39,11 @@ class _ViewCheckInState extends State<ViewCheckIn> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     checkinBloc ??= Provider.of<CheckInBloc>(context);
-    // checkinBloc!.viewProject(projectId: widget.contactId!).then(
-    //       (value) => setState(() {
-    //         loading = false;
-    //       }),
-    //     );
+    checkinBloc!.viewCheckin(checkInID: widget.checkInId!).then(
+          (value) => setState(() {
+            loading = false;
+          }),
+        );
 
     // setState(() {
     //   loading = false;
@@ -67,7 +67,7 @@ class _ViewCheckInState extends State<ViewCheckIn> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const CustomHeader(isBackButtonNeeded: true, heading: 'Project Details'),
+              const CustomHeader(isBackButtonNeeded: true, heading: 'CheckIn Details'),
 
               //
               Expanded(
@@ -107,8 +107,8 @@ class _ViewCheckInState extends State<ViewCheckIn> {
                                   ).ripple(
                                     context,
                                     () async {
-                                      if (widget.contactId != null) {
-                                        await bloc.viewProject(projectId: widget.contactId!);
+                                      if (widget.checkInId != null) {
+                                        await bloc.viewProject(projectId: widget.checkInId!);
                                       }
                                     },
                                     borderRadius: BorderRadius.circular(15.r),

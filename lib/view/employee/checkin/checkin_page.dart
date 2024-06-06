@@ -419,10 +419,15 @@ class _ProjectCard extends StatelessWidget {
                         // SizedBox(width: 5.w),
                       ],
                     ).ripple(context, () {
+                      final checkInId = model?.data == null || model!.data!.isEmpty || model!.data![0].checkinData == null || model!.data![0].checkinData!.isEmpty
+                          ? '-'
+                          : model?.data![0].checkinData![index].checkInId == ''
+                              ? '-'
+                              : model?.data![0].checkinData![index].checkInId ?? '-';
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const ViewCheckIn(),
+                          builder: (context) => ViewCheckIn(checkInId: checkInId),
                         ),
                       );
                     }),
