@@ -7,6 +7,9 @@ part 'get_checkin_view.g.dart';
 @JsonSerializable()
 class GetCheckInView {
   GetCheckInView({required this.status, required this.response, required this.data});
+
+  factory GetCheckInView.fromJson(Map<String, dynamic> json) => _$GetCheckInViewFromJson(json);
+
   final String? status;
   final String? response;
   final List<Data>? data;
@@ -17,7 +20,7 @@ class Data {
   Data({
     required this.tableTitle,
     required this.userDesignation,
-    required this.outId,
+    // required this.outId,
     required this.checkout,
     required this.checkoutDetails,
     required this.userID,
@@ -26,7 +29,7 @@ class Data {
   });
   final String? tableTitle;
   final String? userDesignation;
-  final String? outId;
+  // final String? outId;
   final Checkout? checkout;
   final List<CheckoutDetails>? checkoutDetails;
   final String? userID;

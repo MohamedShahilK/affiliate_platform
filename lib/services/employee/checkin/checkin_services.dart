@@ -108,7 +108,7 @@ class CheckInServices {
       return null;
     } catch (e) {
       Loader.hide();
-      print('viewContact Error :- $e');
+      print('viewCheckin Error :- $e');
       return null;
     }
   }
