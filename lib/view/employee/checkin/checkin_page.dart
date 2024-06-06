@@ -40,14 +40,14 @@ class _CheckInPageState extends State<CheckInPage> {
       },
       child: CustomScaffold(
         key: _refreshKey,
-        onTapFloatingButton: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const NewProject(),
-            ),
-          );
-        },
+        // onTapFloatingButton: () {
+        //   Navigator.push(
+        //     context,
+        //     MaterialPageRoute(
+        //       builder: (context) => const NewProject(),
+        //     ),
+        //   );
+        // },
         body: SafeArea(
           child: GestureDetector(
             // onTap: _handleLocaleChanged,

@@ -35,7 +35,7 @@ class CheckInBloc {
 
   Future<void> initDetails() async {
     await getAllCheckins();
-    // await getContactForm();
+    await getCheckinForm();
   }
 
   Future<void> getAllCheckins() async {
@@ -43,14 +43,14 @@ class CheckInBloc {
     getAllCheckInsStream.add(respModel);
   }
 
-  Future<void> getContactForm() async {
+  Future<void> getCheckinForm() async {
     final respModel = await CheckInServices().getCheckinForm();
     getProjectFormStream.add(respModel);
   }
 
-  Future<void> viewProject({required String contactId}) async {
+  Future<void> viewCheckin({required String checkInID}) async {
     getProjectViewStream.add(null);
-    final respModel = await CheckInServices().viewCheckin(contactId: contactId);
+    final respModel = await CheckInServices().viewCheckin(checkInID: checkInID);
     getProjectViewStream.add(respModel);
   }
 
