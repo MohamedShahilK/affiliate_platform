@@ -4,6 +4,7 @@ import 'package:affiliate_platform/config/ripple.dart';
 import 'package:affiliate_platform/logic/employee/checkin/checkin_bloc.dart';
 import 'package:affiliate_platform/logic/employee/project/project_bloc.dart';
 import 'package:affiliate_platform/utils/constants/styles.dart';
+import 'package:affiliate_platform/utils/utility_functions.dart';
 import 'package:affiliate_platform/view/common/custom_header.dart';
 import 'package:affiliate_platform/view/common/custom_scafflod.dart';
 import 'package:flutter/material.dart';
@@ -157,7 +158,7 @@ class _ViewCheckInState extends State<ViewCheckIn> {
                                               Text('Check In Time', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800])),
                                               const Spacer(),
                                               SelectableText(
-                                                model?.datetime ?? '-',
+                                                UtilityFunctions.convertIntoNormalDateTimeStringFromDateTimeString(model?.datetime ?? '2024-05-20 21:55:20'),
                                                 style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800], fontWeight: FontWeight.w800),
                                               ),
                                             ],

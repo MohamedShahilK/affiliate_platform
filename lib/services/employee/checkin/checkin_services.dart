@@ -113,7 +113,7 @@ class CheckInServices {
     }
   }
 
-    Future<Map<String,dynamic>?> deleteCheckin({required String checkInID}) async {
+  Future<Map<String, dynamic>?> deleteCheckin({required String checkInID}) async {
     try {
       final token = StorageServices.to.getString(StorageServicesKeys.token);
       final haveToken = token.isNotEmpty;
@@ -128,6 +128,59 @@ class CheckInServices {
           ),
           // queryParameters: {'id':checkInID},
           '${EndPoints.checkInDelete}/$checkInID',
+        );
+
+        print('55555555555555555555555 ${response!.data}');
+
+        // final respModel = GetCheckInView.fromJson(response!.data ?? {});
+
+        return response.data;
+      }
+      return null;
+    } catch (e) {
+      Loader.hide();
+      print('viewCheckin Error :- $e');
+      return null;
+    }
+  }
+
+  Future<Map<String, dynamic>?> formSubmitCheckin({
+    required String employee,
+    required String dateTime,
+    required String workForm,
+    required String remarks,
+    required String? latitude,
+    required String? longitude,
+    required String projects_1,
+    required String remarks_1,
+    required String reqHours_1,
+  }) async {
+    try {
+      final token = StorageServices.to.getString(StorageServicesKeys.token);
+      final haveToken = token.isNotEmpty;
+      if (haveToken) {
+        final formData = FormData.fromMap({
+          'employee': employee,
+          'datetime': dateTime,
+          'work_from': workForm,
+          'remarks': remarks,
+          'latitude': latitude,
+          'longitude': longitude,
+          'projects_1': projects_1,
+          'remarks_1': remarks_1,
+          'req_hours_1': reqHours_1,          
+        });
+        final response = await api.dio?.post<Map<String, dynamic>>(
+          options: Options(
+            headers: {
+              // 'accept': '*/*',
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer $token',
+            },
+          ),
+          // queryParameters: {'id':checkInID},
+          data: formData,
+          EndPoints.checkInFormSubmit,
         );
 
         print('55555555555555555555555 ${response!.data}');

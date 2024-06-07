@@ -3,10 +3,8 @@
 import 'package:affiliate_platform/models/employee/checkin/get_checkin_form.dart';
 import 'package:affiliate_platform/models/employee/checkin/get_checkin_view.dart';
 import 'package:affiliate_platform/models/employee/checkin/getall_checkins.dart';
-import 'package:affiliate_platform/models/employee/project/view_project.dart';
 import 'package:affiliate_platform/services/employee/checkin/checkin_services.dart';
-import 'package:affiliate_platform/services/employee/project/project_services.dart';
-import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:rxdart/rxdart.dart';
 
 class CheckInBloc {
@@ -27,6 +25,15 @@ class CheckInBloc {
   final projectIdStream = BehaviorSubject<String>.seeded('');
 
   final descriptionStream = BehaviorSubject<String>.seeded('');
+
+  final latitudeStream = BehaviorSubject<String>.seeded('');
+  final longitudeStream = BehaviorSubject<String>.seeded('');
+
+  final reqHourStream = BehaviorSubject<String>.seeded('');
+  final reqMinStream = BehaviorSubject<String>.seeded('');
+
+  final workFromStream = BehaviorSubject<String>.seeded('Office');
+  final commentsStream = BehaviorSubject<String>.seeded('');
 
   Future<void> initDetails() async {
     await getAllCheckins();
@@ -61,101 +68,41 @@ class CheckInBloc {
     return isDeleted;
   }
 
-  // Future<bool> addPermissionForAffUsers({required String contactId, required String affUserId}) async {
-  //   var isPermAdded = false;
+  Future<Map<String, dynamic>?> formSubmitCheckin({
+    required String employeeId,
+    required String projectId,
+    required String workFromId,
+  }) async {
+    print('222222222222222222 ${checkinTimeStream.value}');
+    final respModel = CheckInServices().formSubmitCheckin(
+      employee: employeeId,
+      dateTime: checkinTimeStream.value,
+      // dateTime: '2024-06-18 10:00:00',
+      workForm: workFromId,
+      remarks: descriptionStream.value,
+      latitude: latitudeStream.valueOrNull,
+      longitude: longitudeStream.valueOrNull,
+      projects_1: projectId,
+      remarks_1: descriptionStream.value,
+      reqHours_1: '${reqHourStream.value}:${reqMinStream.value}:00',
+    );
 
-  //   final jsonData = await ManageContactSevices().addPermissionForAffUsers(contactId: contactId, affUserId: affUserId);
-
-  //   if (jsonData != null && jsonData['status'] == 'SUCCESS' && jsonData['response'] == 'OK') {
-  //     isPermAdded = true;
-  //   }
-
-  //   return isPermAdded;
-  // }
-
-  // Future<bool> deletePermissionForAffUsers(BuildContext context, {required String contactId, required String affUserId}) async {
-  //   var isPermDeleted = false;
-
-  //   final jsonData = await ManageContactSevices().deletePermissionForAffUsers(context, contactId: contactId, affUserId: affUserId);
-
-  //   if (jsonData != null && jsonData['status'] == 'SUCCESS' && jsonData['response'] == 'OK') {
-  //     isPermDeleted = true;
-  //   }
-
-  //   return isPermDeleted;
-  // }
-
-  // Future<bool> addFollowup({required String contactId}) async {
-  //   var isFollowUpAdded = false;
-
-  //   final jsonData = await ManageContactSevices().addFollowup(
-  //     contactId: contactId,
-  //     title: followupTitleStream.value,
-  //     description: followupDescriptionStream.value,
-  //     date: followupDateStream.value,
-  //   );
-
-  //   if (jsonData != null && jsonData['status'] == 'SUCCESS' && jsonData['response'] == 'OK') {
-  //     isFollowUpAdded = true;
-  //   }
-
-  //   return isFollowUpAdded;
-  // }
-
-  // Future<bool> deleteFollowup({required String contactId, required String followupId}) async {
-  //   var isFollowUpDelete = false;
-
-  //   final jsonData = await ManageContactSevices().deleteFollowup(contactId: contactId, followupId: followupId);
-
-  //   if (jsonData != null && jsonData['status'] == 'SUCCESS' && jsonData['response'] == 'OK') {
-  //     isFollowUpDelete = true;
-  //   }
-
-  //   return isFollowUpDelete;
-  // }
-
-  // Future<bool> editFollowup({required String contactId, required String followupId}) async {
-  //   var isFollowUpAdded = false;
-
-  //   final jsonData = await ManageContactSevices().editFollowup(
-  //     contactId: contactId,
-  //     followupId: followupId,
-  //     title: followupTitleStream.value,
-  //     description: followupDescriptionStream.value,
-  //     date: followupDateStream.value,
-  //   );
-
-  //   if (jsonData != null && jsonData['status'] == 'SUCCESS' && jsonData['response'] == 'OK') {
-  //     isFollowUpAdded = true;
-  //   }
-
-  //   return isFollowUpAdded;
-  // }
-
-  // Future<ContactEditSubmissionModel?> contactEdit({required String contactId}) async {
-  //   final respModel = ManageContactSevices().contactEdit(
-  //     contactId: contactId,
-  //     name: nameStream.value,
-  //     mobile: mobileStream.value,
-  //     email: emailStream.value,
-  //     contactType: contactTypeIdStream.value,
-  //     contactSource: contactSourceIdStream.value,
-  //     designation: designationStream.value,
-  //     companyName: companyNameStream.value,
-  //     landlineNumber: landlineStream.value,
-  //     companyWebsite: websiteStream.value,
-  //     companyLocation: companyLocationStream.value,
-  //     companyAddress: companyAddressStream.value,
-  //     remarks: remarkStream.value,
-  //   );
-
-  //   return respModel;
-  // }
+    return respModel;
+  }
 
   void clearStreams() {
     employeeStream.add('');
     employeeIdStream.add('');
     checkinTimeStream.add('');
+    projectStream.add('');
+    projectIdStream.add('');
+    descriptionStream.add('');
+    latitudeStream.add('');
+    longitudeStream.add('');
+    reqHourStream.add('');
+    reqMinStream.add('');
+    workFromStream.add('');
+    commentsStream.add('');
   }
 
   void dispose() {

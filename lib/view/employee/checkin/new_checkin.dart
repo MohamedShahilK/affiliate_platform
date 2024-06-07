@@ -4,12 +4,14 @@ import 'package:affiliate_platform/config/ripple.dart';
 import 'package:affiliate_platform/logic/employee/checkin/checkin_bloc.dart';
 import 'package:affiliate_platform/models/employee/checkin/get_checkin_form.dart';
 import 'package:affiliate_platform/utils/constants/styles.dart';
+import 'package:affiliate_platform/utils/custom_tools.dart';
 import 'package:affiliate_platform/utils/utility_functions.dart';
 import 'package:affiliate_platform/view/common/custom_header.dart';
 import 'package:affiliate_platform/view/common/custom_scafflod.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -55,6 +57,8 @@ class _NewCheckinState extends State<NewCheckin> {
   @override
   Widget build(BuildContext context) {
     final bloc = Provider.of<CheckInBloc>(context);
+
+    print('3333333333333333333333333333 ${bloc.checkinTimeStream}');
 
     return CustomScaffold(
       haveFloatingButton: false,
@@ -113,9 +117,13 @@ class _NewCheckinState extends State<NewCheckin> {
 
                       if (snapshot.hasData) {
                         checkinFormModel = snapshot.data;
-                        // if (checkinFormModel!.data![0].contactType != null) {
-                        //   // print('22222222222222222222222222222222222 ${checkinFormModel.data![0].contactType!.values.toList(growable: false)}');
-                        // }
+                        if (checkinFormModel!.data![0].userID != null && checkinFormModel.data![0].employeeList != null && checkinFormModel.data![0].employeeList!.isNotEmpty) {
+                          final employeeName = checkinFormModel.data![0].employeeList!.firstWhere((e) => e.userId == checkinFormModel?.data?[0].userID).firstName;
+                          bloc.employeeStream.add(employeeName ?? '');
+                        }
+                        final date = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
+                        print('asdsadasdasd $date');
+                        bloc.checkinTimeStream.add(date);
                       }
 
                       return Skeletonizer(
@@ -132,18 +140,39 @@ class _NewCheckinState extends State<NewCheckin> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  NewContactDropDown(
-                                    checkinFormModel: checkinFormModel,
-                                    textStream: bloc.employeeStream,
+                                  Row(
+                                    children: [
+                                      Flexible(
+                                        child: NewContactDropDown(
+                                          checkinFormModel: checkinFormModel,
+                                          textStream: bloc.employeeStream,
 
-                                    heading: 'Employee',
-                                    hint: 'Select Employee',
-                                    // items:checkinFormModel != null ? ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'] : ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'],
-                                    items: (checkinFormModel != null && checkinFormModel.data != null && checkinFormModel.data!.isNotEmpty && checkinFormModel.data?[0].employeeList != null)
-                                        ? ['', ...checkinFormModel.data![0].employeeList!.map((e) => e.firstName ?? '')]
-                                        : [''],
-                                    label: 'Employee',
-                                  ), //dropdown
+                                          heading: 'Employee',
+                                          hint: 'Select Employee',
+                                          // items:checkinFormModel != null ? ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'] : ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'],
+                                          items: (checkinFormModel != null &&
+                                                  checkinFormModel.data != null &&
+                                                  checkinFormModel.data!.isNotEmpty &&
+                                                  checkinFormModel.data?[0].employeeList != null)
+                                              ? ['', ...checkinFormModel.data![0].employeeList!.map((e) => e.firstName ?? '')]
+                                              : [''],
+                                          label: 'Employee',
+                                        ),
+                                      ),
+                                      SizedBox(width: 5.w),
+                                      Flexible(
+                                        child: NewContactDropDown(
+                                          checkinFormModel: checkinFormModel,
+                                          textStream: bloc.workFromStream,
+                                          heading: 'Work From',
+                                          hint: 'Select Work From',
+                                          // items:checkinFormModel != null ? ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'] : ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'],
+                                          items: const ['', 'Home', 'Office'],
+                                          label: 'Work From',
+                                        ),
+                                      ),
+                                    ],
+                                  ),
 
                                   NewContactField(
                                     enabled: false,
@@ -161,6 +190,24 @@ class _NewCheckinState extends State<NewCheckin> {
                                         bloc.checkinTimeStream.add(date);
                                       }
                                     },
+                                  ),
+
+                                  // NewContactDropDown(
+                                  //   checkinFormModel: checkinFormModel,
+                                  //   textStream: bloc.workFromStream,
+                                  //   heading: 'Work From',
+                                  //   hint: 'Select Work From',
+                                  //   // items:checkinFormModel != null ? ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'] : ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'],
+                                  //   items: const ['', 'Home', 'Office'],
+                                  //   label: 'Work From',
+                                  // ), //dropdown
+
+                                  NewContactField(
+                                    autoEnlarge: true,
+                                    heading: 'Comments',
+                                    hintText: 'Comments',
+                                    textStream: bloc.commentsStream,
+                                    onChanged: bloc.checkinTimeStream.add,
                                   ),
 
                                   Text('Project #1', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800])),
@@ -186,6 +233,35 @@ class _NewCheckinState extends State<NewCheckin> {
                                     textStream: bloc.descriptionStream,
                                     onChanged: bloc.descriptionStream.add,
                                   ),
+
+                                  Row(
+                                    children: [
+                                      Flexible(
+                                        child: NewContactDropDown(
+                                          checkinFormModel: checkinFormModel,
+                                          textStream: bloc.reqHourStream,
+
+                                          heading: 'Hour',
+                                          hint: 'Select Hour',
+                                          // items:checkinFormModel != null ? ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'] : ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'],
+                                          items: ['', ...List.generate(8, (index) => '${index + 1}')],
+                                          label: 'Hour',
+                                        ),
+                                      ),
+                                      SizedBox(width: 5.w),
+                                      Flexible(
+                                        child: NewContactDropDown(
+                                          checkinFormModel: checkinFormModel,
+                                          textStream: bloc.reqMinStream,
+                                          heading: 'Minutes',
+                                          hint: 'Select Minutes',
+                                          // items:checkinFormModel != null ? ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'] : ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'],
+                                          items: ['', ...List.generate(60, (index) => '$index')],
+                                          label: 'Minutes',
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ],
                               ),
                             ),
@@ -210,45 +286,22 @@ class _NewCheckinState extends State<NewCheckin> {
                                   ),
                                   child: Text('Submit', style: AppStyles.poppins.copyWith(fontSize: 14.w, color: Colors.white)),
                                 ).ripple(context, () async {
-                                  // customLoader(context);
-                                  // // if new project
-                                  // if (widget.projectId == null && checkinFormModel != null && checkinFormModel.data != null && checkinFormModel.data!.isNotEmpty) {
-                                  //   final customerId = checkinFormModel.data?[0].contactList?.firstWhereOrNull((e) => e.contactName == bloc.clientStream.value)?.contactID;
-                                  //   final quotationId = checkinFormModel.data?[0].quotationList?.firstWhereOrNull((e) => e.quoteRefr == bloc.quotationRefereneceStream.value)?.quoteID;
+                                  customLoader(context);
+                                  final employeeId = checkinFormModel?.data?[0].employeeList?.firstWhere((e) => e.firstName == bloc.employeeStream.value).userId ?? '0';
+                                  final projectId = checkinFormModel?.data?[0].projectList?.firstWhere((e) => e.name == bloc.projectStream.value).id ?? '0';
+                                  final workFromId = bloc.workFromStream.value == 'Home' ? '1' : '2';
 
-                                  //   final resp = await bloc.submitProjectForm(context, customerId: customerId, quotationId: quotationId);
+                                  final resp = await bloc.formSubmitCheckin(employeeId: employeeId, projectId: projectId, workFromId: workFromId);
 
-                                  //   if (resp != null && resp['status'] == 'SUCCESS' && resp['response'] == 'OK') {
-                                  //     Navigator.pop(context);
-                                  //     await successMotionToastInfo(context, msg: resp['message'] as String);
-                                  //     await bloc.getAllProjects();
-                                  //     Loader.hide();
-                                  //   } else {
-                                  //     await erroMotionToastInfo(context, msg: 'Submission Failed !!');
-                                  //     Loader.hide();
-                                  //   }
-                                  //   // }
-                                  // }
-                                  // // else existing project
-                                  // else if (widget.projectId != null && checkinFormModel != null && checkinFormModel.data != null && checkinFormModel.data!.isNotEmpty) {
-                                  //   final customerId = checkinFormModel.data?[0].contactList?.firstWhereOrNull((e) => e.contactName == bloc.clientStream.value)?.contactID;
-                                  //   final quotationId = checkinFormModel.data?[0].quotationList?.firstWhereOrNull((e) => e.quoteRefr == bloc.quotationRefereneceStream.value)?.quoteID;
-
-                                  //   print('211231223213212323 $customerId');
-                                  //   print('211231223213212323 $quotationId');
-
-                                  //   final resp = await bloc.projectEdit(projectId: widget.projectId ?? '', customerId: customerId, quotationId: quotationId);
-
-                                  //   if (resp != null && resp['status'] == 'SUCCESS' && resp['response'] == 'OK') {
-                                  //     Navigator.pop(context);
-                                  //     await successMotionToastInfo(context, msg: (resp['message'] as String?) ?? 'Project updated successfully');
-                                  //     await bloc.getAllProjects();
-                                  //     Loader.hide();
-                                  //   } else {
-                                  //     await erroMotionToastInfo(context, msg: 'Updation Failed !!');
-                                  //     Loader.hide();
-                                  //   }
-                                  // }
+                                  if (resp != null && resp['status'] == 'SUCCESS' && resp['response'] == 'OK') {
+                                    Navigator.pop(context);
+                                    await successMotionToastInfo(context, msg: 'Check In Created Successfully');
+                                    await bloc.getAllCheckins();
+                                    Loader.hide();
+                                  } else {
+                                    await erroMotionToastInfo(context, msg: 'Submission Failed !!');
+                                    Loader.hide();
+                                  }
                                 }),
                               ],
                             ),
@@ -281,14 +334,24 @@ Future<String?> _selectDate(BuildContext context) async {
   );
 
   if (picked != null) {
-    date = DateTime(
-      picked.year,
-      picked.month,
-      picked.day,
+    final pickedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(picked),
     );
 
+    if (pickedTime != null) {
+      date = DateTime(
+        picked.year,
+        picked.month,
+        picked.day,
+        pickedTime.hour,
+        pickedTime.minute,
+        // pickedTime.,
+      );
+    }
+
     // print('77777777777777777777777777777 ${DateFormat('dd/MM/yyyy').format(date)}');
-    final dateStr = DateFormat('dd-MM-yyyy').format(date);
+    final dateStr = DateFormat('yyyy-MM-dd HH:mm:ss').format(date);
 
     // if (dateStr == '') {
     //   await erroMotionToastInfo(context, msg: 'Something wrong !!');
@@ -550,7 +613,7 @@ class _NewContactFieldState extends State<NewContactField> {
       if (value.isEmpty) {
         _controller.clear();
       } else if (_controller.text != value) {
-        _controller.text = widget.isForDateField ? UtilityFunctions.convertIntoNormalDateStringFromDateTimeString(value) : value;
+        _controller.text = widget.isForDateField ? UtilityFunctions.convertIntoNormalDateTimeStringFromDateTimeString(value) : value;
       }
     });
   }
@@ -589,7 +652,7 @@ class _NewContactFieldState extends State<NewContactField> {
                     // maxLines: null,
                     minLines: widget.autoEnlarge ? 1 : null,
                     maxLines: widget.autoEnlarge ? 30 : null,
-                    maxLength: widget.autoEnlarge ? 500 : null,
+                    // maxLength: widget.autoEnlarge ? 500 : null,
                     controller: _controller,
                     validator: widget.validator,
                     onChanged: widget.onChanged,
@@ -607,7 +670,7 @@ class _NewContactFieldState extends State<NewContactField> {
                         color: Colors.purple[100],
                         fontSize: 13.w,
                       ),
-                      contentPadding: EdgeInsets.only(left: 15.w),
+                      contentPadding: EdgeInsets.only(left: 15.w, top: widget.autoEnlarge ? 30.h : 0),
                       border: OutlineInputBorder(
                         borderSide: const BorderSide(color: Color.fromARGB(139, 103, 51, 137)),
                         borderRadius: BorderRadius.circular(12.r),

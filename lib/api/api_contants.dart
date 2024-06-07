@@ -33,6 +33,7 @@ class EndPoints {
   static const checkinForm = '/checkin/form';
   static const checkInView = '/checkin/view';
   static const checkInDelete = '/checkin/delete';
+  static const checkInFormSubmit = '/checkin/formsubmit';
 
   // CheckOuts
   static const getAllCheckouts = '/checkout/list';
@@ -46,5 +47,5 @@ class EndPoints {
   static const submitLeaveForm = '/leaves/leave_submit';
 
   // User
-  static const userDetails = 'users/get_data';
+  static const userDetails = '/users/get_data';
 }
