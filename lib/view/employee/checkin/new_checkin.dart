@@ -8,7 +8,9 @@ import 'package:affiliate_platform/utils/custom_tools.dart';
 import 'package:affiliate_platform/utils/utility_functions.dart';
 import 'package:affiliate_platform/view/common/custom_header.dart';
 import 'package:affiliate_platform/view/common/custom_scafflod.dart';
+import 'package:affiliate_platform/view/employee/project/new_project.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -19,6 +21,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class NewCheckin extends StatefulWidget {
   const NewCheckin({
@@ -33,6 +36,8 @@ class _NewCheckinState extends State<NewCheckin> {
   CheckInBloc? checkInBloc;
 
   bool loading = true;
+
+  final PageController _controller = PageController();
 
   @override
   void initState() {
@@ -121,8 +126,11 @@ class _NewCheckinState extends State<NewCheckin> {
                           final employeeName = checkinFormModel.data![0].employeeList!.firstWhere((e) => e.userId == checkinFormModel?.data?[0].userID).firstName;
                           bloc.employeeStream.add(employeeName ?? '');
                         }
+
+                        bloc.workFromStream.add('Office');
+
                         final date = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
-                        print('asdsadasdasd $date');
+                        // print('asdsadasdasd $date');
                         bloc.checkinTimeStream.add(date);
                       }
 
@@ -210,57 +218,492 @@ class _NewCheckinState extends State<NewCheckin> {
                                     onChanged: bloc.checkinTimeStream.add,
                                   ),
 
-                                  Text('Project #1', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800])),
+                                  // Text('Project #1', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800])),
 
-                                  NewContactDropDown(
-                                    checkinFormModel: checkinFormModel,
-                                    textStream: bloc.projectStream,
-                                    heading: 'Project',
-                                    hint: 'Select Project',
-                                    // items:checkinFormModel != null ? ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'] : ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'],
-                                    items: (checkinFormModel != null && checkinFormModel.data != null && checkinFormModel.data!.isNotEmpty && checkinFormModel.data?[0].projectList != null)
-                                        ? ['', ...checkinFormModel.data![0].projectList!.map((e) => e.name ?? '')]
-                                        : [''],
-                                    label: 'Project',
-                                  ), //dropdown
+                                  // NewContactDropDown(
+                                  //   checkinFormModel: checkinFormModel,
+                                  //   textStream: bloc.projectStream,
+                                  //   heading: 'Project',
+                                  //   hint: 'Select Project',
+                                  //   // items:checkinFormModel != null ? ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'] : ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'],
+                                  //   items: (checkinFormModel != null && checkinFormModel.data != null && checkinFormModel.data!.isNotEmpty && checkinFormModel.data?[0].projectList != null)
+                                  //       ? ['', ...checkinFormModel.data![0].projectList!.map((e) => e.name ?? '')]
+                                  //       : [''],
+                                  //   label: 'Project',
+                                  // ), //dropdown
 
-                                  NewContactField(
-                                    // enabled: false,
-                                    // isForDateField: true,
-                                    autoEnlarge: true,
-                                    heading: 'Description',
-                                    hintText: 'Description',
-                                    textStream: bloc.descriptionStream,
-                                    onChanged: bloc.descriptionStream.add,
+                                  // NewContactField(
+                                  //   // enabled: false,
+                                  //   // isForDateField: true,
+                                  //   autoEnlarge: true,
+                                  //   heading: 'Description',
+                                  //   hintText: 'Description',
+                                  //   textStream: bloc.descriptionStream,
+                                  //   onChanged: bloc.descriptionStream.add,
+                                  // ),
+
+                                  // Row(
+                                  //   children: [
+                                  //     Flexible(
+                                  //       child: NewContactDropDown(
+                                  //         checkinFormModel: checkinFormModel,
+                                  //         textStream: bloc.reqHourStream,
+
+                                  //         heading: 'Hour',
+                                  //         hint: 'Select Hour',
+                                  //         // items:checkinFormModel != null ? ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'] : ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'],
+                                  //         items: ['', ...List.generate(8, (index) => '${index + 1}')],
+                                  //         label: 'Hour',
+                                  //       ),
+                                  //     ),
+                                  //     SizedBox(width: 5.w),
+                                  //     Flexible(
+                                  //       child: NewContactDropDown(
+                                  //         checkinFormModel: checkinFormModel,
+                                  //         textStream: bloc.reqMinStream,
+                                  //         heading: 'Minutes',
+                                  //         hint: 'Select Minutes',
+                                  //         // items:checkinFormModel != null ? ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'] : ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'],
+                                  //         items: ['', ...List.generate(60, (index) => '$index')],
+                                  //         label: 'Minutes',
+                                  //       ),
+                                  //     ),
+                                  //   ],
+                                  // ),
+
+                                  SizedBox(
+                                    height: 240.h,
+                                    child: PageView(
+                                      controller: _controller,
+                                      children: [
+                                        // Project 1
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text('Project #1', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800])),
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                  child: NewContactDropDown(
+                                                    checkinFormModel: checkinFormModel,
+                                                    textStream: bloc.projectStream1,
+                                                    heading: 'Project',
+                                                    hint: 'Select Project',
+                                                    // items:checkinFormModel != null ? ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'] : ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'],
+                                                    items: (checkinFormModel != null &&
+                                                            checkinFormModel.data != null &&
+                                                            checkinFormModel.data!.isNotEmpty &&
+                                                            checkinFormModel.data?[0].projectList != null)
+                                                        ? ['', ...checkinFormModel.data![0].projectList!.map((e) => e.name ?? '')]
+                                                        : [''],
+                                                    label: 'Project',
+                                                  ),
+                                                ),
+                                                Icon(Icons.add).ripple(context, () {
+                                                  Navigator.push(context, MaterialPageRoute(builder: (context) => const NewProject(isFromCheckInPage1: true)));
+                                                })
+                                              ],
+                                            ),
+                                            NewContactField(
+                                              // enabled: false,
+                                              // isForDateField: true,
+                                              autoEnlarge: true,
+                                              heading: 'Description',
+                                              hintText: 'Description',
+                                              textStream: bloc.descriptionStream1,
+                                              onChanged: bloc.descriptionStream1.add,
+                                            ),
+                                            Row(
+                                              children: [
+                                                Flexible(
+                                                  child: NewContactDropDown(
+                                                    checkinFormModel: checkinFormModel,
+                                                    textStream: bloc.reqHourStream1,
+
+                                                    heading: 'Hour',
+                                                    hint: 'Select Hour',
+                                                    // items:checkinFormModel != null ? ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'] : ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'],
+                                                    items: ['', ...List.generate(8, (index) => '${index + 1}')],
+                                                    label: 'Hour',
+                                                  ),
+                                                ),
+                                                SizedBox(width: 5.w),
+                                                Flexible(
+                                                  child: NewContactDropDown(
+                                                    checkinFormModel: checkinFormModel,
+                                                    textStream: bloc.reqMinStream1,
+                                                    heading: 'Minutes',
+                                                    hint: 'Select Minutes',
+                                                    // items:checkinFormModel != null ? ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'] : ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'],
+                                                    items: ['', ...List.generate(60, (index) => '$index')],
+                                                    label: 'Minutes',
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                        // Project 2
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text('Project #2', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800])),
+
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                  child: NewContactDropDown(
+                                                    checkinFormModel: checkinFormModel,
+                                                    textStream: bloc.projectStream2,
+                                                    heading: 'Project',
+                                                    hint: 'Select Project',
+                                                    // items:checkinFormModel != null ? ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'] : ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'],
+                                                    items: (checkinFormModel != null &&
+                                                            checkinFormModel.data != null &&
+                                                            checkinFormModel.data!.isNotEmpty &&
+                                                            checkinFormModel.data?[0].projectList != null)
+                                                        ? ['', ...checkinFormModel.data![0].projectList!.map((e) => e.name ?? '')]
+                                                        : [''],
+                                                    label: 'Project',
+                                                  ),
+                                                ),
+                                                Icon(Icons.add).ripple(context, () {
+                                                  Navigator.push(context, MaterialPageRoute(builder: (context) => const NewProject(isFromCheckInPage2: true)));
+                                                })
+                                              ],
+                                            ), //dropdown
+
+                                            NewContactField(
+                                              // enabled: false,
+                                              // isForDateField: true,
+                                              autoEnlarge: true,
+                                              heading: 'Description',
+                                              hintText: 'Description',
+                                              textStream: bloc.descriptionStream2,
+                                              onChanged: bloc.descriptionStream2.add,
+                                            ),
+
+                                            Row(
+                                              children: [
+                                                Flexible(
+                                                  child: NewContactDropDown(
+                                                    checkinFormModel: checkinFormModel,
+                                                    textStream: bloc.reqHourStream2,
+
+                                                    heading: 'Hour',
+                                                    hint: 'Select Hour',
+                                                    // items:checkinFormModel != null ? ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'] : ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'],
+                                                    items: ['', ...List.generate(8, (index) => '${index + 1}')],
+                                                    label: 'Hour',
+                                                  ),
+                                                ),
+                                                SizedBox(width: 5.w),
+                                                Flexible(
+                                                  child: NewContactDropDown(
+                                                    checkinFormModel: checkinFormModel,
+                                                    textStream: bloc.reqMinStream2,
+                                                    heading: 'Minutes',
+                                                    hint: 'Select Minutes',
+                                                    // items:checkinFormModel != null ? ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'] : ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'],
+                                                    items: ['', ...List.generate(60, (index) => '$index')],
+                                                    label: 'Minutes',
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                        // Project 3
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text('Project #3', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800])),
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                  child: NewContactDropDown(
+                                                    checkinFormModel: checkinFormModel,
+                                                    textStream: bloc.projectStream3,
+                                                    heading: 'Project',
+                                                    hint: 'Select Project',
+                                                    // items:checkinFormModel != null ? ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'] : ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'],
+                                                    items: (checkinFormModel != null &&
+                                                            checkinFormModel.data != null &&
+                                                            checkinFormModel.data!.isNotEmpty &&
+                                                            checkinFormModel.data?[0].projectList != null)
+                                                        ? ['', ...checkinFormModel.data![0].projectList!.map((e) => e.name ?? '')]
+                                                        : [''],
+                                                    label: 'Project',
+                                                  ),
+                                                ),
+                                                Icon(Icons.add).ripple(context, () {
+                                                  Navigator.push(context, MaterialPageRoute(builder: (context) => const NewProject(isFromCheckInPage3: true)));
+                                                })
+                                              ],
+                                            ),
+                                            NewContactField(
+                                              // enabled: false,
+                                              // isForDateField: true,
+                                              autoEnlarge: true,
+                                              heading: 'Description',
+                                              hintText: 'Description',
+                                              textStream: bloc.descriptionStream3,
+                                              onChanged: bloc.descriptionStream3.add,
+                                            ),
+                                            Row(
+                                              children: [
+                                                Flexible(
+                                                  child: NewContactDropDown(
+                                                    checkinFormModel: checkinFormModel,
+                                                    textStream: bloc.reqHourStream3,
+
+                                                    heading: 'Hour',
+                                                    hint: 'Select Hour',
+                                                    // items:checkinFormModel != null ? ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'] : ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'],
+                                                    items: ['', ...List.generate(8, (index) => '${index + 1}')],
+                                                    label: 'Hour',
+                                                  ),
+                                                ),
+                                                SizedBox(width: 5.w),
+                                                Flexible(
+                                                  child: NewContactDropDown(
+                                                    checkinFormModel: checkinFormModel,
+                                                    textStream: bloc.reqMinStream3,
+                                                    heading: 'Minutes',
+                                                    hint: 'Select Minutes',
+                                                    // items:checkinFormModel != null ? ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'] : ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'],
+                                                    items: ['', ...List.generate(60, (index) => '$index')],
+                                                    label: 'Minutes',
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                        // Project 4
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text('Project #4', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800])),
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                  child: NewContactDropDown(
+                                                    checkinFormModel: checkinFormModel,
+                                                    textStream: bloc.projectStream4,
+                                                    heading: 'Project',
+                                                    hint: 'Select Project',
+                                                    // items:checkinFormModel != null ? ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'] : ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'],
+                                                    items: (checkinFormModel != null &&
+                                                            checkinFormModel.data != null &&
+                                                            checkinFormModel.data!.isNotEmpty &&
+                                                            checkinFormModel.data?[0].projectList != null)
+                                                        ? ['', ...checkinFormModel.data![0].projectList!.map((e) => e.name ?? '')]
+                                                        : [''],
+                                                    label: 'Project',
+                                                  ),
+                                                ),
+                                                Icon(Icons.add).ripple(context, () {
+                                                  Navigator.push(context, MaterialPageRoute(builder: (context) => const NewProject(isFromCheckInPage4: true)));
+                                                })
+                                              ],
+                                            ),
+                                            NewContactField(
+                                              // enabled: false,
+                                              // isForDateField: true,
+                                              autoEnlarge: true,
+                                              heading: 'Description',
+                                              hintText: 'Description',
+                                              textStream: bloc.descriptionStream4,
+                                              onChanged: bloc.descriptionStream4.add,
+                                            ),
+                                            Row(
+                                              children: [
+                                                Flexible(
+                                                  child: NewContactDropDown(
+                                                    checkinFormModel: checkinFormModel,
+                                                    textStream: bloc.reqHourStream4,
+
+                                                    heading: 'Hour',
+                                                    hint: 'Select Hour',
+                                                    // items:checkinFormModel != null ? ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'] : ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'],
+                                                    items: ['', ...List.generate(8, (index) => '${index + 1}')],
+                                                    label: 'Hour',
+                                                  ),
+                                                ),
+                                                SizedBox(width: 5.w),
+                                                Flexible(
+                                                  child: NewContactDropDown(
+                                                    checkinFormModel: checkinFormModel,
+                                                    textStream: bloc.reqMinStream4,
+                                                    heading: 'Minutes',
+                                                    hint: 'Select Minutes',
+                                                    // items:checkinFormModel != null ? ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'] : ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'],
+                                                    items: ['', ...List.generate(60, (index) => '$index')],
+                                                    label: 'Minutes',
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                        // Project 5
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text('Project #5', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800])),
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                  child: NewContactDropDown(
+                                                    checkinFormModel: checkinFormModel,
+                                                    textStream: bloc.projectStream5,
+                                                    heading: 'Project',
+                                                    hint: 'Select Project',
+                                                    // items:checkinFormModel != null ? ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'] : ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'],
+                                                    items: (checkinFormModel != null &&
+                                                            checkinFormModel.data != null &&
+                                                            checkinFormModel.data!.isNotEmpty &&
+                                                            checkinFormModel.data?[0].projectList != null)
+                                                        ? ['', ...checkinFormModel.data![0].projectList!.map((e) => e.name ?? '')]
+                                                        : [''],
+                                                    label: 'Project',
+                                                  ),
+                                                ),
+                                                Icon(Icons.add).ripple(context, () {
+                                                  Navigator.push(context, MaterialPageRoute(builder: (context) => const NewProject(isFromCheckInPage5: true)));
+                                                })
+                                              ],
+                                            ),
+                                            NewContactField(
+                                              // enabled: false,
+                                              // isForDateField: true,
+                                              autoEnlarge: true,
+                                              heading: 'Description',
+                                              hintText: 'Description',
+                                              textStream: bloc.descriptionStream5,
+                                              onChanged: bloc.descriptionStream5.add,
+                                            ),
+                                            Row(
+                                              children: [
+                                                Flexible(
+                                                  child: NewContactDropDown(
+                                                    checkinFormModel: checkinFormModel,
+                                                    textStream: bloc.reqHourStream5,
+
+                                                    heading: 'Hour',
+                                                    hint: 'Select Hour',
+                                                    // items:checkinFormModel != null ? ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'] : ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'],
+                                                    items: ['', ...List.generate(8, (index) => '${index + 1}')],
+                                                    label: 'Hour',
+                                                  ),
+                                                ),
+                                                SizedBox(width: 5.w),
+                                                Flexible(
+                                                  child: NewContactDropDown(
+                                                    checkinFormModel: checkinFormModel,
+                                                    textStream: bloc.reqMinStream5,
+                                                    heading: 'Minutes',
+                                                    hint: 'Select Minutes',
+                                                    // items:checkinFormModel != null ? ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'] : ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'],
+                                                    items: ['', ...List.generate(60, (index) => '$index')],
+                                                    label: 'Minutes',
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                        // Project 6
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text('Project #6', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800])),
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                  child: NewContactDropDown(
+                                                    checkinFormModel: checkinFormModel,
+                                                    textStream: bloc.projectStream6,
+                                                    heading: 'Project',
+                                                    hint: 'Select Project',
+                                                    // items:checkinFormModel != null ? ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'] : ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'],
+                                                    items: (checkinFormModel != null &&
+                                                            checkinFormModel.data != null &&
+                                                            checkinFormModel.data!.isNotEmpty &&
+                                                            checkinFormModel.data?[0].projectList != null)
+                                                        ? ['', ...checkinFormModel.data![0].projectList!.map((e) => e.name ?? '')]
+                                                        : [''],
+                                                    label: 'Project',
+                                                  ),
+                                                ),
+                                                Icon(Icons.add).ripple(context, () {
+                                                  Navigator.push(context, MaterialPageRoute(builder: (context) => const NewProject(isFromCheckInPage6: true)));
+                                                })
+                                              ],
+                                            ),
+                                            NewContactField(
+                                              // enabled: false,
+                                              // isForDateField: true,
+                                              autoEnlarge: true,
+                                              heading: 'Description',
+                                              hintText: 'Description',
+                                              textStream: bloc.descriptionStream6,
+                                              onChanged: bloc.descriptionStream6.add,
+                                            ),
+                                            Row(
+                                              children: [
+                                                Flexible(
+                                                  child: NewContactDropDown(
+                                                    checkinFormModel: checkinFormModel,
+                                                    textStream: bloc.reqHourStream6,
+
+                                                    heading: 'Hour',
+                                                    hint: 'Select Hour',
+                                                    // items:checkinFormModel != null ? ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'] : ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'],
+                                                    items: ['', ...List.generate(8, (index) => '${index + 1}')],
+                                                    label: 'Hour',
+                                                  ),
+                                                ),
+                                                SizedBox(width: 5.w),
+                                                Flexible(
+                                                  child: NewContactDropDown(
+                                                    checkinFormModel: checkinFormModel,
+                                                    textStream: bloc.reqMinStream6,
+                                                    heading: 'Minutes',
+                                                    hint: 'Select Minutes',
+                                                    // items:checkinFormModel != null ? ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'] : ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'],
+                                                    items: ['', ...List.generate(60, (index) => '$index')],
+                                                    label: 'Minutes',
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
 
-                                  Row(
-                                    children: [
-                                      Flexible(
-                                        child: NewContactDropDown(
-                                          checkinFormModel: checkinFormModel,
-                                          textStream: bloc.reqHourStream,
-
-                                          heading: 'Hour',
-                                          hint: 'Select Hour',
-                                          // items:checkinFormModel != null ? ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'] : ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'],
-                                          items: ['', ...List.generate(8, (index) => '${index + 1}')],
-                                          label: 'Hour',
+                                  SizedBox(
+                                    height: 30,
+                                    width: double.infinity,
+                                    child: Center(
+                                      child: Padding(
+                                        padding: EdgeInsets.only(bottom: 5.h),
+                                        child: SmoothPageIndicator(
+                                          controller: _controller,
+                                          count: 6,
+                                          effect: const ExpandingDotsEffect(
+                                            dotHeight: 8,
+                                            dotWidth: 8,
+                                            spacing: 16,
+                                            dotColor: Colors.grey,
+                                            activeDotColor: Colors.purple,
+                                          ),
                                         ),
                                       ),
-                                      SizedBox(width: 5.w),
-                                      Flexible(
-                                        child: NewContactDropDown(
-                                          checkinFormModel: checkinFormModel,
-                                          textStream: bloc.reqMinStream,
-                                          heading: 'Minutes',
-                                          hint: 'Select Minutes',
-                                          // items:checkinFormModel != null ? ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'] : ['', 'Qtn2016', 'Qtn2017', 'Qtn2018'],
-                                          items: ['', ...List.generate(60, (index) => '$index')],
-                                          label: 'Minutes',
-                                        ),
-                                      ),
-                                    ],
+                                    ),
                                   ),
                                 ],
                               ),
@@ -269,15 +712,15 @@ class _NewCheckinState extends State<NewCheckin> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
-                                  decoration: BoxDecoration(
-                                    color: Colors.orange,
-                                    borderRadius: BorderRadius.circular(15.r),
-                                  ),
-                                  child: Text('Reset', style: AppStyles.poppins.copyWith(fontSize: 14.w, color: Colors.white)),
-                                ),
-                                SizedBox(width: 10.w),
+                                // Container(
+                                //   padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
+                                //   decoration: BoxDecoration(
+                                //     color: Colors.orange,
+                                //     borderRadius: BorderRadius.circular(15.r),
+                                //   ),
+                                //   child: Text('Reset', style: AppStyles.poppins.copyWith(fontSize: 14.w, color: Colors.white)),
+                                // ),
+                                // SizedBox(width: 10.w),
                                 Container(
                                   padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
                                   decoration: BoxDecoration(
@@ -288,10 +731,45 @@ class _NewCheckinState extends State<NewCheckin> {
                                 ).ripple(context, () async {
                                   customLoader(context);
                                   final employeeId = checkinFormModel?.data?[0].employeeList?.firstWhere((e) => e.firstName == bloc.employeeStream.value).userId ?? '0';
-                                  final projectId = checkinFormModel?.data?[0].projectList?.firstWhere((e) => e.name == bloc.projectStream.value).id ?? '0';
+                                  var projectId1 = '';
+                                  var projectId2 = '';
+                                  var projectId3 = '';
+                                  var projectId4 = '';
+                                  var projectId5 = '';
+                                  var projectId6 = '';
+                                  if (bloc.projectStream1.value != '') {
+                                    projectId1 = checkinFormModel?.data?[0].projectList?.firstWhere((e) => e.name == bloc.projectStream1.value).id ?? '';
+                                  } else {
+                                    await erroMotionToastInfo(context, msg: 'Atleast select one project');
+                                    return;
+                                  }
+                                  if (bloc.projectStream2.value != '') {
+                                    projectId2 = checkinFormModel?.data?[0].projectList?.firstWhere((e) => e.name == bloc.projectStream2.value).id ?? '';
+                                  }
+                                  if (bloc.projectStream3.value != '') {
+                                    projectId3 = checkinFormModel?.data?[0].projectList?.firstWhere((e) => e.name == bloc.projectStream3.value).id ?? '';
+                                  }
+                                  if (bloc.projectStream4.value != '') {
+                                    projectId4 = checkinFormModel?.data?[0].projectList?.firstWhere((e) => e.name == bloc.projectStream4.value).id ?? '';
+                                  }
+                                  if (bloc.projectStream5.value != '') {
+                                    projectId5 = checkinFormModel?.data?[0].projectList?.firstWhere((e) => e.name == bloc.projectStream5.value).id ?? '';
+                                  }
+                                  if (bloc.projectStream6.value != '') {
+                                    projectId6 = checkinFormModel?.data?[0].projectList?.firstWhere((e) => e.name == bloc.projectStream6.value).id ?? '';
+                                  }
                                   final workFromId = bloc.workFromStream.value == 'Home' ? '1' : '2';
 
-                                  final resp = await bloc.formSubmitCheckin(employeeId: employeeId, projectId: projectId, workFromId: workFromId);
+                                  final resp = await bloc.formSubmitCheckin(
+                                    employeeId: employeeId,
+                                    workFromId: workFromId,
+                                    projectId1: projectId1,
+                                    projectId2: projectId2 == '' ? null : projectId2,
+                                    projectId3: projectId2 == '' ? null : projectId3,
+                                    projectId4: projectId2 == '' ? null : projectId4,
+                                    projectId5: projectId2 == '' ? null : projectId5,
+                                    projectId6: projectId2 == '' ? null : projectId6,
+                                  );
 
                                   if (resp != null && resp['status'] == 'SUCCESS' && resp['response'] == 'OK') {
                                     Navigator.pop(context);

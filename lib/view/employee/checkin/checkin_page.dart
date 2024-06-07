@@ -397,7 +397,7 @@ class _ProjectCard extends StatelessWidget {
                                     ? 'No'
                                     : model?.data![0].checkinData![index].checkOutStatus ?? 'No';
                             return Container(
-                              padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 3.h),
+                              padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 5.h),
                               decoration: BoxDecoration(
                                 color: isLoading
                                     ? Colors.transparent
@@ -406,12 +406,12 @@ class _ProjectCard extends StatelessWidget {
                                         : Colors.green[600],
                                 // border: Border.all(color: Colors.purple[400]!),
                                 // borderRadius: BorderRadius.only(topRight: Radius.circular(15.r), bottomLeft: Radius.circular(15.r)),
-                                // shape: BoxShape.circle,
-                                borderRadius: BorderRadius.circular(5.r),
+                                shape: BoxShape.circle,
+                                // borderRadius: BorderRadius.circular(5.r),
                               ),
                               child: Icon(
                                 Icons.subdirectory_arrow_right_rounded,
-                                size: 19.w,
+                                size: 15.w,
                                 // color: Colors.purple[400],
                                 color: Colors.white,
                               ),

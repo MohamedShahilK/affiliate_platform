@@ -1,17 +1,14 @@
 // ignore_for_file: lines_longer_than_80_chars, use_build_context_synchronously
 
 import 'package:affiliate_platform/config/ripple.dart';
+import 'package:affiliate_platform/logic/employee/checkin/checkin_bloc.dart';
 import 'package:affiliate_platform/logic/employee/project/project_bloc.dart';
-import 'package:affiliate_platform/logic/manage_contact/manage_contact_bloc.dart';
 import 'package:affiliate_platform/models/employee/project/project_form.dart';
 import 'package:affiliate_platform/models/employee/project/view_project.dart';
-import 'package:affiliate_platform/models/manage_contact/contact_form_model.dart';
-import 'package:affiliate_platform/models/manage_contact/contact_view_model.dart';
 import 'package:affiliate_platform/utils/constants/styles.dart';
 import 'package:affiliate_platform/utils/custom_tools.dart';
 import 'package:affiliate_platform/view/common/custom_header.dart';
 import 'package:affiliate_platform/view/common/custom_scafflod.dart';
-import 'package:affiliate_platform/view/common/sidebar.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,7 +16,6 @@ import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -27,10 +23,22 @@ import 'package:skeletonizer/skeletonizer.dart';
 class NewProject extends StatefulWidget {
   const NewProject({
     this.projectId,
+    this.isFromCheckInPage1 = false,
+    this.isFromCheckInPage2 = false,
+    this.isFromCheckInPage3 = false,
+    this.isFromCheckInPage4 = false,
+    this.isFromCheckInPage5 = false,
+    this.isFromCheckInPage6 = false,
     super.key,
   });
 
   final String? projectId;
+  final bool isFromCheckInPage1;
+  final bool isFromCheckInPage2;
+  final bool isFromCheckInPage3;
+  final bool isFromCheckInPage4;
+  final bool isFromCheckInPage5;
+  final bool isFromCheckInPage6;
 
   @override
   State<NewProject> createState() => _NewProjectState();
@@ -483,9 +491,92 @@ class _NewProjectState extends State<NewProject> {
                                         final resp = await bloc.submitProjectForm(context, customerId: customerId, quotationId: quotationId);
 
                                         if (resp != null && resp['status'] == 'SUCCESS' && resp['response'] == 'OK') {
-                                          Navigator.pop(context);
+                                          // if (!widget.isFromCheckInPage1) {
+                                          // }
+
                                           await successMotionToastInfo(context, msg: resp['message'] as String);
                                           await bloc.getAllProjects();
+                                          if (widget.isFromCheckInPage1 &&
+                                              !widget.isFromCheckInPage2 &&
+                                              !widget.isFromCheckInPage3 &&
+                                              !widget.isFromCheckInPage4 &&
+                                              !widget.isFromCheckInPage5 &&
+                                              !widget.isFromCheckInPage6) {
+                                            // ignore: avoid_dynamic_calls
+                                            final projectId = (resp['data'] as List)[0]['projects']['name'] as String?;
+                                            // final projectName = bloc.getAllProjectsStream.value?.data?[0].projectList?.firstWhere((e) => e.id == projectId).name;
+                                            // print('46854646465846844 $projectId');
+                                            context.read<CheckInBloc>().projectStream1.add(projectId ?? '');
+                                            await context.read<CheckInBloc>().getCheckinForm();
+                                          }
+                                          if (!widget.isFromCheckInPage1 &&
+                                              widget.isFromCheckInPage2 &&
+                                              !widget.isFromCheckInPage3 &&
+                                              !widget.isFromCheckInPage4 &&
+                                              !widget.isFromCheckInPage5 &&
+                                              !widget.isFromCheckInPage6) {
+                                            // ignore: avoid_dynamic_calls
+                                            final projectId = (resp['data'] as List)[0]['projects']['name'] as String?;
+                                            // final projectName = bloc.getAllProjectsStream.value?.data?[0].projectList?.firstWhere((e) => e.id == projectId).name;
+                                            // print('46854646465846844 $projectId');
+                                            context.read<CheckInBloc>().projectStream2.add(projectId ?? '');
+                                            await context.read<CheckInBloc>().getCheckinForm();
+                                          }
+                                          if (!widget.isFromCheckInPage1 &&
+                                              !widget.isFromCheckInPage2 &&
+                                              widget.isFromCheckInPage3 &&
+                                              !widget.isFromCheckInPage4 &&
+                                              !widget.isFromCheckInPage5 &&
+                                              !widget.isFromCheckInPage6) {
+                                            // ignore: avoid_dynamic_calls
+                                            final projectId = (resp['data'] as List)[0]['projects']['name'] as String?;
+                                            // final projectName = bloc.getAllProjectsStream.value?.data?[0].projectList?.firstWhere((e) => e.id == projectId).name;
+                                            // print('46854646465846844 $projectId');
+                                            context.read<CheckInBloc>().projectStream3.add(projectId ?? '');
+                                            await context.read<CheckInBloc>().getCheckinForm();
+                                          }
+                                          if (!widget.isFromCheckInPage1 &&
+                                              !widget.isFromCheckInPage2 &&
+                                              !widget.isFromCheckInPage3 &&
+                                              widget.isFromCheckInPage4 &&
+                                              !widget.isFromCheckInPage5 &&
+                                              !widget.isFromCheckInPage6) {
+                                            // ignore: avoid_dynamic_calls
+                                            final projectId = (resp['data'] as List)[0]['projects']['name'] as String?;
+                                            // final projectName = bloc.getAllProjectsStream.value?.data?[0].projectList?.firstWhere((e) => e.id == projectId).name;
+                                            // print('46854646465846844 $projectId');
+                                            context.read<CheckInBloc>().projectStream4.add(projectId ?? '');
+                                            await context.read<CheckInBloc>().getCheckinForm();
+                                          }
+                                          if (!widget.isFromCheckInPage1 &&
+                                              !widget.isFromCheckInPage2 &&
+                                              !widget.isFromCheckInPage3 &&
+                                              !widget.isFromCheckInPage4 &&
+                                              widget.isFromCheckInPage5 &&
+                                              !widget.isFromCheckInPage6) {
+                                            // ignore: avoid_dynamic_calls
+                                            final projectId = (resp['data'] as List)[0]['projects']['name'] as String?;
+                                            // final projectName = bloc.getAllProjectsStream.value?.data?[0].projectList?.firstWhere((e) => e.id == projectId).name;
+                                            // print('46854646465846844 $projectId');
+                                            context.read<CheckInBloc>().projectStream5.add(projectId ?? '');
+                                            await context.read<CheckInBloc>().getCheckinForm();
+                                          }
+                                          if (!widget.isFromCheckInPage1 &&
+                                              !widget.isFromCheckInPage2 &&
+                                              !widget.isFromCheckInPage3 &&
+                                              !widget.isFromCheckInPage4 &&
+                                              !widget.isFromCheckInPage5 &&
+                                              widget.isFromCheckInPage6) {
+                                            // ignore: avoid_dynamic_calls
+                                            final projectId = (resp['data'] as List)[0]['projects']['name'] as String?;
+                                            // final projectName = bloc.getAllProjectsStream.value?.data?[0].projectList?.firstWhere((e) => e.id == projectId).name;
+                                            // print('46854646465846844 $projectId');
+                                            context.read<CheckInBloc>().projectStream6.add(projectId ?? '');
+                                            await context.read<CheckInBloc>().getCheckinForm();
+                                          }
+
+                                          Navigator.pop(context);
+
                                           Loader.hide();
                                         } else {
                                           await erroMotionToastInfo(context, msg: 'Submission Failed !!');
@@ -506,6 +597,7 @@ class _NewProjectState extends State<NewProject> {
                                         if (resp != null && resp['status'] == 'SUCCESS' && resp['response'] == 'OK') {
                                           Navigator.pop(context);
                                           await successMotionToastInfo(context, msg: (resp['message'] as String?) ?? 'Project updated successfully');
+
                                           await bloc.getAllProjects();
                                           Loader.hide();
                                         } else {
@@ -534,8 +626,6 @@ class _NewProjectState extends State<NewProject> {
     );
   }
 }
-
-
 
 String getStatusId({required String status}) {
   if (status == 'Inactive') {
