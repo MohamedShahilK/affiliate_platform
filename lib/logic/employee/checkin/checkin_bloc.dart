@@ -55,31 +55,17 @@ class CheckInBloc {
     getCheckinViewStream.add(respModel);
   }
 
-  Future<Map<String, dynamic>?> submitProjectForm(BuildContext context,{required String? customerId, required String? quotationId}) async {
-    final respModel = ProjectServices().submitProjectForm(
-      context,
-      name: projectNameStream.value,
-      description: descriptionStream.valueOrNull,
-      startDate: startDateStream.valueOrNull,
-      endDate: endDateStream.valueOrNull,
-      customerId: customerId,
-      quotationId: quotationId,
-    );
+  Future<bool> deleteContact({required String checkInID}) async {
+    var isDeleted = false;
 
-    return respModel;
+    final jsonData = await CheckInServices().deleteCheckin(checkInID: checkInID);
+
+    if (jsonData != null && jsonData['status'] == 'SUCCESS' && jsonData['response'] == 'OK') {
+      isDeleted = true;
+    }
+
+    return isDeleted;
   }
-
-  // Future<bool> deleteContact({required String contactId}) async {
-  //   var isDeleted = false;
-
-  //   final jsonData = await ManageContactSevices().deleteContact(contactId: contactId);
-
-  //   if (jsonData != null && jsonData['status'] == 'SUCCESS' && jsonData['response'] == 'OK') {
-  //     isDeleted = true;
-  //   }
-
-  //   return isDeleted;
-  // }
 
   // Future<bool> addPermissionForAffUsers({required String contactId, required String affUserId}) async {
   //   var isPermAdded = false;

@@ -32,6 +32,7 @@ class EndPoints {
   static const getAllCheckins = '/checkin/list';
   static const checkinForm = '/checkin/form';
   static const checkInView = '/checkin/view';
+  static const checkInDelete = '/checkin/delete';
 
   // CheckOuts
   static const getAllCheckouts = '/checkout/list';

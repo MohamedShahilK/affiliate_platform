@@ -4,6 +4,7 @@ import 'package:affiliate_platform/config/ripple.dart';
 import 'package:affiliate_platform/logic/employee/checkin/checkin_bloc.dart';
 import 'package:affiliate_platform/models/employee/checkin/getall_checkins.dart';
 import 'package:affiliate_platform/utils/constants/styles.dart';
+import 'package:affiliate_platform/utils/custom_tools.dart';
 import 'package:affiliate_platform/utils/utility_functions.dart';
 import 'package:affiliate_platform/view/common/custom_header.dart';
 import 'package:affiliate_platform/view/common/custom_scafflod.dart';
@@ -466,7 +467,39 @@ class _ProjectCard extends StatelessWidget {
                         // color: Colors.purple[400],
                         color: Colors.red,
                       ),
-                    ),
+                    ).ripple(context, () async {
+                      final isTrue = await showWarningDialog(
+                        context,
+                        title: 'Remove Contact',
+                        description: 'Are you sure want to delete the contact?',
+                        yes: 'Delete',
+                        no: 'Cancel',
+                      );
+
+                      if (isTrue != null && isTrue) {
+                        final checkInId = model?.data == null || model!.data!.isEmpty || model!.data![0].checkinData == null || model!.data![0].checkinData!.isEmpty
+                            ? '-'
+                            : model?.data![0].checkinData![index].checkInId == ''
+                                ? '-'
+                                : model?.data![0].checkinData![index].checkInId ?? '-';
+                        // ignore: use_build_context_synchronously
+                        customLoader(context);
+                        // ignore: use_build_context_synchronously
+                        final jsonData = await context.read<CheckInBloc>().deleteContact(checkInID: checkInId);
+
+                        if (jsonData) {
+                          // ignore: use_build_context_synchronously
+                          await context.read<CheckInBloc>().getAllCheckins();
+                          Loader.hide();
+                          // ignore: use_build_context_synchronously
+                          await successMotionToastInfo(context, msg: 'CheckIn deleted successfully');
+                        } else {
+                          Loader.hide();
+                          // ignore: use_build_context_synchronously
+                          await erroMotionToastInfo(context, msg: "Something wrong!!. Can't able to delete");
+                        }
+                      }
+                    }),
                   ],
                 ),
               ],
