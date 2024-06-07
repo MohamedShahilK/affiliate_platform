@@ -8,6 +8,7 @@ import 'package:affiliate_platform/utils/custom_tools.dart';
 import 'package:affiliate_platform/utils/utility_functions.dart';
 import 'package:affiliate_platform/view/common/custom_header.dart';
 import 'package:affiliate_platform/view/common/custom_scafflod.dart';
+import 'package:affiliate_platform/view/employee/checkin/new_checkin.dart';
 import 'package:affiliate_platform/view/employee/checkin/view_checkin.dart';
 import 'package:affiliate_platform/view/employee/project/new_project.dart';
 import 'package:affiliate_platform/view/manage_contact/manage_contact.dart';
@@ -41,14 +42,14 @@ class _CheckInPageState extends State<CheckInPage> {
       },
       child: CustomScaffold(
         key: _refreshKey,
-        // onTapFloatingButton: () {
-        //   Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //       builder: (context) => const NewProject(),
-        //     ),
-        //   );
-        // },
+        onTapFloatingButton: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const NewCheckin(),
+            ),
+          );
+        },
         body: SafeArea(
           child: GestureDetector(
             // onTap: _handleLocaleChanged,

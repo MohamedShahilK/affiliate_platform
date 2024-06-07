@@ -18,20 +18,14 @@ class CheckInBloc {
   final getCheckInFormStream = BehaviorSubject<GetCheckinForm?>();
   final getCheckinViewStream = BehaviorSubject<GetCheckInView?>();
 
-  final projectNameStream = BehaviorSubject<String>.seeded('');
+  final employeeStream = BehaviorSubject<String>.seeded('');
+  final employeeIdStream = BehaviorSubject<String>.seeded('');
 
-  final clientStream = BehaviorSubject<String>.seeded('');
-  final clientIdStream = BehaviorSubject<String>.seeded('');
+  final checkinTimeStream = BehaviorSubject<String>.seeded('');
 
-  final quotationRefereneceStream = BehaviorSubject<String>.seeded('');
-  final quotationPersonNameStream = BehaviorSubject<String>.seeded(''); // Pending to implement by praveen
-  final quotationIdStream = BehaviorSubject<String>.seeded('');
+  final projectStream = BehaviorSubject<String>.seeded('');
+  final projectIdStream = BehaviorSubject<String>.seeded('');
 
-  final statusStream = BehaviorSubject<String>.seeded('');
-  final statusIdStream = BehaviorSubject<String>.seeded('');
-
-  final startDateStream = BehaviorSubject<String>.seeded('');
-  final endDateStream = BehaviorSubject<String>.seeded('');
   final descriptionStream = BehaviorSubject<String>.seeded('');
 
   Future<void> initDetails() async {
@@ -159,32 +153,9 @@ class CheckInBloc {
   // }
 
   void clearStreams() {
-    // nameStream.add('');
-    // mobileStream.add('');
-    // emailStream.add('');
-    // // sourceStream.add('');
-    // designationStream.add('');
-    // companyNameStream.add('');
-    // landlineStream.add('');
-    // websiteStream.add('');
-    // companyLocationStream.add('');
-    // companyAddressStream.add('');
-    // remarkStream.add('');
-
-    // contactTypeStream.add('');
-    // contactSourceStream.add('');
-
-    projectNameStream.add('');
-    clientStream.add('');
-    clientIdStream.add('');
-    quotationRefereneceStream.add('');
-    quotationPersonNameStream.add('');
-    quotationIdStream.add('');
-    statusStream.add('');
-    statusIdStream.add('');
-    startDateStream.add('');
-    endDateStream.add('');
-    descriptionStream.add('');
+    employeeStream.add('');
+    employeeIdStream.add('');
+    checkinTimeStream.add('');
   }
 
   void dispose() {
