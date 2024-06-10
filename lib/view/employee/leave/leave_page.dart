@@ -27,6 +27,12 @@ class LeavePage extends StatefulWidget {
 class _LeavePageState extends State<LeavePage> {
   var _refreshKey = UniqueKey();
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    Loader.hide();
+  }
+
   // To update or hot reload
   void _handleLocaleChanged() => setState(() {
         _refreshKey = UniqueKey();

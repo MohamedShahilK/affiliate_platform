@@ -210,7 +210,7 @@ class _ViewCheckInState extends State<ViewCheckIn> {
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           SizedBox(height: 20.h),
-                                          Text('Project #1', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800], fontWeight: FontWeight.w800)),
+                                          Text('Project #${index + 1}', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800], fontWeight: FontWeight.w800)),
                                           SizedBox(height: 5.h),
                                           Container(
                                             padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 5.h),

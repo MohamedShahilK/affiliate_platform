@@ -2,8 +2,17 @@
 
 import 'package:affiliate_platform/config/ripple.dart';
 import 'package:affiliate_platform/controllers/sidemenu_controller.dart';
+import 'package:affiliate_platform/logic/employee/checkin/checkin_bloc.dart';
+import 'package:affiliate_platform/logic/employee/checkout/checkout_bloc.dart';
+import 'package:affiliate_platform/logic/employee/leave/leave_bloc.dart';
+import 'package:affiliate_platform/logic/employee/project/project_bloc.dart';
+import 'package:affiliate_platform/logic/manage_contact/manage_contact_bloc.dart';
+import 'package:affiliate_platform/logic/profile/profile_bloc.dart';
+import 'package:affiliate_platform/models/employee/checkin/get_checkin_view.dart';
+import 'package:affiliate_platform/utils/custom_tools.dart';
 import 'package:affiliate_platform/view/employee/attendance/attendance.dart';
 import 'package:affiliate_platform/view/employee/checkin/checkin_page.dart';
+import 'package:affiliate_platform/view/employee/checkout/checkout_page.dart';
 import 'package:affiliate_platform/view/employee/leave/leave_page.dart';
 import 'package:affiliate_platform/view/employee/project/project.dart';
 import 'package:affiliate_platform/view/manage_contact/manage_contact.dart';
@@ -22,182 +31,216 @@ class SideMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final menu = Provider.of<SideMenuController>(context, listen: false);
-    return SizedBox(
-      width: 220,
-      child: Drawer(
-        backgroundColor: Colors.grey[200],
-        child: LayoutBuilder(
-          builder: (context, constraint) {
-            return SingleChildScrollView(
-              // it enables scrolling
-              child: ConstrainedBox(
-                constraints: BoxConstraints(minHeight: constraint.maxHeight),
-                child: IntrinsicHeight(
-                  child: Column(
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.symmetric(vertical: 35),
-                        // child: Image.asset("assets/images/new_logo-removebg-preview.png", width: 250),
-                        child: Image.asset(
-                          'assets/images/logo-dark.png',
-                          width: 200,
-                          height: 50,
+    return SafeArea(
+      child: Container(
+        margin: EdgeInsets.symmetric(vertical: 20.h),
+        // padding: EdgeInsets.symmetric(vertical: 50),
+        width: 220,
+        child: Drawer(
+          backgroundColor: Colors.grey[200],
+          child: LayoutBuilder(
+            builder: (context, constraint) {
+              return SingleChildScrollView(
+                // it enables scrolling
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(minHeight: constraint.maxHeight),
+                  child: IntrinsicHeight(
+                    child: Column(
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.symmetric(vertical: 35),
+                          // child: Image.asset("assets/images/new_logo-removebg-preview.png", width: 250),
+                          child: Image.asset(
+                            'assets/images/logo-dark.png',
+                            width: 200,
+                            height: 50,
+                          ),
                         ),
-                      ),
-                      DrawerListTile(
-                        title: 'Manage Contact',
-                        icon: Icons.account_box_outlined,
-                        svgHeight: 17,
-                        press: () {
-                          menu.setMyMenu('Manage Contact');
-                          menu.setmyMenuExpand('');
-                          _handlePageNavigation(context, route: const ManageContactPage());
-                        },
-                      ),
-                      // DrawerListTile(
-                      //   title: 'Customer',
-                      //   icon: Icons.account_box_outlined,
-                      //   svgHeight: 17,
-                      //   press: () {
-                      //     menu.setMyMenu('Customer');
-                      //     menu.setmyMenuExpand('');
-                      //     _handlePageNavigation(context, '/dashboard');
-                      //   },
-                      // ),
-                      Container(
-                        // margin: EdgeInsets.symmetric(),
-                        // padding: const EdgeInsets.only(top: 5),
-                        // margin: EdgeInsets.symmetric(horizontal: 10),
-
-                        // decoration: BoxDecoration(border: Border.all(color: Colors.grey[300]!)),
-                        child: ExpansionDrawerListTile(
-                          title: 'Employee',
-                          icon: Icons.person,
-                          svgHeight: 18,
-                          press: () {
-                            menu.setmyMenuExpand('Employee');
-                            print('1231231213 ${menu.myMenuExpand}');
-                            // _handlePageNavigation(context, '/');
+                        DrawerListTile(
+                          title: 'Manage Contact',
+                          icon: Icons.account_box_outlined,
+                          svgHeight: 17,
+                          press: () async {
+                            customLoader(context);
+                            menu.setMyMenu('Manage Contact');
+                            menu.setmyMenuExpand('');
+                            // Scaffold.of(context).closeDrawer();
+                            await context.read<ManageContactBloc>().getAllContacts();
+                            // ignore: use_build_context_synchronously
+                            await _handlePageNavigation(context, route: const ManageContactPage());
                           },
-                          children: [
-                            Column(
-                              children: [
-                                DrawerListTile(
-                                  title: 'Attendance',
-                                  icon: Icons.accessible_sharp,
-                                  removeBorder : true,                                  
-                                  svgHeight: 15,
-                                  textFont: 13,
-                                  press: () {
-                                    menu.setMyMenu('Attendance');
-                                    menu.setmyMenuExpand('Employee');
-                                    _handlePageNavigation(context, route: const AttendancePage());
-                                  },
-                                ),
-                                DrawerListTile(
-                                  title: 'Project',
-                                  icon: Icons.accessible_sharp,
-                                  removeBorder : true,
-                                  svgHeight: 15,
-                                  textFont: 13,
-                                  press: () {
-                                    menu.setMyMenu('Project');
-                                    menu.setmyMenuExpand('Employee');
-                                    _handlePageNavigation(context, route: const ProjectPage());
-                                  },
-                                ),
-                                DrawerListTile(
-                                  title: 'Check In',
-                                  icon: Icons.accessible_sharp,
-                                  removeBorder : true,
-                                  svgHeight: 15,
-                                  textFont: 13,
-                                  press: () {
-                                    menu.setMyMenu('Check In');
-                                    menu.setmyMenuExpand('Employee');
-                                    _handlePageNavigation(context, route: const CheckInPage());
-                                  },
-                                ),
-                                DrawerListTile(
-                                  title: 'Break',
-                                  icon: Icons.accessible_sharp,
-                                  removeBorder : true,
-                                  svgHeight: 15,
-                                  textFont: 13,
-                                  press: () {
-                                    menu.setMyMenu('Break');
-                                    menu.setmyMenuExpand('Employee');
-                                    // _handlePageNavigation(context, '/masterreport');
-                                  },
-                                ),
-                                DrawerListTile(
-                                  title: 'Check Out',
-                                  icon: Icons.accessible_sharp,
-                                  removeBorder : true,
-                                  svgHeight: 15,
-                                  textFont: 13,
-                                  press: () {
-                                    menu.setMyMenu('Check Out');
-                                    menu.setmyMenuExpand('Employee');
-                                    // _handlePageNavigation(context, '/masterreport');
-                                  },
-                                ),
-                                DrawerListTile(
-                                  title: 'Leave Request',
-                                  icon: Icons.accessible_sharp,
-                                  removeBorder : true,
-                                  svgHeight: 15,
-                                  textFont: 13,
-                                  press: () {
-                                    menu.setMyMenu('Leave Request');
-                                    menu.setmyMenuExpand('Employee');
-                                     _handlePageNavigation(context, route: const LeavePage());
-                                    // _handlePageNavigation(context, '/masterreport');
-                                  },
-                                ),
-                                DrawerListTile(
-                                  title: 'My Profile',
-                                  icon: Icons.accessible_sharp,
-                                  removeBorder : true,
-                                  svgHeight: 15,
-                                  textFont: 13,
-                                  press: () {
-                                    menu.setMyMenu('My Profile');
-                                    menu.setmyMenuExpand('Employee');
-                                    // _handlePageNavigation(context, '/masterreport');
-                                  },
-                                ),
-                                DrawerListTile(
-                                  title: 'Settings',
-                                  icon: Icons.accessible_sharp,
-                                  removeBorder : true,
-                                  svgHeight: 15,
-                                  textFont: 13,
-                                  press: () {
-                                    menu.setMyMenu('Settings');
-                                    menu.setmyMenuExpand('Employee');
-                                    // _handlePageNavigation(context, '/masterreport');
-                                  },
-                                ),
-                              ],
-                            ),
-                          ],
                         ),
-                      ),
-                      const Spacer(),
-                      DrawerListTile(
-                        noTopPadding: true,
-                        title: 'LogOut',
-                        svgHeight: 17,
-                        svgSrc: 'assets/icons/logout2.svg',
-                        press: () async {},
-                      ),
-                    ],
+                        // DrawerListTile(
+                        //   title: 'Customer',
+                        //   icon: Icons.account_box_outlined,
+                        //   svgHeight: 17,
+                        //   press: () {
+                        //     menu.setMyMenu('Customer');
+                        //     menu.setmyMenuExpand('');
+                        //     _handlePageNavigation(context, '/dashboard');
+                        //   },
+                        // ),
+                        Container(
+                          // margin: EdgeInsets.symmetric(),
+                          // padding: const EdgeInsets.only(top: 5),
+                          // margin: EdgeInsets.symmetric(horizontal: 10),
+
+                          // decoration: BoxDecoration(border: Border.all(color: Colors.grey[300]!)),
+                          child: ExpansionDrawerListTile(
+                            title: 'Employee',
+                            icon: Icons.person,
+                            svgHeight: 18,
+                            press: () {
+                              menu.setmyMenuExpand('Employee');
+                              print('1231231213 ${menu.myMenuExpand}');
+                              // _handlePageNavigation(context, '/');
+                            },
+                            children: [
+                              Column(
+                                children: [
+                                  DrawerListTile(
+                                    title: 'Attendance',
+                                    icon: Icons.account_tree_outlined,
+                                    removeBorder: true,
+                                    svgHeight: 15,
+                                    textFont: 13,
+                                    press: () {
+                                      menu.setMyMenu('Attendance');
+                                      menu.setmyMenuExpand('Employee');
+                                      _handlePageNavigation(context, route: const AttendancePage());
+                                    },
+                                  ),
+                                  DrawerListTile(
+                                    title: 'Project',
+                                    icon: Icons.account_tree_outlined,
+                                    removeBorder: true,
+                                    svgHeight: 15,
+                                    textFont: 13,
+                                    press: () async {
+                                      customLoader(context);
+                                      menu.setMyMenu('Project');
+                                      menu.setmyMenuExpand('Employee');
+                                      // Scaffold.of(context).closeDrawer();
+                                      await context.read<ProjectBloc>().getAllProjects();
+                                      // ignore: use_build_context_synchronously
+                                      await _handlePageNavigation(context, route: const ProjectPage());
+                                    },
+                                  ),
+                                  DrawerListTile(
+                                    title: 'Check In',
+                                    icon: Icons.account_tree_outlined,
+                                    removeBorder: true,
+                                    svgHeight: 15,
+                                    textFont: 13,
+                                    press: () async {
+                                      customLoader(context);
+                                      menu.setMyMenu('Check In');
+                                      menu.setmyMenuExpand('Employee');
+                                      // Scaffold.of(context).closeDrawer();
+                                      await context.read<CheckInBloc>().getAllCheckins();
+                                      // ignore: use_build_context_synchronously
+                                      await _handlePageNavigation(context, route: const CheckInPage());
+                                    },
+                                  ),
+                                  DrawerListTile(
+                                    title: 'Break',
+                                    icon: Icons.account_tree_outlined,
+                                    removeBorder: true,
+                                    svgHeight: 15,
+                                    textFont: 13,
+                                    press: () async {
+                                      menu.setMyMenu('Break');
+                                      menu.setmyMenuExpand('Employee');
+
+                                      // _handlePageNavigation(context, '/masterreport');
+                                    },
+                                  ),
+                                  DrawerListTile(
+                                    title: 'Check Out',
+                                    icon: Icons.account_tree_outlined,
+                                    removeBorder: true,
+                                    svgHeight: 15,
+                                    textFont: 13,
+                                    press: () async {
+                                      customLoader(context);
+                                      menu.setMyMenu('Check Out');
+                                      menu.setmyMenuExpand('Employee');
+                                      // Scaffold.of(context).closeDrawer();
+                                      await context.read<CheckOutBloc>().getAllCheckouts();
+                                      // ignore: use_build_context_synchronously
+                                      await _handlePageNavigation(context, route: const CheckOutPage());
+                                      // _handlePageNavigation(context, '/masterreport');
+                                    },
+                                  ),
+                                  DrawerListTile(
+                                    title: 'Leave Request',
+                                    icon: Icons.account_tree_outlined,
+                                    removeBorder: true,
+                                    svgHeight: 15,
+                                    textFont: 13,
+                                    press: () async {
+                                      customLoader(context);
+                                      menu.setMyMenu('Leave Request');
+                                      menu.setmyMenuExpand('Employee');
+                                      // Scaffold.of(context).closeDrawer();
+                                      await context.read<LeaveBloc>().getAllLeaves();
+                                      // ignore: use_build_context_synchronously
+                                      await _handlePageNavigation(context, route: const LeavePage());
+                                      // _handlePageNavigation(context, '/masterreport');
+                                    },
+                                  ),
+                                  DrawerListTile(
+                                    title: 'My Profile',
+                                    icon: Icons.account_tree_outlined,
+                                    removeBorder: true,
+                                    svgHeight: 15,
+                                    textFont: 13,
+                                    press: () async {
+                                      customLoader(context);
+                                      menu.setMyMenu('My Profile');
+                                      menu.setmyMenuExpand('Employee');
+                                      // Scaffold.of(context).closeDrawer();
+                                      await context.read<ProfileBloc>().getAllContacts();
+                                      // ignore: use_build_context_synchronously
+                                      await _handlePageNavigation(context, route: const ProfilePage());
+                                      // _handlePageNavigation(context, '/masterreport');
+                                    },
+                                  ),
+                                  DrawerListTile(
+                                    title: 'Settings',
+                                    icon: Icons.account_tree_outlined,
+                                    removeBorder: true,
+                                    svgHeight: 15,
+                                    textFont: 13,
+                                    press: () {
+                                      menu.setMyMenu('Settings');
+                                      menu.setmyMenuExpand('Employee');
+                                      // _handlePageNavigation(context, '/masterreport');
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Spacer(),
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 10.h),
+                          child: DrawerListTile(
+                            noTopPadding: true,
+                            title: 'LogOut',
+                            svgHeight: 17,
+                            svgSrc: 'assets/icons/logout2.svg',
+                            press: () async {},
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
       ),
     );
@@ -302,7 +345,7 @@ class DrawerListTile extends StatelessWidget {
         decoration: BoxDecoration(
           color: isSelected ? const Color.fromARGB(220, 75, 2, 93) : Colors.transparent,
           borderRadius: BorderRadius.circular(20.r),
-          border: Border.all(color:removeBorder ?Colors.transparent :Colors.grey[300]!),
+          border: Border.all(color: removeBorder ? Colors.transparent : Colors.grey[300]!),
         ),
         child: Row(
           children: [

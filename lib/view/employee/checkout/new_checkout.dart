@@ -10,10 +10,8 @@ import 'package:affiliate_platform/view/common/custom_header.dart';
 import 'package:affiliate_platform/view/common/custom_scafflod.dart';
 import 'package:affiliate_platform/view/employee/project/new_project.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -23,16 +21,16 @@ import 'package:rxdart/rxdart.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-class NewCheckin extends StatefulWidget {
-  const NewCheckin({
+class NewCheckOut extends StatefulWidget {
+  const NewCheckOut({
     super.key,
   });
 
   @override
-  State<NewCheckin> createState() => _NewCheckinState();
+  State<NewCheckOut> createState() => _NewCheckOutState();
 }
 
-class _NewCheckinState extends State<NewCheckin> {
+class _NewCheckOutState extends State<NewCheckOut> {
   CheckInBloc? checkInBloc;
 
   bool loading = true;
@@ -71,7 +69,7 @@ class _NewCheckinState extends State<NewCheckin> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const CustomHeader(isBackButtonNeeded: true, heading: 'Add New CheckIn'),
+            const CustomHeader(isBackButtonNeeded: true, heading: 'Check-Out Details'),
             Expanded(
               child: SingleChildScrollView(
                 child: Padding(

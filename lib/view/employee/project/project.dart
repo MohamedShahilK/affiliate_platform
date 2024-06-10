@@ -28,6 +28,15 @@ class ProjectPage extends StatefulWidget {
 class _ProjectPageState extends State<ProjectPage> {
   var _refreshKey = UniqueKey();
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      // context.read<ProjectBloc>().getAllProjects();
+      Loader.hide();
+    });
+  }
+
   // To update or hot reload
   void _handleLocaleChanged() => setState(() {
         _refreshKey = UniqueKey();
@@ -75,6 +84,7 @@ class _ProjectPageState extends State<ProjectPage> {
                   StreamBuilder(
                     stream: projectBloc.getAllProjectsStream,
                     builder: (context, getAllProjectsStreamsnapshot) {
+                      print('2222222222222222222222222222222222222 ${getAllProjectsStreamsnapshot.connectionState == ConnectionState.waiting}');
                       if ((!getAllProjectsStreamsnapshot.hasData && getAllProjectsStreamsnapshot.connectionState != ConnectionState.waiting) || getAllProjectsStreamsnapshot.hasError) {
                         Loader.hide();
                         return Column(
