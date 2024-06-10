@@ -1,5 +1,6 @@
 // ignore_for_file: lines_longer_than_80_chars
 
+import 'package:affiliate_platform/app.dart';
 import 'package:affiliate_platform/models/employee/checkin/get_checkin_form.dart';
 import 'package:affiliate_platform/models/employee/checkin/get_checkin_view.dart';
 import 'package:affiliate_platform/models/employee/checkin/getall_checkins.dart';
@@ -63,8 +64,10 @@ class CheckInBloc {
   }
 
   Future<void> getAllCheckins() async {
+    blocOficialLoaderNotifier.value = true;
     final respModel = await CheckInServices().getAllCheckins();
     getAllCheckInsStream.add(respModel);
+    blocOficialLoaderNotifier.value = false;
   }
 
   Future<void> getCheckinForm() async {

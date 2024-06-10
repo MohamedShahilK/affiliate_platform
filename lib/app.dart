@@ -15,6 +15,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
+final blocOficialLoaderNotifier = ValueNotifier<bool>(false);
+
 // ignore: strict_raw_type
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 

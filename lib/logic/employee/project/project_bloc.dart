@@ -1,5 +1,6 @@
 // ignore_for_file: lines_longer_than_80_chars
 
+import 'package:affiliate_platform/app.dart';
 import 'package:affiliate_platform/models/employee/project/get_all_projects.dart';
 import 'package:affiliate_platform/models/employee/project/project_form.dart';
 import 'package:affiliate_platform/models/employee/project/view_project.dart';
@@ -41,8 +42,10 @@ class ProjectBloc {
   }
 
   Future<void> getAllProjects() async {
+    blocOficialLoaderNotifier.value = true;
     final respModel = await ProjectServices().getAllProjects();
     getAllProjectsStream.add(respModel);
+    blocOficialLoaderNotifier.value = false;
   }
 
   Future<void> getContactForm() async {

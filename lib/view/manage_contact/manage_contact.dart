@@ -2,18 +2,15 @@
 
 import 'dart:async';
 
+import 'package:affiliate_platform/app.dart';
 import 'package:affiliate_platform/config/ripple.dart';
-import 'package:affiliate_platform/logic/auth/auth_bloc.dart';
 import 'package:affiliate_platform/logic/manage_contact/manage_contact_bloc.dart';
 import 'package:affiliate_platform/models/manage_contact/all_contacts.dart';
 import 'package:affiliate_platform/models/manage_contact/contact_view_model.dart';
-import 'package:affiliate_platform/services/manage_contact/manage_contact_services.dart';
 import 'package:affiliate_platform/utils/constants/styles.dart';
 import 'package:affiliate_platform/utils/custom_tools.dart';
 import 'package:affiliate_platform/view/common/custom_header.dart';
 import 'package:affiliate_platform/view/common/custom_scafflod.dart';
-import 'package:affiliate_platform/view/common/sidebar.dart';
-import 'package:affiliate_platform/view/manage_contact/data_sample.dart';
 import 'package:affiliate_platform/view/manage_contact/new_contact.dart';
 import 'package:affiliate_platform/view/manage_contact/view_contact.dart';
 import 'package:flutter/material.dart';
@@ -157,10 +154,14 @@ class _ManageContactPageState extends State<ManageContactPage> {
                       allContactsRespModel = snapshot.data;
                     }
 
+                    if (blocOficialLoaderNotifier.value) {
+                      allContactsRespModel = null;
+                    }
+
                     return Expanded(
                       child: SingleChildScrollView(
                         child: Skeletonizer(
-                          enabled: snapshot.connectionState == ConnectionState.waiting,
+                          enabled: snapshot.connectionState == ConnectionState.waiting || blocOficialLoaderNotifier.value,
                           child: Padding(
                             padding: EdgeInsets.symmetric(horizontal: 15.w),
                             child: Column(

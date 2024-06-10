@@ -1,5 +1,6 @@
 // ignore_for_file: lines_longer_than_80_chars, inference_failure_on_instance_creation
 
+import 'package:affiliate_platform/app.dart';
 import 'package:affiliate_platform/config/ripple.dart';
 import 'package:affiliate_platform/logic/employee/checkout/checkout_bloc.dart';
 import 'package:affiliate_platform/models/employee/checkout/get_allcheckout.dart';
@@ -80,40 +81,38 @@ class _CheckOutPageState extends State<CheckOutPage> {
                     builder: (context, getAllProjectsStreamsnapshot) {
                       if ((!getAllProjectsStreamsnapshot.hasData && getAllProjectsStreamsnapshot.connectionState != ConnectionState.waiting) || getAllProjectsStreamsnapshot.hasError) {
                         Loader.hide();
-                        return Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Something went wrong',
-                                style: TextStyle(fontSize: 16.w),
-                              ),
-                              SizedBox(height: 30.h),
-                              Container(
-                                padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 8.h),
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.purple[100]!),
-                                  borderRadius: BorderRadius.circular(15.r),
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(Icons.refresh, size: 17.w),
-                                    SizedBox(width: 5.w),
-                                    Text('Refresh', style: TextStyle(fontSize: 15.w)),
-                                  ],
-                                ),
-                              ).ripple(
-                                context,
-                                () async {
-                                  await checkoutBloc.getAllCheckouts();
-                                },
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Something went wrong',
+                              style: TextStyle(fontSize: 16.w),
+                            ),
+                            SizedBox(height: 30.h),
+                            Container(
+                              padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 8.h),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.purple[100]!),
                                 borderRadius: BorderRadius.circular(15.r),
-                                overlayColor: Colors.purple.withOpacity(.15),
                               ),
-                            ],
-                          ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.refresh, size: 17.w),
+                                  SizedBox(width: 5.w),
+                                  Text('Refresh', style: TextStyle(fontSize: 15.w)),
+                                ],
+                              ),
+                            ).ripple(
+                              context,
+                              () async {
+                                await checkoutBloc.getAllCheckouts();
+                              },
+                              borderRadius: BorderRadius.circular(15.r),
+                              overlayColor: Colors.purple.withOpacity(.15),
+                            ),
+                          ],
                         );
                       }
 
@@ -130,10 +129,17 @@ class _CheckOutPageState extends State<CheckOutPage> {
                         }
                       }
 
+                      if (blocOficialLoaderNotifier.value) {
+                        // print('11111111111111111111111111111111111');
+                        // checkinData = [];
+                        allCheckinsRespModel = null;
+                      }
+
                       // print('232314343 ${projectList}');
 
                       return Skeletonizer(
-                        enabled: getAllProjectsStreamsnapshot.connectionState == ConnectionState.waiting,
+                        enabled: getAllProjectsStreamsnapshot.connectionState == ConnectionState.waiting || blocOficialLoaderNotifier.value,
+                        // (getAllProjectsStreamsnapshot.hasData && getAllProjectsStreamsnapshot.data?.status == 'Loading'),
                         child: Padding(
                           padding: EdgeInsets.only(top: 30.h, bottom: 5.h, left: 20.w, right: 20.w),
                           child: Column(

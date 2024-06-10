@@ -1,5 +1,6 @@
 // ignore_for_file: lines_longer_than_80_chars
 
+import 'package:affiliate_platform/app.dart';
 import 'package:affiliate_platform/models/employee/checkout/get_allcheckout.dart';
 import 'package:affiliate_platform/services/employee/checkout/checkout_services.dart';
 import 'package:rxdart/rxdart.dart';
@@ -58,8 +59,12 @@ class CheckOutBloc {
   }
 
   Future<void> getAllCheckouts() async {
+    // getAllCheckOutsStream.add(GetAllCheckouts(status: 'Loading', response: null, data: null));
+    blocOficialLoaderNotifier.value = true;
+    // getAllCheckOutsStream.add(null);
     final respModel = await CheckOutServices().getAllCheckouts();
     getAllCheckOutsStream.add(respModel);
+    blocOficialLoaderNotifier.value = false;
   }
 
   void clearStreams() {}

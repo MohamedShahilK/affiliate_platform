@@ -2,6 +2,7 @@
 
 import 'dart:io';
 
+import 'package:affiliate_platform/app.dart';
 import 'package:affiliate_platform/config/ripple.dart';
 import 'package:affiliate_platform/logic/profile/profile_bloc.dart';
 import 'package:affiliate_platform/models/profile/profile_model.dart';
@@ -129,10 +130,14 @@ class _ProfilePageState extends State<ProfilePage> with ImagePickerMixin {
                       model = getAllProfileViewStreamsnapshot.data;
                     }
 
+                    if (blocOficialLoaderNotifier.value) {
+                      model = null;
+                    }
+
                     // print('asdhasdhiashdui ${model!.data![0].employee!.firstName}');
 
                     return Skeletonizer(
-                      enabled: getAllProfileViewStreamsnapshot.connectionState == ConnectionState.waiting,
+                      enabled: getAllProfileViewStreamsnapshot.connectionState == ConnectionState.waiting || blocOficialLoaderNotifier.value,
                       child: Expanded(
                         child: SingleChildScrollView(
                           child: Column(

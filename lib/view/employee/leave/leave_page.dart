@@ -1,5 +1,6 @@
 // ignore_for_file: lines_longer_than_80_chars
 
+import 'package:affiliate_platform/app.dart';
 import 'package:affiliate_platform/config/ripple.dart';
 import 'package:affiliate_platform/logic/employee/leave/leave_bloc.dart';
 import 'package:affiliate_platform/models/employee/leave/leave_model.dart';
@@ -119,8 +120,12 @@ class _LeavePageState extends State<LeavePage> {
                         // }
                       }
 
+                      if (blocOficialLoaderNotifier.value) {
+                        allLeavesRespModel = null;
+                      }
+
                       return Skeletonizer(
-                        enabled: getAllLeavesStreamsnapshot.connectionState == ConnectionState.waiting,
+                        enabled: getAllLeavesStreamsnapshot.connectionState == ConnectionState.waiting || blocOficialLoaderNotifier.value,
                         child: Padding(
                           padding: EdgeInsets.only(top: 30.h, bottom: 5.h, left: 20.w, right: 20.w),
                           child: Column(

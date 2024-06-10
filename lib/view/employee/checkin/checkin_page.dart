@@ -1,5 +1,6 @@
 // ignore_for_file: lines_longer_than_80_chars, inference_failure_on_instance_creation
 
+import 'package:affiliate_platform/app.dart';
 import 'package:affiliate_platform/config/ripple.dart';
 import 'package:affiliate_platform/logic/employee/checkin/checkin_bloc.dart';
 import 'package:affiliate_platform/models/employee/checkin/getall_checkins.dart';
@@ -133,10 +134,14 @@ class _CheckInPageState extends State<CheckInPage> {
                         }
                       }
 
+                      if (blocOficialLoaderNotifier.value) {
+                        allCheckinsRespModel = null;
+                      }
+
                       // print('232314343 ${projectList}');
 
                       return Skeletonizer(
-                        enabled: getAllProjectsStreamsnapshot.connectionState == ConnectionState.waiting,
+                        enabled: getAllProjectsStreamsnapshot.connectionState == ConnectionState.waiting || blocOficialLoaderNotifier.value,
                         child: Padding(
                           padding: EdgeInsets.only(top: 30.h, bottom: 5.h, left: 20.w, right: 20.w),
                           child: Column(

@@ -6,7 +6,7 @@ part 'get_allcheckout.g.dart';
 
 @JsonSerializable()
 class GetAllCheckouts {
-  GetAllCheckouts({required this.status, required this.response, required this.data});
+  GetAllCheckouts({required this.status, required this.response,  this.data});
 
   factory GetAllCheckouts.fromJson(Map<String, dynamic> json) => _$GetAllCheckoutsFromJson(json);
 

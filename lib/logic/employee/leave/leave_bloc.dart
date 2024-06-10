@@ -1,5 +1,8 @@
 // ignore_for_file: lines_longer_than_80_chars
 
+import 'dart:ffi';
+
+import 'package:affiliate_platform/app.dart';
 import 'package:affiliate_platform/models/employee/leave/leave_form_model.dart';
 import 'package:affiliate_platform/models/employee/leave/leave_model.dart';
 import 'package:affiliate_platform/services/employee/leave/leave_services.dart';
@@ -35,8 +38,10 @@ class LeaveBloc {
   }
 
   Future<void> getAllLeaves() async {
+    blocOficialLoaderNotifier.value = true;
     final respModel = await LeavesServices().getAllLeaves();
     getAllLeavesStream.add(respModel);
+    blocOficialLoaderNotifier.value = false;
   }
 
   Future<void> getLeaveForm() async {

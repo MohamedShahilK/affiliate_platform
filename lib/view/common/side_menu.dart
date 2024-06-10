@@ -60,14 +60,14 @@ class SideMenu extends StatelessWidget {
                           title: 'Manage Contact',
                           icon: Icons.account_box_outlined,
                           svgHeight: 17,
-                          press: () async {
-                            customLoader(context);
+                          press: () {
+                            // customLoader(context);
                             menu.setMyMenu('Manage Contact');
                             menu.setmyMenuExpand('');
                             // Scaffold.of(context).closeDrawer();
-                            await context.read<ManageContactBloc>().getAllContacts();
+                            context.read<ManageContactBloc>().getAllContacts();
                             // ignore: use_build_context_synchronously
-                            await _handlePageNavigation(context, route: const ManageContactPage());
+                            _handlePageNavigation(context, route: const ManageContactPage());
                           },
                         ),
                         // DrawerListTile(
@@ -116,14 +116,14 @@ class SideMenu extends StatelessWidget {
                                     removeBorder: true,
                                     svgHeight: 15,
                                     textFont: 13,
-                                    press: () async {
-                                      customLoader(context);
+                                    press: () {
+                                      // customLoader(context);
                                       menu.setMyMenu('Project');
                                       menu.setmyMenuExpand('Employee');
                                       // Scaffold.of(context).closeDrawer();
-                                      await context.read<ProjectBloc>().getAllProjects();
+                                      context.read<ProjectBloc>().getAllProjects();
                                       // ignore: use_build_context_synchronously
-                                      await _handlePageNavigation(context, route: const ProjectPage());
+                                      _handlePageNavigation(context, route: const ProjectPage());
                                     },
                                   ),
                                   DrawerListTile(
@@ -132,14 +132,14 @@ class SideMenu extends StatelessWidget {
                                     removeBorder: true,
                                     svgHeight: 15,
                                     textFont: 13,
-                                    press: () async {
-                                      customLoader(context);
+                                    press: () {
+                                      // customLoader(context);
                                       menu.setMyMenu('Check In');
                                       menu.setmyMenuExpand('Employee');
                                       // Scaffold.of(context).closeDrawer();
-                                      await context.read<CheckInBloc>().getAllCheckins();
+                                      context.read<CheckInBloc>().getAllCheckins();
                                       // ignore: use_build_context_synchronously
-                                      await _handlePageNavigation(context, route: const CheckInPage());
+                                      _handlePageNavigation(context, route: const CheckInPage());
                                     },
                                   ),
                                   DrawerListTile(
@@ -148,7 +148,7 @@ class SideMenu extends StatelessWidget {
                                     removeBorder: true,
                                     svgHeight: 15,
                                     textFont: 13,
-                                    press: () async {
+                                    press: () {
                                       menu.setMyMenu('Break');
                                       menu.setmyMenuExpand('Employee');
 
@@ -161,14 +161,14 @@ class SideMenu extends StatelessWidget {
                                     removeBorder: true,
                                     svgHeight: 15,
                                     textFont: 13,
-                                    press: () async {
-                                      customLoader(context);
+                                    press: () {
+                                      // customLoader(context);
                                       menu.setMyMenu('Check Out');
                                       menu.setmyMenuExpand('Employee');
                                       // Scaffold.of(context).closeDrawer();
-                                      await context.read<CheckOutBloc>().getAllCheckouts();
+                                      context.read<CheckOutBloc>().getAllCheckouts();
                                       // ignore: use_build_context_synchronously
-                                      await _handlePageNavigation(context, route: const CheckOutPage());
+                                      _handlePageNavigation(context, route: const CheckOutPage());
                                       // _handlePageNavigation(context, '/masterreport');
                                     },
                                   ),
@@ -178,14 +178,14 @@ class SideMenu extends StatelessWidget {
                                     removeBorder: true,
                                     svgHeight: 15,
                                     textFont: 13,
-                                    press: () async {
-                                      customLoader(context);
+                                    press: () {
+                                      // customLoader(context);
                                       menu.setMyMenu('Leave Request');
                                       menu.setmyMenuExpand('Employee');
                                       // Scaffold.of(context).closeDrawer();
-                                      await context.read<LeaveBloc>().getAllLeaves();
+                                      context.read<LeaveBloc>().getAllLeaves();
                                       // ignore: use_build_context_synchronously
-                                      await _handlePageNavigation(context, route: const LeavePage());
+                                      _handlePageNavigation(context, route: const LeavePage());
                                       // _handlePageNavigation(context, '/masterreport');
                                     },
                                   ),
@@ -195,14 +195,14 @@ class SideMenu extends StatelessWidget {
                                     removeBorder: true,
                                     svgHeight: 15,
                                     textFont: 13,
-                                    press: () async {
-                                      customLoader(context);
+                                    press: () {
+                                      // customLoader(context);
                                       menu.setMyMenu('My Profile');
                                       menu.setmyMenuExpand('Employee');
                                       // Scaffold.of(context).closeDrawer();
-                                      await context.read<ProfileBloc>().getAllContacts();
+                                      context.read<ProfileBloc>().getAllContacts();
                                       // ignore: use_build_context_synchronously
-                                      await _handlePageNavigation(context, route: const ProfilePage());
+                                      _handlePageNavigation(context, route: const ProfilePage());
                                       // _handlePageNavigation(context, '/masterreport');
                                     },
                                   ),
@@ -231,7 +231,7 @@ class SideMenu extends StatelessWidget {
                             title: 'LogOut',
                             svgHeight: 17,
                             svgSrc: 'assets/icons/logout2.svg',
-                            press: () async {},
+                            press: () {},
                           ),
                         ),
                       ],

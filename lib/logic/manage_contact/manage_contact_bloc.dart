@@ -1,5 +1,6 @@
 // ignore_for_file: lines_longer_than_80_chars
 
+import 'package:affiliate_platform/app.dart';
 import 'package:affiliate_platform/models/manage_contact/all_contacts.dart';
 import 'package:affiliate_platform/models/manage_contact/contact_edit_submission_model.dart';
 import 'package:affiliate_platform/models/manage_contact/contact_form_model.dart';
@@ -46,8 +47,10 @@ class ManageContactBloc {
   }
 
   Future<void> getAllContacts() async {
+    blocOficialLoaderNotifier.value = true;
     final respModel = await ManageContactSevices().getAllContacts();
     getAllContactsStream.add(respModel);
+    blocOficialLoaderNotifier.value = false;
   }
 
   Future<void> getContactForm() async {
@@ -126,7 +129,6 @@ class ManageContactBloc {
     return isFollowUpDelete;
   }
 
-
   Future<bool> editFollowup({required String contactId, required String followupId}) async {
     var isFollowUpAdded = false;
 
@@ -144,7 +146,6 @@ class ManageContactBloc {
 
     return isFollowUpAdded;
   }
-
 
   Future<ContactViewModel?> submitForm() async {
     final respModel = ManageContactSevices().submitForm(
