@@ -157,6 +157,7 @@ class _ProfilePageState extends State<ProfilePage> with ImagePickerMixin {
                                             decoration: croppedImagePath.value == null
                                                 ? const BoxDecoration(
                                                     // shape: BoxShape.circle,
+                                                    shape: BoxShape.circle,
                                                     color: Colors.white,
                                                     image: DecorationImage(image: AssetImage('assets/images/avatar2.png'), fit: BoxFit.fill),
                                                   )
