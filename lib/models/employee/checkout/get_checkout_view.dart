@@ -7,6 +7,9 @@ part 'get_checkout_view.g.dart';
 @JsonSerializable()
 class GetCheckOutView {
   GetCheckOutView({required this.status, required this.response, required this.data});
+
+  factory GetCheckOutView.fromJson(Map<String, dynamic> json) => _$GetCheckOutViewFromJson(json);
+
   final String? status;
   final String? response;
   final List<Data>? data;

@@ -38,6 +38,7 @@ class EndPoints {
   // CheckOuts
   static const getAllCheckouts = '/checkout/list';
   static const checkOutForm = '/checkout/form';
+  static const checkOutView = '/checkout/view';
 
   // Profile
   static const getProfileView = '/profile/view';

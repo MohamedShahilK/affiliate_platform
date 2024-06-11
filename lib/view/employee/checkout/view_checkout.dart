@@ -15,11 +15,11 @@ import 'package:skeletonizer/skeletonizer.dart';
 
 class ViewCheckOut extends StatefulWidget {
   const ViewCheckOut({
-    this.checkInId,
+    this.checkOutId,
     super.key,
   });
 
-  final String? checkInId;
+  final String? checkOutId;
 
   @override
   State<ViewCheckOut> createState() => _ViewCheckOutState();
@@ -40,7 +40,7 @@ class _ViewCheckOutState extends State<ViewCheckOut> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     checkOutBloc ??= Provider.of<CheckOutBloc>(context);
-    checkOutBloc!.viewCheckin(checkInID: widget.checkInId!).then(
+    checkOutBloc!.viewCheckOut(checkoutId: widget.checkOutId!).then(
           (value) => setState(() {
             loading = false;
           }),
@@ -58,7 +58,7 @@ class _ViewCheckOutState extends State<ViewCheckOut> {
   final project_status = ['Inactive', 'Active', 'Completed', 'On Hold'];
   @override
   Widget build(BuildContext context) {
-    final bloc = Provider.of<CheckInBloc>(context);
+    final bloc = Provider.of<CheckOutBloc>(context);
     return CustomScaffold(
       key: _refreshKey,
       haveFloatingButton: false,
@@ -69,7 +69,7 @@ class _ViewCheckOutState extends State<ViewCheckOut> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const CustomHeader(isBackButtonNeeded: true, heading: 'Check In & Check Out Information'),
+              const CustomHeader(isBackButtonNeeded: true, heading: 'Check Out Information'),
 
               //
               Expanded(
@@ -77,7 +77,7 @@ class _ViewCheckOutState extends State<ViewCheckOut> {
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 16.h),
                     child: StreamBuilder(
-                      stream: bloc.getCheckinViewStream,
+                      stream: bloc.getCheckOutViewStream,
                       builder: (context, getContactViewStreamsnapshot) {
                         if (!getContactViewStreamsnapshot.hasData && !loading) {
                           Loader.hide();
@@ -109,8 +109,8 @@ class _ViewCheckOutState extends State<ViewCheckOut> {
                                   ).ripple(
                                     context,
                                     () async {
-                                      if (widget.checkInId != null) {
-                                        await bloc.viewCheckin(checkInID: widget.checkInId!);
+                                      if (widget.checkOutId != null) {
+                                        await bloc.viewCheckOut(checkoutId: widget.checkOutId!);
                                       }
                                     },
                                     borderRadius: BorderRadius.circular(15.r),
@@ -122,10 +122,8 @@ class _ViewCheckOutState extends State<ViewCheckOut> {
                           );
                         }
                         final data = getContactViewStreamsnapshot.data?.data?[0];
-                        final model = getContactViewStreamsnapshot.data?.data?[0].checkinData;
-                        final checkindataprojects = getContactViewStreamsnapshot.data?.data?[0].checkinProjects ?? [];
-                        final checkout = getContactViewStreamsnapshot.data?.data?[0].checkout;
-                        final checkoutDetails = getContactViewStreamsnapshot.data?.data?[0].checkoutDetails;
+                        final checkout = getContactViewStreamsnapshot.data?.data?[0].checkout;                      
+                        final checkoutDetails = getContactViewStreamsnapshot.data?.data?[0].checkoutDetails ?? [];
                         return Skeletonizer(
                           enabled: loading,
                           child: Column(
@@ -133,7 +131,7 @@ class _ViewCheckOutState extends State<ViewCheckOut> {
                             children: [
                               Container(),
                               SizedBox(height: 10.h),
-                              Text('${model?.firstName} (${model?.userCode})', style: AppStyles.poppins.copyWith(fontSize: 15.w, color: Colors.grey[800], fontWeight: FontWeight.w800)),
+                              Text('${checkout?.firstName} (${checkout?.userCode})', style: AppStyles.poppins.copyWith(fontSize: 15.w, color: Colors.grey[800], fontWeight: FontWeight.w800)),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -158,7 +156,7 @@ class _ViewCheckOutState extends State<ViewCheckOut> {
                                               Text('Check In Time', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800])),
                                               const Spacer(),
                                               SelectableText(
-                                                UtilityFunctions.convertIntoNormalDateTimeStringFromDateTimeString(model?.datetime ?? '2024-05-20 21:55:20'),
+                                                UtilityFunctions.convertIntoNormalDateTimeStringFromDateTimeString(checkout?.datetime ?? '2024-05-20 21:55:20'),
                                                 style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800], fontWeight: FontWeight.w800),
                                               ),
                                             ],
@@ -166,7 +164,7 @@ class _ViewCheckOutState extends State<ViewCheckOut> {
                                         ),
 
                                         if (checkout?.datetime != null) _NewCardItem(field: 'Check Out Time', value: checkout?.outTime ?? '-', icondata: Icons.person_pin_outlined),
-                                        _NewCardItem(field: 'Work From', value: model?.workFrom ?? '-', icondata: Icons.person_pin_outlined),
+                                        _NewCardItem(field: 'Work From', value: checkout?.checkoutWorkFrom ?? '-', icondata: Icons.person_pin_outlined),
                                         if (checkout?.breakHours != null) _NewCardItem(field: 'Break Hours', value: checkout?.breakHours ?? '-', icondata: Icons.person_pin_outlined),
                                         if (checkout?.hours != null) _NewCardItem(field: 'Working Hours', value: checkout?.hours ?? '-', icondata: Icons.person_pin_outlined),
                                         if (checkout?.hours != null) _NewCardItem(field: 'Total Hours', value: checkout?.hours ?? '-', icondata: Icons.person_pin_outlined),
@@ -187,7 +185,7 @@ class _ViewCheckOutState extends State<ViewCheckOut> {
                                               Text('Comments', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800])),
                                               const Spacer(),
                                               SelectableText(
-                                                model?.remarks ?? '-',
+                                                checkout?.comments ?? '-',
                                                 style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800], fontWeight: FontWeight.w800),
                                               ),
                                             ],
@@ -203,9 +201,9 @@ class _ViewCheckOutState extends State<ViewCheckOut> {
                               // Text('Project Information', style: AppStyles.poppins.copyWith(fontSize: 13.w, color: Colors.grey[800], fontWeight: FontWeight.w800)),
                               Column(
                                 children: [
-                                  if (checkindataprojects.isNotEmpty)
+                                  if (checkoutDetails.isNotEmpty)
                                     ...List.generate(
-                                      checkindataprojects.length,
+                                      checkoutDetails.length,
                                       (index) => Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
@@ -237,14 +235,16 @@ class _ViewCheckOutState extends State<ViewCheckOut> {
                                                       Text('Project Name', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800])),
                                                       const Spacer(),
                                                       SelectableText(
-                                                        checkindataprojects[index].projectname ?? '-',
+                                                        checkoutDetails[index].projectname ?? '-',
                                                         style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800], fontWeight: FontWeight.w800),
                                                       ),
                                                     ],
                                                   ),
                                                 ),
 
-                                                _NewCardItem(field: 'Project Description', value: checkindataprojects[index].checkinProjects ?? '-', icondata: Icons.note_alt_outlined),
+                                                _NewCardItem(field: 'Project CheckIn Description', value: checkoutDetails[index].checkInRemarks ?? '-', icondata: Icons.note_alt_outlined),
+                                                _NewCardItem(field: 'Project CheckOut Description', value: checkoutDetails[index].checkOutRemarks ?? '-', icondata: Icons.note_alt_outlined),
+                                                _NewCardItem(field: 'Required Hours', value: checkoutDetails[index].reqHoursMin ?? '-', icondata: Icons.note_alt_outlined),
                                                 // _NewCardItem(field: 'Required Hours', value: checkindataprojects[index].reqHoursMin ?? '-', icondata: Icons.note_alt_outlined),
 
                                                 Container(
@@ -258,10 +258,10 @@ class _ViewCheckOutState extends State<ViewCheckOut> {
                                                     children: [
                                                       Icon(Icons.stairs_outlined, size: 13.w),
                                                       SizedBox(width: 5.w),
-                                                      Text('Required Hours', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800])),
+                                                      Text('Hours Spent', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800])),
                                                       const Spacer(),
                                                       SelectableText(
-                                                        checkindataprojects[index].reqHoursMin ?? '-',
+                                                        checkoutDetails[index].hoursSpent ?? '-',
                                                         style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800], fontWeight: FontWeight.w800),
                                                       ),
                                                     ],

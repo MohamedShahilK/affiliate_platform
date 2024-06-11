@@ -8,6 +8,8 @@ import 'package:affiliate_platform/utils/constants/styles.dart';
 import 'package:affiliate_platform/utils/utility_functions.dart';
 import 'package:affiliate_platform/view/common/custom_header.dart';
 import 'package:affiliate_platform/view/common/custom_scafflod.dart';
+import 'package:affiliate_platform/view/employee/checkout/new_checkout.dart';
+import 'package:affiliate_platform/view/employee/checkout/view_checkout.dart';
 import 'package:affiliate_platform/view/employee/project/new_project.dart';
 import 'package:affiliate_platform/view/manage_contact/manage_contact.dart';
 import 'package:flutter/material.dart';
@@ -30,8 +32,6 @@ class _CheckOutPageState extends State<CheckOutPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     Loader.hide();
-
-    
   }
 
   // To update or hot reload
@@ -431,7 +431,14 @@ class _ProjectCard extends StatelessWidget {
                       // color: Colors.blue[400]!,
                       isLoading: isLoading,
                       icon: Icons.remove_red_eye_outlined,
-                      onTap: () {},
+                      onTap: () {
+                        final checkOutId = model?.data == null || model!.data!.isEmpty || model!.data![0].checkoutData!.isEmpty
+                            ? '-'
+                            : model?.data![0].checkoutData![index].checkOutId == ''
+                                ? '-'
+                                : model?.data![0].checkoutData![index].checkOutId ?? '-';
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => ViewCheckOut(checkOutId: checkOutId)));
+                      },
                     ),
                     _EachProjectSmallButtons(
                       // color: Colors.red[400]!,

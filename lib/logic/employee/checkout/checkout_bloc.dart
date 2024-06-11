@@ -3,6 +3,7 @@
 import 'package:affiliate_platform/app.dart';
 import 'package:affiliate_platform/models/employee/checkout/get_allcheckout.dart';
 import 'package:affiliate_platform/models/employee/checkout/get_checkout_form_model.dart';
+import 'package:affiliate_platform/models/employee/checkout/get_checkout_view.dart';
 import 'package:affiliate_platform/services/employee/checkout/checkout_services.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -13,6 +14,7 @@ class CheckOutBloc {
 
   final getAllCheckOutsStream = BehaviorSubject<GetAllCheckouts?>();
   final getCheckOutFormStream = BehaviorSubject<GetCheckOutFormModel?>();
+  final getCheckOutViewStream = BehaviorSubject<GetCheckOutView?>();
 
   final employeeStream = BehaviorSubject<String>.seeded('');
   final employeeIdStream = BehaviorSubject<String>.seeded('');
@@ -73,6 +75,14 @@ class CheckOutBloc {
     final respModel = await CheckOutServices().getCheckOutForm(dateTimeStr: dateTimeStr);
     getCheckOutFormStream.add(respModel);
   }
+
+
+  Future<void> viewCheckOut({required String checkoutId}) async {
+    getCheckOutViewStream.add(null);
+    final respModel = await CheckOutServices().viewCheckOut(checkoutId: checkoutId);
+    getCheckOutViewStream.add(respModel);
+  }
+
 
   void clearStreams() {
     employeeStream.add('');

@@ -11,89 +11,51 @@ GetCheckOutView _$GetCheckOutViewFromJson(Map<String, dynamic> json) =>
       status: json['status'] as String?,
       response: json['response'] as String?,
       data: (json['data'] as List<dynamic>?)
-          ?.map((e) => Data.fromJson(e as Map<String, dynamic>))
+          ?.map((e) => _$DataFromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
-Map<String, dynamic> _$GetCheckOutViewToJson(GetCheckOutView instance) =>
-    <String, dynamic>{
-      'status': instance.status,
-      'response': instance.response,
-      'data': instance.data,
-    };
+
 
 Data _$DataFromJson(Map<String, dynamic> json) => Data(
-      tableTitle: json['tableTitle'] as String?,
-      userDesignation: json['userDesignation'] as String?,
+      tableTitle: json['table_title'] as String?,
+      userDesignation: json['user_Designation'] as String?,
       checkout: json['checkout'] == null
           ? null
-          : Checkout.fromJson(json['checkout'] as Map<String, dynamic>),
-      checkoutDetails: (json['checkoutDetails'] as List<dynamic>?)
-          ?.map((e) => CheckoutDetails.fromJson(e as Map<String, dynamic>))
+          : _$CheckoutFromJson(json['checkout'] as Map<String, dynamic>),
+      checkoutDetails: (json['checkout_details'] as List<dynamic>?)
+          ?.map((e) =>  _$CheckoutDetailsFromJson(e as Map<String, dynamic>))
           .toList(),
-      userID: json['userID'] as String?,
+      userID: json['user_ID'] as String?,
     );
 
-Map<String, dynamic> _$DataToJson(Data instance) => <String, dynamic>{
-      'tableTitle': instance.tableTitle,
-      'userDesignation': instance.userDesignation,
-      'checkout': instance.checkout,
-      'checkoutDetails': instance.checkoutDetails,
-      'userID': instance.userID,
-    };
 
 Checkout _$CheckoutFromJson(Map<String, dynamic> json) => Checkout(
       id: json['id'] as String?,
-      parentId: json['parentId'] as String?,
-      userCode: json['userCode'] as String?,
-      firstName: json['firstName'] as String?,
-      lastName: json['lastName'] as String?,
+      parentId: json['parent_id'] as String?,
+      userCode: json['user_code'] as String?,
+      firstName: json['first_name'] as String?,
+      lastName: json['last_name'] as String?,
       datetime: json['datetime'] as String?,
-      outTime: json['outTime'] as String?,
-      breakHours: json['breakHours'] as String?,
-      breakHoursRemarks: json['breakHoursRemarks'] as String?,
+      outTime: json['out_time'] as String?,
+      breakHours: json['break_hours'] as String?,
+      breakHoursRemarks: json['break_hours_remarks'] as String?,
       remarks: json['remarks'] as String?,
       comments: json['comments'] as String?,
       hours: json['hours'] as String?,
-      checkoutWorkFrom: json['checkoutWorkFrom'] as String?,
+      checkoutWorkFrom: json['checkout_work_from'] as String?,
     );
 
-Map<String, dynamic> _$CheckoutToJson(Checkout instance) => <String, dynamic>{
-      'id': instance.id,
-      'parentId': instance.parentId,
-      'userCode': instance.userCode,
-      'firstName': instance.firstName,
-      'lastName': instance.lastName,
-      'datetime': instance.datetime,
-      'outTime': instance.outTime,
-      'breakHours': instance.breakHours,
-      'breakHoursRemarks': instance.breakHoursRemarks,
-      'remarks': instance.remarks,
-      'comments': instance.comments,
-      'hours': instance.hours,
-      'checkoutWorkFrom': instance.checkoutWorkFrom,
-    };
+
 
 CheckoutDetails _$CheckoutDetailsFromJson(Map<String, dynamic> json) =>
     CheckoutDetails(
-      projectname: json['projectname'] as String?,
-      checkInRemarks: json['checkInRemarks'] as String?,
-      checkOutRemarks: json['checkOutRemarks'] as String?,
-      reqHoursMin: json['reqHoursMin'] as String?,
-      reqFullTime: json['reqFullTime'] as String?,
-      hoursSpent: json['hoursSpent'] as String?,
-      hoursSpentFull: json['hoursSpentFull'] as String?,
-      projectsStatus: json['projectsStatus'] as String?,
+      projectname: json['Projectname'] as String?,
+      checkInRemarks: json['CheckInRemarks'] as String?,
+      checkOutRemarks: json['CheckOutRemarks'] as String?,
+      reqHoursMin: json['req_hours_min'] as String?,
+      reqFullTime: json['req_full_time'] as String?,
+      hoursSpent: json['hours_spent'] as String?,
+      hoursSpentFull: json['hours_spent_full'] as String?,
+      projectsStatus: json['projects_status'] as String?,
     );
-
-Map<String, dynamic> _$CheckoutDetailsToJson(CheckoutDetails instance) =>
-    <String, dynamic>{
-      'projectname': instance.projectname,
-      'checkInRemarks': instance.checkInRemarks,
-      'checkOutRemarks': instance.checkOutRemarks,
-      'reqHoursMin': instance.reqHoursMin,
-      'reqFullTime': instance.reqFullTime,
-      'hoursSpent': instance.hoursSpent,
-      'hoursSpentFull': instance.hoursSpentFull,
-      'projectsStatus': instance.projectsStatus,
-    };
