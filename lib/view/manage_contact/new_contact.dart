@@ -183,7 +183,7 @@ class _NewContactState extends State<NewContact> {
                       return StreamBuilder(
                         stream: bloc.getContactViewStream,
                         builder: (context, getContactViewStreamsnapshot) {
-                          if (!getContactViewStreamsnapshot.hasData && !loading) {
+                          if (!getContactViewStreamsnapshot.hasData && !loading && widget.contactId != null) {
                             // Loader.hide();
                             return SizedBox(
                               height: MediaQuery.of(context).size.height - 60,
@@ -217,6 +217,9 @@ class _NewContactState extends State<NewContact> {
                                       customLoader(context);
                                       if (widget.contactId != null) {
                                         await bloc.viewContact(contactId: widget.contactId!).then((value) => Loader.hide());
+                                      } else {
+                                        await manageContactBloc!.getContactForm();
+                                        Loader.hide();
                                       }
                                     },
                                     borderRadius: BorderRadius.circular(15.r),
