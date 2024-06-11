@@ -272,36 +272,37 @@ class _NewLeaveState extends State<NewLeave> {
                                     builder: (context, snapshot) {
                                       if (snapshot.data == 'Full day') {
                                         if (widget.leaveModel == null) {
-                                          final inputS = DateFormat('dd-MM-yyyy').parse(bloc.leaveStartDateStream.value);
-                                          final outputFormatS = DateFormat('yyyy-MM-dd');
-                                          final outputDateStringS = outputFormatS.format(inputS);
+                                          if (bloc.leaveStartDateStream.value != '' && bloc.leaveEndDateStream.value != '') {
+                                            final inputS = DateFormat('dd-MM-yyyy').parse(bloc.leaveStartDateStream.value);
+                                            final outputFormatS = DateFormat('yyyy-MM-dd');
+                                            final outputDateStringS = outputFormatS.format(inputS);
 
+                                            final start = DateTime.parse(outputDateStringS);
 
-                                          final start = DateTime.parse(outputDateStringS);
+                                            final inputE = DateFormat('dd-MM-yyyy').parse(bloc.leaveEndDateStream.value);
+                                            final outputFormatE = DateFormat('yyyy-MM-dd');
+                                            final outputDateStringE = outputFormatE.format(inputE);
 
-                                          final inputE = DateFormat('dd-MM-yyyy').parse(bloc.leaveEndDateStream.value);
-                                          final outputFormatE = DateFormat('yyyy-MM-dd');
-                                          final outputDateStringE = outputFormatE.format(inputE);
+                                            final end = DateTime.parse(outputDateStringE);
 
+                                            // final end = DateTime.parse(date ?? '20-01-2023');
 
-                                          final end = DateTime.parse(outputDateStringE);
+                                            // print('132131231231232113 $end');
 
-                                          // final end = DateTime.parse(date ?? '20-01-2023');
+                                            final normalizedDate1 = DateTime(start.year, start.month, start.day);
+                                            final normalizedDate2 = DateTime(end.year, end.month, end.day);
 
-                                          // print('132131231231232113 $end');
+                                            final differenceInDays = normalizedDate2.difference(normalizedDate1).inDays + 1;
 
-                                          final normalizedDate1 = DateTime(start.year, start.month, start.day);
-                                          final normalizedDate2 = DateTime(end.year, end.month, end.day);
-
-                                          final differenceInDays = normalizedDate2.difference(normalizedDate1).inDays + 1;
-
-                                          if (differenceInDays < 1 || differenceInDays.isNegative) {
-                                            bloc.noOfHoursStream.add('0');
+                                            if (differenceInDays < 1 || differenceInDays.isNegative) {
+                                              bloc.noOfHoursStream.add('0');
+                                            } else {
+                                              bloc.noOfHoursStream.add(differenceInDays.toString());
+                                            }
                                           } else {
-                                            bloc.noOfHoursStream.add(differenceInDays.toString());
+                                            erroMotionToastInfo(context, msg: 'Need to select both start and end date');
+                                            bloc.leaveDurationStream.add('');
                                           }
-                                        } else {
-                                         
                                         }
 
                                         // bloc.noOfHoursStream.add('1');
