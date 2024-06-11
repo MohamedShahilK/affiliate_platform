@@ -76,13 +76,23 @@ class CheckOutBloc {
     getCheckOutFormStream.add(respModel);
   }
 
-
   Future<void> viewCheckOut({required String checkoutId}) async {
     getCheckOutViewStream.add(null);
     final respModel = await CheckOutServices().viewCheckOut(checkoutId: checkoutId);
     getCheckOutViewStream.add(respModel);
   }
 
+  Future<bool> deleteCheckOut({required String checkOutId}) async {
+    var isDeleted = false;
+
+    final jsonData = await CheckOutServices().deleteCheckOut(checkOutID: checkOutId);
+
+    if (jsonData != null && jsonData['status'] == 'SUCCESS' && jsonData['response'] == 'OK') {
+      isDeleted = true;
+    }
+
+    return isDeleted;
+  }
 
   void clearStreams() {
     employeeStream.add('');

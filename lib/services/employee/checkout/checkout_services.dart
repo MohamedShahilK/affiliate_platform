@@ -2,19 +2,12 @@
 
 import 'package:affiliate_platform/api/api.dart';
 import 'package:affiliate_platform/api/api_contants.dart';
-import 'package:affiliate_platform/api/api_errror_handling.dart';
-import 'package:affiliate_platform/models/employee/checkin/get_checkin_form.dart';
-import 'package:affiliate_platform/models/employee/checkin/getall_checkins.dart';
 import 'package:affiliate_platform/models/employee/checkout/get_allcheckout.dart';
 import 'package:affiliate_platform/models/employee/checkout/get_checkout_form_model.dart';
 import 'package:affiliate_platform/models/employee/checkout/get_checkout_view.dart';
-import 'package:affiliate_platform/models/employee/project/view_project.dart';
-import 'package:affiliate_platform/models/manage_contact/contact_edit_submission_model.dart';
 import 'package:affiliate_platform/utils/constants/string_constants.dart';
-import 'package:affiliate_platform/utils/custom_tools.dart';
 import 'package:affiliate_platform/utils/internal_services/storage_services.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 
 class CheckOutServices {
@@ -41,7 +34,10 @@ class CheckOutServices {
               'Authorization': 'Bearer $token',
             },
           ),
-          // queryParameters: {},
+          // queryParameters: {
+          //   'out_date_search': '01/06/2024',
+          //   'out_date_search_2': '08/06/2024',
+          // },
           EndPoints.getAllCheckouts,
         );
 
@@ -101,7 +97,6 @@ class CheckOutServices {
               'Authorization': 'Bearer $token',
             },
           ),
-          // queryParameters: {'id':checkoutId},
           '${EndPoints.checkOutView}/$checkoutId',
         );
 
@@ -115,6 +110,37 @@ class CheckOutServices {
     } catch (e) {
       Loader.hide();
       print('viewCheckOut Error :- $e');
+      return null;
+    }
+  }
+
+  Future<Map<String, dynamic>?> deleteCheckOut({required String checkOutID}) async {
+    try {
+      final token = StorageServices.to.getString(StorageServicesKeys.token);
+      final haveToken = token.isNotEmpty;
+      if (haveToken) {
+        final response = await api.dio?.get<Map<String, dynamic>>(
+          options: Options(
+            headers: {
+              // 'accept': '*/*',
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer $token',
+            },
+          ),
+          // queryParameters: {'id':checkOutID},
+          '${EndPoints.checkOutDelete}/$checkOutID',
+        );
+
+        print('55555555555555555555555 ${response!.data}');
+
+        // final respModel = GetCheckInView.fromJson(response!.data ?? {});
+
+        return response.data;
+      }
+      return null;
+    } catch (e) {
+      Loader.hide();
+      print('viewCheckin Error :- $e');
       return null;
     }
   }

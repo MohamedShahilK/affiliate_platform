@@ -183,6 +183,44 @@ class _NewCheckOutState extends State<NewCheckOut> {
                             // print(' adasdadsadsadsadsadsadsads ${projName}');
                           }
                         }
+
+                        if (checkinFormModel.data![0].checkOutProjectData != null &&
+                            checkinFormModel.data![0].checkOutProjectData!.isNotEmpty &&
+                            checkinFormModel.data![0].checkOutProjectData?[0].reqHoursMin != '') {
+                          // final employeeName = checkinFormModel.data![0].employeeList!.firstWhere((e) => e.id == checkinFormModel?.data?[0].userID).firstName;
+                          final reqHourStreams = [
+                            bloc.reqHourStream1,
+                            bloc.reqHourStream2,
+                            bloc.reqHourStream3,
+                            bloc.reqHourStream4,
+                            bloc.reqHourStream5,
+                            bloc.reqHourStream6,
+                          ];
+
+                          final reqMinStreams = [
+                            bloc.reqMinStream1,
+                            bloc.reqMinStream2,
+                            bloc.reqMinStream3,
+                            bloc.reqMinStream4,
+                            bloc.reqMinStream5,
+                            bloc.reqMinStream6,
+                          ];
+                          for (var i = 0; i < checkinFormModel.data![0].checkOutProjectData!.length; i++) {
+                            final reqHours = checkinFormModel.data?[0].checkOutProjectData?[i].reqHoursMin?.split(':');
+
+                            final hour = reqHours?[0];
+                            final min = reqHours?[1];
+
+                            
+
+                      
+
+                            reqHourStreams[i].add(hour ?? '');
+                            reqMinStreams[i].add(min ?? '');
+
+                            // print(' adasdadsadsadsadsadsadsads ${projName}');
+                          }
+                        }
                       }
 
                       return Skeletonizer(

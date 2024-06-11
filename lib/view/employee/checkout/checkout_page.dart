@@ -5,6 +5,7 @@ import 'package:affiliate_platform/config/ripple.dart';
 import 'package:affiliate_platform/logic/employee/checkout/checkout_bloc.dart';
 import 'package:affiliate_platform/models/employee/checkout/get_allcheckout.dart';
 import 'package:affiliate_platform/utils/constants/styles.dart';
+import 'package:affiliate_platform/utils/custom_tools.dart';
 import 'package:affiliate_platform/utils/utility_functions.dart';
 import 'package:affiliate_platform/view/common/custom_header.dart';
 import 'package:affiliate_platform/view/common/custom_scafflod.dart';
@@ -437,6 +438,8 @@ class _ProjectCard extends StatelessWidget {
                             : model?.data![0].checkoutData![index].checkOutId == ''
                                 ? '-'
                                 : model?.data![0].checkoutData![index].checkOutId ?? '-';
+
+                        print('11111111111111111111111111 $checkOutId');
                         Navigator.push(context, MaterialPageRoute(builder: (context) => ViewCheckOut(checkOutId: checkOutId)));
                       },
                     ),
@@ -444,7 +447,39 @@ class _ProjectCard extends StatelessWidget {
                       // color: Colors.red[400]!,
                       isLoading: isLoading,
                       icon: Icons.delete_outline_outlined,
-                      onTap: () {},
+                      onTap: () async {
+                        final isTrue = await showWarningDialog(
+                          context,
+                          title: 'Remove Contact',
+                          description: 'Are you sure want to delete the contact?',
+                          yes: 'Delete',
+                          no: 'Cancel',
+                        );
+
+                        if (isTrue != null && isTrue) {
+                          final checkOutId = model?.data == null || model!.data!.isEmpty || model!.data![0].checkoutData == null || model!.data![0].checkoutData!.isEmpty
+                              ? '-'
+                              : model?.data![0].checkoutData![index].checkOutId == ''
+                                  ? '-'
+                                  : model?.data![0].checkoutData![index].checkOutId ?? '-';
+                          // ignore: use_build_context_synchronously
+                          customLoader(context);
+                          // ignore: use_build_context_synchronously
+                          final jsonData = await context.read<CheckOutBloc>().deleteCheckOut(checkOutId: checkOutId);
+
+                          if (jsonData) {
+                            // ignore: use_build_context_synchronously
+                            await context.read<CheckOutBloc>().getAllCheckouts();
+                            Loader.hide();
+                            // ignore: use_build_context_synchronously
+                            await successMotionToastInfo(context, msg: 'CheckOut deleted successfully');
+                          } else {
+                            Loader.hide();
+                            // ignore: use_build_context_synchronously
+                            await erroMotionToastInfo(context, msg: "Something wrong!!. Can't able to delete");
+                          }
+                        }
+                      },
                     ),
                   ],
                 ),

@@ -142,19 +142,19 @@ class SideMenu extends StatelessWidget {
                                       _handlePageNavigation(context, route: const CheckInPage());
                                     },
                                   ),
-                                  DrawerListTile(
-                                    title: 'Break',
-                                    icon: Icons.account_tree_outlined,
-                                    removeBorder: true,
-                                    svgHeight: 15,
-                                    textFont: 13,
-                                    press: () {
-                                      menu.setMyMenu('Break');
-                                      menu.setmyMenuExpand('Employee');
+                                  // DrawerListTile(
+                                  //   title: 'Break',
+                                  //   icon: Icons.account_tree_outlined,
+                                  //   removeBorder: true,
+                                  //   svgHeight: 15,
+                                  //   textFont: 13,
+                                  //   press: () {
+                                  //     menu.setMyMenu('Break');
+                                  //     menu.setmyMenuExpand('Employee');
 
-                                      // _handlePageNavigation(context, '/masterreport');
-                                    },
-                                  ),
+                                  //     // _handlePageNavigation(context, '/masterreport');
+                                  //   },
+                                  // ),
                                   DrawerListTile(
                                     title: 'Check Out',
                                     icon: Icons.account_tree_outlined,
