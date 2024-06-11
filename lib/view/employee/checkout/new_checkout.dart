@@ -211,12 +211,20 @@ class _NewCheckOutState extends State<NewCheckOut> {
                             final hour = reqHours?[0];
                             final min = reqHours?[1];
 
-                            
-
-                      
-
-                            reqHourStreams[i].add(hour ?? '');
-                            reqMinStreams[i].add(min ?? '');
+                            reqHourStreams[i].add(
+                              hour != null
+                                  ? hour.startsWith('0')
+                                      ? hour.substring(1)
+                                      : hour
+                                  : '',
+                            );
+                            reqMinStreams[i].add(
+                              min != null
+                                  ? min.startsWith('0')
+                                      ? min.substring(1)
+                                      : min
+                                  : '',
+                            );
 
                             // print(' adasdadsadsadsadsadsadsads ${projName}');
                           }
@@ -388,13 +396,13 @@ class _NewCheckOutState extends State<NewCheckOut> {
                                                     label: 'Project',
                                                   ),
                                                 ),
-                                                Icon(Icons.add).ripple(context, () {
+                                                const Icon(Icons.add).ripple(context, () {
                                                   Navigator.push(context, MaterialPageRoute(builder: (context) => const NewProject(isFromCheckInPage1: true)));
                                                 })
                                               ],
                                             ),
                                             NewContactField(
-                                              // enabled: false,
+                                              // enabled: false,    required String dateTimeIdForCheckOut,
                                               // isForDateField: true,
                                               autoEnlarge: true,
                                               heading: 'Description',
@@ -456,7 +464,7 @@ class _NewCheckOutState extends State<NewCheckOut> {
                                                     label: 'Project',
                                                   ),
                                                 ),
-                                                Icon(Icons.add).ripple(context, () {
+                                                const Icon(Icons.add).ripple(context, () {
                                                   Navigator.push(context, MaterialPageRoute(builder: (context) => const NewProject(isFromCheckInPage2: true)));
                                                 })
                                               ],
@@ -525,7 +533,7 @@ class _NewCheckOutState extends State<NewCheckOut> {
                                                     label: 'Project',
                                                   ),
                                                 ),
-                                                Icon(Icons.add).ripple(context, () {
+                                                const Icon(Icons.add).ripple(context, () {
                                                   Navigator.push(context, MaterialPageRoute(builder: (context) => const NewProject(isFromCheckInPage3: true)));
                                                 })
                                               ],
@@ -592,7 +600,7 @@ class _NewCheckOutState extends State<NewCheckOut> {
                                                     label: 'Project',
                                                   ),
                                                 ),
-                                                Icon(Icons.add).ripple(context, () {
+                                                const Icon(Icons.add).ripple(context, () {
                                                   Navigator.push(context, MaterialPageRoute(builder: (context) => const NewProject(isFromCheckInPage4: true)));
                                                 })
                                               ],
@@ -659,7 +667,7 @@ class _NewCheckOutState extends State<NewCheckOut> {
                                                     label: 'Project',
                                                   ),
                                                 ),
-                                                Icon(Icons.add).ripple(context, () {
+                                                const Icon(Icons.add).ripple(context, () {
                                                   Navigator.push(context, MaterialPageRoute(builder: (context) => const NewProject(isFromCheckInPage5: true)));
                                                 })
                                               ],
@@ -726,7 +734,7 @@ class _NewCheckOutState extends State<NewCheckOut> {
                                                     label: 'Project',
                                                   ),
                                                 ),
-                                                Icon(Icons.add).ripple(context, () {
+                                                const Icon(Icons.add).ripple(context, () {
                                                   Navigator.push(context, MaterialPageRoute(builder: (context) => const NewProject(isFromCheckInPage6: true)));
                                                 })
                                               ],
@@ -818,69 +826,117 @@ class _NewCheckOutState extends State<NewCheckOut> {
                                   ),
                                   child: Text('Submit', style: AppStyles.poppins.copyWith(fontSize: 14.w, color: Colors.white)),
                                 ).ripple(context, () async {
-                                  // customLoader(context);
-                                  // final employeeId = checkinFormModel?.data?[0].employeeList?.firstWhere((e) => e.firstName == bloc.employeeStream.value).userId ?? '0';
-                                  // var projectId1 = '';
-                                  // var projectId2 = '';
-                                  // var projectId3 = '';
-                                  // var projectId4 = '';
-                                  // var projectId5 = '';
-                                  // var projectId6 = '';
-                                  // if (bloc.projectStream1.value == '' &&
-                                  //     bloc.projectStream2.value == '' &&
-                                  //     bloc.projectStream3.value == '' &&
-                                  //     bloc.projectStream4.value == '' &&
-                                  //     bloc.projectStream5.value == '' &&
-                                  //     bloc.projectStream6.value == '') {
+                                  customLoader(context);
+                                  final employeeId = checkinFormModel?.data?[0].employeeList?.firstWhere((e) => e.firstName == bloc.employeeStream.value).id ?? '0';
+                                  var projectId1 = '';
+                                  var projectId2 = '';
+                                  var projectId3 = '';
+                                  var projectId4 = '';
+                                  var projectId5 = '';
+                                  var projectId6 = '';
+                                  if (bloc.projectStream1.value == '' &&
+                                      bloc.projectStream2.value == '' &&
+                                      bloc.projectStream3.value == '' &&
+                                      bloc.projectStream4.value == '' &&
+                                      bloc.projectStream5.value == '' &&
+                                      bloc.projectStream6.value == '') {
+                                    await erroMotionToastInfo(context, msg: 'Atleast select one project');
+                                    Loader.hide();
+                                    return;
+                                  }
+                                  if (bloc.projectStream1.value != '') {
+                                    projectId1 = checkinFormModel?.data?[0].projectList?.firstWhere((e) => e.name == bloc.projectStream1.value).id ?? '';
+                                  }
+                                  // else {
                                   //   await erroMotionToastInfo(context, msg: 'Atleast select one project');
                                   //   Loader.hide();
                                   //   return;
                                   // }
-                                  // if (bloc.projectStream1.value != '') {
-                                  //   projectId1 = checkinFormModel?.data?[0].projectList?.firstWhere((e) => e.name == bloc.projectStream1.value).id ?? '';
-                                  // }
-                                  // // else {
-                                  // //   await erroMotionToastInfo(context, msg: 'Atleast select one project');
-                                  // //   Loader.hide();
-                                  // //   return;
-                                  // // }
-                                  // if (bloc.projectStream2.value != '') {
-                                  //   projectId2 = checkinFormModel?.data?[0].projectList?.firstWhere((e) => e.name == bloc.projectStream2.value).id ?? '';
-                                  // }
-                                  // if (bloc.projectStream3.value != '') {
-                                  //   projectId3 = checkinFormModel?.data?[0].projectList?.firstWhere((e) => e.name == bloc.projectStream3.value).id ?? '';
-                                  // }
-                                  // if (bloc.projectStream4.value != '') {
-                                  //   projectId4 = checkinFormModel?.data?[0].projectList?.firstWhere((e) => e.name == bloc.projectStream4.value).id ?? '';
-                                  // }
-                                  // if (bloc.projectStream5.value != '') {
-                                  //   projectId5 = checkinFormModel?.data?[0].projectList?.firstWhere((e) => e.name == bloc.projectStream5.value).id ?? '';
-                                  // }
-                                  // if (bloc.projectStream6.value != '') {
-                                  //   projectId6 = checkinFormModel?.data?[0].projectList?.firstWhere((e) => e.name == bloc.projectStream6.value).id ?? '';
-                                  // }
-                                  // final workFromId = bloc.workFromStream.value == 'Home' ? '1' : '2';
+                                  if (bloc.projectStream2.value != '') {
+                                    projectId2 = checkinFormModel?.data?[0].projectList?.firstWhere((e) => e.name == bloc.projectStream2.value).id ?? '';
+                                  }
+                                  if (bloc.projectStream3.value != '') {
+                                    projectId3 = checkinFormModel?.data?[0].projectList?.firstWhere((e) => e.name == bloc.projectStream3.value).id ?? '';
+                                  }
+                                  if (bloc.projectStream4.value != '') {
+                                    projectId4 = checkinFormModel?.data?[0].projectList?.firstWhere((e) => e.name == bloc.projectStream4.value).id ?? '';
+                                  }
+                                  if (bloc.projectStream5.value != '') {
+                                    projectId5 = checkinFormModel?.data?[0].projectList?.firstWhere((e) => e.name == bloc.projectStream5.value).id ?? '';
+                                  }
+                                  if (bloc.projectStream6.value != '') {
+                                    projectId6 = checkinFormModel?.data?[0].projectList?.firstWhere((e) => e.name == bloc.projectStream6.value).id ?? '';
+                                  }
+                                  final workFromId = bloc.workFromStream.value == 'Home' ? '1' : '2';
 
-                                  // final resp = await bloc.formSubmitCheckin(
-                                  //   employeeId: employeeId,
-                                  //   workFromId: workFromId,
-                                  //   projectId1: projectId1,
-                                  //   projectId2: projectId2 == '' ? null : projectId2,
-                                  //   projectId3: projectId2 == '' ? null : projectId3,
-                                  //   projectId4: projectId2 == '' ? null : projectId4,
-                                  //   projectId5: projectId2 == '' ? null : projectId5,
-                                  //   projectId6: projectId2 == '' ? null : projectId6,
-                                  // );
+                                  Map<String, String?> subIds = {
+                                    '1': null,
+                                    '2': null,
+                                    '3': null,
+                                    '4': null,
+                                    '5': null,
+                                    '6': null,
+                                  };
 
-                                  // if (resp != null && resp['status'] == 'SUCCESS' && resp['response'] == 'OK') {
-                                  //   Navigator.pop(context);
-                                  //   await successMotionToastInfo(context, msg: 'Check In Created Successfully');
-                                  //   await bloc.getAllCheckins();
-                                  //   Loader.hide();
-                                  // } else {
-                                  //   await erroMotionToastInfo(context, msg: 'Submission Failed !!');
-                                  //   Loader.hide();
-                                  // }
+                                  Map<String, String?> mainIds = {
+                                    '1': null,
+                                    '2': null,
+                                    '3': null,
+                                    '4': null,
+                                    '5': null,
+                                    '6': null,
+                                  };
+
+                                  if (checkinFormModel?.data![0].checkOutProjectData != null &&
+                                      checkinFormModel!.data![0].checkOutProjectData!.isNotEmpty &&
+                                      checkinFormModel.data![0].checkOutProjectData?[0].reqHoursMin != '') {
+                                    for (var i = 0; i < checkinFormModel.data![0].checkOutProjectData!.length; i++) {
+                                      final checkInSubId = checkinFormModel.data?[0].checkOutProjectData?[i].checkInSubId;
+                                      final checkInMainId = checkinFormModel.data?[0].checkOutProjectData?[i].checkInMainId;
+
+                                      subIds['${i + 1}'] = checkInSubId ?? '';
+                                      mainIds['${i + 1}'] = checkInMainId ?? '';
+                                    }
+                                  }
+
+                                  final checkInId = checkinFormModel?.data?[0].checkInId;
+                                  // final checkInMainId = checkinFormModel?.data?[0].checkOutProjectData?[0].checkInMainId;
+
+                                  final resp = await bloc.formSubmitCheckOut(
+                                    dateTimeIdForCheckOut: widget.checkoutDateTimeStr,
+                                    employeeId: employeeId,
+                                    workFromId: workFromId,
+                                    breakHours: '1:00',
+                                    checkInId: checkInId ?? '',
+                                    projectId1: projectId1,
+                                    refMain1: mainIds['1'] ?? '',
+                                    refSub1: subIds['1'] ?? '',
+                                    projectId2: projectId2 == '' ? null : projectId2,
+                                    refMain2: mainIds['2'],
+                                    refSub2: subIds['2'],
+                                    projectId3: projectId2 == '' ? null : projectId3,
+                                    refMain3: mainIds['3'],
+                                    refSub3: subIds['3'],
+                                    projectId4: projectId2 == '' ? null : projectId4,
+                                    refMain4: mainIds['4'],
+                                    refSub4: subIds['4'],
+                                    projectId5: projectId2 == '' ? null : projectId5,
+                                    refMain5: mainIds['5'],
+                                    refSub5: subIds['5'],
+                                    projectId6: projectId2 == '' ? null : projectId6,
+                                    refMain6: mainIds['6'],
+                                    refSub6: subIds['6'],
+                                  );
+
+                                  if (resp != null && resp['status'] == 'SUCCESS' && resp['response'] == 'OK') {
+                                    Navigator.pop(context);
+                                    await successMotionToastInfo(context, msg: 'Check In Created Successfully');
+                                    await bloc.getAllCheckouts();
+                                    Loader.hide();
+                                  } else {
+                                    await erroMotionToastInfo(context, msg: 'Submission Failed !!');
+                                    Loader.hide();
+                                  }
                                 }),
                               ],
                             ),

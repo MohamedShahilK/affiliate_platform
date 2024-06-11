@@ -144,4 +144,118 @@ class CheckOutServices {
       return null;
     }
   }
+
+  Future<Map<String, dynamic>?> formSubmitCheckOut({
+    required String dateTimeIdForCheckOut,
+    required String employee,
+    required String outTime,
+    required String breakHours,
+    required String checkInId,
+    required String? comments,
+    required String? workFrom,
+    required String projects_1,
+    required String remarks_1,
+    required String reqHours_1,
+    required String refMain1,
+    required String refSub1,
+    String? breakHoursRemarks,
+    String? latitude,
+    String? longitude,
+    String? projects_2,
+    String? remarks_2,
+    String? refMain2,
+    String? refSub2,
+    String? reqHours_2,
+    String? projects_3,
+    String? remarks_3,
+    String? reqHours_3,
+    String? refMain3,
+    String? refSub3,
+    String? projects_4,
+    String? remarks_4,
+    String? reqHours_4,
+    String? refMain4,
+    String? refSub4,
+    String? projects_5,
+    String? remarks_5,
+    String? reqHours_5,
+    String? refMain5,
+    String? refSub5,
+    String? projects_6,
+    String? remarks_6,
+    String? reqHours_6,
+    String? refMain6,
+    String? refSub6,
+  }) async {
+    try {
+      final token = StorageServices.to.getString(StorageServicesKeys.token);
+      final haveToken = token.isNotEmpty;
+      if (haveToken) {
+        final formData = FormData.fromMap({
+          'employee': employee,
+          'out_time': outTime,
+          'break_hours': breakHours,
+          'break_hours_remarks': breakHoursRemarks,
+          'work_from': workFrom,
+          'comments': comments,
+          'check_in_id': checkInId,
+          'latitude': latitude,
+          'longitude': longitude,
+          'projects_1': projects_1,
+          'remarks_1': remarks_1,
+          'req_hours_1': reqHours_1,
+          'refr_main_1': refMain1,
+          'refr_sub_1': refSub1,
+          'projects_2': projects_2,
+          'remarks_2': remarks_2,
+          'req_hours_2': reqHours_2,
+          'refr_main_2': refMain1,
+          'refr_sub_2': refSub1,
+          'projects_3': projects_3,
+          'remarks_3': remarks_3,
+          'req_hours_3': reqHours_3,
+          'refr_main_3': refMain1,
+          'refr_sub_3': refSub1,
+          'projects_4': projects_4,
+          'remarks_4': remarks_4,
+          'req_hours_4': reqHours_4,
+          'refr_main_4': refMain1,
+          'refr_sub_4': refSub1,
+          'projects_5': projects_5,
+          'remarks_5': remarks_5,
+          'req_hours_5': reqHours_5,
+          'refr_main_5': refMain1,
+          'refr_sub_5': refSub1,
+          'projects_6': projects_6,
+          'remarks_6': remarks_6,
+          'req_hours_6': reqHours_6,
+          'refr_main_6': refMain1,
+          'refr_sub_6': refSub1,
+        });
+        final response = await api.dio?.post<Map<String, dynamic>>(
+          options: Options(
+            headers: {
+              // 'accept': '*/*',
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer $token',
+            },
+          ),
+          queryParameters: {'dateIs': dateTimeIdForCheckOut},
+          data: formData,
+          EndPoints.checkOutFormSubmit,
+        );
+
+        print('55555555555555555555555 ${response!.data}');
+
+        // final respModel = GetCheckInView.fromJson(response!.data ?? {});
+
+        return response.data;
+      }
+      return null;
+    } catch (e) {
+      Loader.hide();
+      print('viewCheckin Error :- $e');
+      return null;
+    }
+  }
 }

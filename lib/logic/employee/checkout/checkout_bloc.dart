@@ -94,6 +94,79 @@ class CheckOutBloc {
     return isDeleted;
   }
 
+  Future<Map<String, dynamic>?> formSubmitCheckOut({
+    required String dateTimeIdForCheckOut,
+    required String employeeId,
+    required String workFromId,
+    required String breakHours,
+    required String checkInId,
+    required String projectId1,
+    required String refMain1,
+    required String refSub1,
+    String? projectId2,
+    String? refMain2,
+    String? refSub2,
+    String? projectId3,
+    String? refMain3,
+    String? refSub3,
+    String? projectId4,
+    String? refMain4,
+    String? refSub4,
+    String? projectId5,
+    String? refMain5,
+    String? refSub5,
+    String? projectId6,
+    String? refMain6,
+    String? refSub6,
+  }) async {
+    print('222222222222222222 ${checkinTimeStream.value}');
+    final respModel = CheckOutServices().formSubmitCheckOut(
+      dateTimeIdForCheckOut:dateTimeIdForCheckOut,
+      breakHours: breakHours,
+      checkInId:checkInId,
+      employee: employeeId,
+      outTime: checkinTimeStream.value,
+      // dateTime: '2024-06-18 10:00:00',
+      workFrom: workFromId,
+
+      comments: commentsStream.value,
+      latitude: latitudeStream.valueOrNull,
+      longitude: longitudeStream.valueOrNull,
+      projects_1: projectId1,
+      remarks_1: descriptionStream1.value,
+      reqHours_1: '${reqHourStream1.value}:${reqMinStream1.value}:00',
+      refMain1: refMain1,
+      refSub1: refSub1,
+      projects_2: projectId2,
+      remarks_2: descriptionStream2.value,
+      reqHours_2: '${reqHourStream2.value}:${reqMinStream2.value}:00',
+      refMain2: refMain2,
+      refSub2: refSub2,
+      projects_3: projectId3,
+      remarks_3: descriptionStream3.value,
+      reqHours_3: '${reqHourStream3.value}:${reqMinStream3.value}:00',
+      refMain3: refMain3,
+      refSub3: refSub3,
+      projects_4: projectId4,
+      remarks_4: descriptionStream4.value,
+      reqHours_4: '${reqHourStream4.value}:${reqMinStream4.value}:00',
+      refMain4: refMain4,
+      refSub4: refSub4,
+      projects_5: projectId5,
+      remarks_5: descriptionStream5.value,
+      reqHours_5: '${reqHourStream5.value}:${reqMinStream5.value}:00',
+      refMain5: refMain5,
+      refSub5: refSub5,
+      projects_6: projectId6,
+      remarks_6: descriptionStream6.value,
+      reqHours_6: '${reqHourStream6.value}:${reqMinStream6.value}:00',
+      refMain6: refMain6,
+      refSub6: refSub6,
+    );
+
+    return respModel;
+  }
+
   void clearStreams() {
     employeeStream.add('');
     employeeIdStream.add('');

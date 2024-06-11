@@ -40,6 +40,7 @@ class EndPoints {
   static const checkOutForm = '/checkout/form';
   static const checkOutView = '/checkout/view';
   static const checkOutDelete = '/checkout/delete';
+  static const checkOutFormSubmit = '/checkout/formsubmit';
 
   // Profile
   static const getProfileView = '/profile/view';
