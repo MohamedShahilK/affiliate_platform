@@ -50,6 +50,7 @@ class CheckinData {
     required this.id,
     required this.employee,
     required this.datetime,
+    required this.checkInDatetime,
     required this.remarks,
     required this.createdAt,
     required this.updatedAt,
@@ -72,6 +73,7 @@ class CheckinData {
   final String? id;
   final String? employee;
   final String? datetime;
+  final int? checkInDatetime;
   final String? workFrom;
   final String? workFromId;
   final String? remarks;

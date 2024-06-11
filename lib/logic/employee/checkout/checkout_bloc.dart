@@ -2,6 +2,7 @@
 
 import 'package:affiliate_platform/app.dart';
 import 'package:affiliate_platform/models/employee/checkout/get_allcheckout.dart';
+import 'package:affiliate_platform/models/employee/checkout/get_checkout_form_model.dart';
 import 'package:affiliate_platform/services/employee/checkout/checkout_services.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -11,6 +12,7 @@ class CheckOutBloc {
   }
 
   final getAllCheckOutsStream = BehaviorSubject<GetAllCheckouts?>();
+  final getCheckOutFormStream = BehaviorSubject<GetCheckOutFormModel?>();
 
   final employeeStream = BehaviorSubject<String>.seeded('');
   final employeeIdStream = BehaviorSubject<String>.seeded('');
@@ -67,7 +69,44 @@ class CheckOutBloc {
     blocOficialLoaderNotifier.value = false;
   }
 
-  void clearStreams() {}
+  Future<void> getCheckOutForm({required String dateTimeStr}) async {
+    final respModel = await CheckOutServices().getCheckOutForm(dateTimeStr: dateTimeStr);
+    getCheckOutFormStream.add(respModel);
+  }
+
+  void clearStreams() {
+    employeeStream.add('');
+    employeeIdStream.add('');
+    checkinTimeStream.add('');
+    projectStream1.add('');
+    descriptionStream1.add('');
+    reqHourStream1.add('');
+    reqMinStream1.add('');
+    projectStream2.add('');
+    descriptionStream2.add('');
+    reqHourStream2.add('');
+    reqMinStream2.add('');
+    projectStream3.add('');
+    descriptionStream3.add('');
+    reqHourStream3.add('');
+    reqMinStream3.add('');
+    projectStream4.add('');
+    descriptionStream4.add('');
+    reqHourStream4.add('');
+    reqMinStream4.add('');
+    projectStream5.add('');
+    descriptionStream5.add('');
+    reqHourStream5.add('');
+    reqMinStream5.add('');
+    projectStream6.add('');
+    descriptionStream6.add('');
+    reqHourStream6.add('');
+    reqMinStream6.add('');
+    latitudeStream.add('');
+    longitudeStream.add('');
+    workFromStream.add('');
+    commentsStream.add('');
+  }
 
   void dispose() {
     getAllCheckOutsStream.close();

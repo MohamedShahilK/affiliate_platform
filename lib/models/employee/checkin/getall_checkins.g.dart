@@ -32,6 +32,7 @@ CheckinData _$CheckinDataFromJson(Map<String, dynamic> json) => CheckinData(
       id: json['id'] as String?,
       employee: json['employee'] as String?,
       datetime: json['datetime'] as String?,
+      checkInDatetime: json['checkIn_datetime'] as int?,
       remarks: json['remarks'] as String?,
       createdAt: json['created_at'] as String?,
       updatedAt: json['updated_at'] as String?,

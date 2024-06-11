@@ -444,10 +444,16 @@ class _ProjectCard extends StatelessWidget {
                           : model?.data![0].checkinData![index].checkOutStatus == ''
                               ? 'No'
                               : model?.data![0].checkinData![index].checkOutStatus ?? 'No';
+
+                      final checkoutDateStr = model?.data == null || model!.data!.isEmpty || model!.data![0].checkinData == null || model!.data![0].checkinData!.isEmpty
+                          ? 0
+                          : model?.data![0].checkinData![index].checkInDatetime == 0
+                              ? 0
+                              : model?.data![0].checkinData![index].checkInDatetime ?? 0;
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => checkoutStatus == 'No' ? const NewCheckOut() : ViewCheckIn(checkInId: checkInId),
+                          builder: (context) => checkoutStatus == 'No' ? NewCheckOut(checkoutDateTimeStr: checkoutDateStr.toString()) : ViewCheckIn(checkInId: checkInId),
                         ),
                       );
                     }),

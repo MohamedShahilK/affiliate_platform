@@ -2,7 +2,9 @@
 
 import 'package:affiliate_platform/config/ripple.dart';
 import 'package:affiliate_platform/logic/employee/checkin/checkin_bloc.dart';
+import 'package:affiliate_platform/logic/employee/checkout/checkout_bloc.dart';
 import 'package:affiliate_platform/models/employee/checkin/get_checkin_form.dart';
+import 'package:affiliate_platform/models/employee/checkout/get_checkout_form_model.dart';
 import 'package:affiliate_platform/utils/constants/styles.dart';
 import 'package:affiliate_platform/utils/custom_tools.dart';
 import 'package:affiliate_platform/utils/utility_functions.dart';
@@ -23,15 +25,18 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class NewCheckOut extends StatefulWidget {
   const NewCheckOut({
+    required this.checkoutDateTimeStr,
     super.key,
   });
+
+  final String checkoutDateTimeStr;
 
   @override
   State<NewCheckOut> createState() => _NewCheckOutState();
 }
 
 class _NewCheckOutState extends State<NewCheckOut> {
-  CheckInBloc? checkInBloc;
+  CheckOutBloc? checkOutBloc;
 
   bool loading = true;
 
@@ -41,7 +46,7 @@ class _NewCheckOutState extends State<NewCheckOut> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      await checkInBloc!.getCheckinForm().then(
+      await checkOutBloc!.getCheckOutForm(dateTimeStr: widget.checkoutDateTimeStr).then(
             (value) => setState(() {
               loading = false;
             }),
@@ -51,17 +56,18 @@ class _NewCheckOutState extends State<NewCheckOut> {
 
   @override
   void didChangeDependencies() {
-    checkInBloc ??= Provider.of<CheckInBloc>(context);
-    checkInBloc!.clearStreams();
+    checkOutBloc ??= Provider.of<CheckOutBloc>(context);
+    checkOutBloc!.clearStreams();
 
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
-    final bloc = Provider.of<CheckInBloc>(context);
-
-    print('3333333333333333333333333333 ${bloc.checkinTimeStream}');
+    final bloc = Provider.of<CheckOutBloc>(context);
+    // ignore: cascade_invocations
+    bloc.clearStreams();
+    print('3333333333333333333333333333 ${bloc.descriptionStream2.value}');
 
     return CustomScaffold(
       haveFloatingButton: false,
@@ -75,7 +81,7 @@ class _NewCheckOutState extends State<NewCheckOut> {
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 12.h),
                   child: StreamBuilder(
-                    stream: bloc.getCheckInFormStream,
+                    stream: bloc.getCheckOutFormStream,
                     builder: (context, snapshot) {
                       if (snapshot.hasError) {
                         Loader.hide();
@@ -106,7 +112,7 @@ class _NewCheckOutState extends State<NewCheckOut> {
                               ).ripple(
                                 context,
                                 () async {
-                                  await bloc.getCheckinForm();
+                                  await bloc.getCheckOutForm(dateTimeStr: widget.checkoutDateTimeStr);
                                 },
                                 borderRadius: BorderRadius.circular(15.r),
                                 overlayColor: Colors.purple.withOpacity(.15),
@@ -116,12 +122,12 @@ class _NewCheckOutState extends State<NewCheckOut> {
                         );
                       }
 
-                      GetCheckinForm? checkinFormModel;
+                      GetCheckOutFormModel? checkinFormModel;
 
                       if (snapshot.hasData) {
                         checkinFormModel = snapshot.data;
                         if (checkinFormModel!.data![0].userID != null && checkinFormModel.data![0].employeeList != null && checkinFormModel.data![0].employeeList!.isNotEmpty) {
-                          final employeeName = checkinFormModel.data![0].employeeList!.firstWhere((e) => e.userId == checkinFormModel?.data?[0].userID).firstName;
+                          final employeeName = checkinFormModel.data![0].employeeList!.firstWhere((e) => e.id == checkinFormModel?.data?[0].userID).firstName;
                           bloc.employeeStream.add(employeeName ?? '');
                         }
 
@@ -130,6 +136,53 @@ class _NewCheckOutState extends State<NewCheckOut> {
                         final date = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
                         // print('asdsadasdasd $date');
                         bloc.checkinTimeStream.add(date);
+
+                        if (checkinFormModel.data![0].checkOutProjectData != null &&
+                            checkinFormModel.data![0].checkOutProjectData!.isNotEmpty &&
+                            checkinFormModel.data![0].checkOutProjectData?[0].remarks != '') {
+                          // final employeeName = checkinFormModel.data![0].employeeList!.firstWhere((e) => e.id == checkinFormModel?.data?[0].userID).firstName;
+                          bloc.commentsStream.add(checkinFormModel.data![0].checkOutProjectData?[0].remarks ?? '');
+                        }
+
+                        if (checkinFormModel.data![0].checkOutProjectData != null &&
+                            checkinFormModel.data![0].checkOutProjectData!.isNotEmpty &&
+                            checkinFormModel.data![0].checkOutProjectData?[0].projectname != '') {
+                          // final employeeName = checkinFormModel.data![0].employeeList!.firstWhere((e) => e.id == checkinFormModel?.data?[0].userID).firstName;
+                          final streams = [
+                            bloc.projectStream1,
+                            bloc.projectStream2,
+                            bloc.projectStream3,
+                            bloc.projectStream4,
+                            bloc.projectStream5,
+                            bloc.projectStream6,
+                          ];
+                          for (var i = 0; i < checkinFormModel.data![0].checkOutProjectData!.length; i++) {
+                            final projName = checkinFormModel.data?[0].checkOutProjectData?[i].projectname;
+                            streams[i].add(projName ?? '');
+
+                            // print(' adasdadsadsadsadsadsadsads ${projName}');
+                          }
+                        }
+
+                        if (checkinFormModel.data![0].checkOutProjectData != null &&
+                            checkinFormModel.data![0].checkOutProjectData!.isNotEmpty &&
+                            checkinFormModel.data![0].checkOutProjectData?[0].checkinProjects != '') {
+                          // final employeeName = checkinFormModel.data![0].employeeList!.firstWhere((e) => e.id == checkinFormModel?.data?[0].userID).firstName;
+                          final streams = [
+                            bloc.descriptionStream1,
+                            bloc.descriptionStream2,
+                            bloc.descriptionStream3,
+                            bloc.descriptionStream4,
+                            bloc.descriptionStream5,
+                            bloc.descriptionStream6,
+                          ];
+                          for (var i = 0; i < checkinFormModel.data![0].checkOutProjectData!.length; i++) {
+                            final description = checkinFormModel.data?[0].checkOutProjectData?[i].checkinProjects;
+                            streams[i].add(description ?? '');
+
+                            // print(' adasdadsadsadsadsadsadsads ${projName}');
+                          }
+                        }
                       }
 
                       return Skeletonizer(
@@ -727,69 +780,69 @@ class _NewCheckOutState extends State<NewCheckOut> {
                                   ),
                                   child: Text('Submit', style: AppStyles.poppins.copyWith(fontSize: 14.w, color: Colors.white)),
                                 ).ripple(context, () async {
-                                  customLoader(context);
-                                  final employeeId = checkinFormModel?.data?[0].employeeList?.firstWhere((e) => e.firstName == bloc.employeeStream.value).userId ?? '0';
-                                  var projectId1 = '';
-                                  var projectId2 = '';
-                                  var projectId3 = '';
-                                  var projectId4 = '';
-                                  var projectId5 = '';
-                                  var projectId6 = '';
-                                  if (bloc.projectStream1.value == '' &&
-                                      bloc.projectStream2.value == '' &&
-                                      bloc.projectStream3.value == '' &&
-                                      bloc.projectStream4.value == '' &&
-                                      bloc.projectStream5.value == '' &&
-                                      bloc.projectStream6.value == '') {
-                                    await erroMotionToastInfo(context, msg: 'Atleast select one project');
-                                    Loader.hide();
-                                    return;
-                                  }
-                                  if (bloc.projectStream1.value != '') {
-                                    projectId1 = checkinFormModel?.data?[0].projectList?.firstWhere((e) => e.name == bloc.projectStream1.value).id ?? '';
-                                  }
-                                  // else {
+                                  // customLoader(context);
+                                  // final employeeId = checkinFormModel?.data?[0].employeeList?.firstWhere((e) => e.firstName == bloc.employeeStream.value).userId ?? '0';
+                                  // var projectId1 = '';
+                                  // var projectId2 = '';
+                                  // var projectId3 = '';
+                                  // var projectId4 = '';
+                                  // var projectId5 = '';
+                                  // var projectId6 = '';
+                                  // if (bloc.projectStream1.value == '' &&
+                                  //     bloc.projectStream2.value == '' &&
+                                  //     bloc.projectStream3.value == '' &&
+                                  //     bloc.projectStream4.value == '' &&
+                                  //     bloc.projectStream5.value == '' &&
+                                  //     bloc.projectStream6.value == '') {
                                   //   await erroMotionToastInfo(context, msg: 'Atleast select one project');
                                   //   Loader.hide();
                                   //   return;
                                   // }
-                                  if (bloc.projectStream2.value != '') {
-                                    projectId2 = checkinFormModel?.data?[0].projectList?.firstWhere((e) => e.name == bloc.projectStream2.value).id ?? '';
-                                  }
-                                  if (bloc.projectStream3.value != '') {
-                                    projectId3 = checkinFormModel?.data?[0].projectList?.firstWhere((e) => e.name == bloc.projectStream3.value).id ?? '';
-                                  }
-                                  if (bloc.projectStream4.value != '') {
-                                    projectId4 = checkinFormModel?.data?[0].projectList?.firstWhere((e) => e.name == bloc.projectStream4.value).id ?? '';
-                                  }
-                                  if (bloc.projectStream5.value != '') {
-                                    projectId5 = checkinFormModel?.data?[0].projectList?.firstWhere((e) => e.name == bloc.projectStream5.value).id ?? '';
-                                  }
-                                  if (bloc.projectStream6.value != '') {
-                                    projectId6 = checkinFormModel?.data?[0].projectList?.firstWhere((e) => e.name == bloc.projectStream6.value).id ?? '';
-                                  }
-                                  final workFromId = bloc.workFromStream.value == 'Home' ? '1' : '2';
+                                  // if (bloc.projectStream1.value != '') {
+                                  //   projectId1 = checkinFormModel?.data?[0].projectList?.firstWhere((e) => e.name == bloc.projectStream1.value).id ?? '';
+                                  // }
+                                  // // else {
+                                  // //   await erroMotionToastInfo(context, msg: 'Atleast select one project');
+                                  // //   Loader.hide();
+                                  // //   return;
+                                  // // }
+                                  // if (bloc.projectStream2.value != '') {
+                                  //   projectId2 = checkinFormModel?.data?[0].projectList?.firstWhere((e) => e.name == bloc.projectStream2.value).id ?? '';
+                                  // }
+                                  // if (bloc.projectStream3.value != '') {
+                                  //   projectId3 = checkinFormModel?.data?[0].projectList?.firstWhere((e) => e.name == bloc.projectStream3.value).id ?? '';
+                                  // }
+                                  // if (bloc.projectStream4.value != '') {
+                                  //   projectId4 = checkinFormModel?.data?[0].projectList?.firstWhere((e) => e.name == bloc.projectStream4.value).id ?? '';
+                                  // }
+                                  // if (bloc.projectStream5.value != '') {
+                                  //   projectId5 = checkinFormModel?.data?[0].projectList?.firstWhere((e) => e.name == bloc.projectStream5.value).id ?? '';
+                                  // }
+                                  // if (bloc.projectStream6.value != '') {
+                                  //   projectId6 = checkinFormModel?.data?[0].projectList?.firstWhere((e) => e.name == bloc.projectStream6.value).id ?? '';
+                                  // }
+                                  // final workFromId = bloc.workFromStream.value == 'Home' ? '1' : '2';
 
-                                  final resp = await bloc.formSubmitCheckin(
-                                    employeeId: employeeId,
-                                    workFromId: workFromId,
-                                    projectId1: projectId1,
-                                    projectId2: projectId2 == '' ? null : projectId2,
-                                    projectId3: projectId2 == '' ? null : projectId3,
-                                    projectId4: projectId2 == '' ? null : projectId4,
-                                    projectId5: projectId2 == '' ? null : projectId5,
-                                    projectId6: projectId2 == '' ? null : projectId6,
-                                  );
+                                  // final resp = await bloc.formSubmitCheckin(
+                                  //   employeeId: employeeId,
+                                  //   workFromId: workFromId,
+                                  //   projectId1: projectId1,
+                                  //   projectId2: projectId2 == '' ? null : projectId2,
+                                  //   projectId3: projectId2 == '' ? null : projectId3,
+                                  //   projectId4: projectId2 == '' ? null : projectId4,
+                                  //   projectId5: projectId2 == '' ? null : projectId5,
+                                  //   projectId6: projectId2 == '' ? null : projectId6,
+                                  // );
 
-                                  if (resp != null && resp['status'] == 'SUCCESS' && resp['response'] == 'OK') {
-                                    Navigator.pop(context);
-                                    await successMotionToastInfo(context, msg: 'Check In Created Successfully');
-                                    await bloc.getAllCheckins();
-                                    Loader.hide();
-                                  } else {
-                                    await erroMotionToastInfo(context, msg: 'Submission Failed !!');
-                                    Loader.hide();
-                                  }
+                                  // if (resp != null && resp['status'] == 'SUCCESS' && resp['response'] == 'OK') {
+                                  //   Navigator.pop(context);
+                                  //   await successMotionToastInfo(context, msg: 'Check In Created Successfully');
+                                  //   await bloc.getAllCheckins();
+                                  //   Loader.hide();
+                                  // } else {
+                                  //   await erroMotionToastInfo(context, msg: 'Submission Failed !!');
+                                  //   Loader.hide();
+                                  // }
                                 }),
                               ],
                             ),
@@ -886,7 +939,7 @@ class NewContactDropDown extends StatefulWidget {
   final String label;
   // final String initialValue;
   final List<String> items;
-  final GetCheckinForm? checkinFormModel;
+  final GetCheckOutFormModel? checkinFormModel;
 
   @override
   State<NewContactDropDown> createState() => _NewContactDropDownState();

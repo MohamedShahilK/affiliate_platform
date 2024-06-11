@@ -30,6 +30,8 @@ class _CheckOutPageState extends State<CheckOutPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     Loader.hide();
+
+    
   }
 
   // To update or hot reload

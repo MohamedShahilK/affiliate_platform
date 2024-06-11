@@ -6,6 +6,7 @@ import 'package:affiliate_platform/api/api_errror_handling.dart';
 import 'package:affiliate_platform/models/employee/checkin/get_checkin_form.dart';
 import 'package:affiliate_platform/models/employee/checkin/getall_checkins.dart';
 import 'package:affiliate_platform/models/employee/checkout/get_allcheckout.dart';
+import 'package:affiliate_platform/models/employee/checkout/get_checkout_form_model.dart';
 import 'package:affiliate_platform/models/employee/project/view_project.dart';
 import 'package:affiliate_platform/models/manage_contact/contact_edit_submission_model.dart';
 import 'package:affiliate_platform/utils/constants/string_constants.dart';
@@ -51,13 +52,13 @@ class CheckOutServices {
       return null;
     } catch (e) {
       Loader.hide();
-      print('getAllContacts Error :- $e');
+      print('getAllCheckouts Error :- $e');
       return null;
     }
   }
 
   // Get Contact Form
-  Future<GetCheckinForm?> getCheckinForm() async {
+  Future<GetCheckOutFormModel?> getCheckOutForm({required String dateTimeStr}) async {
     try {
       final token = StorageServices.to.getString(StorageServicesKeys.token);
       final haveToken = token.isNotEmpty;
@@ -70,18 +71,18 @@ class CheckOutServices {
               'Authorization': 'Bearer $token',
             },
           ),
-          // queryParameters: {},
-          EndPoints.checkinForm,
+          queryParameters: {'dateIs': dateTimeStr},
+          EndPoints.checkOutForm,
         );
 
-        final respModel = GetCheckinForm.fromJson(response!.data ?? {});
+        final respModel = GetCheckOutFormModel.fromJson(response!.data ?? {});
 
         return respModel;
       }
       return null;
     } catch (e) {
       Loader.hide();
-      print('getContactForm Error :- $e');
+      print('getCheckOutForm Error :- $e');
       return null;
     }
   }
@@ -173,7 +174,7 @@ class CheckOutServices {
       } catch (e) {
         //
       }
-      
+
       print('submitForm Error :- $e');
       return null;
     } catch (e) {
