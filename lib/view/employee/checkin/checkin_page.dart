@@ -477,6 +477,49 @@ class _ProjectCard extends StatelessWidget {
                     //   onTap: () {},
                     // ),
 
+                    Builder(
+                      builder: (context) {
+                        final checkoutStatus = model?.data == null || model!.data!.isEmpty || model!.data![0].checkinData == null || model!.data![0].checkinData!.isEmpty
+                            ? 'No'
+                            : model?.data![0].checkinData![index].checkOutStatus == ''
+                                ? 'No'
+                                : model?.data![0].checkinData![index].checkOutStatus ?? 'No';
+                        return checkoutStatus == 'Yes'
+                            ? const SizedBox.shrink()
+                            : Container(
+                                padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 3.h),
+                                decoration: BoxDecoration(
+                                  // color:  Colors.red[600],
+                                  border: Border.all(color: Colors.blue[600]!),
+                                  // borderRadius: BorderRadius.only(topRight: Radius.circular(15.r), bottomLeft: Radius.circular(15.r)),
+                                  shape: BoxShape.circle,
+                                  // borderRadius: BorderRadius.circular(5.r),
+                                ),
+                                child: Icon(
+                                  Icons.remove_red_eye_outlined,
+                                  size: 19.w,
+                                  // color: Colors.purple[400],
+                                  color: Colors.blue,
+                                ),
+                              ).ripple(context, () {
+                                final checkInId = model?.data == null || model!.data!.isEmpty || model!.data![0].checkinData == null || model!.data![0].checkinData!.isEmpty
+                                    ? '-'
+                                    : model?.data![0].checkinData![index].checkInId == ''
+                                        ? '-'
+                                        : model?.data![0].checkinData![index].checkInId ?? '-';
+
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ViewCheckIn(checkInId: checkInId,isCheckoutDone: true),
+                                  ),
+                                );
+                              });
+                      },
+                    ),
+
+                    SizedBox(width: 5.w),
+
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 3.h),
                       decoration: BoxDecoration(
