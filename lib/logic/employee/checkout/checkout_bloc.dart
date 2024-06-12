@@ -27,26 +27,32 @@ class CheckOutBloc {
   final descriptionStream1 = BehaviorSubject<String>.seeded('');
   final reqHourStream1 = BehaviorSubject<String>.seeded('');
   final reqMinStream1 = BehaviorSubject<String>.seeded('');
+  final projectStatusStream1 = BehaviorSubject<String>.seeded('');
   final projectStream2 = BehaviorSubject<String>.seeded('');
   final descriptionStream2 = BehaviorSubject<String>.seeded('');
   final reqHourStream2 = BehaviorSubject<String>.seeded('');
   final reqMinStream2 = BehaviorSubject<String>.seeded('');
+  final projectStatusStream2 = BehaviorSubject<String>.seeded('');
   final projectStream3 = BehaviorSubject<String>.seeded('');
   final descriptionStream3 = BehaviorSubject<String>.seeded('');
   final reqHourStream3 = BehaviorSubject<String>.seeded('');
   final reqMinStream3 = BehaviorSubject<String>.seeded('');
   final projectStream4 = BehaviorSubject<String>.seeded('');
+  final projectStatusStream3 = BehaviorSubject<String>.seeded('');
   final descriptionStream4 = BehaviorSubject<String>.seeded('');
   final reqHourStream4 = BehaviorSubject<String>.seeded('');
   final reqMinStream4 = BehaviorSubject<String>.seeded('');
+  final projectStatusStream4 = BehaviorSubject<String>.seeded('');
   final projectStream5 = BehaviorSubject<String>.seeded('');
   final descriptionStream5 = BehaviorSubject<String>.seeded('');
   final reqHourStream5 = BehaviorSubject<String>.seeded('');
   final reqMinStream5 = BehaviorSubject<String>.seeded('');
+  final projectStatusStream5 = BehaviorSubject<String>.seeded('');
   final projectStream6 = BehaviorSubject<String>.seeded('');
   final descriptionStream6 = BehaviorSubject<String>.seeded('');
   final reqHourStream6 = BehaviorSubject<String>.seeded('');
   final reqMinStream6 = BehaviorSubject<String>.seeded('');
+  final projectStatusStream6 = BehaviorSubject<String>.seeded('');
 
   final latitudeStream = BehaviorSubject<String>.seeded('');
   final longitudeStream = BehaviorSubject<String>.seeded('');
@@ -119,7 +125,7 @@ class CheckOutBloc {
     String? refMain6,
     String? refSub6,
   }) async {
-    print('222222222222222222 ${checkinTimeStream.value}');
+    // print('222222222222222222 ${checkinTimeStream.value}');
     final respModel = CheckOutServices().formSubmitCheckOut(
       dateTimeIdForCheckOut:dateTimeIdForCheckOut,
       breakHours: breakHours,
@@ -134,32 +140,50 @@ class CheckOutBloc {
       longitude: longitudeStream.valueOrNull,
       projects_1: projectId1,
       remarks_1: descriptionStream1.value,
-      reqHours_1: '${reqHourStream1.value}:${reqMinStream1.value}:00',
+      // reqHours_1: '${reqHourStream1.value}:${reqMinStream1.value}:00',
+      reqHours_1: reqHourStream1.value,
+      reqMin_1: reqMinStream1.value,
+      projectStatus_1: '2',
       refMain1: refMain1,
       refSub1: refSub1,
       projects_2: projectId2,
       remarks_2: descriptionStream2.value,
-      reqHours_2: '${reqHourStream2.value}:${reqMinStream2.value}:00',
+      // reqHours_2: '${reqHourStream2.value}:${reqMinStream2.value}:00',
+      reqHours_2: reqHourStream2.value,
+      reqMin_2: reqMinStream2.value,
+      projectStatus_2: '2',
       refMain2: refMain2,
       refSub2: refSub2,
       projects_3: projectId3,
       remarks_3: descriptionStream3.value,
-      reqHours_3: '${reqHourStream3.value}:${reqMinStream3.value}:00',
+      // reqHours_3: '${reqHourStream3.value}:${reqMinStream3.value}:00',
+      reqHours_3: reqHourStream3.value,
+      reqMin_3: reqMinStream3.value,
+      projectStatus_3: '2',
       refMain3: refMain3,
       refSub3: refSub3,
       projects_4: projectId4,
       remarks_4: descriptionStream4.value,
-      reqHours_4: '${reqHourStream4.value}:${reqMinStream4.value}:00',
+      // reqHours_4: '${reqHourStream4.value}:${reqMinStream4.value}:00',
+      reqHours_4: reqHourStream4.value,
+      reqMin_4: reqMinStream4.value,
       refMain4: refMain4,
+      projectStatus_4: '2',
       refSub4: refSub4,
       projects_5: projectId5,
       remarks_5: descriptionStream5.value,
-      reqHours_5: '${reqHourStream5.value}:${reqMinStream5.value}:00',
+      // reqHours_5: '${reqHourStream5.value}:${reqMinStream5.value}:00',
+      reqHours_5: reqHourStream5.value,
+      reqMin_5: reqMinStream5.value,
+      projectStatus_5: '2',
       refMain5: refMain5,
       refSub5: refSub5,
       projects_6: projectId6,
       remarks_6: descriptionStream6.value,
-      reqHours_6: '${reqHourStream6.value}:${reqMinStream6.value}:00',
+      // reqHours_6: '${reqHourStream6.value}:${reqMinStream6.value}:00',
+      reqHours_6: reqHourStream6.value,
+      reqMin_6: reqMinStream6.value,
+      projectStatus_6: '2',
       refMain6: refMain6,
       refSub6: refSub6,
     );

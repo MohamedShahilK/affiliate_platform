@@ -788,6 +788,9 @@ class _NewCheckinState extends State<NewCheckin> {
                                     await successMotionToastInfo(context, msg: 'Check In Created Successfully');
                                     await bloc.getAllCheckins();
                                     Loader.hide();
+                                  } else if (resp != null && resp['status'] == 'ERROR' &&( resp['response']  as String).contains('Check-in was already created')) {
+                                    await erroMotionToastInfo(context, msg: resp['response'] as String);
+                                    Loader.hide();
                                   } else {
                                     await erroMotionToastInfo(context, msg: 'Submission Failed !!');
                                     Loader.hide();

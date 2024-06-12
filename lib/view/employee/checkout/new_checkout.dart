@@ -162,6 +162,8 @@ class _NewCheckOutState extends State<NewCheckOut> {
 
                             // print(' adasdadsadsadsadsadsadsads ${projName}');
                           }
+
+                          print('12121212121212112 ${bloc.projectStream1.value}');
                         }
 
                         if (checkinFormModel.data![0].checkOutProjectData != null &&
@@ -184,51 +186,51 @@ class _NewCheckOutState extends State<NewCheckOut> {
                           }
                         }
 
-                        if (checkinFormModel.data![0].checkOutProjectData != null &&
-                            checkinFormModel.data![0].checkOutProjectData!.isNotEmpty &&
-                            checkinFormModel.data![0].checkOutProjectData?[0].reqHoursMin != '') {
-                          // final employeeName = checkinFormModel.data![0].employeeList!.firstWhere((e) => e.id == checkinFormModel?.data?[0].userID).firstName;
-                          final reqHourStreams = [
-                            bloc.reqHourStream1,
-                            bloc.reqHourStream2,
-                            bloc.reqHourStream3,
-                            bloc.reqHourStream4,
-                            bloc.reqHourStream5,
-                            bloc.reqHourStream6,
-                          ];
+                        // if (checkinFormModel.data![0].checkOutProjectData != null &&
+                        //     checkinFormModel.data![0].checkOutProjectData!.isNotEmpty &&
+                        //     checkinFormModel.data![0].checkOutProjectData?[0].reqHoursMin != '') {
+                        //   // final employeeName = checkinFormModel.data![0].employeeList!.firstWhere((e) => e.id == checkinFormModel?.data?[0].userID).firstName;
+                        //   final reqHourStreams = [
+                        //     bloc.reqHourStream1,
+                        //     bloc.reqHourStream2,
+                        //     bloc.reqHourStream3,
+                        //     bloc.reqHourStream4,
+                        //     bloc.reqHourStream5,
+                        //     bloc.reqHourStream6,
+                        //   ];
 
-                          final reqMinStreams = [
-                            bloc.reqMinStream1,
-                            bloc.reqMinStream2,
-                            bloc.reqMinStream3,
-                            bloc.reqMinStream4,
-                            bloc.reqMinStream5,
-                            bloc.reqMinStream6,
-                          ];
-                          for (var i = 0; i < checkinFormModel.data![0].checkOutProjectData!.length; i++) {
-                            final reqHours = checkinFormModel.data?[0].checkOutProjectData?[i].reqHoursMin?.split(':');
+                        //   final reqMinStreams = [
+                        //     bloc.reqMinStream1,
+                        //     bloc.reqMinStream2,
+                        //     bloc.reqMinStream3,
+                        //     bloc.reqMinStream4,
+                        //     bloc.reqMinStream5,
+                        //     bloc.reqMinStream6,
+                        //   ];
+                        //   for (var i = 0; i < checkinFormModel.data![0].checkOutProjectData!.length; i++) {
+                        //     final reqHours = checkinFormModel.data?[0].checkOutProjectData?[i].reqHoursMin?.split(':');
 
-                            final hour = reqHours?[0];
-                            final min = reqHours?[1];
+                        //     final hour = reqHours?[0];
+                        //     final min = reqHours?[1];
 
-                            reqHourStreams[i].add(
-                              hour != null
-                                  ? hour.startsWith('0')
-                                      ? hour.substring(1)
-                                      : hour
-                                  : '',
-                            );
-                            reqMinStreams[i].add(
-                              min != null
-                                  ? min.startsWith('0')
-                                      ? min.substring(1)
-                                      : min
-                                  : '',
-                            );
+                        //     reqHourStreams[i].add(
+                        //       hour != null
+                        //           ? hour.startsWith('0')
+                        //               ? hour.substring(1)
+                        //               : hour
+                        //           : '',
+                        //     );
+                        //     reqMinStreams[i].add(
+                        //       min != null
+                        //           ? min.startsWith('0')
+                        //               ? min.substring(1)
+                        //               : min
+                        //           : '',
+                        //     );
 
-                            // print(' adasdadsadsadsadsadsadsads ${projName}');
-                          }
-                        }
+                        //     // print(' adasdadsadsadsadsadsadsads ${projName}');
+                        //   }
+                        // }
                       }
 
                       return Skeletonizer(
@@ -902,11 +904,18 @@ class _NewCheckOutState extends State<NewCheckOut> {
                                   final checkInId = checkinFormModel?.data?[0].checkInId;
                                   // final checkInMainId = checkinFormModel?.data?[0].checkOutProjectData?[0].checkInMainId;
 
+                                  // print('22222222222222222222222222222 ${mainIds['1']}');
+                                  // print('33333333333333333333333333333 ${subIds['1']}');
+                                  // print('22222222222222222222222222222 ${mainIds['2']}');
+                                  // print('33333333333333333333333333333 ${subIds['2']}');
+                                  // print('22222222222222222222222222222 ${mainIds['3']}');
+                                  // print('33333333333333333333333333333 ${subIds['3']}');
+
                                   final resp = await bloc.formSubmitCheckOut(
                                     dateTimeIdForCheckOut: widget.checkoutDateTimeStr,
                                     employeeId: employeeId,
                                     workFromId: workFromId,
-                                    breakHours: '1:00',
+                                    breakHours: '01:00',
                                     checkInId: checkInId ?? '',
                                     projectId1: projectId1,
                                     refMain1: mainIds['1'] ?? '',
@@ -930,10 +939,11 @@ class _NewCheckOutState extends State<NewCheckOut> {
 
                                   if (resp != null && resp['status'] == 'SUCCESS' && resp['response'] == 'OK') {
                                     Navigator.pop(context);
-                                    await successMotionToastInfo(context, msg: 'Check In Created Successfully');
-                                    await bloc.getAllCheckouts();
+                                    await successMotionToastInfo(context, msg: 'Check Out Successfully Done');
+                                    await context.read<CheckInBloc>().getAllCheckins();
                                     Loader.hide();
-                                  } else {
+                                  }  else {
+                                    // print('111111111111111111111111 $resp');
                                     await erroMotionToastInfo(context, msg: 'Submission Failed !!');
                                     Loader.hide();
                                   }
