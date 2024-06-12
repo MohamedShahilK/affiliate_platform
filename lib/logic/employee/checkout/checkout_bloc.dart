@@ -134,7 +134,7 @@ class CheckOutBloc {
       breakHoursRemarks: breakRemarkStream.value,
       checkInId:checkInId,
       employee: employeeId,
-      outTime: checkinTimeStream.value,
+      outTime: checkoutTimeStream.value,
       // dateTime: '2024-06-18 10:00:00',
       workFrom: workFromId,
 
