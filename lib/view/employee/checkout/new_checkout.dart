@@ -1,5 +1,6 @@
 // ignore_for_file: lines_longer_than_80_chars, use_build_context_synchronously
 
+import 'package:affiliate_platform/config/extra_extensions.dart';
 import 'package:affiliate_platform/config/ripple.dart';
 import 'package:affiliate_platform/logic/employee/checkin/checkin_bloc.dart';
 import 'package:affiliate_platform/logic/employee/checkout/checkout_bloc.dart';
@@ -133,9 +134,9 @@ class _NewCheckOutState extends State<NewCheckOut> {
                         }
 
                         if (checkinFormModel.data![0].userID != null && checkinFormModel.data![0].checkOutProjectData != null && checkinFormModel.data![0].checkOutProjectData!.isNotEmpty) {
-                          final datetime = checkinFormModel.data![0].checkOutProjectData!.firstWhereOrNull((e) => e.id == checkinFormModel?.data?[0].userID)?.datetime;
-                          print('sdlsakdksadkasdl $datetime');
-                          // bloc.checkinTimeStream.add(datetime ?? '');
+                          final checkIndatetime = checkinFormModel.data![0].checkIndatetime;
+                          // print('sdlsakdksadkasdl $datetime');
+                          bloc.checkinTimeStream.add(checkIndatetime ?? '');
                         }
 
                         bloc.workFromStream.add('Office');
@@ -144,7 +145,7 @@ class _NewCheckOutState extends State<NewCheckOut> {
                         // print('asdsadasdasd $date');
                         bloc.checkoutTimeStream.add(date);
 
-                        bloc.breakHrsStream.add('1:00');
+                        bloc.breakHrsStream.add('01:00');
 
                         if (checkinFormModel.data![0].checkOutProjectData != null &&
                             checkinFormModel.data![0].checkOutProjectData!.isNotEmpty &&
@@ -344,12 +345,48 @@ class _NewCheckOutState extends State<NewCheckOut> {
                                   //   label: 'Work From',
                                   // ), //dropdown
 
-                                  NewContactField(
-                                    autoEnlarge: true,
-                                    heading: 'Break Taken (Hours)',
-                                    hintText: 'Break Taken (Hours)',
-                                    textStream: bloc.breakHrsStream,
-                                    onChanged: bloc.breakHrsStream.add,
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: NewContactField(
+                                          enabled: false,
+                                          textAlign: TextAlign.center,
+                                          heading: 'Break',
+                                          hintText: 'Break',
+                                          textStream: bloc.breakHrsStream,
+                                          // onChanged: bloc.breakHrsStream.add,
+                                          onTap: () async {
+                                            final time = await showTimePicker(
+                                              builder: (BuildContext context, Widget? child) {
+                                                return MediaQuery(
+                                                  data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
+                                                  child: child!,
+                                                );
+                                              },
+                                              // onEntryModeChanged: (mode) => ,
+                                              context: context,
+                                              initialTime: const TimeOfDay(hour: 1, minute: 0),
+                                            );
+                                            // final time = TimeOfDay(hour: 1, minute: 0);
+                                            if (time != null) {
+                                              final formattedTime = time.formatToString();
+                                              bloc.breakHrsStream.add(formattedTime);
+                                            }
+                                          },
+                                        ),
+                                      ),
+                                      SizedBox(width: 5.w),
+                                      Expanded(
+                                        flex: 5,
+                                        child: NewContactField(
+                                          autoEnlarge: true,
+                                          heading: 'Break Remark',
+                                          hintText: 'Break Remark',
+                                          textStream: bloc.breakRemarkStream,
+                                          onChanged: bloc.breakRemarkStream.add,
+                                        ),
+                                      ),
+                                    ],
                                   ),
 
                                   NewContactField(
@@ -443,7 +480,7 @@ class _NewCheckOutState extends State<NewCheckOut> {
                                                 ),
                                                 const Icon(Icons.add).ripple(context, () {
                                                   Navigator.push(context, MaterialPageRoute(builder: (context) => const NewProject(isFromCheckInPage1: true)));
-                                                })
+                                                }),
                                               ],
                                             ),
                                             NewContactField(
@@ -511,7 +548,7 @@ class _NewCheckOutState extends State<NewCheckOut> {
                                                 ),
                                                 const Icon(Icons.add).ripple(context, () {
                                                   Navigator.push(context, MaterialPageRoute(builder: (context) => const NewProject(isFromCheckInPage2: true)));
-                                                })
+                                                }),
                                               ],
                                             ), //dropdown
 
@@ -580,7 +617,7 @@ class _NewCheckOutState extends State<NewCheckOut> {
                                                 ),
                                                 const Icon(Icons.add).ripple(context, () {
                                                   Navigator.push(context, MaterialPageRoute(builder: (context) => const NewProject(isFromCheckInPage3: true)));
-                                                })
+                                                }),
                                               ],
                                             ),
                                             NewContactField(
@@ -647,7 +684,7 @@ class _NewCheckOutState extends State<NewCheckOut> {
                                                 ),
                                                 const Icon(Icons.add).ripple(context, () {
                                                   Navigator.push(context, MaterialPageRoute(builder: (context) => const NewProject(isFromCheckInPage4: true)));
-                                                })
+                                                }),
                                               ],
                                             ),
                                             NewContactField(
@@ -714,7 +751,7 @@ class _NewCheckOutState extends State<NewCheckOut> {
                                                 ),
                                                 const Icon(Icons.add).ripple(context, () {
                                                   Navigator.push(context, MaterialPageRoute(builder: (context) => const NewProject(isFromCheckInPage5: true)));
-                                                })
+                                                }),
                                               ],
                                             ),
                                             NewContactField(
@@ -781,7 +818,7 @@ class _NewCheckOutState extends State<NewCheckOut> {
                                                 ),
                                                 const Icon(Icons.add).ripple(context, () {
                                                   Navigator.push(context, MaterialPageRoute(builder: (context) => const NewProject(isFromCheckInPage6: true)));
-                                                })
+                                                }),
                                               ],
                                             ),
                                             NewContactField(
@@ -914,7 +951,7 @@ class _NewCheckOutState extends State<NewCheckOut> {
                                   }
                                   final workFromId = bloc.workFromStream.value == 'Home' ? '1' : '2';
 
-                                  Map<String, String?> subIds = {
+                                  final Map<String, String?> subIds = {
                                     '1': null,
                                     '2': null,
                                     '3': null,
@@ -923,7 +960,7 @@ class _NewCheckOutState extends State<NewCheckOut> {
                                     '6': null,
                                   };
 
-                                  Map<String, String?> mainIds = {
+                                  final Map<String, String?> mainIds = {
                                     '1': null,
                                     '2': null,
                                     '3': null,
@@ -958,7 +995,6 @@ class _NewCheckOutState extends State<NewCheckOut> {
                                     dateTimeIdForCheckOut: widget.checkoutDateTimeStr,
                                     employeeId: employeeId,
                                     workFromId: workFromId,
-                                    breakHours: '01:00',
                                     checkInId: checkInId ?? '',
                                     projectId1: projectId1,
                                     refMain1: mainIds['1'] ?? '',
@@ -1023,6 +1059,12 @@ Future<String?> _selectDate(BuildContext context) async {
 
   if (picked != null) {
     final pickedTime = await showTimePicker(
+      builder: (BuildContext context, Widget? child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
+          child: child!,
+        );
+      },
       context: context,
       initialTime: TimeOfDay.fromDateTime(picked),
     );
@@ -1255,6 +1297,7 @@ class NewContactField extends StatefulWidget {
     this.icon,
     this.suffixIcon,
     this.isObscure = false,
+    this.textAlign = TextAlign.start,
     this.enabled = true,
     this.validator,
     this.keyboardType,
@@ -1270,6 +1313,7 @@ class NewContactField extends StatefulWidget {
 
   final bool isForDateField;
   final bool autoEnlarge;
+  final TextAlign textAlign;
   // final TextEditingController controller;
   final String heading;
   // final String initialValue;
@@ -1328,6 +1372,7 @@ class _NewContactFieldState extends State<NewContactField> {
                       bottom: MediaQuery.of(context).viewInsets.bottom + 15.w * 6, // Adjust the value as needed
                     ),
                     // controller: controller,
+                    textAlign: widget.textAlign,
                     style: AppStyles.poppins.copyWith(
                       color: Colors.purple,
                       fontSize: 13.w,
@@ -1358,7 +1403,7 @@ class _NewContactFieldState extends State<NewContactField> {
                         color: Colors.purple[100],
                         fontSize: 13.w,
                       ),
-                      contentPadding: EdgeInsets.only(left: 15.w, top: widget.autoEnlarge ? 30.h : 0),
+                      contentPadding: EdgeInsets.only(left: widget.textAlign == TextAlign.start ? 15.w : 0.w, top: widget.autoEnlarge ? 30.h : 0),
                       border: OutlineInputBorder(
                         borderSide: const BorderSide(color: Color.fromARGB(139, 103, 51, 137)),
                         borderRadius: BorderRadius.circular(12.r),

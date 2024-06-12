@@ -27,6 +27,7 @@ class Data {
     required this.checkOutProjectData,
     required this.checkInId,
     required this.workFrom,
+    required this.checkIndatetime,
   });
   final String? tableTitle;
   final String? isdate;
@@ -37,6 +38,7 @@ class Data {
   final List<CheckOutProjectData>? checkOutProjectData;
   final String? checkInId;
   final String? workFrom;
+  final String? checkIndatetime;
 }
 
 @JsonSerializable()

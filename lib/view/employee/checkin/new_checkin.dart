@@ -788,7 +788,7 @@ class _NewCheckinState extends State<NewCheckin> {
                                     await successMotionToastInfo(context, msg: 'Check In Created Successfully');
                                     await bloc.getAllCheckins();
                                     Loader.hide();
-                                  } else if (resp != null && resp['status'] == 'ERROR' &&( resp['response']  as String).contains('Check-in was already created')) {
+                                  } else if (resp != null && resp['status'] == 'ERROR' && (resp['response'] as String).contains('Check-in was already created')) {
                                     await erroMotionToastInfo(context, msg: resp['response'] as String);
                                     Loader.hide();
                                   } else {
@@ -828,6 +828,12 @@ Future<String?> _selectDate(BuildContext context) async {
 
   if (picked != null) {
     final pickedTime = await showTimePicker(
+      builder: (BuildContext context, Widget? child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
+          child: child!,
+        );
+      },
       context: context,
       initialTime: TimeOfDay.fromDateTime(picked),
     );

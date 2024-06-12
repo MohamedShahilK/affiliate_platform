@@ -64,6 +64,7 @@ class CheckOutBloc {
   final workFromStream = BehaviorSubject<String>.seeded('Office');
   final commentsStream = BehaviorSubject<String>.seeded('');
   final breakHrsStream = BehaviorSubject<String>.seeded('');
+  final breakRemarkStream = BehaviorSubject<String>.seeded('');
 
   Future<void> initDetails() async {
     await getAllCheckouts();
@@ -106,7 +107,6 @@ class CheckOutBloc {
     required String dateTimeIdForCheckOut,
     required String employeeId,
     required String workFromId,
-    required String breakHours,
     required String checkInId,
     required String projectId1,
     required String refMain1,
@@ -130,7 +130,8 @@ class CheckOutBloc {
     // print('222222222222222222 ${checkinTimeStream.value}');
     final respModel = CheckOutServices().formSubmitCheckOut(
       dateTimeIdForCheckOut:dateTimeIdForCheckOut,
-      breakHours: breakHours,
+      breakHours: breakHrsStream.value,
+      breakHoursRemarks: breakRemarkStream.value,
       checkInId:checkInId,
       employee: employeeId,
       outTime: checkinTimeStream.value,

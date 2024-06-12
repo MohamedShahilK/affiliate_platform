@@ -24,6 +24,7 @@ Data _$DataFromJson(Map<String, dynamic> json) => Data(
       checkOutProjectData: (json['check_out_project_data'] as List<dynamic>?)?.map((e) => _$CheckOutProjectDataFromJson(e as Map<String, dynamic>)).toList(),
       checkInId: json['check_in_id'] as String?,
       workFrom: json['work_from'] as String?,
+      checkIndatetime: json['checkin_datetime'] as String?,
     );
 
 ProjectList _$ProjectListFromJson(Map<String, dynamic> json) => ProjectList(
