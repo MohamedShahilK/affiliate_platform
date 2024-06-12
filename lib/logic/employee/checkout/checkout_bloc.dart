@@ -20,6 +20,7 @@ class CheckOutBloc {
   final employeeIdStream = BehaviorSubject<String>.seeded('');
 
   final checkinTimeStream = BehaviorSubject<String>.seeded('');
+  final checkoutTimeStream = BehaviorSubject<String>.seeded('');
 
   // final projectIdStream = BehaviorSubject<String>.seeded('');
 
@@ -62,6 +63,7 @@ class CheckOutBloc {
 
   final workFromStream = BehaviorSubject<String>.seeded('Office');
   final commentsStream = BehaviorSubject<String>.seeded('');
+  final breakHrsStream = BehaviorSubject<String>.seeded('');
 
   Future<void> initDetails() async {
     await getAllCheckouts();

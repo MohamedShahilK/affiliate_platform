@@ -215,7 +215,7 @@ class _NewCheckinState extends State<NewCheckin> {
                                     heading: 'Comments',
                                     hintText: 'Comments',
                                     textStream: bloc.commentsStream,
-                                    onChanged: bloc.checkinTimeStream.add,
+                                    onChanged: bloc.commentsStream.add,
                                   ),
 
                                   // Text('Project #1', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800])),

@@ -17,6 +17,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
@@ -66,7 +67,7 @@ class _NewCheckOutState extends State<NewCheckOut> {
   Widget build(BuildContext context) {
     final bloc = Provider.of<CheckOutBloc>(context);
     // ignore: cascade_invocations
-    bloc.clearStreams();
+    // bloc.clearStreams();
     print('3333333333333333333333333333 ${bloc.descriptionStream2.value}');
 
     return CustomScaffold(
@@ -131,11 +132,19 @@ class _NewCheckOutState extends State<NewCheckOut> {
                           bloc.employeeStream.add(employeeName ?? '');
                         }
 
+                        if (checkinFormModel.data![0].userID != null && checkinFormModel.data![0].checkOutProjectData != null && checkinFormModel.data![0].checkOutProjectData!.isNotEmpty) {
+                          final datetime = checkinFormModel.data![0].checkOutProjectData!.firstWhereOrNull((e) => e.id == checkinFormModel?.data?[0].userID)?.datetime;
+                          print('sdlsakdksadkasdl $datetime');
+                          // bloc.checkinTimeStream.add(datetime ?? '');
+                        }
+
                         bloc.workFromStream.add('Office');
 
                         final date = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
                         // print('asdsadasdasd $date');
-                        bloc.checkinTimeStream.add(date);
+                        bloc.checkoutTimeStream.add(date);
+
+                        bloc.breakHrsStream.add('1:00');
 
                         if (checkinFormModel.data![0].checkOutProjectData != null &&
                             checkinFormModel.data![0].checkOutProjectData!.isNotEmpty &&
@@ -281,22 +290,48 @@ class _NewCheckOutState extends State<NewCheckOut> {
                                     ],
                                   ),
 
-                                  NewContactField(
-                                    enabled: false,
-                                    // isForDateField: true,
-                                    heading: 'Check In Time',
-                                    hintText: 'Select Check In Time',
-                                    textStream: bloc.checkinTimeStream,
-                                    // onChanged: bloc.checkinTimeStream.add,
-                                    onTap: () async {
-                                      // print('132131231231232113 ${DateFormat('yyyy-MM-dd').parse(bloc.leaveStartDateStream.value)}');
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: NewContactField(
+                                          enabled: false,
+                                          // isForDateField: true,
+                                          heading: 'Check In Time',
+                                          hintText: 'Select Check In Time',
+                                          textStream: bloc.checkinTimeStream,
+                                          // onChanged: bloc.checkinTimeStream.add,
+                                          onTap: () async {
+                                            // print('132131231231232113 ${DateFormat('yyyy-MM-dd').parse(bloc.leaveStartDateStream.value)}');
 
-                                      final date = await _selectDate(context);
+                                            final date = await _selectDate(context);
 
-                                      if (date != null) {
-                                        bloc.checkinTimeStream.add(date);
-                                      }
-                                    },
+                                            if (date != null) {
+                                              bloc.checkinTimeStream.add(date);
+                                            }
+                                          },
+                                        ),
+                                      ),
+                                      SizedBox(width: 5.w),
+                                      Expanded(
+                                        child: NewContactField(
+                                          enabled: false,
+                                          // isForDateField: true,
+                                          heading: 'Check Out Time',
+                                          hintText: 'Select Check Out Time',
+                                          textStream: bloc.checkoutTimeStream,
+                                          // onChanged: bloc.checkoutTimeStream.add,
+                                          onTap: () async {
+                                            // print('132131231231232113 ${DateFormat('yyyy-MM-dd').parse(bloc.leaveStartDateStream.value)}');
+
+                                            final date = await _selectDate(context);
+
+                                            if (date != null) {
+                                              bloc.checkoutTimeStream.add(date);
+                                            }
+                                          },
+                                        ),
+                                      ),
+                                    ],
                                   ),
 
                                   // NewContactDropDown(
@@ -311,10 +346,18 @@ class _NewCheckOutState extends State<NewCheckOut> {
 
                                   NewContactField(
                                     autoEnlarge: true,
+                                    heading: 'Break Taken (Hours)',
+                                    hintText: 'Break Taken (Hours)',
+                                    textStream: bloc.breakHrsStream,
+                                    onChanged: bloc.breakHrsStream.add,
+                                  ),
+
+                                  NewContactField(
+                                    autoEnlarge: true,
                                     heading: 'Comments',
                                     hintText: 'Comments',
                                     textStream: bloc.commentsStream,
-                                    onChanged: bloc.checkinTimeStream.add,
+                                    onChanged: bloc.commentsStream.add,
                                   ),
 
                                   // Text('Project #1', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800])),
@@ -942,7 +985,7 @@ class _NewCheckOutState extends State<NewCheckOut> {
                                     await successMotionToastInfo(context, msg: 'Check Out Successfully Done');
                                     await context.read<CheckInBloc>().getAllCheckins();
                                     Loader.hide();
-                                  }  else {
+                                  } else {
                                     // print('111111111111111111111111 $resp');
                                     await erroMotionToastInfo(context, msg: 'Submission Failed !!');
                                     Loader.hide();

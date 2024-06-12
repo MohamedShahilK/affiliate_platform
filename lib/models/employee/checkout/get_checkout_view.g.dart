@@ -42,7 +42,7 @@ Checkout _$CheckoutFromJson(Map<String, dynamic> json) => Checkout(
       breakHoursRemarks: json['break_hours_remarks'] as String?,
       remarks: json['remarks'] as String?,
       comments: json['comments'] as String?,
-      hours: json['hours'] as String?,
+      hours: json['Hours'] as String?,
       checkoutWorkFrom: json['checkout_work_from'] as String?,
     );
 

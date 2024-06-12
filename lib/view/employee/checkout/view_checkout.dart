@@ -122,7 +122,7 @@ class _ViewCheckOutState extends State<ViewCheckOut> {
                           );
                         }
                         final data = getContactViewStreamsnapshot.data?.data?[0];
-                        final checkout = getContactViewStreamsnapshot.data?.data?[0].checkout;                      
+                        final checkout = getContactViewStreamsnapshot.data?.data?[0].checkout;
                         final checkoutDetails = getContactViewStreamsnapshot.data?.data?[0].checkoutDetails ?? [];
                         return Skeletonizer(
                           enabled: loading,
@@ -163,11 +163,33 @@ class _ViewCheckOutState extends State<ViewCheckOut> {
                                           ),
                                         ),
 
-                                        if (checkout?.datetime != null) _NewCardItem(field: 'Check Out Time', value: checkout?.outTime ?? '-', icondata: Icons.person_pin_outlined),
-                                        _NewCardItem(field: 'Work From', value: checkout?.checkoutWorkFrom ?? '-', icondata: Icons.person_pin_outlined),
+                                        if (checkout?.datetime != null)
+                                          _NewCardItem(
+                                            field: 'Check Out Time',
+                                            value: UtilityFunctions.convertIntoNormalDateTimeStringFromDateTimeString(checkout?.outTime ?? '2024-05-20 21:55:20'),
+                                            icondata: Icons.person_pin_outlined,
+                                          ),
+                                        _NewCardItem(field: 'Work From', value: checkout?.checkoutWorkFrom == '1' ? 'Home' : 'Office', icondata: Icons.person_pin_outlined),
                                         if (checkout?.breakHours != null) _NewCardItem(field: 'Break Hours', value: checkout?.breakHours ?? '-', icondata: Icons.person_pin_outlined),
                                         if (checkout?.hours != null) _NewCardItem(field: 'Working Hours', value: checkout?.hours ?? '-', icondata: Icons.person_pin_outlined),
-                                        if (checkout?.hours != null) _NewCardItem(field: 'Total Hours', value: checkout?.hours ?? '-', icondata: Icons.person_pin_outlined),
+                                        if (checkout?.hours != null)
+                                          Builder(
+                                            builder: (context) {
+                                              String formatDuration(Duration duration) {
+                                                String twoDigits(int n) => n.toString().padLeft(2, '0');
+                                                final twoDigitHours = twoDigits(duration.inHours);
+                                                final twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+                                                final twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+                                                return '$twoDigitHours:$twoDigitMinutes:$twoDigitSeconds';
+                                              }
+
+                                              final breakHrs = DateTime.parse('2012-02-27 ${checkout?.breakHours ?? '00:00:00'}');
+                                              final workingHrs = DateTime.parse('2012-02-27 ${checkout?.hours ?? '00:00:00'}');
+
+                                              final difference = workingHrs.difference(breakHrs);
+                                              return _NewCardItem(field: 'Total Hours', value: formatDuration(difference), icondata: Icons.person_pin_outlined);
+                                            },
+                                          ),
                                         // _NewCardItem(field: 'UserCode', value: model?.userCode ?? '-', icondata: Icons.note_alt_outlined),
 
                                         //
@@ -205,138 +227,153 @@ class _ViewCheckOutState extends State<ViewCheckOut> {
                                     ...List.generate(
                                       checkoutDetails.length,
                                       (index) => Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          SizedBox(height: 20.h),
-                                          Text('Project #${index + 1}', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800], fontWeight: FontWeight.w800)),
-                                          SizedBox(height: 5.h),
-                                          Container(
-                                            padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 5.h),
-                                            decoration: BoxDecoration(color: Colors.green[700], borderRadius: BorderRadius.circular(10.r)),
-                                            child: Text('CHECK IN', style: AppStyles.poppins.copyWith(fontSize: 8.w, color: Colors.white, fontWeight: FontWeight.w800)),
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.only(top: 5.h),
-                                            // child: _NewCardItem(model: model),
-                                            child: Column(
-                                              children: [
-                                                Container(
-                                                  margin: EdgeInsets.only(bottom: 2.h),
-                                                  decoration: BoxDecoration(
-                                                    // border: Border.all(color: Colors.grey),
-                                                    color: const Color(0xFFFEFBFF),
-                                                    borderRadius: BorderRadius.only(topRight: Radius.circular(12.r), topLeft: Radius.circular(12.r)),
-                                                  ),
-                                                  padding: EdgeInsets.symmetric(vertical: 13.h, horizontal: 5.w),
-                                                  child: Row(
-                                                    children: [
-                                                      Icon(Icons.book_outlined, size: 13.w),
-                                                      SizedBox(width: 5.w),
-                                                      Text('Project Name', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800])),
-                                                      const Spacer(),
-                                                      SelectableText(
-                                                        checkoutDetails[index].projectname ?? '-',
-                                                        style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800], fontWeight: FontWeight.w800),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-
-                                                _NewCardItem(field: 'Project CheckIn Description', value: checkoutDetails[index].checkInRemarks ?? '-', icondata: Icons.note_alt_outlined),
-                                                _NewCardItem(field: 'Project CheckOut Description', value: checkoutDetails[index].checkOutRemarks ?? '-', icondata: Icons.note_alt_outlined),
-                                                _NewCardItem(field: 'Required Hours', value: checkoutDetails[index].reqHoursMin ?? '-', icondata: Icons.note_alt_outlined),
-                                                // _NewCardItem(field: 'Required Hours', value: checkindataprojects[index].reqHoursMin ?? '-', icondata: Icons.note_alt_outlined),
-
-                                                Container(
-                                                  decoration: BoxDecoration(
-                                                    // border: Border.all(color: Colors.grey),
-                                                    color: const Color(0xFFFEFBFF),
-                                                    borderRadius: BorderRadius.only(bottomRight: Radius.circular(12.r), bottomLeft: Radius.circular(12.r)),
-                                                  ),
-                                                  padding: EdgeInsets.symmetric(vertical: 13.h, horizontal: 5.w),
-                                                  child: Row(
-                                                    children: [
-                                                      Icon(Icons.stairs_outlined, size: 13.w),
-                                                      SizedBox(width: 5.w),
-                                                      Text('Hours Spent', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800])),
-                                                      const Spacer(),
-                                                      SelectableText(
-                                                        checkoutDetails[index].hoursSpent ?? '-',
-                                                        style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800], fontWeight: FontWeight.w800),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          if (checkoutDetails != null) SizedBox(height: 5.h),
-                                          if (checkoutDetails != null)
-                                            Container(
-                                              padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 5.h),
-                                              decoration: BoxDecoration(color: Colors.red[700], borderRadius: BorderRadius.circular(10.r)),
-                                              child: Text('CHECK OUT', style: AppStyles.poppins.copyWith(fontSize: 8.w, color: Colors.white, fontWeight: FontWeight.w800)),
-                                            ),
-                                          if (checkoutDetails != null)
-                                            Padding(
-                                              padding: EdgeInsets.only(top: 5.h),
-                                              // child: _NewCardItem(model: model),
-                                              child: Column(
-                                                children: [
-                                                  Container(
-                                                    margin: EdgeInsets.only(bottom: 2.h),
-                                                    decoration: BoxDecoration(
-                                                      // border: Border.all(color: Colors.grey),
-                                                      color: const Color(0xFFFEFBFF),
-                                                      borderRadius: BorderRadius.only(topRight: Radius.circular(12.r), topLeft: Radius.circular(12.r)),
-                                                    ),
-                                                    padding: EdgeInsets.symmetric(vertical: 13.h, horizontal: 5.w),
-                                                    child: Row(
-                                                      children: [
-                                                        Icon(Icons.book_outlined, size: 13.w),
-                                                        SizedBox(width: 5.w),
-                                                        Text('Description', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800])),
-                                                        const Spacer(),
-                                                        SelectableText(
-                                                          checkoutDetails?[index].checkOutRemarks ?? '-',
-                                                          style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800], fontWeight: FontWeight.w800),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-
-                                                  // _NewCardItem(field: 'Description', value: checkoutDetails?[index].checkOutRemarks ?? '-', icondata: Icons.note_alt_outlined),
-                                                  // _NewCardItem(field: 'Required Hours', value: checkindataprojects[index].reqHoursMin ?? '-', icondata: Icons.note_alt_outlined),
-
-                                                  Container(
-                                                    decoration: BoxDecoration(
-                                                      // border: Border.all(color: Colors.grey),
-                                                      color: const Color(0xFFFEFBFF),
-                                                      borderRadius: BorderRadius.only(bottomRight: Radius.circular(12.r), bottomLeft: Radius.circular(12.r)),
-                                                    ),
-                                                    padding: EdgeInsets.symmetric(vertical: 13.h, horizontal: 5.w),
-                                                    child: Row(
-                                                      children: [
-                                                        Icon(Icons.stairs_outlined, size: 13.w),
-                                                        SizedBox(width: 5.w),
-                                                        Text('Hours Spent', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800])),
-                                                        const Spacer(),
-                                                        SelectableText(
-                                                          checkoutDetails?[index].hoursSpent ?? '-',
-                                                          style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800], fontWeight: FontWeight.w800),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ],
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              SizedBox(height: 20.h),
+                                              Text('Project #${index + 1}', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800], fontWeight: FontWeight.w800)),
+                                              SizedBox(height: 5.h),
+                                              Container(
+                                                padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 5.h),
+                                                decoration: BoxDecoration(color: Colors.green[700], borderRadius: BorderRadius.circular(10.r)),
+                                                child: Text('CHECK IN', style: AppStyles.poppins.copyWith(fontSize: 8.w, color: Colors.white, fontWeight: FontWeight.w800)),
                                               ),
-                                            ),
-                                          SizedBox(height: 5.h),
-                                          Container(
-                                            padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 5.h),
-                                            decoration: BoxDecoration(color: Colors.orange[700], borderRadius: BorderRadius.circular(10.r)),
-                                            child: Text('STATUS : PENDING', style: AppStyles.poppins.copyWith(fontSize: 8.w, color: Colors.white, fontWeight: FontWeight.w800)),
+                                              Padding(
+                                                padding: EdgeInsets.only(top: 5.h),
+                                                // child: _NewCardItem(model: model),
+                                                child: Column(
+                                                  children: [
+                                                    Container(
+                                                      margin: EdgeInsets.only(bottom: 2.h),
+                                                      decoration: BoxDecoration(
+                                                        // border: Border.all(color: Colors.grey),
+                                                        color: const Color(0xFFFEFBFF),
+                                                        borderRadius: BorderRadius.only(topRight: Radius.circular(12.r), topLeft: Radius.circular(12.r)),
+                                                      ),
+                                                      padding: EdgeInsets.symmetric(vertical: 13.h, horizontal: 5.w),
+                                                      child: Row(
+                                                        children: [
+                                                          Icon(Icons.book_outlined, size: 13.w),
+                                                          SizedBox(width: 5.w),
+                                                          Text('Project Name', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800])),
+                                                          const Spacer(),
+                                                          SelectableText(
+                                                            checkoutDetails[index].projectname ?? '-',
+                                                            style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800], fontWeight: FontWeight.w800),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+
+                                                    _NewCardItem(
+                                                      field: 'Project CheckIn Description',
+                                                      value: checkoutDetails[index].checkInRemarks ?? '-',
+                                                      icondata: Icons.note_alt_outlined,
+                                                    ),
+                                                    _NewCardItem(
+                                                      field: 'Project CheckOut Description',
+                                                      value: checkoutDetails[index].checkOutRemarks ?? '-',
+                                                      icondata: Icons.note_alt_outlined,
+                                                    ),
+                                                    _NewCardItem(field: 'Required Hours', value: checkoutDetails[index].reqHoursMin ?? '-', icondata: Icons.note_alt_outlined),
+                                                    // _NewCardItem(field: 'Required Hours', value: checkindataprojects[index].reqHoursMin ?? '-', icondata: Icons.note_alt_outlined),
+
+                                                    Container(
+                                                      decoration: BoxDecoration(
+                                                        // border: Border.all(color: Colors.grey),
+                                                        color: const Color(0xFFFEFBFF),
+                                                        borderRadius: BorderRadius.only(bottomRight: Radius.circular(12.r), bottomLeft: Radius.circular(12.r)),
+                                                      ),
+                                                      padding: EdgeInsets.symmetric(vertical: 13.h, horizontal: 5.w),
+                                                      child: Row(
+                                                        children: [
+                                                          Icon(Icons.stairs_outlined, size: 13.w),
+                                                          SizedBox(width: 5.w),
+                                                          Text('Hours Spent', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800])),
+                                                          const Spacer(),
+                                                          SelectableText(
+                                                            textAlign: TextAlign.end,
+                                                            checkoutDetails[index].hoursSpent ?? '-',
+                                                            style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800], fontWeight: FontWeight.w800),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              if (checkoutDetails != null) SizedBox(height: 5.h),
+                                              if (checkoutDetails != null)
+                                                Container(
+                                                  padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 5.h),
+                                                  decoration: BoxDecoration(color: Colors.red[700], borderRadius: BorderRadius.circular(10.r)),
+                                                  child: Text('CHECK OUT', style: AppStyles.poppins.copyWith(fontSize: 8.w, color: Colors.white, fontWeight: FontWeight.w800)),
+                                                ),
+                                              if (checkoutDetails != null)
+                                                Padding(
+                                                  padding: EdgeInsets.only(top: 5.h),
+                                                  // child: _NewCardItem(model: model),
+                                                  child: Column(
+                                                    children: [
+                                                      Container(
+                                                        margin: EdgeInsets.only(bottom: 2.h),
+                                                        decoration: BoxDecoration(
+                                                          // border: Border.all(color: Colors.grey),
+                                                          color: const Color(0xFFFEFBFF),
+                                                          borderRadius: BorderRadius.only(topRight: Radius.circular(12.r), topLeft: Radius.circular(12.r)),
+                                                        ),
+                                                        padding: EdgeInsets.symmetric(vertical: 13.h, horizontal: 5.w),
+                                                        child: Row(
+                                                          children: [
+                                                            Icon(Icons.book_outlined, size: 13.w),
+                                                            SizedBox(width: 5.w),
+                                                            Text('Description', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800])),
+                                                            const Spacer(),
+                                                            SelectableText(
+                                                              checkoutDetails?[index].checkOutRemarks ?? '-',
+                                                              style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800], fontWeight: FontWeight.w800),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+
+                                                      // _NewCardItem(field: 'Description', value: checkoutDetails?[index].checkOutRemarks ?? '-', icondata: Icons.note_alt_outlined),
+                                                      // _NewCardItem(field: 'Required Hours', value: checkindataprojects[index].reqHoursMin ?? '-', icondata: Icons.note_alt_outlined),
+
+                                                      Container(
+                                                        decoration: BoxDecoration(
+                                                          // border: Border.all(color: Colors.grey),
+                                                          color: const Color(0xFFFEFBFF),
+                                                          borderRadius: BorderRadius.only(bottomRight: Radius.circular(12.r), bottomLeft: Radius.circular(12.r)),
+                                                        ),
+                                                        padding: EdgeInsets.symmetric(vertical: 13.h, horizontal: 5.w),
+                                                        child: Row(
+                                                          children: [
+                                                            Icon(Icons.stairs_outlined, size: 13.w),
+                                                            SizedBox(width: 5.w),
+                                                            Text('Hours Spent', style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800])),
+                                                            const Spacer(),
+                                                            SelectableText(
+                                                              checkoutDetails?[index].hoursSpent ?? '-',
+                                                              style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800], fontWeight: FontWeight.w800),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              SizedBox(height: 5.h),
+                                              Container(
+                                                padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 5.h),
+                                                decoration: BoxDecoration(color: Colors.orange[700], borderRadius: BorderRadius.circular(10.r)),
+                                                child: Text('STATUS : PENDING', style: AppStyles.poppins.copyWith(fontSize: 8.w, color: Colors.white, fontWeight: FontWeight.w800)),
+                                              ),
+                                            ],
                                           ),
+                                          SizedBox(height: 15.h),
+                                          Divider(color: Colors.grey[100]),
                                         ],
                                       ),
                                     ),
@@ -407,7 +444,7 @@ class _NewCardItem extends StatelessWidget {
               alignment: Alignment.bottomRight,
               child: SelectableText(
                 value,
-                textAlign: TextAlign.justify,
+                textAlign: TextAlign.end,
                 style: AppStyles.poppins.copyWith(fontSize: 11.w, color: Colors.grey[800], fontWeight: FontWeight.w800),
               ),
             ),
