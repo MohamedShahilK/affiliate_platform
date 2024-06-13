@@ -384,8 +384,8 @@ class _NewLeaveState extends State<NewLeave> {
                                   ),
                                   child: Text('Submit', style: AppStyles.poppins.copyWith(fontSize: 14.w, color: Colors.white)),
                                 ).ripple(context, () async {
-                                  customLoader(context);
                                   // if new project
+                                  customLoader(context);
                                   if (widget.leaveModel == null) {
                                     final employeeId = leaveFormModel?.data?[0].employeeList?.firstWhere((e) => e.firstName == bloc.employeeNameStream.value).id ?? '0';
                                     final durationId = getDurationI(status: bloc.leaveDurationStream.value);
@@ -403,6 +403,23 @@ class _NewLeaveState extends State<NewLeave> {
                                       Loader.hide();
                                     }
                                     // }
+                                  } else {
+                                    final leaveId = widget.leaveModel?.id ?? '';
+                                    final employeeId = leaveFormModel?.data?[0].employeeList?.firstWhere((e) => e.firstName == bloc.employeeNameStream.value).id ?? '0';
+                                    final durationId = getDurationI(status: bloc.leaveDurationStream.value);
+                                    final leaveTypeId = leaveFormModel?.data?[0].leavesType?.firstWhere((e) => e.name == bloc.leaveTypeStream.value).id ?? '0';
+
+                                    final resp = await bloc.submitLeaveEditForm(leaveId: leaveId, employeeId: employeeId, durationId: durationId, leaveTypeId: leaveTypeId);
+
+                                    if (resp != null && resp['status'] == 'SUCCESS' && resp['response'] == 'OK') {
+                                      Navigator.pop(context);
+                                      await successMotionToastInfo(context, msg: resp['message'] as String);
+                                      await bloc.getAllLeaves();
+                                      Loader.hide();
+                                    } else {
+                                      await erroMotionToastInfo(context, msg: 'Submission Failed !!');
+                                      Loader.hide();
+                                    }
                                   }
                                 }),
                               ],

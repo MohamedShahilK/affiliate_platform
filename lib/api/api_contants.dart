@@ -49,6 +49,7 @@ class EndPoints {
   static const getAllLeaves= '/leaves/leave_list';
   static const leaveForm = '/leaves/leave_form';
   static const submitLeaveForm = '/leaves/leave_submit';
+  static const submitLeaveEditForm = '/leaves/leave_edit_submit';
 
   // User
   static const userDetails = '/users/get_data';

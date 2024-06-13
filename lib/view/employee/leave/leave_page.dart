@@ -191,19 +191,58 @@ class _ProjectCard extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Text(
-                      // 'Giridhar | Qtn2015',
-                      'Leave #${index + 1}',
-                      // '1',
-                      style: AppStyles.poppins.copyWith(color: Colors.grey[800], fontSize: 9.w, fontWeight: FontWeight.w900),
+                    Builder(
+                      builder: (context) {
+                        final durationId = model?.data == null || model!.data!.isEmpty || model!.data![0].leavesList!.isEmpty
+                            ? '3'
+                            : model?.data![0].leavesList![index].leaveDuration == ''
+                                ? '3'
+                                : model?.data![0].leavesList![index].leaveDuration ?? '3';
+
+                        final durationName = getLeaveDuration(durationId: durationId);
+
+                        return Row(
+                          children: [
+                            Text(
+                              // 'Giridhar | Qtn2015',
+                              'Leave #${index + 1}',
+                              // '1',
+                              style: AppStyles.poppins.copyWith(color: Colors.grey[800], fontSize: 9.w, fontWeight: FontWeight.w900),
+                            ),
+                            SizedBox(width: 7.w),
+                            Text(
+                              // 'Giridhar | Qtn2015',
+                              '($durationName)',
+                              // '1',
+                              style: AppStyles.poppins.copyWith(color: Colors.grey[800], fontSize: 9.w, fontWeight: FontWeight.w900),
+                            ),
+                          ],
+                        );
+                      },
                     ),
                     const Spacer(),
-                    Text(
-                      // 'Giridhar | Qtn2015',
-                      'No. of Days : 2',
-                      // 'No. of Projects : ${model?.data == null || model!.data!.isEmpty || model!.data![0].checkoutData!.isEmpty ? '-' : model?.data![0].checkoutData![index].totalProjects == '' ? '-' : model?.data![0].checkoutData![index].totalProjects ?? '-'}',
-                      // '1',
-                      style: AppStyles.poppins.copyWith(color: Colors.grey[800], fontSize: 11.w, fontWeight: FontWeight.w900),
+                    Builder(
+                      builder: (context) {
+                        final durationId = model?.data == null || model!.data!.isEmpty || model!.data![0].leavesList!.isEmpty
+                            ? '3'
+                            : model?.data![0].leavesList![index].leaveDuration == ''
+                                ? '3'
+                                : model?.data![0].leavesList![index].leaveDuration ?? '3';
+
+                        final leaveInterval = model?.data == null || model!.data!.isEmpty || model!.data![0].leavesList!.isEmpty
+                            ? '1'
+                            : model?.data![0].leavesList![index].leavesIntervals == ''
+                                ? '1'
+                                : model?.data![0].leavesList![index].leavesIntervals ?? '1';
+
+                        return Text(
+                          // 'Giridhar | Qtn2015',
+                          durationId == '3' ? 'No. of Days : $leaveInterval' : 'No. of Hours : $leaveInterval',
+                          // 'No. of Projects : ${model?.data == null || model!.data!.isEmpty || model!.data![0].checkoutData!.isEmpty ? '-' : model?.data![0].checkoutData![index].totalProjects == '' ? '-' : model?.data![0].checkoutData![index].totalProjects ?? '-'}',
+                          // '1',
+                          style: AppStyles.poppins.copyWith(color: Colors.grey[800], fontSize: 11.w, fontWeight: FontWeight.w900),
+                        );
+                      },
                     ),
                   ],
                 ),
@@ -341,41 +380,68 @@ class _ProjectCard extends StatelessWidget {
                 SizedBox(height: 15.h),
 
                 //
+
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  // mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    _EachProjectSmallButtons(
-                      // color: Colors.green[900]!,
-                      isLoading: isLoading,
-                      icon: Icons.edit_outlined,
-                      onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => NewLeave(
-                            leaveModel: model?.data![0].leavesList![index],
+                    if (model?.data![0].leavesList![index].approvalStatus == '1')
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 3.h),
+                        decoration: BoxDecoration(
+                          color: Colors.orange[700],
+                          borderRadius: BorderRadius.circular(15.r),
+                        ),
+                        child: Text(
+                          'Pending',
+                          style: TextStyle(fontSize: 12.w, color: Colors.white),
+                        ),
+                      ),
+                    if (model?.data![0].leavesList![index].approvalStatus == '2')
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 3.h),
+                        decoration: BoxDecoration(
+                          color: Colors.green[700],
+                          borderRadius: BorderRadius.circular(15.r),
+                        ),
+                        child: Text(
+                          'Approved',
+                          style: TextStyle(fontSize: 12.w, color: Colors.white),
+                        ),
+                      ),
+                    if (model?.data![0].leavesList![index].approvalStatus == '3')
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 3.h),
+                        decoration: BoxDecoration(
+                          color: Colors.red[700],
+                          borderRadius: BorderRadius.circular(15.r),
+                        ),
+                        child: Text(
+                          'Rejected',
+                          style: TextStyle(fontSize: 12.w, color: Colors.white),
+                        ),
+                      ),
+                    const Spacer(),
+                    if (model?.data![0].leavesList![index].approvalStatus == '1')
+                      _EachProjectSmallButtons(
+                        // color: Colors.green[900]!,
+                        isLoading: isLoading,
+                        icon: Icons.edit_outlined,
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => NewLeave(
+                              leaveModel: model?.data![0].leavesList![index],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    _EachProjectSmallButtons(
-                      // color: Colors.blue[400]!,
-                      isLoading: isLoading,
-                      icon: Icons.remove_red_eye_outlined,
-                      onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ViewLeave(
-                            leaveModel: model?.data![0].leavesList![index],
-                          ),
-                        ),
+                    if (model?.data![0].leavesList![index].approvalStatus == '1')
+                      _EachProjectSmallButtons(
+                        // color: Colors.red[400]!,
+                        isLoading: isLoading,
+                        icon: Icons.delete_outline_outlined,
+                        onTap: () {},
                       ),
-                    ),
-                    _EachProjectSmallButtons(
-                      // color: Colors.red[400]!,
-                      isLoading: isLoading,
-                      icon: Icons.delete_outline_outlined,
-                      onTap: () {},
-                    ),
                   ],
                 ),
               ],

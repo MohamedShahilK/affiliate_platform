@@ -32,9 +32,15 @@ class LeaveBloc {
   final leaveTypeStream = BehaviorSubject<String>.seeded('');
   final leaveReasonStream = BehaviorSubject<String>.seeded('');
 
+  final approvalStatusStream = BehaviorSubject<String>.seeded('1');
+  final approvalRemarkStream = BehaviorSubject<String>.seeded('');
+  final approvedByStream = BehaviorSubject<String>.seeded('');
+  final approvedOnStream = BehaviorSubject<String>.seeded('');
+
   Future<void> initDetails() async {
     await getAllLeaves();
     await getLeaveForm();
+    await userDetails();
   }
 
   Future<void> getAllLeaves() async {
@@ -80,6 +86,32 @@ class LeaveBloc {
       leaveReason: leaveReasonStream.value,
       leaveDurationIntervals: noOfHoursStream.valueOrNull,
       leavesHouroffText: hourOffStartAndEndDateStream.valueOrNull,
+    );
+
+    return respModel;
+  }
+
+  Future<Map<String, dynamic>?> submitLeaveEditForm({
+    required String leaveId,
+    required String employeeId,
+    required String durationId,
+    required String leaveTypeId,
+  }) async {
+    final respModel = LeavesServices().submitLeaveEditForm(
+      leaveId: leaveId,
+      employee: employeeId,
+      leaveApplyDate: leaveApplyDateStream.value,
+      leaveDuration: durationId,
+      leaveType: leaveTypeId,
+      leaveStartDate: leaveStartDateStream.value,
+      leaveEndDate: leaveEndDateStream.value,
+      leaveReason: leaveReasonStream.value,
+      leaveDurationIntervals: noOfHoursStream.valueOrNull,
+      leavesHouroffText: hourOffStartAndEndDateStream.valueOrNull,
+      approvalStatus: approvalStatusStream.valueOrNull,
+      approvalStatusRemarks: approvalRemarkStream.valueOrNull,
+      approvedBy: approvedByStream.valueOrNull,
+      approvedOn: approvedOnStream.valueOrNull,
     );
 
     return respModel;
