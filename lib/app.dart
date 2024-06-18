@@ -29,6 +29,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return FlavorBanner(
       child: ScreenUtilInit(
+        // designSize: ScreenUtil.defaultSize,
         designSize: const Size(375, 812),
         minTextAdapt: true,
         splitScreenMode: true,

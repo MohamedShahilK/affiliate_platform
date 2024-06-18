@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:affiliate_platform/main_initialization.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AppBlocObserver extends BlocObserver {
   const AppBlocObserver();
@@ -31,6 +32,7 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
   await runZonedGuarded(
     () async {
       WidgetsFlutterBinding.ensureInitialized();
+      await ScreenUtil.ensureScreenSize();
       await mainInitialization();
       runApp(await builder());
     },
