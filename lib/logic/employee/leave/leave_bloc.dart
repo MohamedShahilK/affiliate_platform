@@ -130,5 +130,24 @@ class LeaveBloc {
 
   void dispose() {
     getAllLeavesStream.close();
+    getLeaveFormStream.close();
+    //  getProjectViewStream.close();
+
+    employeeNameStream.close();
+    leaveApplyDateStream.close();
+    leaveStartDateStream.close();
+    leaveEndDateStream.close();
+
+    leaveDurationStream.close();
+
+    noOfHoursStream.close();
+    hourOffStartAndEndDateStream.close();
+    leaveTypeStream.close();
+    leaveReasonStream.close();
+
+    approvalStatusStream.close();
+    approvalRemarkStream.close();
+    approvedByStream.close();
+    approvedOnStream.close();
   }
 }

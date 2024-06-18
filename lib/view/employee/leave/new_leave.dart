@@ -4,8 +4,10 @@ import 'package:affiliate_platform/config/ripple.dart';
 import 'package:affiliate_platform/logic/employee/leave/leave_bloc.dart';
 import 'package:affiliate_platform/models/employee/leave/leave_form_model.dart';
 import 'package:affiliate_platform/models/employee/leave/leave_model.dart';
+import 'package:affiliate_platform/utils/constants/string_constants.dart';
 import 'package:affiliate_platform/utils/constants/styles.dart';
 import 'package:affiliate_platform/utils/custom_tools.dart';
+import 'package:affiliate_platform/utils/internal_services/storage_services.dart';
 import 'package:affiliate_platform/utils/utility_functions.dart';
 import 'package:affiliate_platform/view/common/custom_header.dart';
 import 'package:affiliate_platform/view/common/custom_scafflod.dart';
@@ -53,6 +55,7 @@ class _NewLeaveState extends State<NewLeave> {
   @override
   Widget build(BuildContext context) {
     final bloc = Provider.of<LeaveBloc>(context);
+    print("Build method called");
 
     return CustomScaffold(
       haveFloatingButton: false,
@@ -117,6 +120,7 @@ class _NewLeaveState extends State<NewLeave> {
                       }
 
                       if (widget.leaveModel != null) {
+                        // print('qweqweqwe');
                         if (widget.leaveModel?.firstName != null && widget.leaveModel?.firstName != '') {
                           bloc.employeeNameStream.add(widget.leaveModel?.firstName ?? '');
                         }
@@ -159,12 +163,30 @@ class _NewLeaveState extends State<NewLeave> {
                         }
 
                         if (widget.leaveModel?.leaveReason != null && (widget.leaveModel?.leaveReason != '')) {
-                          bloc.leaveReasonStream.add(widget.leaveModel?.leaveReason ?? '');
+                          // bloc.leaveReasonStream.add(widget.leaveModel?.leaveReason ?? '');
+                          if (bloc.leaveReasonStream.value == '') {
+                            //  bloc.lea
+                            bloc.leaveReasonStream.add(widget.leaveModel?.leaveReason ?? '');
+                          }
                         } else {
                           bloc.leaveReasonStream.add('');
                         }
                       } else {
                         // bloc.projectNameStream.add('');
+                        // final userId = StorageServices.to.getString(StorageServicesKeys.userId);
+                        final employeeName = leaveFormModel?.data?[0].employeeList?.firstWhere((e) => e.id == leaveFormModel?.data?[0].userID).firstName;
+                        bloc.employeeNameStream.add(employeeName ?? '');
+
+                        final now = DateTime.now();
+                        var date = DateTime(now.year, now.month, now.day);
+
+                        final dateOnlyToStr = DateFormat('yyyy-MM-dd').format(date);
+
+                        bloc.leaveApplyDateStream.add(dateOnlyToStr);
+                        bloc.leaveStartDateStream.add(dateOnlyToStr);
+                        bloc.leaveEndDateStream.add(dateOnlyToStr);
+
+                        bloc.leaveDurationStream.add('Full day');
                       }
 
                       return Skeletonizer(
@@ -217,7 +239,7 @@ class _NewLeaveState extends State<NewLeave> {
                                     heading: 'Start Date',
                                     hintText: 'Select Start Date',
                                     textStream: bloc.leaveStartDateStream,
-                                    // onChanged: bloc.leaveStartDateStream.add,
+                                    onChanged: bloc.leaveStartDateStream.add,
                                     onTap: () async {
                                       final date = await _selectDate(context);
                                       bloc.leaveStartDateStream.add(date ?? '');
@@ -230,7 +252,7 @@ class _NewLeaveState extends State<NewLeave> {
                                     heading: 'End Date',
                                     hintText: 'Select End Date',
                                     textStream: bloc.leaveEndDateStream,
-                                    // onChanged: bloc.leaveEndDateStream.add,
+                                    onChanged: bloc.leaveEndDateStream.add,
                                     onTap: () async {
                                       if (bloc.leaveStartDateStream.value == '') {
                                         await erroMotionToastInfo(context, msg: 'Starting Date Is Not Selected');
@@ -271,23 +293,22 @@ class _NewLeaveState extends State<NewLeave> {
                                     stream: bloc.leaveDurationStream,
                                     builder: (context, snapshot) {
                                       if (snapshot.data == 'Full day') {
-                                        if (widget.leaveModel == null) {
+                                        if (widget.leaveModel == null || (bloc.leaveStartDateStream.value != '' && bloc.leaveEndDateStream.value != '')) {
                                           if (bloc.leaveStartDateStream.value != '' && bloc.leaveEndDateStream.value != '') {
-                                            final inputS = DateFormat('dd-MM-yyyy').parse(bloc.leaveStartDateStream.value);
-                                            final outputFormatS = DateFormat('yyyy-MM-dd');
-                                            final outputDateStringS = outputFormatS.format(inputS);
+                                            // final inputS = DateFormat('dd-MM-yyyy').parse(bloc.leaveStartDateStream.value);
+                                            // final outputFormatS = DateFormat('yyyy-MM-dd');
+                                            // final outputDateStringS = outputFormatS.format(inputS);
 
-                                            final start = DateTime.parse(outputDateStringS);
+                                            // final start = DateTime.parse(outputDateStringS);
 
-                                            final inputE = DateFormat('dd-MM-yyyy').parse(bloc.leaveEndDateStream.value);
-                                            final outputFormatE = DateFormat('yyyy-MM-dd');
-                                            final outputDateStringE = outputFormatE.format(inputE);
+                                            // final inputE = DateFormat('dd-MM-yyyy').parse(bloc.leaveEndDateStream.value);
+                                            // final outputFormatE = DateFormat('yyyy-MM-dd');
+                                            // final outputDateStringE = outputFormatE.format(inputE);
 
-                                            final end = DateTime.parse(outputDateStringE);
+                                            // final end = DateTime.parse(outputDateStringE);
 
-                                            // final end = DateTime.parse(date ?? '20-01-2023');
-
-                                            // print('132131231231232113 $end');
+                                            final start = DateFormat('yyyy-MM-dd').parse(bloc.leaveStartDateStream.value);
+                                            final end = DateFormat('yyyy-MM-dd').parse(bloc.leaveEndDateStream.value);
 
                                             final normalizedDate1 = DateTime(start.year, start.month, start.day);
                                             final normalizedDate2 = DateTime(end.year, end.month, end.day);
@@ -303,6 +324,17 @@ class _NewLeaveState extends State<NewLeave> {
                                             erroMotionToastInfo(context, msg: 'Need to select both start and end date');
                                             bloc.leaveDurationStream.add('');
                                           }
+                                        } else {
+                                          final startDate = widget.leaveModel?.leaveStartDate;
+                                          final endDate = widget.leaveModel?.leaveEndDate;
+                                          final start = DateTime.parse(startDate ?? '');
+
+                                          final end = DateTime.parse(endDate ?? '');
+                                          final normalizedDate1 = DateTime(start.year, start.month, start.day);
+                                          final normalizedDate2 = DateTime(end.year, end.month, end.day);
+
+                                          final differenceInDays = normalizedDate2.difference(normalizedDate1).inDays + 1;
+                                          bloc.noOfHoursStream.add(differenceInDays.toString());
                                         }
 
                                         // bloc.noOfHoursStream.add('1');
@@ -385,11 +417,22 @@ class _NewLeaveState extends State<NewLeave> {
                                   child: Text('Submit', style: AppStyles.poppins.copyWith(fontSize: 14.w, color: Colors.white)),
                                 ).ripple(context, () async {
                                   // if new project
-                                  customLoader(context);
+
+                                  if (bloc.leaveTypeStream.value == '') {
+                                    await erroMotionToastInfo(context, msg: 'Select Leave Type');
+                                    return;
+                                  }
+
+                                  if (bloc.leaveReasonStream.value == '') {
+                                    await erroMotionToastInfo(context, msg: 'Submit Leave Reason');
+                                    return;
+                                  }
                                   if (widget.leaveModel == null) {
+                                    customLoader(context);
                                     final employeeId = leaveFormModel?.data?[0].employeeList?.firstWhere((e) => e.firstName == bloc.employeeNameStream.value).id ?? '0';
                                     final durationId = getDurationI(status: bloc.leaveDurationStream.value);
                                     final leaveTypeId = leaveFormModel?.data?[0].leavesType?.firstWhere((e) => e.name == bloc.leaveTypeStream.value).id ?? '0';
+                                    // print('11111111111111111111111111111111111111111111111111111');
 
                                     final resp = await bloc.submitLeaveForm(employeeId: employeeId, durationId: durationId, leaveTypeId: leaveTypeId);
 
@@ -404,6 +447,7 @@ class _NewLeaveState extends State<NewLeave> {
                                     }
                                     // }
                                   } else {
+                                    customLoader(context);
                                     final leaveId = widget.leaveModel?.id ?? '';
                                     final employeeId = leaveFormModel?.data?[0].employeeList?.firstWhere((e) => e.firstName == bloc.employeeNameStream.value).id ?? '0';
                                     final durationId = getDurationI(status: bloc.leaveDurationStream.value);
@@ -459,7 +503,7 @@ class _NewLeaveState extends State<NewLeave> {
       );
 
       // print('77777777777777777777777777777 ${DateFormat('dd/MM/yyyy').format(date)}');
-      final dateStr = DateFormat('dd-MM-yyyy').format(date);
+      final dateStr = DateFormat('yyyy-MM-dd').format(date);
 
       // if (dateStr == '') {
       //   await erroMotionToastInfo(context, msg: 'Something wrong !!');
@@ -616,20 +660,20 @@ class _NewContactDropDownState extends State<NewContactDropDown> {
                     // value: selectedValue == '' ? null : selectedValue,
                     value: data == '' ? null : data,
                     onChanged: (value) {
-                      setState(() {
-                        if (value == widget.hint) {
-                          // selectedValue = '';
-                          widget.textStream.add('');
-                        } else {
-                          // selectedValue = value!;
-                          widget.textStream.add(value!);
-                          // if (widget.heading == 'Client') {
+                      // setState(() {
+                      if (value == widget.hint) {
+                        // selectedValue = '';
+                        widget.textStream.add('');
+                      } else {
+                        // selectedValue = value!;
+                        widget.textStream.add(value!);
+                        // if (widget.heading == 'Client') {
 
-                          // }else  if (widget.heading == 'Quotation') {
+                        // }else  if (widget.heading == 'Quotation') {
 
-                          // }else if (widget.heading == 'Status'){}
-                        }
-                      });
+                        // }else if (widget.heading == 'Status'){}
+                      }
+                      // });
                     },
                     buttonStyleData: ButtonStyleData(
                       height: 50,
@@ -743,10 +787,12 @@ class _NewContactFieldState extends State<NewContactField> {
   void initState() {
     super.initState();
     widget.textStream.listen((value) {
+      print('15145646513514351436416546584 $value');
       if (value.isEmpty) {
         _controller.clear();
       } else if (_controller.text != value) {
         _controller.text = (widget.isForDateField && widget.isNewLeave) ? UtilityFunctions.convertIntoNormalDateStringFromDateTimeString(value) : value;
+        // _controller.text = value;
       }
     });
   }
