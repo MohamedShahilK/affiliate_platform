@@ -5,6 +5,7 @@ import 'package:affiliate_platform/config/ripple.dart';
 import 'package:affiliate_platform/logic/employee/leave/leave_bloc.dart';
 import 'package:affiliate_platform/models/employee/leave/leave_model.dart';
 import 'package:affiliate_platform/utils/constants/styles.dart';
+import 'package:affiliate_platform/utils/custom_tools.dart';
 import 'package:affiliate_platform/utils/utility_functions.dart';
 import 'package:affiliate_platform/view/common/custom_header.dart';
 import 'package:affiliate_platform/view/common/custom_scafflod.dart';
@@ -440,7 +441,38 @@ class _ProjectCard extends StatelessWidget {
                         // color: Colors.red[400]!,
                         isLoading: isLoading,
                         icon: Icons.delete_outline_outlined,
-                        onTap: () {},
+                        onTap: () async {
+                          final isTrue = await showWarningDialog(
+                            context,
+                            title: 'Remove Leave',
+                            description: 'Are you sure want to delete the leave?',
+                            yes: 'Delete',
+                            no: 'Cancel',
+                          );
+
+                          if (isTrue != null && isTrue) {
+                            final leaveId = model?.data == null || model!.data!.isEmpty || model!.data![0].leavesList == null || model!.data![0].leavesList!.isEmpty
+                                ? '-'
+                                : model?.data![0].leavesList![index].id == ''
+                                    ? '-'
+                                    : model?.data![0].leavesList![index].id ?? '-';
+                            // ignore: use_build_context_synchronously
+                            customLoader(context);
+                            // ignore: use_build_context_synchronously
+                            final jsonData = await context.read<LeaveBloc>().deleteLeave(leaveId: leaveId);
+                            if (jsonData) {
+                              // ignore: use_build_context_synchronously
+                              await context.read<LeaveBloc>().getAllLeaves();
+                              Loader.hide();
+                              // ignore: use_build_context_synchronously
+                              await successMotionToastInfo(context, msg: 'Leave deleted successfully');
+                            } else {
+                              Loader.hide();
+                              // ignore: use_build_context_synchronously
+                              await erroMotionToastInfo(context, msg: "Something wrong!!. Can't able to delete");
+                            }
+                          }
+                        },
                       ),
                   ],
                 ),

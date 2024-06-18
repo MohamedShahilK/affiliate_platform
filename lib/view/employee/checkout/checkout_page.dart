@@ -450,8 +450,8 @@ class _ProjectCard extends StatelessWidget {
                       onTap: () async {
                         final isTrue = await showWarningDialog(
                           context,
-                          title: 'Remove Contact',
-                          description: 'Are you sure want to delete the contact?',
+                          title: 'Remove CheckOut',
+                          description: 'Are you sure want to delete the checkout?',
                           yes: 'Delete',
                           no: 'Cancel',
                         );

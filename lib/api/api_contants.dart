@@ -50,6 +50,7 @@ class EndPoints {
   static const leaveForm = '/leaves/leave_form';
   static const submitLeaveForm = '/leaves/leave_submit';
   static const submitLeaveEditForm = '/leaves/leave_edit_submit';
+  static const leaveDelete = '/leaves/leave_delete';
 
   // User
   static const userDetails = '/users/get_data';

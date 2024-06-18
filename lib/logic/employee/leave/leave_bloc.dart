@@ -117,6 +117,18 @@ class LeaveBloc {
     return respModel;
   }
 
+    Future<bool> deleteLeave({required String leaveId}) async {
+    var isDeleted = false;
+
+    final jsonData = await LeavesServices().deleteLeave(leaveId: leaveId);
+
+    if (jsonData != null && jsonData['status'] == 'SUCCESS' && jsonData['response'] == 'OK') {
+      isDeleted = true;
+    }
+
+    return isDeleted;
+  }
+
   void clearStreams() {
     employeeNameStream.add('');
     leaveApplyDateStream.add('');

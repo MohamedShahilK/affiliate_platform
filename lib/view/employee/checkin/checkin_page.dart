@@ -538,8 +538,8 @@ class _ProjectCard extends StatelessWidget {
                     ).ripple(context, () async {
                       final isTrue = await showWarningDialog(
                         context,
-                        title: 'Remove Contact',
-                        description: 'Are you sure want to delete the contact?',
+                        title: 'Remove CheckIN',
+                        description: 'Are you sure want to delete the checkin?',
                         yes: 'Delete',
                         no: 'Cancel',
                       );

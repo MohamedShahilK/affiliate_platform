@@ -139,7 +139,7 @@ class CheckInServices {
       return null;
     } catch (e) {
       Loader.hide();
-      print('viewCheckin Error :- $e');
+      print('deleteCheckin Error :- $e');
       return null;
     }
   }

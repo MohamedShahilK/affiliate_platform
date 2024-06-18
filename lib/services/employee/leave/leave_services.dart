@@ -270,4 +270,35 @@ class LeavesServices {
       return null;
     }
   }
+
+  Future<Map<String, dynamic>?> deleteLeave({required String leaveId}) async {
+    try {
+      final token = StorageServices.to.getString(StorageServicesKeys.token);
+      final haveToken = token.isNotEmpty;
+      if (haveToken) {
+        final response = await api.dio?.get<Map<String, dynamic>>(
+          options: Options(
+            headers: {
+              // 'accept': '*/*',
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer $token',
+            },
+          ),
+          // queryParameters: {'id':leaveId},
+          '${EndPoints.leaveDelete}/$leaveId',
+        );
+
+        print('55555555555555555555555 ${response!.data}');
+
+        // final respModel = GetCheckInView.fromJson(response!.data ?? {});
+
+        return response.data;
+      }
+      return null;
+    } catch (e) {
+      Loader.hide();
+      print('deleteCheckin Error :- $e');
+      return null;
+    }
+  }
 }
