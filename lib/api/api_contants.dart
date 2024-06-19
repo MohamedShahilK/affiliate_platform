@@ -57,4 +57,7 @@ class EndPoints {
 
   // Settings
   static const changePassword = '/settings/change';
+
+  // Attendace
+  static const getAttendance = '/attendance/list';
 }
