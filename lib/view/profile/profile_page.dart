@@ -7,6 +7,7 @@ import 'package:affiliate_platform/config/ripple.dart';
 import 'package:affiliate_platform/logic/profile/profile_bloc.dart';
 import 'package:affiliate_platform/models/profile/profile_model.dart';
 import 'package:affiliate_platform/utils/constants/styles.dart';
+import 'package:affiliate_platform/utils/custom_tools.dart';
 import 'package:affiliate_platform/utils/image_related.dart';
 import 'package:affiliate_platform/utils/utility_functions.dart';
 import 'package:affiliate_platform/view/common/custom_header.dart';
@@ -47,8 +48,9 @@ class _ProfilePageState extends State<ProfilePage> with ImagePickerMixin {
   Widget build(BuildContext context) {
     final profileBloc = Provider.of<ProfileBloc>(context);
     return PopScope(
-      onPopInvoked: (didPop) {
-        Navigator.pop(context);
+      canPop: false,
+      onPopInvoked: (bool didPop) async {
+        await appExitDialog(context);
       },
       child: CustomScaffold(
         key: _refreshKey,
@@ -184,9 +186,9 @@ class _ProfilePageState extends State<ProfilePage> with ImagePickerMixin {
                                         ],
                                       ).ripple(context, () async {
                                         final imageSrc = await selectImagePickerSource(context);
-                      
+
                                         final xfile = await pickXFileImage(context, imageSource: imageSrc!);
-                      
+
                                         if (xfile != null) {
                                           await compressAndResizeImage(File(xfile.path)).then((fileInJpg) async {
                                             // print('3333333333333333333333333333333333333333333');
@@ -211,9 +213,9 @@ class _ProfilePageState extends State<ProfilePage> with ImagePickerMixin {
                                             //     content: Image.file(fileInJpg),
                                             //   ),
                                             // );
-                      
+
                                             // final bytes = fileInJpg.readAsBytesSync();
-                      
+
                                             final croppedFile = await ImageCropper().cropImage(
                                               cropStyle: CropStyle.circle,
                                               sourcePath: fileInJpg.path,
@@ -242,11 +244,11 @@ class _ProfilePageState extends State<ProfilePage> with ImagePickerMixin {
                                                 ),
                                               ],
                                             );
-                      
+
                                             final output = croppedFile?.path;
-                      
+
                                             // print('22222222222222222222222 ${output}');
-                      
+
                                             croppedImagePath.value = output;
                                             croppedImagePath.notifyListeners();
                                           });
@@ -255,11 +257,11 @@ class _ProfilePageState extends State<ProfilePage> with ImagePickerMixin {
                                     },
                                   ),
                                   // DP
-                      
+
                                   // const Spacer(),
-                      
+
                                   SizedBox(height: 15.h),
-                      
+
                                   // Top Section
                                   Column(
                                     // crossAxisAlignment: CrossAxisAlignment.center,
@@ -299,7 +301,7 @@ class _ProfilePageState extends State<ProfilePage> with ImagePickerMixin {
                                                       : model.data![0].employee!.joiningDate == ''
                                                           ? '-'
                                                           : UtilityFunctions.convertIntoNormalDateStringFromDateTimeString(model.data![0].employee!.joiningDate ?? '2014-05-27 08:53:53'),
-                      
+
                                                   textAlign: TextAlign.justify,
                                                   style: AppStyles.poppins.copyWith(fontSize: 14.w, color: Colors.grey[800]),
                                                 ),
@@ -333,9 +335,9 @@ class _ProfilePageState extends State<ProfilePage> with ImagePickerMixin {
                                     ],
                                   ),
                                   // Top Section
-                      
+
                                   SizedBox(height: 30.h),
-                      
+
                                   // Below
                                   Container(
                                     decoration: BoxDecoration(

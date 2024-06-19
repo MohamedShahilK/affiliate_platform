@@ -1,9 +1,12 @@
 // ignore_for_file: lines_longer_than_80_chars
 
+import 'dart:io';
+
 import 'package:affiliate_platform/config/ripple.dart';
 import 'package:delightful_toast/delight_toast.dart';
 import 'package:delightful_toast/toast/components/toast_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -182,7 +185,7 @@ Future<bool?> showWarningDialog(
             vertical: 10.h,
           ),
           title: Text(
-           title,
+            title,
             style: TextStyle(
               fontSize: 13.w,
               color: const Color.fromARGB(255, 104, 0, 239),
@@ -240,4 +243,100 @@ Future<bool?> showWarningDialog(
     },
   );
   return isTrue;
+}
+
+Future<void> appExitDialog(BuildContext context) async {
+  await showDialog(
+    barrierDismissible: false,
+    context: context,
+    builder: (BuildContext context) {
+      return MediaQuery.withClampedTextScaling(
+        minScaleFactor: 0.85, // set min scale value here
+        maxScaleFactor: .95,
+        child: AlertDialog(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            side: const BorderSide(color: Colors.purple),
+            borderRadius: BorderRadius.circular(15.r),
+          ),
+          actionsPadding: EdgeInsets.symmetric(
+            horizontal: 12.w,
+            vertical: 15.h,
+          ),
+          iconPadding: EdgeInsets.symmetric(horizontal: 12.w),
+          buttonPadding: EdgeInsets.symmetric(horizontal: 12.w),
+          contentPadding: EdgeInsets.symmetric(horizontal: 12.w),
+          // insetPadding: EdgeInsets.only(
+          //   bottom: 50.h,
+          //   left: 15.w,
+          //   right: 15.w,
+          // ),
+          titlePadding: EdgeInsets.symmetric(
+            horizontal: 12.w,
+            vertical: 10.h,
+          ),
+          title: Text(
+            'Exit',
+            style: TextStyle(
+              fontSize: 13.w,
+              color: const Color.fromARGB(255, 104, 0, 239),
+            ),
+          ),
+          content: Text(
+            'Are you want to exit from app?',
+            style: TextStyle(fontSize: 14.w),
+          ),
+          actions: <Widget>[
+            SizedBox(
+              height: 35.h,
+              child: OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  side: const BorderSide(
+                    // color: Color.fromARGB(255, 209, 174, 226),
+                    color: Colors.transparent,
+                  ),
+                  // foregroundColor: const Color.fromARGB(255, 146, 80, 177),
+                  backgroundColor: const Color.fromARGB(255, 146, 80, 177),
+                  foregroundColor: Colors.white,
+                ),
+                onPressed: () async {
+                  if (Platform.isAndroid) {
+                    // It is Ok
+                    await SystemNavigator.pop();
+                  } else if (Platform.isIOS) {
+                    // Warning: Do not call the exit function. Applications calling exit will appear to the user to have crashed, rather than performing a graceful termination and animating back to the Home screen.
+                    exit(0);
+                  }
+                },
+                child: Text(
+                  'Exit',
+                  style: TextStyle(fontSize: 13.w),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 35.h,
+              child: OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  side: const BorderSide(
+                    color: Color.fromARGB(255, 209, 174, 226),
+                  ),
+                  // backgroundColor:
+                  //     Color.fromARGB(255, 146, 80, 177),
+                  foregroundColor: const Color.fromARGB(255, 146, 80, 177),
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  'Cancel',
+                  style: TextStyle(fontSize: 13.w),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    },
+  );
 }

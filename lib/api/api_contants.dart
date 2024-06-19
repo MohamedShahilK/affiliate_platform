@@ -46,7 +46,7 @@ class EndPoints {
   static const getProfileView = '/profile/view';
 
   // Leave
-  static const getAllLeaves= '/leaves/leave_list';
+  static const getAllLeaves = '/leaves/leave_list';
   static const leaveForm = '/leaves/leave_form';
   static const submitLeaveForm = '/leaves/leave_submit';
   static const submitLeaveEditForm = '/leaves/leave_edit_submit';
@@ -54,4 +54,7 @@ class EndPoints {
 
   // User
   static const userDetails = '/users/get_data';
+
+  // Settings
+  static const changePassword = '/settings/change';
 }

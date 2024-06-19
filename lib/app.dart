@@ -7,6 +7,7 @@ import 'package:affiliate_platform/logic/employee/leave/leave_bloc.dart';
 import 'package:affiliate_platform/logic/employee/project/project_bloc.dart';
 import 'package:affiliate_platform/logic/manage_contact/manage_contact_bloc.dart';
 import 'package:affiliate_platform/logic/profile/profile_bloc.dart';
+import 'package:affiliate_platform/logic/settings/settings_bloc.dart';
 import 'package:affiliate_platform/splash.dart';
 import 'package:affiliate_platform/utils/l10n/l10n.dart';
 import 'package:affiliate_platform/view/employee/checkin/checkin_page.dart';
@@ -63,6 +64,10 @@ class App extends StatelessWidget {
               ),
               Provider(
                 create: (context) => LeaveBloc(),
+                dispose: (context, bloc) => bloc.dispose(),
+              ),
+              Provider(
+                create: (context) => SettingsBloc(),
                 dispose: (context, bloc) => bloc.dispose(),
               ),
             ],

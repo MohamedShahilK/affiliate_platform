@@ -44,8 +44,9 @@ class _CheckOutPageState extends State<CheckOutPage> {
   Widget build(BuildContext context) {
     final checkoutBloc = Provider.of<CheckOutBloc>(context);
     return PopScope(
-      onPopInvoked: (didPop) {
-        Navigator.pop(context);
+      canPop: false,
+      onPopInvoked: (bool didPop) async {
+        await appExitDialog(context);
       },
       child: CustomScaffold(
         key: _refreshKey,

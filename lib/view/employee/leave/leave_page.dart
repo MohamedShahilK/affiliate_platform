@@ -10,7 +10,6 @@ import 'package:affiliate_platform/utils/utility_functions.dart';
 import 'package:affiliate_platform/view/common/custom_header.dart';
 import 'package:affiliate_platform/view/common/custom_scafflod.dart';
 import 'package:affiliate_platform/view/employee/leave/new_leave.dart';
-import 'package:affiliate_platform/view/employee/leave/view_leave.dart';
 import 'package:affiliate_platform/view/manage_contact/manage_contact.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
@@ -44,8 +43,9 @@ class _LeavePageState extends State<LeavePage> {
   Widget build(BuildContext context) {
     final leaveBloc = Provider.of<LeaveBloc>(context);
     return PopScope(
-      onPopInvoked: (didPop) {
-        Navigator.pop(context);
+      canPop: false,
+      onPopInvoked: (bool didPop) async {
+        await appExitDialog(context);
       },
       child: CustomScaffold(
         key: _refreshKey,

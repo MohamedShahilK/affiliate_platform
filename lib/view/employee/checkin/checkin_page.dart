@@ -45,8 +45,9 @@ class _CheckInPageState extends State<CheckInPage> {
   Widget build(BuildContext context) {
     final checkinBloc = Provider.of<CheckInBloc>(context);
     return PopScope(
-      onPopInvoked: (didPop) {
-        Navigator.pop(context);
+      canPop: false,
+      onPopInvoked: (bool didPop) async {
+        await appExitDialog(context);
       },
       child: CustomScaffold(
         key: _refreshKey,
@@ -511,7 +512,7 @@ class _ProjectCard extends StatelessWidget {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => ViewCheckIn(checkInId: checkInId,isCheckoutDone: true),
+                                    builder: (context) => ViewCheckIn(checkInId: checkInId, isCheckoutDone: true),
                                   ),
                                 );
                               });

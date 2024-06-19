@@ -1,5 +1,6 @@
 // ignore_for_file: lines_longer_than_80_chars
 
+import 'package:affiliate_platform/utils/custom_tools.dart';
 import 'package:affiliate_platform/view/common/custom_header.dart';
 import 'package:affiliate_platform/view/common/custom_scafflod.dart';
 import 'package:affiliate_platform/view/common/sidebar.dart';
@@ -26,8 +27,9 @@ class _AttendancePageState extends State<AttendancePage> {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      onPopInvoked: (didPop) {
-        Navigator.pop(context);
+      canPop: false,
+      onPopInvoked: (bool didPop) async {
+        await appExitDialog(context);
       },
       child: CustomScaffold(
         key: _refreshKey,
@@ -121,7 +123,7 @@ class _AttendancePageState extends State<AttendancePage> {
                               alignment: Alignment.center,
                               width: 100.w,
                               color: Colors.green,
-                              child:  Text('P', style: TextStyle(color: Colors.white, fontSize: 11.w, fontWeight: FontWeight.w900)),
+                              child: Text('P', style: TextStyle(color: Colors.white, fontSize: 11.w, fontWeight: FontWeight.w900)),
                             ),
                           ),
                         ],

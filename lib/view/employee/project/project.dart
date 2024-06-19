@@ -47,8 +47,9 @@ class _ProjectPageState extends State<ProjectPage> {
   Widget build(BuildContext context) {
     final projectBloc = Provider.of<ProjectBloc>(context);
     return PopScope(
-      onPopInvoked: (didPop) {
-        Navigator.pop(context);
+      canPop: false,
+      onPopInvoked: (bool didPop) async {
+        await appExitDialog(context);
       },
       child: CustomScaffold(
         key: _refreshKey,

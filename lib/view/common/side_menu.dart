@@ -17,6 +17,7 @@ import 'package:affiliate_platform/view/employee/leave/leave_page.dart';
 import 'package:affiliate_platform/view/employee/project/project.dart';
 import 'package:affiliate_platform/view/manage_contact/manage_contact.dart';
 import 'package:affiliate_platform/view/profile/profile_page.dart';
+import 'package:affiliate_platform/view/settings/change_password_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -207,14 +208,15 @@ class SideMenu extends StatelessWidget {
                                     },
                                   ),
                                   DrawerListTile(
-                                    title: 'Settings',
+                                    title: 'Change Password',
                                     icon: Icons.account_tree_outlined,
                                     removeBorder: true,
                                     svgHeight: 15,
                                     textFont: 13,
                                     press: () {
-                                      menu.setMyMenu('Settings');
+                                      menu.setMyMenu('Change Password');
                                       menu.setmyMenuExpand('Employee');
+                                      _handlePageNavigation(context, route: const ChangePassword());
                                       // _handlePageNavigation(context, '/masterreport');
                                     },
                                   ),

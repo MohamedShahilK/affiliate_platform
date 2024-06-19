@@ -54,8 +54,9 @@ class _ManageContactPageState extends State<ManageContactPage> {
   Widget build(BuildContext context) {
     final manageContactBloc = Provider.of<ManageContactBloc>(context);
     return PopScope(
-      onPopInvoked: (didPop) {
-        Navigator.pop(context);
+      canPop: false,
+      onPopInvoked: (bool didPop) async {
+        await appExitDialog(context);
       },
       child: GestureDetector(
         // onTap: _handleLocaleChanged,
