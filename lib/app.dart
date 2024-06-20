@@ -1,7 +1,7 @@
 import 'package:affiliate_platform/config/flavor_banner.dart';
 import 'package:affiliate_platform/controllers/sidemenu_controller.dart';
+import 'package:affiliate_platform/logic/attendance/attendance_bloc.dart';
 import 'package:affiliate_platform/logic/auth/auth_bloc.dart';
-import 'package:affiliate_platform/logic/employee/attendance/attendance_bloc.dart';
 import 'package:affiliate_platform/logic/employee/checkin/checkin_bloc.dart';
 import 'package:affiliate_platform/logic/employee/checkout/checkout_bloc.dart';
 import 'package:affiliate_platform/logic/employee/leave/leave_bloc.dart';
