@@ -306,10 +306,12 @@ class _CheckInPageState extends State<CheckInPage> {
                                         projectId = checkInFormModel?.data?[0].projectList?.firstWhere((e) => e.name == checkinBloc.projectFilterStream.value).id;
                                       }
 
-                                      if (UtilityFunctions.isSecondDateBeforeFirst(
-                                        firstDateStr: checkinBloc.checkInFromDateFilterStream.value,
-                                        secondDateStr: checkinBloc.checkInToDateFilterStream.value,
-                                      )) {
+                                      if (checkinBloc.checkInFromDateFilterStream.value != '' &&
+                                          checkinBloc.checkInFromDateFilterStream.value != '' &&
+                                          UtilityFunctions.isSecondDateBeforeFirst(
+                                            firstDateStr: checkinBloc.checkInFromDateFilterStream.value,
+                                            secondDateStr: checkinBloc.checkInToDateFilterStream.value,
+                                          )) {
                                         await erroMotionToastInfo(context, msg: 'To Date must not be earlier than From Date');
                                         Loader.hide();
                                         return;

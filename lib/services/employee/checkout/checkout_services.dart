@@ -21,7 +21,13 @@ class CheckOutServices {
   final api = Api();
 
   // Get All Contacts
-  Future<GetAllCheckouts?> getAllCheckouts() async {
+  Future<GetAllCheckouts?> getAllCheckouts({
+    String? employeeSearch,
+    String? projectSearch,
+    String? checkOutFrom,
+    String? checkOutTo,
+    String? checkOutStatus,
+  }) async {
     try {
       final token = StorageServices.to.getString(StorageServicesKeys.token);
       final haveToken = token.isNotEmpty;
@@ -34,10 +40,13 @@ class CheckOutServices {
               'Authorization': 'Bearer $token',
             },
           ),
-          // queryParameters: {
-          //   'out_date_search': '01/06/2024',
-          //   'out_date_search_2': '08/06/2024',
-          // },
+          queryParameters: {
+            'employee_search': employeeSearch,
+            'project_search': projectSearch,
+            'out_date_search': checkOutFrom,
+            'out_date_search_2': checkOutTo,
+            'out_status': checkOutStatus,
+          },
           EndPoints.getAllCheckouts,
         );
 

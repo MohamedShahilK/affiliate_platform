@@ -1,9 +1,11 @@
 // ignore_for_file: lines_longer_than_80_chars
 
 import 'package:affiliate_platform/app.dart';
+import 'package:affiliate_platform/models/employee/checkin/get_checkin_form.dart';
 import 'package:affiliate_platform/models/employee/checkout/get_allcheckout.dart';
 import 'package:affiliate_platform/models/employee/checkout/get_checkout_form_model.dart';
 import 'package:affiliate_platform/models/employee/checkout/get_checkout_view.dart';
+import 'package:affiliate_platform/services/employee/checkin/checkin_services.dart';
 import 'package:affiliate_platform/services/employee/checkout/checkout_services.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -66,16 +68,40 @@ class CheckOutBloc {
   final breakHrsStream = BehaviorSubject<String>.seeded('');
   final breakRemarkStream = BehaviorSubject<String>.seeded('');
 
+  // Filtering
+  final employeeFilterStream = BehaviorSubject<String>.seeded('');
+  final projectFilterStream = BehaviorSubject<String>.seeded('');
+  final checkOutFromDateFilterStream = BehaviorSubject<String>.seeded('');
+  final checkOutToDateFilterStream = BehaviorSubject<String>.seeded('');
+  final checkOutStatusFilterStream = BehaviorSubject<String>.seeded('');
+
+  final getCheckInFormStream = BehaviorSubject<GetCheckinForm?>();
+
   Future<void> initDetails() async {
     await getAllCheckouts();
-    // await getContactForm();
+    await getCheckinForm();
   }
 
-  Future<void> getAllCheckouts() async {
+  Future<void> getCheckinForm() async {
+    final respModel = await CheckInServices().getCheckinForm();
+    getCheckInFormStream.add(respModel);
+  }
+
+  Future<void> getAllCheckouts({
+    String? employeeId,
+    String? projectId,
+    String? outStatusID,
+  }) async {
     // getAllCheckOutsStream.add(GetAllCheckouts(status: 'Loading', response: null, data: null));
     blocOficialLoaderNotifier.value = true;
     // getAllCheckOutsStream.add(null);
-    final respModel = await CheckOutServices().getAllCheckouts();
+    final respModel = await CheckOutServices().getAllCheckouts(
+      employeeSearch: employeeId,
+      projectSearch: projectId,
+      checkOutFrom: checkOutFromDateFilterStream.valueOrNull,
+      checkOutTo: checkOutToDateFilterStream.valueOrNull,
+      checkOutStatus: outStatusID,
+    );
     getAllCheckOutsStream.add(respModel);
     blocOficialLoaderNotifier.value = false;
   }
@@ -129,10 +155,10 @@ class CheckOutBloc {
   }) async {
     // print('222222222222222222 ${checkinTimeStream.value}');
     final respModel = CheckOutServices().formSubmitCheckOut(
-      dateTimeIdForCheckOut:dateTimeIdForCheckOut,
+      dateTimeIdForCheckOut: dateTimeIdForCheckOut,
       breakHours: breakHrsStream.value,
       breakHoursRemarks: breakRemarkStream.value,
-      checkInId:checkInId,
+      checkInId: checkInId,
       employee: employeeId,
       outTime: checkoutTimeStream.value,
       // dateTime: '2024-06-18 10:00:00',
