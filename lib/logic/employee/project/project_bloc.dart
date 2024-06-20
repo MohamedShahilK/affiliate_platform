@@ -4,10 +4,7 @@ import 'package:affiliate_platform/app.dart';
 import 'package:affiliate_platform/models/employee/project/get_all_projects.dart';
 import 'package:affiliate_platform/models/employee/project/project_form.dart';
 import 'package:affiliate_platform/models/employee/project/view_project.dart';
-import 'package:affiliate_platform/models/manage_contact/contact_form_model.dart';
-import 'package:affiliate_platform/models/manage_contact/contact_view_model.dart';
 import 'package:affiliate_platform/services/employee/project/project_services.dart';
-import 'package:affiliate_platform/services/manage_contact/manage_contact_services.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -35,15 +32,18 @@ class ProjectBloc {
   final startDateStream = BehaviorSubject<String>.seeded('');
   final endDateStream = BehaviorSubject<String>.seeded('');
   final descriptionStream = BehaviorSubject<String>.seeded('');
+  
+  final projectSearchStream = BehaviorSubject<String>.seeded('');
+  final projectStatusStream = BehaviorSubject<String>.seeded('');
 
   Future<void> initDetails() async {
     await getAllProjects();
     // await getContactForm();
   }
 
-  Future<void> getAllProjects() async {
+  Future<void> getAllProjects({String? statusId}) async {
     blocOficialLoaderNotifier.value = true;
-    final respModel = await ProjectServices().getAllProjects();
+    final respModel = await ProjectServices().getAllProjects(statusId: statusId, keywordSearch: projectSearchStream.valueOrNull);
     getAllProjectsStream.add(respModel);
     blocOficialLoaderNotifier.value = false;
   }
@@ -74,7 +74,7 @@ class ProjectBloc {
   }
 
   Future<Map<String, dynamic>?> projectEdit({required String projectId, required String? customerId, required String? quotationId}) async {
-    final respModel = ProjectServices().projectEdit(      
+    final respModel = ProjectServices().projectEdit(
       projectId: projectId,
       name: projectNameStream.value,
       description: descriptionStream.valueOrNull,

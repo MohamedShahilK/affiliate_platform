@@ -25,12 +25,15 @@ class ProjectServices {
   final api = Api();
 
   // Get All Contacts
-  Future<GetAllProjects?> getAllProjects() async {
+  Future<GetAllProjects?> getAllProjects({String? statusId, String? keywordSearch}) async {
     try {
       final token = StorageServices.to.getString(StorageServicesKeys.token);
       final haveToken = token.isNotEmpty;
       if (haveToken) {
-        final formData = FormData.fromMap({'status_search': '1'});
+        final formData = FormData.fromMap({
+          'status_search': statusId ?? '1',
+          'keyword_search': keywordSearch,
+        });
         final response = await api.dio?.post<Map<String, dynamic>>(
           options: Options(
             headers: {
@@ -72,6 +75,7 @@ class ProjectServices {
             },
           ),
           // queryParameters: {},
+
           EndPoints.projectForm,
         );
 

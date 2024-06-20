@@ -333,12 +333,12 @@ class _NewProjectState extends State<NewProject> {
                                 if (project.status != null && (project.status != '')) {
                                   final statusList = snapshot.data!.data![0].projectStatus ?? [];
 
-                                  var statusId = '0';
+                                  var statusId = '1';
 
                                   var status = '';
 
                                   // final oneItem = statusList.firstWhereOrNull((e) => e == getStatusId(status: project.status ?? '') );
-                                  final oneItem = statusList[int.parse(project.status ?? '0')];
+                                  final oneItem = statusList[int.parse(project.status ?? '1')];
                                   if (project.quotationRefr != '') {
                                     status = oneItem;
                                   }
@@ -495,6 +495,7 @@ class _NewProjectState extends State<NewProject> {
                                           // }
 
                                           await successMotionToastInfo(context, msg: resp['message'] as String);
+
                                           await bloc.getAllProjects();
                                           if (widget.isFromCheckInPage1 &&
                                               !widget.isFromCheckInPage2 &&
@@ -637,7 +638,21 @@ String getStatusId({required String status}) {
   } else if (status == 'On Hold') {
     return '3';
   } else {
-    return '-1';
+    return '1';
+  }
+}
+
+String getStatusName({required String statusId}) {
+  if (statusId == '0') {
+    return 'Inactive';
+  } else if (statusId == '1') {
+    return 'Active';
+  } else if (statusId == '2') {
+    return 'Completed';
+  } else if (statusId == '3') {
+    return 'On Hold';
+  } else {
+    return '1';
   }
 }
 
