@@ -36,4 +36,13 @@ class UtilityFunctions {
 
     return dayOfWeek;
   }
+
+  static bool isSecondDateBeforeFirst({required String firstDateStr, required String secondDateStr}) {
+    final dateFormat = DateFormat('dd/MM/yyyy');
+
+    final firstDate = dateFormat.parse(firstDateStr);
+    final secondDate = dateFormat.parse(secondDateStr);
+
+    return secondDate.isBefore(firstDate);
+  }
 }

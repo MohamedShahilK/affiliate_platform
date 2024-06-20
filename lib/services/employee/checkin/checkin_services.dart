@@ -22,7 +22,12 @@ class CheckInServices {
   final api = Api();
 
   // Get All Contacts
-  Future<GetAllCheckIns?> getAllCheckins() async {
+  Future<GetAllCheckIns?> getAllCheckins({
+    String? projectSearch,
+    String? checkInFrom,
+    String? checkInTo,
+    String? workFormId,
+  }) async {
     try {
       final token = StorageServices.to.getString(StorageServicesKeys.token);
       final haveToken = token.isNotEmpty;
@@ -35,7 +40,12 @@ class CheckInServices {
               'Authorization': 'Bearer $token',
             },
           ),
-          // queryParameters: {},
+          queryParameters: {
+            'project_search': projectSearch,
+            'checkin_date_search': checkInFrom,
+            'checkin_date_search_2': checkInTo,
+            'work_from': workFormId,
+          },
           EndPoints.getAllCheckins,
         );
 
@@ -145,7 +155,6 @@ class CheckInServices {
   }
 
   Future<Map<String, dynamic>?> formSubmitCheckin({
-
     required String employee,
     required String dateTime,
     required String workForm,
@@ -209,7 +218,6 @@ class CheckInServices {
               'Authorization': 'Bearer $token',
             },
           ),
-         
           data: formData,
           EndPoints.checkInFormSubmit,
         );

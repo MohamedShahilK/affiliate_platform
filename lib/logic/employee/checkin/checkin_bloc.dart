@@ -58,14 +58,29 @@ class CheckInBloc {
   final workFromStream = BehaviorSubject<String>.seeded('Office');
   final commentsStream = BehaviorSubject<String>.seeded('');
 
+  // Filtering
+  final employeeFilterStream = BehaviorSubject<String>.seeded('');
+  final projectFilterStream = BehaviorSubject<String>.seeded('');
+  final checkInFromDateFilterStream = BehaviorSubject<String>.seeded('');
+  final checkInToDateFilterStream = BehaviorSubject<String>.seeded('');
+  final workFromFilterStream = BehaviorSubject<String>.seeded('');
+
   Future<void> initDetails() async {
     await getAllCheckins();
     await getCheckinForm();
   }
 
-  Future<void> getAllCheckins() async {
+  Future<void> getAllCheckins({
+    String? projectId,
+    String? worfromId,
+  }) async {
     blocOficialLoaderNotifier.value = true;
-    final respModel = await CheckInServices().getAllCheckins();
+    final respModel = await CheckInServices().getAllCheckins(
+      projectSearch: projectId,
+      checkInFrom: checkInFromDateFilterStream.valueOrNull,
+      checkInTo: checkInToDateFilterStream.valueOrNull,
+      workFormId: worfromId,
+    );
     getAllCheckInsStream.add(respModel);
     blocOficialLoaderNotifier.value = false;
   }

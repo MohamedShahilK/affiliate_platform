@@ -164,7 +164,7 @@ class _ProjectPageState extends State<ProjectPage> {
                                   ),
                                   SizedBox(width: 20.w),
                                   Expanded(
-                                    child: AttendanceDropDown(
+                                    child: ProjectDropDown(
                                       textStream: projectBloc.projectStatusStream,
                                       heading: 'Project Status',
                                       hint: 'Select Project Status',
@@ -192,7 +192,7 @@ class _ProjectPageState extends State<ProjectPage> {
                                   child: Text('Filter', style: AppStyles.poppins.copyWith(fontSize: 10.w, color: Colors.white)),
                                 ).ripple(context, () async {
                                   customLoader(context);
-                                  
+
                                   try {
                                     await projectBloc.getAllProjects(statusId: getStatusId(status: projectBloc.projectStatusStream.value));
                                     Loader.hide();
@@ -203,12 +203,19 @@ class _ProjectPageState extends State<ProjectPage> {
                                   }
                                 }),
                               ),
-                              Column(
-                                children: List.generate(
-                                  (allProjectsRespModel == null) ? 5 : allProjectsRespModel.data![0].projectList!.length,
-                                  (index) => _ProjectCard(index: index, model: allProjectsRespModel, projectId: allProjectsRespModel?.data![0].projectList![index].id),
+                              if (allProjectsRespModel != null &&
+                                  allProjectsRespModel.data != null &&
+                                  allProjectsRespModel.data!.isNotEmpty &&
+                                  allProjectsRespModel.data![0].projectList != null &&
+                                  allProjectsRespModel.data![0].projectList!.isEmpty)
+                                const Center(child: Text('Not Data Found'))
+                              else
+                                Column(
+                                  children: List.generate(
+                                    (allProjectsRespModel == null) ? 5 : allProjectsRespModel.data![0].projectList!.length,
+                                    (index) => _ProjectCard(index: index, model: allProjectsRespModel, projectId: allProjectsRespModel?.data![0].projectList![index].id),
+                                  ),
                                 ),
-                              ),
                             ],
                           ),
                         ),
@@ -643,8 +650,8 @@ class _EachProjectSmallButtons extends StatelessWidget {
   }
 }
 
-class AttendanceDropDown extends StatefulWidget {
-  const AttendanceDropDown({
+class ProjectDropDown extends StatefulWidget {
+  const ProjectDropDown({
     // required this.controller,
     required this.textStream,
     required this.heading,
@@ -665,10 +672,10 @@ class AttendanceDropDown extends StatefulWidget {
   // final GetAttendanceModel? attendanceModel;
 
   @override
-  State<AttendanceDropDown> createState() => _NewContactDropDownState();
+  State<ProjectDropDown> createState() => _NewContactDropDownState();
 }
 
-class _NewContactDropDownState extends State<AttendanceDropDown> {
+class _NewContactDropDownState extends State<ProjectDropDown> {
   // final items = ['', 'a', 'b', 'c'];
 
   // String selectedValue = '';
