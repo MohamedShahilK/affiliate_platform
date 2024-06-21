@@ -295,11 +295,9 @@ class _AttendancePageState extends State<AttendancePage> {
                                     attendanceDataList.length,
                                     (index) => DataRow(
                                       cells: [
-                                        DataCell(Flexible(child: Center(child: Text((index + 1).toString(), style: TextStyle(fontSize: 10.w))))),
+                                        DataCell(Center(child: Text((index + 1).toString(), style: TextStyle(fontSize: 10.w)))),
                                         DataCell(
-                                          Flexible(
-                                            child: Center(child: Text(UtilityFunctions().getDayOfWeek(attendanceDataList?[index].date ?? '10-05-2024'), style: TextStyle(fontSize: 10.w))),
-                                          ),
+                                          Center(child: Text(UtilityFunctions().getDayOfWeek(attendanceDataList?[index].date ?? '10-05-2024'), style: TextStyle(fontSize: 10.w))),
                                         ),
                                         DataCell(
                                           Container(

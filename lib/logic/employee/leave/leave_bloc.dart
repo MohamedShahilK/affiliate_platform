@@ -37,15 +37,30 @@ class LeaveBloc {
   final approvedByStream = BehaviorSubject<String>.seeded('');
   final approvedOnStream = BehaviorSubject<String>.seeded('');
 
+  // Filtering
+  final employeeFilterStream = BehaviorSubject<String>.seeded('');
+  final leaveTypeFilterStream = BehaviorSubject<String>.seeded('');
+  final leaveFromDateFilterStream = BehaviorSubject<String>.seeded('');
+  final leaveToDateFilterStream = BehaviorSubject<String>.seeded('');
+  final leaveStatusFilterStream = BehaviorSubject<String>.seeded('');
+
   Future<void> initDetails() async {
     await getAllLeaves();
     await getLeaveForm();
     await userDetails();
   }
 
-  Future<void> getAllLeaves() async {
+  Future<void> getAllLeaves({
+    String? leaveApprovalStatusId,
+    String? leaveTypeId,
+  }) async {
     blocOficialLoaderNotifier.value = true;
-    final respModel = await LeavesServices().getAllLeaves();
+    final respModel = await LeavesServices().getAllLeaves(
+      leaveFromDate: leaveFromDateFilterStream.valueOrNull,
+      leaveToDate: leaveToDateFilterStream.valueOrNull,
+      leaveApprovalStatus: leaveApprovalStatusId,
+      leaveType: leaveTypeId,
+    );
     getAllLeavesStream.add(respModel);
     blocOficialLoaderNotifier.value = false;
   }
@@ -117,7 +132,7 @@ class LeaveBloc {
     return respModel;
   }
 
-    Future<bool> deleteLeave({required String leaveId}) async {
+  Future<bool> deleteLeave({required String leaveId}) async {
     var isDeleted = false;
 
     final jsonData = await LeavesServices().deleteLeave(leaveId: leaveId);

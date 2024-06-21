@@ -22,12 +22,25 @@ class LeavesServices {
   final api = Api();
 
   // Get All Contacts
-  Future<GetAllLeaves?> getAllLeaves() async {
+  Future<GetAllLeaves?> getAllLeaves({
+    String? leaveFromDate,
+    String? leaveToDate,
+    String? leaveApprovalStatus,
+    String? leaveType,
+  }) async {
     try {
       final token = StorageServices.to.getString(StorageServicesKeys.token);
       final haveToken = token.isNotEmpty;
       if (haveToken) {
-        final response = await api.dio?.get<Map<String, dynamic>>(
+        print('55555555555555555555555555555555555555 $leaveType');
+        final formData = FormData.fromMap({
+          // 'employee': employee,
+          'leave_date': leaveFromDate,
+          'leave_date_2': leaveToDate,
+          'approval_status': leaveApprovalStatus,
+          'leave_type': leaveType,
+        });
+        final response = await api.dio?.post<Map<String, dynamic>>(
           options: Options(
             headers: {
               // 'accept': '*/*',
@@ -36,6 +49,7 @@ class LeavesServices {
             },
           ),
           // queryParameters: {},
+          data: formData,
           EndPoints.getAllLeaves,
         );
 
