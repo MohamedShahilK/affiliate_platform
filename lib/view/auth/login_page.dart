@@ -5,6 +5,7 @@ import 'dart:ui';
 
 import 'package:affiliate_platform/config/ripple.dart';
 import 'package:affiliate_platform/logic/auth/auth_bloc.dart';
+import 'package:affiliate_platform/logic/manage_contact/manage_contact_bloc.dart';
 import 'package:affiliate_platform/utils/constants/string_constants.dart';
 import 'package:affiliate_platform/utils/constants/styles.dart';
 import 'package:affiliate_platform/utils/custom_tools.dart';
@@ -331,6 +332,8 @@ class _LoginPageState extends State<LoginPage> {
                                   // Saving token in to SharedPreference
 
                                   // await authBloc.validateToken(token: token);
+
+                                  await context.read<ManageContactBloc>().getAllContacts();
 
                                   await Navigator.pushAndRemoveUntil(
                                     context,

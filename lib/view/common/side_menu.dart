@@ -9,7 +9,10 @@ import 'package:affiliate_platform/logic/employee/project/project_bloc.dart';
 import 'package:affiliate_platform/logic/manage_contact/manage_contact_bloc.dart';
 import 'package:affiliate_platform/logic/profile/profile_bloc.dart';
 import 'package:affiliate_platform/models/employee/checkin/get_checkin_view.dart';
+import 'package:affiliate_platform/utils/constants/string_constants.dart';
 import 'package:affiliate_platform/utils/custom_tools.dart';
+import 'package:affiliate_platform/utils/internal_services/storage_services.dart';
+import 'package:affiliate_platform/view/auth/login_page.dart';
 import 'package:affiliate_platform/view/employee/attendance/attendance.dart';
 import 'package:affiliate_platform/view/employee/checkin/checkin_page.dart';
 import 'package:affiliate_platform/view/employee/checkout/checkout_page.dart';
@@ -18,6 +21,7 @@ import 'package:affiliate_platform/view/employee/project/project.dart';
 import 'package:affiliate_platform/view/manage_contact/manage_contact.dart';
 import 'package:affiliate_platform/view/profile/profile_page.dart';
 import 'package:affiliate_platform/view/settings/change_password_page.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -226,15 +230,56 @@ class SideMenu extends StatelessWidget {
                           ),
                         ),
                         const Spacer(),
-                        Padding(
-                          padding: EdgeInsets.only(bottom: 10.h),
-                          child: DrawerListTile(
-                            noTopPadding: true,
-                            title: 'LogOut',
-                            svgHeight: 17,
-                            svgSrc: 'assets/icons/logout2.svg',
-                            press: () {},
-                          ),
+                        // Padding(
+                        //   padding: EdgeInsets.only(bottom: 10.h),
+                        //   child: DrawerListTile(
+                        //     noTopPadding: true,
+                        //     title: 'LogOut',
+                        //     svgHeight: 17,
+                        //     svgSrc: 'assets/icons/logout2.svg',
+                        //     press: () {},
+                        //   ),
+                        // ),
+                        Align(
+                          alignment: Alignment.bottomRight,
+                          child: Container(
+                            margin: EdgeInsets.only(bottom: 10.h, right: 20.w),
+                            padding: EdgeInsets.only(top: 10.h, bottom: 10.h, left: 20.w, right: 20.w),
+                            decoration: BoxDecoration(color: Colors.red, borderRadius: BorderRadius.circular(13.r)),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  'Logout',
+                                  style: TextStyle(color: Colors.white, fontSize: 15.w),
+                                ),
+                                // const Spacer(),
+                                SizedBox(width: 7.w),
+                                Icon(Icons.power_settings_new_rounded, size: 22.w, color: Colors.white),
+                              ],
+                            ),
+                          ).ripple(context, () async {
+                            final isTrue = await showWarningDialog(
+                              context,
+                              title: 'Logout',
+                              description: 'Are you sure want to logout?',
+                              yes: 'Yes',
+                              no: 'No',
+                              yesColor: Colors.red[700]!,
+                            );
+
+                            if (isTrue != null && isTrue) {
+                              await StorageServices.to.remove(StorageServicesKeys.token).then((value) {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const LoginPage(),
+                                  ),
+                                );
+                              });
+                            }
+                          }),
                         ),
                       ],
                     ),
