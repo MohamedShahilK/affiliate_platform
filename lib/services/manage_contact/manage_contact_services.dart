@@ -24,6 +24,64 @@ class ManageContactSevices {
 
   final api = Api();
 
+  Future<Map<String, dynamic>?> userDetails() async {
+    try {
+      final token = StorageServices.to.getString(StorageServicesKeys.token);
+      final haveToken = token.isNotEmpty;
+      if (haveToken) {
+        final response = await api.dio?.get<Map<String, dynamic>>(
+          options: Options(
+            headers: {
+              // 'accept': '*/*',
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer $token',
+            },
+          ),
+          // queryParameters: {},
+          EndPoints.userDetails,
+        );
+
+        // final respModel = GetAllLeaves.fromJson(response!.data ?? {});
+
+        return response?.data;
+      }
+      return null;
+    } catch (e) {
+      Loader.hide();
+      print('userDetails Error :- $e');
+      return null;
+    }
+  }
+
+   Future<Map<String, dynamic>?> userPermissions() async {
+    try {
+      final token = StorageServices.to.getString(StorageServicesKeys.token);
+      final haveToken = token.isNotEmpty;
+      if (haveToken) {
+        final response = await api.dio?.get<Map<String, dynamic>>(
+          options: Options(
+            headers: {
+              // 'accept': '*/*',
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer $token',
+            },
+          ),
+          // queryParameters: {},
+          EndPoints.userPermissions,
+        );
+
+        // final respModel = GetAllLeaves.fromJson(response!.data ?? {});
+
+        return response?.data;
+      }
+      return null;
+    } catch (e) {
+      Loader.hide();
+      print('userPermissions Error :- $e');
+      return null;
+    }
+  }
+
   // Get All Contacts
   Future<GetAllContactsAndUsers?> getAllContacts() async {
     try {

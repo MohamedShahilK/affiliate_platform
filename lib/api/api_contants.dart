@@ -54,6 +54,7 @@ class EndPoints {
 
   // User
   static const userDetails = '/users/get_data';
+  static const userPermissions = '/permission/get_user_permissions';
 
   // Settings
   static const changePassword = '/settings/change';

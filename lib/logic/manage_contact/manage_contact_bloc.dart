@@ -5,7 +5,6 @@ import 'package:affiliate_platform/models/manage_contact/all_contacts.dart';
 import 'package:affiliate_platform/models/manage_contact/contact_edit_submission_model.dart';
 import 'package:affiliate_platform/models/manage_contact/contact_form_model.dart';
 import 'package:affiliate_platform/models/manage_contact/contact_view_model.dart';
-import 'package:affiliate_platform/services/employee/leave/leave_services.dart';
 import 'package:affiliate_platform/services/manage_contact/manage_contact_services.dart';
 import 'package:affiliate_platform/utils/constants/string_constants.dart';
 import 'package:affiliate_platform/utils/internal_services/storage_services.dart';
@@ -45,9 +44,10 @@ class ManageContactBloc {
   final followupDateStream = BehaviorSubject<String>.seeded('');
 
   Future<void> initDetails() async {
+    await userDetails();
+    await userPermissions();
     await getAllContacts();
     await getContactForm();
-    await userDetails();
   }
 
   Future<void> getAllContacts() async {
@@ -191,7 +191,7 @@ class ManageContactBloc {
   }
 
   Future<void> userDetails() async {
-    final respModel = await LeavesServices().userDetails();
+    final respModel = await ManageContactSevices().userDetails();
     if (respModel != null) {
       final data = respModel['data'];
 
@@ -209,16 +209,37 @@ class ManageContactBloc {
           // ignore: avoid_dynamic_calls
           final role = users[0]['role'] as String?;
           if (firstName != null) {
-            print('11111111111111111111111 $firstName');
+            // print('11111111111111111111111 $firstName');
             await StorageServices.to.setString(StorageServicesKeys.firstName, firstName);
           }
           if (role != null) {
-            print('11111111111111111111111 $role');
+            // print('11111111111111111111111 $role');
             await StorageServices.to.setString(StorageServicesKeys.role, role);
           }
         }
       }
     }
+  }
+
+  Future<void> userPermissions() async {
+    final respJson = await ManageContactSevices().userPermissions();
+
+    if (respJson != null) {
+      final data = respJson['data'] as Map<String, dynamic>?;
+      // ignore: inference_failure_on_collection_literal
+      if (data != null) {
+        final permissions = data['permissions'] as List?;
+        // print('222222222222222222222222222222222222222 $permissions');
+
+        if (permissions != null && permissions.isNotEmpty) {
+          final permsList = permissions.map((e) => e.toString()).toList();
+          await StorageServices.to.setList(StorageServicesKeys.permissionsList, permsList);
+          // print('33333333333333333333333333333 ${permissions.runtimeType}');
+        }
+      }
+    }
+
+    // return respJson;
   }
 
   void clearStreams() {
