@@ -36,9 +36,9 @@ class AttendanceServices {
           EndPoints.getAttendance,
         );
 
-        print('4444444444444444444444444444444444 ${response!.data}');
+        // print('4444444444444444444444444444444444 ${response!.data}');
 
-        final respModel = GetAttendanceModel.fromJson(response.data ?? {});
+        final respModel = GetAttendanceModel.fromJson(response?.data ?? {});
 
         return respModel;
       }

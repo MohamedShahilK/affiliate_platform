@@ -47,7 +47,7 @@ class LeaveBloc {
   Future<void> initDetails() async {
     await getAllLeaves();
     await getLeaveForm();
-    await userDetails();
+
   }
 
   Future<void> getAllLeaves({
@@ -70,21 +70,7 @@ class LeaveBloc {
     getLeaveFormStream.add(respModel);
   }
 
-  Future<void> userDetails() async {
-    final respModel = await LeavesServices().userDetails();
-    if (respModel != null) {
-      final data = respModel['data'];
 
-      if (data is List? && data != null && data.isNotEmpty) {
-        final item = data[0] as Map?;
-        final userId = item?['user_ID'] as String?;
-
-        if (userId != null) {
-          await StorageServices.to.setString(StorageServicesKeys.userId, userId);
-        }
-      }
-    }
-  }
 
   Future<Map<String, dynamic>?> submitLeaveForm({
     required String employeeId,

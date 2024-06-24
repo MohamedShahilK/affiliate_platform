@@ -1,5 +1,9 @@
+// ignore_for_file: lines_longer_than_80_chars
+
 import 'package:affiliate_platform/config/ripple.dart';
+import 'package:affiliate_platform/utils/constants/string_constants.dart';
 import 'package:affiliate_platform/utils/constants/styles.dart';
+import 'package:affiliate_platform/utils/internal_services/storage_services.dart';
 import 'package:affiliate_platform/view/profile/edit_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -85,12 +89,19 @@ class CustomHeader extends StatelessWidget {
 
                   const Spacer(),
                   if (!isBackButtonNeeded)
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text('Welcome, Mohamed', style: AppStyles.openSans.copyWith(fontSize: 12.w, color: Colors.black)),
-                        Text('EMPLOYEE', style: AppStyles.openSans.copyWith(fontSize: 12.w, color: Colors.black)),
-                      ],
+                    Builder(
+                      builder: (context) {
+                        final role =   StorageServices.to.getString(StorageServicesKeys.role);
+                        final firstName =   StorageServices.to.getString(StorageServicesKeys.firstName);
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text('Welcome, $firstName', style: AppStyles.openSans.copyWith(fontSize: 12.w, color: Colors.black)),
+                            // Text('EMPLOYEE', style: AppStyles.openSans.copyWith(fontSize: 12.w, color: Colors.black)),
+                            Text(role, style: AppStyles.openSans.copyWith(fontSize: 12.w, color: Colors.black)),
+                          ],
+                        );
+                      },
                     ),
                   // Text('EMPLOYEE', style: TextStyle(fontSize: 12.w)),
 

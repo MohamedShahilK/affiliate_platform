@@ -28,11 +28,10 @@ class SettingsSevices {
       final token = StorageServices.to.getString(StorageServicesKeys.token);
       final haveToken = token.isNotEmpty;
       if (haveToken) {
-         final formData = FormData.fromMap({
+        final formData = FormData.fromMap({
           'current_password': currentPassword,
           'new_password': newPassword,
           'confirm_new_password': confirmNewPassword,
-      
         });
         final response = await api.dio?.post<Map<String, dynamic>>(
           options: Options(
@@ -47,9 +46,9 @@ class SettingsSevices {
           EndPoints.changePassword,
         );
 
-        print('4444444444444444444444444444444444 ${response!.data}');
+        // print('4444444444444444444444444444444444 ${response!.data}');
 
-        return response.data;
+        return response?.data ?? {};
       }
       return null;
     } catch (e) {

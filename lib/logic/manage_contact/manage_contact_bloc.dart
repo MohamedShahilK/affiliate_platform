@@ -5,7 +5,10 @@ import 'package:affiliate_platform/models/manage_contact/all_contacts.dart';
 import 'package:affiliate_platform/models/manage_contact/contact_edit_submission_model.dart';
 import 'package:affiliate_platform/models/manage_contact/contact_form_model.dart';
 import 'package:affiliate_platform/models/manage_contact/contact_view_model.dart';
+import 'package:affiliate_platform/services/employee/leave/leave_services.dart';
 import 'package:affiliate_platform/services/manage_contact/manage_contact_services.dart';
+import 'package:affiliate_platform/utils/constants/string_constants.dart';
+import 'package:affiliate_platform/utils/internal_services/storage_services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -44,6 +47,7 @@ class ManageContactBloc {
   Future<void> initDetails() async {
     await getAllContacts();
     await getContactForm();
+    await userDetails();
   }
 
   Future<void> getAllContacts() async {
@@ -184,6 +188,37 @@ class ManageContactBloc {
     );
 
     return respModel;
+  }
+
+  Future<void> userDetails() async {
+    final respModel = await LeavesServices().userDetails();
+    if (respModel != null) {
+      final data = respModel['data'];
+
+      if (data is List? && data != null && data.isNotEmpty) {
+        final item = data[0] as Map?;
+        final userId = item?['user_ID'] as String?;
+
+        if (userId != null) {
+          await StorageServices.to.setString(StorageServicesKeys.userId, userId);
+        }
+        final users = item?['users'] as List?;
+        if (users != null && users.isNotEmpty) {
+          // ignore: avoid_dynamic_calls
+          final firstName = users[0]['first_name'] as String?;
+          // ignore: avoid_dynamic_calls
+          final role = users[0]['role'] as String?;
+          if (firstName != null) {
+            print('11111111111111111111111 $firstName');
+            await StorageServices.to.setString(StorageServicesKeys.firstName, firstName);
+          }
+          if (role != null) {
+            print('11111111111111111111111 $role');
+            await StorageServices.to.setString(StorageServicesKeys.role, role);
+          }
+        }
+      }
+    }
   }
 
   void clearStreams() {

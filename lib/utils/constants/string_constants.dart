@@ -7,5 +7,7 @@ class StorageServicesKeys {
 
   // 
   static const String userId = 'userId';
+  static const String firstName = 'firstName';
+  static const String role = 'role';
 
 }

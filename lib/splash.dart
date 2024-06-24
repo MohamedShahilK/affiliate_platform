@@ -126,7 +126,7 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   Future<void> validLogin() async {
-    print('111111111111111111111111111111111111111');
+    // print('111111111111111111111111111111111111111');
     final authBloc = Provider.of<AuthBloc>(context, listen: false);
     // final authServices = AuthServices();
     final token = StorageServices.to.getString(StorageServicesKeys.token);
