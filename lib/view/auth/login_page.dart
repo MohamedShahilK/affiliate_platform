@@ -334,6 +334,9 @@ class _LoginPageState extends State<LoginPage> {
                                   // await authBloc.validateToken(token: token);
 
                                   await context.read<ManageContactBloc>().getAllContacts();
+                                  await context.read<ManageContactBloc>().getContactForm();
+                                  await context.read<ManageContactBloc>().userDetails();
+                                  await context.read<ManageContactBloc>().userPermissions();
 
                                   await Navigator.pushAndRemoveUntil(
                                     context,

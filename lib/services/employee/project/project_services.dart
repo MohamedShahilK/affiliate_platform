@@ -132,6 +132,8 @@ class ProjectServices {
     required String? endDate,
     required String? customerId,
     required String? quotationId,
+    required String? status,
+    required String? createdByEmployee,
   }) async {
     try {
       final token = StorageServices.to.getString(StorageServicesKeys.token);
@@ -144,6 +146,8 @@ class ProjectServices {
           'end_date': endDate,
           'customer_id': customerId,
           'quotation_id': quotationId,
+          'status': status,
+          'created_by': createdByEmployee,
         });
 
         final response = await api.dio?.post<Map<String, dynamic>>(
@@ -197,6 +201,8 @@ class ProjectServices {
     required String? endDate,
     required String? customerId,
     required String? quotationId,
+    required String? status,
+    required String? updatedByEmployee,
   }) async {
     try {
       final token = StorageServices.to.getString(StorageServicesKeys.token);
@@ -209,6 +215,8 @@ class ProjectServices {
           'end_date': endDate,
           'customer_id': customerId,
           'quotation_id': quotationId,
+          'status': status,
+          'updated_by': updatedByEmployee,
         });
 
         final response = await api.dio?.post<Map<String, dynamic>>(

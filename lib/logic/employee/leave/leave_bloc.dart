@@ -1,13 +1,9 @@
 // ignore_for_file: lines_longer_than_80_chars
 
-import 'dart:ffi';
-
 import 'package:affiliate_platform/app.dart';
 import 'package:affiliate_platform/models/employee/leave/leave_form_model.dart';
 import 'package:affiliate_platform/models/employee/leave/leave_model.dart';
 import 'package:affiliate_platform/services/employee/leave/leave_services.dart';
-import 'package:affiliate_platform/utils/constants/string_constants.dart';
-import 'package:affiliate_platform/utils/internal_services/storage_services.dart';
 import 'package:rxdart/rxdart.dart';
 
 class LeaveBloc {
@@ -47,15 +43,16 @@ class LeaveBloc {
   Future<void> initDetails() async {
     await getAllLeaves();
     await getLeaveForm();
-
   }
 
   Future<void> getAllLeaves({
     String? leaveApprovalStatusId,
     String? leaveTypeId,
+    String? employeeId,
   }) async {
     blocOficialLoaderNotifier.value = true;
     final respModel = await LeavesServices().getAllLeaves(
+      employeeId: employeeId,
       leaveFromDate: leaveFromDateFilterStream.valueOrNull,
       leaveToDate: leaveToDateFilterStream.valueOrNull,
       leaveApprovalStatus: leaveApprovalStatusId,
@@ -69,8 +66,6 @@ class LeaveBloc {
     final respModel = await LeavesServices().getLeaveForm();
     getLeaveFormStream.add(respModel);
   }
-
-
 
   Future<Map<String, dynamic>?> submitLeaveForm({
     required String employeeId,

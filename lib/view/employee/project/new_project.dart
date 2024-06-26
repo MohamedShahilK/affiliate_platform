@@ -5,8 +5,10 @@ import 'package:affiliate_platform/logic/employee/checkin/checkin_bloc.dart';
 import 'package:affiliate_platform/logic/employee/project/project_bloc.dart';
 import 'package:affiliate_platform/models/employee/project/project_form.dart';
 import 'package:affiliate_platform/models/employee/project/view_project.dart';
+import 'package:affiliate_platform/utils/constants/string_constants.dart';
 import 'package:affiliate_platform/utils/constants/styles.dart';
 import 'package:affiliate_platform/utils/custom_tools.dart';
+import 'package:affiliate_platform/utils/internal_services/storage_services.dart';
 import 'package:affiliate_platform/view/common/custom_header.dart';
 import 'package:affiliate_platform/view/common/custom_scafflod.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -487,8 +489,16 @@ class _NewProjectState extends State<NewProject> {
                                       if (widget.projectId == null && projectFormModel != null && projectFormModel.data != null && projectFormModel.data!.isNotEmpty) {
                                         final customerId = projectFormModel.data?[0].contactList?.firstWhereOrNull((e) => e.contactName == bloc.clientStream.value)?.contactID;
                                         final quotationId = projectFormModel.data?[0].quotationList?.firstWhereOrNull((e) => e.quoteRefr == bloc.quotationRefereneceStream.value)?.quoteID;
+                                        final createdByEmployee = StorageServices.to.getString(StorageServicesKeys.userId);
+                                        final statusID = getStatusId(status: bloc.statusStream.valueOrNull ?? 'Active');
 
-                                        final resp = await bloc.submitProjectForm(context, customerId: customerId, quotationId: quotationId);
+                                        final resp = await bloc.submitProjectForm(
+                                          context,
+                                          customerId: customerId,
+                                          quotationId: quotationId,
+                                          createdByEmployee: createdByEmployee,
+                                          status: statusID,
+                                        );
 
                                         if (resp != null && resp['status'] == 'SUCCESS' && resp['response'] == 'OK') {
                                           // if (!widget.isFromCheckInPage1) {
@@ -590,10 +600,19 @@ class _NewProjectState extends State<NewProject> {
                                         final customerId = projectFormModel.data?[0].contactList?.firstWhereOrNull((e) => e.contactName == bloc.clientStream.value)?.contactID;
                                         final quotationId = projectFormModel.data?[0].quotationList?.firstWhereOrNull((e) => e.quoteRefr == bloc.quotationRefereneceStream.value)?.quoteID;
 
+                                        final updatedByEmployee = StorageServices.to.getString(StorageServicesKeys.userId);
+                                        final statusID = getStatusId(status: bloc.statusStream.valueOrNull ?? 'Active');
+
                                         print('211231223213212323 $customerId');
                                         print('211231223213212323 $quotationId');
 
-                                        final resp = await bloc.projectEdit(projectId: widget.projectId ?? '', customerId: customerId, quotationId: quotationId);
+                                        final resp = await bloc.projectEdit(
+                                          projectId: widget.projectId ?? '',
+                                          customerId: customerId,
+                                          quotationId: quotationId,
+                                          updatedByEmployee:updatedByEmployee,
+                                          status:statusID,
+                                        );
 
                                         if (resp != null && resp['status'] == 'SUCCESS' && resp['response'] == 'OK') {
                                           Navigator.pop(context);

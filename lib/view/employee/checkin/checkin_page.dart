@@ -300,10 +300,16 @@ class _CheckInPageState extends State<CheckInPage> {
                                     ).ripple(context, () async {
                                       customLoader(context);
 
+                                      String? employeeId;
+
                                       String? projectId;
 
                                       if (checkinBloc.projectFilterStream.value != '') {
                                         projectId = checkInFormModel?.data?[0].projectList?.firstWhere((e) => e.name == checkinBloc.projectFilterStream.value).id;
+                                      }
+
+                                      if (checkinBloc.employeeFilterStream.value != '') {
+                                        employeeId = checkInFormModel?.data?[0].employeeList?.firstWhere((e) => e.firstName == checkinBloc.employeeFilterStream.value).userId;
                                       }
 
                                       if (checkinBloc.checkInFromDateFilterStream.value != '' &&
@@ -324,7 +330,7 @@ class _CheckInPageState extends State<CheckInPage> {
                                               : '';
                                       // print('22222222222222222222222222222 ${checkinBloc.workFromFilterStream.value}');
                                       try {
-                                        await checkinBloc.getAllCheckins(projectId: projectId, worfromId: workFromId);
+                                        await checkinBloc.getAllCheckins(employeeId: employeeId ,projectId: projectId, worfromId: workFromId);
                                         Loader.hide();
                                       } catch (e) {
                                         Loader.hide();

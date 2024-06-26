@@ -23,6 +23,7 @@ class CheckInServices {
 
   // Get All Contacts
   Future<GetAllCheckIns?> getAllCheckins({
+    String? employeeSearch,
     String? projectSearch,
     String? checkInFrom,
     String? checkInTo,
@@ -41,6 +42,7 @@ class CheckInServices {
             },
           ),
           queryParameters: {
+            'employee_search': employeeSearch,
             'project_search': projectSearch,
             'checkin_date_search': checkInFrom,
             'checkin_date_search_2': checkInTo,
@@ -231,7 +233,7 @@ class CheckInServices {
       return null;
     } catch (e) {
       Loader.hide();
-      print('viewCheckin Error :- $e');
+      print('formSubmitCheckin Error :- $e');
       return null;
     }
   }

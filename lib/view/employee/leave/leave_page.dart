@@ -286,10 +286,15 @@ class _LeavePageState extends State<LeavePage> {
                                         leaveTypeId = leaveFormModel?.data?[0].leavesType?.firstWhere((e) => e.name == leaveBloc.leaveTypeFilterStream.value).id;
                                       }
 
+                                      String? employeeId;
                                       String? approvalStatusId;
 
                                       if (leaveBloc.leaveStatusFilterStream.value != '') {
                                         approvalStatusId = leaveStatusId(status: leaveBloc.leaveStatusFilterStream.value);
+                                      }
+
+                                        if (leaveBloc.employeeFilterStream.value != '') {
+                                        employeeId = leaveFormModel?.data?[0].employeeList?.firstWhere((e) => e.firstName == leaveBloc.employeeFilterStream.value).id;
                                       }
 
                                       if (leaveBloc.leaveFromDateFilterStream.value != '' &&
@@ -308,6 +313,7 @@ class _LeavePageState extends State<LeavePage> {
                                         // print('22222222222222222222222222 $approvalStatusId');
                                         await leaveBloc.getAllLeaves(
                                           leaveTypeId: leaveTypeId,
+                                          employeeId: employeeId,
                                           leaveApprovalStatusId: approvalStatusId,
                                         );
                                         Loader.hide();

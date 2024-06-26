@@ -71,11 +71,13 @@ class CheckInBloc {
   }
 
   Future<void> getAllCheckins({
+    String? employeeId,
     String? projectId,
     String? worfromId,
   }) async {
     blocOficialLoaderNotifier.value = true;
     final respModel = await CheckInServices().getAllCheckins(
+      employeeSearch: employeeId,
       projectSearch: projectId,
       checkInFrom: checkInFromDateFilterStream.valueOrNull,
       checkInTo: checkInToDateFilterStream.valueOrNull,

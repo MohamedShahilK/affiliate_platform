@@ -316,7 +316,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                                       String? employeeId;
 
                                       if (checkoutBloc.employeeFilterStream.value != '') {
-                                        projectId = checkInFormModel?.data?[0].employeeList?.firstWhere((e) => e.firstName == checkoutBloc.employeeFilterStream.value).id;
+                                        projectId = checkInFormModel?.data?[0].employeeList?.firstWhere((e) => e.firstName == checkoutBloc.employeeFilterStream.value).userId;
                                       }
 
                                       if (checkoutBloc.checkOutFromDateFilterStream.value != '' &&

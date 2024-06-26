@@ -270,14 +270,27 @@ class SideMenu extends StatelessWidget {
                             );
 
                             if (isTrue != null && isTrue) {
-                              await StorageServices.to.remove(StorageServicesKeys.token).then((value) {
-                                Navigator.pushReplacement(
+                              // await StorageServices.to.remove(StorageServicesKeys.token).then((value) {
+                              //   Navigator.pushReplacement(
+                              //     context,
+                              //     MaterialPageRoute(
+                              //       builder: (context) => const LoginPage(),
+                              //     ),
+                              //   );
+                              // });
+
+                                await StorageServices.to.remove(StorageServicesKeys.token);
+                                await StorageServices.to.remove(StorageServicesKeys.userId);
+                                await StorageServices.to.remove(StorageServicesKeys.firstName);
+                                await StorageServices.to.remove(StorageServicesKeys.role);
+                                await StorageServices.to.remove(StorageServicesKeys.permissionsList);
+
+                                  await Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => const LoginPage(),
                                   ),
                                 );
-                              });
                             }
                           }),
                         ),

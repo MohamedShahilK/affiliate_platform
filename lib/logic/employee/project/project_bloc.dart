@@ -32,7 +32,7 @@ class ProjectBloc {
   final startDateStream = BehaviorSubject<String>.seeded('');
   final endDateStream = BehaviorSubject<String>.seeded('');
   final descriptionStream = BehaviorSubject<String>.seeded('');
-  
+
   final projectSearchStream = BehaviorSubject<String>.seeded('');
   final projectStatusStream = BehaviorSubject<String>.seeded('');
 
@@ -59,7 +59,13 @@ class ProjectBloc {
     getProjectViewStream.add(respModel);
   }
 
-  Future<Map<String, dynamic>?> submitProjectForm(BuildContext context, {required String? customerId, required String? quotationId}) async {
+  Future<Map<String, dynamic>?> submitProjectForm(
+    BuildContext context, {
+    required String? customerId,
+    required String? quotationId,
+    required String? status,
+    required String? createdByEmployee,
+  }) async {
     final respModel = ProjectServices().submitProjectForm(
       context,
       name: projectNameStream.value,
@@ -68,12 +74,20 @@ class ProjectBloc {
       endDate: endDateStream.valueOrNull,
       customerId: customerId,
       quotationId: quotationId,
+      status: status,
+      createdByEmployee: createdByEmployee,
     );
 
     return respModel;
   }
 
-  Future<Map<String, dynamic>?> projectEdit({required String projectId, required String? customerId, required String? quotationId}) async {
+  Future<Map<String, dynamic>?> projectEdit({
+    required String projectId,
+    required String? customerId,
+    required String? quotationId,
+    required String? status,
+    required String? updatedByEmployee,
+  }) async {
     final respModel = ProjectServices().projectEdit(
       projectId: projectId,
       name: projectNameStream.value,
@@ -82,6 +96,8 @@ class ProjectBloc {
       endDate: endDateStream.valueOrNull,
       customerId: customerId,
       quotationId: quotationId,
+      status: status,
+      updatedByEmployee: updatedByEmployee,
     );
 
     return respModel;
